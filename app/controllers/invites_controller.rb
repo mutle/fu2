@@ -3,7 +3,7 @@ class InvitesController < ApplicationController
   before_filter :login_required
   
   def new
-    raise ActiveRecord::NotFound if current_user.can_invite?
+    raise ActiveRecord::NotFound unless current_user.can_invite?
   end
   
   def create
