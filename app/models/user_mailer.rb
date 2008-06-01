@@ -16,7 +16,7 @@ class UserMailer < ActionMailer::Base
   def invite(invite)
     @recipients  = "#{invite.email}"
     @from        = default_email
-    @subject     = "[FUCKUP-Wiki] Invitation"
+    @subject     = "[fu2] Invitation"
     @sent_on     = Time.now
     
     @body[:user] = invite.name
@@ -26,13 +26,13 @@ class UserMailer < ActionMailer::Base
   protected
     
     def default_email
-      "fuwki.temp@gmail.com"
+      DEFAULT_EMAIL
     end
     
     def setup_email(user)
       @recipients  = "#{user.email}"
       @from        = default_email
-      @subject     = "[FUCKUP-Wiki] "
+      @subject     = "[fu2] "
       @sent_on     = Time.now
       @body[:user] = user
     end

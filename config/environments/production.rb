@@ -22,3 +22,4 @@ ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.default_charset = "utf-8"
 
 FU2_HOST = "localhost"
+DEFAULT_EMAIL = "your_email@example.com"

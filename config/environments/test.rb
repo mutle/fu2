@@ -22,3 +22,4 @@ config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method = :test
 
 FU2_HOST = "localhost"
+DEFAULT_EMAIL = "your_email@example.com"
