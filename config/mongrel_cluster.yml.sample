@@ -1,0 +1,10 @@
+--- 
+cwd: /var/www/fu2/current
+port: "8500"
+environment: production
+address: 0.0.0.0
+pid_file: log/mongrel.pid
+servers: 3
+log: log/mongrel.log
+user: your_user
+group: your_user

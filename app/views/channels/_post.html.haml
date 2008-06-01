@@ -1,0 +1,15 @@
+%a{:name => "post_#{post.id}"}
+-div_for post do
+  .name= user_name(post.user)
+  .date
+    =post.created_at.strftime('%Y/%m/%d %H:%M:%S')
+    / =time_ago_in_words(post.created_at)
+    / ago
+  .body
+    =format_body(post)
+    -if post.user_id == current_user.id
+      / %br/
+      =link_to "Edit", edit_channel_post_path(@channel, post)
+      |
+      =link_to "Delete", channel_post_path(@channel, post), :method => :delete, :confirm => "Are you sure?"
+.clear

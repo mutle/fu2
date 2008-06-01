@@ -1,0 +1,77 @@
+set :application, "fu2"
+
+set :scm, :git
+set :repository,  "git://github.com/mutle/fu2.git"
+set :branch, "master"
+
+set :deploy_to, "/var/www/#{application}"
+
+role :app, "your_server", :mailer => false
+role :web, "your_server"
+role :db,  "your_server", :primary => true
+
+set :monit_group, application
+
+set :runner, "your_user"
+
+# Deploy Configuration for monit
+namespace :deploy do
+  
+  desc "Stops the Mongrel Cluster on the Server (blogage specific)"
+  task :stop, :roles => :app do
+    sudo "/usr/sbin/monit stop all -g #{monit_group}" 
+  end
+
+  desc "Starts the Mongrel Cluster on the Server (blogage specific)"
+  task :start, :roles => :app do
+    sudo "/usr/sbin/monit start all -g #{monit_group}" 
+  end
+
+  desc "Restarts the Mongrel Cluster on the Server (blogage specific)"
+  task :restart, :roles => :app do
+    sudo "/usr/sbin/monit restart all -g #{monit_group}"
+  end
+  
+end
+
+namespace :sphinx do
+  
+  task :configure do
+    run "cd #{latest_release}; RAILS_ENV=production rake ultrasphinx:configure"
+    index
+  end
+  
+  task :index do
+    run "cd #{latest_release}; RAILS_ENV=production rake ultrasphinx:index"
+  end
+  
+  task :start do
+    run "cd #{latest_release}; RAILS_ENV=production rake ultrasphinx:daemon:start"
+  end
+  
+  task :stop do
+    run "cd #{latest_release}; RAILS_ENV=production rake ultrasphinx:daemon:stop"
+  end
+  
+  task :build_wordlist do
+    run "cd #{latest_release}; RAILS_ENV=production rake ultrasphinx:spelling:build"
+  end
+  
+end
+
+after "deploy", "sphinx:configure"
+
+
+# Custom Tasks
+desc "Copies configuration files in Location"
+task :copy_configs, :roles => :app do
+  run "cp #{release_path}/config/mongrel_cluster.yml /var/www/mongrel_cluster/#{application}.yml"
+  put File.read(File.join(File.dirname(__FILE__), 'config/database.yml')), "#{release_path}/config/database.yml"
+end
+after "deploy:update_code", :copy_configs
+
+desc "Copies the local config/environments/production_mailer.rb to the server, this enables mailing"
+task :copy_production_mailer_config, :roles => :app, :except => { :mailer => false } do
+  put File.read(File.join(File.dirname(__FILE__), 'config/production_mailer.rb')), "#{release_path}/config/production.rb"
+end
+after "deploy:update_code", :copy_production_mailer_config

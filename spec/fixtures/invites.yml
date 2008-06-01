@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  email: MyString
+  activation_code: MyString
+  approved_user_1_id: 1
+
+two:
+  name: MyString
+  email: MyString
+  activation_code: MyString
+  approved_user_1_id: 1

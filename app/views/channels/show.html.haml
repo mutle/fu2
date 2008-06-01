@@ -1,0 +1,18 @@
+%h2=h @channel.title
+-if @channel.can_read?(current_user)
+  -@channel.posts.each do |post|
+    -if post.can_read?(current_user)
+      =render :partial => "post", :object => post
+  %hr/
+-else
+  %p
+    You can't read the content of this channel
+-if @channel.can_write?(current_user)
+  %h3 Add a comment  
+  -form_for :post, :url => channel_post_path(@channel, @post) do |f|
+    %p
+      =f.text_area :body, :class => 'comment_box'
+    %p.right
+      =f.submit 'Add Comment', :accesskey => "s"
+  .clear
+  =javascript_tag "add_editor('post_body');"

@@ -1,0 +1,14 @@
+%h2 Edit your Profile
+=error_messages_for :user
+-form_for :user, :url => user_path(@user), :html => {:method => :put} do |f|
+  %p
+    %label{:for => "user_display_name"} Display Name:
+    =f.text_field :display_name
+  %p
+    %label{:for => "user_color"} Color:
+    =f.text_field :color
+  %p
+    %label{:for => "user_stylesheet_id"} Stylesheet:
+    =f.select :stylesheet_id, [["Default", 0]] + Stylesheet.find(:all, :order => "LOWER(title) DESC").map { |s| ["#{h(s.title)} by #{h(s.user.display_name)}", s.id] }
+  %p
+    =f.submit

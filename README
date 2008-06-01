@@ -1,0 +1,18 @@
+== About fu2
+
+fu2 is a community-software. It works similar to forums, but also has some differences.
+
+== Notes
+
+If you're using PostgreSQL you need to run "CREATE LANGUAGE 'plpgsql';" on each database first, this it required by ultrasphinx.
+
+To deploy you need to create copies of the following files and remove the .sample extension:
+
+- config/database.yml.sample
+- config/deploy.rb.sample
+- config/mongrel_cluster.yml.sample
+
+== Contributors
+
+- Mutwin Kraus (mutle) - Code
+- Frederik Aust (sniker) - Default Design

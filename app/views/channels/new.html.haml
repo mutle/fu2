@@ -1,0 +1,11 @@
+%h2 Create a new Channel
+-form_for :channel, :url => channels_path do |f|
+  %p
+    %label{:for => "channel_title"} Title:
+    =f.text_field :title
+  %p
+    %label{:for => "channel_message"} Message:
+    =f.text_area :body
+  %p.right
+    =f.submit 'Create', :accesskey => "s"
+  =javascript_tag "add_editor('channel_body');"

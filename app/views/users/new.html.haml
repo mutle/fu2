@@ -1,0 +1,17 @@
+%h2 Register your account
+=error_messages_for :user
+=@user.inspect
+-form_for :user, :url => users_path do |f|
+  =f.hidden_field :invite_user_id
+  =f.hidden_field :activation_code
+  %p
+    %label{:for => "login"} Name:
+    =f.text_field :login
+  %p
+    %label{:for => "password"} Password:
+    =f.password_field :password
+  %p
+    %label{:for => "password_confirmation"} Confirm Password:
+    =f.password_field :password_confirmation
+  %p.right
+    =submit_tag 'Create'

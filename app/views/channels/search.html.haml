@@ -1,0 +1,13 @@
+%h2== Search for "#{h(@query)}" (#{@search.total_entries} results)
+-if @correction
+  == Did you mean #{@correction}?
+-unless @search.any?
+  %em No results found.
+-@search.results.each do |result|
+  %p
+    -if result.is_a?(Channel)
+      =link_to "Channel Title: #{result.title}", channel_path(result)
+    -elsif result.is_a?(Post)
+      =link_to "Channel Title: #{result.channel.title}<br />Post: #{result.body}", channel_path(result.channel, :anchor => "post_#{result.id}")
+      ==by #{user_name(result.channel.user)}
+=will_paginate(@search)

@@ -1,0 +1,16 @@
+%h2{:style => @user.display_color}=h @user.display_name
+-if current_user.id == @user.id
+  =link_to "Edit", edit_user_path(current_user)
+-else
+  =link_to "Send a private Message", channel_path(@user.private_channel)
+%h3= "Recent Posts (#{@user.posts.count} total)"
+-if @user.posts.count > 0
+  %ul
+    -@user.posts.find(:all, :limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post|
+      -next unless post and post.channel
+      %li
+        .date
+          =time_ago_in_words(post.created_at)
+          ago
+        In
+        =link_to post.channel.title, channel_path(post.channel, :anchor => "post_#{post.id}")

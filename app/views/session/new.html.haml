@@ -1,0 +1,13 @@
+.notice
+  =flash[:notice] || "Sorry, but you have to be logged in to enter this site!"
+-form_tag session_path do
+  %p
+    %label{:for => "login"} Username:
+    =text_field_tag 'login'
+  %p
+    %label{:for => "password"} Password:
+    =password_field_tag 'password'
+  %p
+    %span.forgot
+    %input{:type => "submit", :value => "Login"}
+.clear

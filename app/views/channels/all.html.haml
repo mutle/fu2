@@ -1,0 +1,14 @@
+%h2 All Channels
+%ul#recent_acitivities
+  -@channels.each do |channel|
+    %li
+      %p
+        .date
+          -if channel.posts.count > 0
+            -last_post = channel.posts.last
+            =last_post.created_at.strftime('%Y/%m/%d %H:%M:%S')
+            / =time_ago_in_words(channel.posts.last.created_at)
+            / ago
+          -else
+            No Posts yet.
+        =link_to h(channel.title), channel_path(channel)

@@ -1,0 +1,8 @@
+%h2 Editing comment
+-form_for :post, :url => channel_post_path(@channel, @post), :html => {:method => :put} do |f|
+  %p
+    ~f.text_area :body, :class => 'comment_box'
+  %p.right
+    =f.submit 'Update Comment', :accesskey => "s"
+.clear
+=javascript_tag "add_editor('post_body');"

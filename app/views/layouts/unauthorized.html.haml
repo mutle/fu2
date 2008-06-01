@@ -1,0 +1,12 @@
+!!!
+!!! XML
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "de", :lang => "de"}
+  %head
+    %meta{'http-equiv' => "content-type", :content => "text/html;charset=UTF-8"}
+    %title fu2
+    =stylesheet_link_tag "application"
+    =javascript_include_tag :defaults
+  %body
+    #login_container
+      #content
+        =yield
