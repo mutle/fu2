@@ -65,13 +65,14 @@ after "deploy", "sphinx:configure"
 # Custom Tasks
 desc "Copies configuration files in Location"
 task :copy_configs, :roles => :app do
-  run "cp #{release_path}/config/mongrel_cluster.yml /var/www/mongrel_cluster/#{application}.yml"
-  put File.read(File.join(File.dirname(__FILE__), 'config/database.yml')), "#{release_path}/config/database.yml"
+  put File.read(File.join(File.dirname(__FILE__), 'mongrel_cluster.yml')), "#{release_path}/config/mongrel_cluster.yml"
+  sudo "cp #{release_path}/config/mongrel_cluster.yml /var/www/mongrel_cluster/#{application}.yml"
+  put File.read(File.join(File.dirname(__FILE__), 'database.yml')), "#{release_path}/config/database.yml"
 end
 after "deploy:update_code", :copy_configs
 
 desc "Copies the local config/environments/production_mailer.rb to the server, this enables mailing"
 task :copy_production_mailer_config, :roles => :app, :except => { :mailer => false } do
-  put File.read(File.join(File.dirname(__FILE__), 'config/production_mailer.rb')), "#{release_path}/config/production.rb"
+  put File.read(File.join(File.dirname(__FILE__), 'environments/production_mailer.rb')), "#{release_path}/config/environments/production.rb"
 end
 after "deploy:update_code", :copy_production_mailer_config
