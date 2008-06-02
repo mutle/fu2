@@ -8,9 +8,9 @@ If you're using PostgreSQL you need to run "CREATE LANGUAGE 'plpgsql';" on each 
 
 To deploy you need to create copies of the following files and remove the .sample extension:
 
-- config/database.yml.sample
-- config/deploy.rb.sample
-- config/mongrel_cluster.yml.sample
+* config/database.yml.sample
+* config/deploy.rb.sample
+* config/mongrel_cluster.yml.sample
 
 h2. License
 
@@ -18,5 +18,5 @@ This application is licensed under the MIT-LICENSE, see the file MIT-LICENSE for
 
 h2. Contributors
 
-- Mutwin Kraus (mutle) - Code
-- Frederik Aust (sniker) - Default Design
+* Mutwin Kraus (mutle) - Code
+* Frederik Aust (sniker) - Default Design
