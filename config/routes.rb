@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
     channels.resources :posts
   end
   
+  map.resources :uploads
+  
   map.resources :stylesheets
   
   map.root :controller => "channels"

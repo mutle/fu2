@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   
   has_many :posts
   has_many :channel_visits
+  has_many :uploads
   
   belongs_to :stylesheet
 
