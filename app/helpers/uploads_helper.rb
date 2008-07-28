@@ -5,7 +5,7 @@ module UploadsHelper
   end
   
   def image_code(upload)
-    "<img src='#{download_url(upload)}' />"
+    "<a href='#{upload_url(upload)}'><img src='#{download_url(upload)}' /></a>"
   end
   
 end
