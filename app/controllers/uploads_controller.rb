@@ -1,5 +1,7 @@
 class UploadsController < ApplicationController
   
+  before_filter :login_required
+  
   def index
     @upload = Upload.new
     @uploads = current_user.uploads
