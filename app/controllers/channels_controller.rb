@@ -8,7 +8,7 @@ class ChannelsController < ApplicationController
   
   def show
     if params[:id] == "all"
-      @channels = Channel.all_channels(current_user)
+      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
       render :action => "all"
     else
       @channel = Channel.find(params[:id])

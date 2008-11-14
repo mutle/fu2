@@ -17,8 +17,8 @@ class Channel < ActiveRecord::Base
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => 50
   end
   
-  def self.all_channels(_user)
-    self.find(:all, :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "LOWER(title)")
+  def self.all_channels(_user, page)
+    self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "LOWER(title)", :page => page, :per_page => 100
   end
   
   def body=(body)
