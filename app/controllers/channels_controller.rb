@@ -11,7 +11,7 @@ class ChannelsController < ApplicationController
       @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
       render :action => "all"
     else
-      @channel = Channel.find(params[:id])
+      @channel = Channel.find(params[:id], :include => :posts)
       @channel.visit(current_user)
       @post = @channel.posts.new
       render

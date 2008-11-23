@@ -13,8 +13,9 @@
     -elsif current_user.stylesheet
       =stylesheet_link_tag current_user.stylesheet.id.to_s
     -else
-      =stylesheet_link_tag "application", :cache => "base"
-    =javascript_include_tag :defaults, "control.textarea.js", "editor", :cache => "base"
+      =stylesheet_link_tag "application", "/javascripts/markitup/skins/markitup/style.css", "/javascripts/markitup/sets/html/style.css", :cache => "base"
+    / =stylesheet_link_tag "markitup"
+    =javascript_include_tag "jquery#{".min.js" if RAILS_ENV == "production"}", "markitup/jquery.markitup", "markitup/sets/html/set", "application", :cache => "base"
   %body
     #main
       #content
