@@ -1,7 +1,6 @@
 %h2 Register your account
 =error_messages_for :user
-=@user.inspect
--form_for :user, :url => users_path do |f|
+-form_for :user, :url => users_path, :html => {:class => "normal"} do |f|
   =f.hidden_field :invite_user_id
   =f.hidden_field :activation_code
   %p

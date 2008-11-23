@@ -1,6 +1,6 @@
 %h2 Invite a friend
 =error_messages_for :invite
--form_for :invite, :url => invites_path do |f|
+-form_for :invite, :url => invites_path, :html => {:class => "normal"} do |f|
   %p
     %label{:for => "name"} Name:
     =f.text_field :name

@@ -74,11 +74,10 @@ blockquote {
   border: 2px solid #C74B3F;
 }
 
-#content textarea {
-/*  float: right;
+#content textarea.align_right {
+  float: right;
   width: 420px;
   height: 120px;
-*/
   border: 1px solid black;
 }
 
@@ -86,16 +85,11 @@ blockquote {
   width: 420px;
 }
 
-/*#content textarea.comment_box {
-  float: left;
-  width: 550px;
-}*/
-
 #content form p {
   clear: both;
 }
 
-#main #content form {
+#main #content form.normal {
   width: 550px;
 }
 
