@@ -1,6 +1,6 @@
 .notice
   =flash[:notice] || "Sorry, but you have to be logged in to enter this site!"
--form_tag session_pat, :html => {:class => "normal"}h do
+-form_tag session_pat, :html => {:class => "normal"} do
   %p
     %label{:for => "login"} Username:
     =text_field_tag 'login'
