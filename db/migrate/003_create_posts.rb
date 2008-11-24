@@ -3,7 +3,7 @@ class CreatePosts < ActiveRecord::Migration
     create_table :posts do |t|
       t.integer :channel_id, :null => false
       t.integer :user_id, :null => false
-      t.text :body, :null => false, :default => ""
+      t.text :body, :null => false #, :default => ""
 
       t.timestamps
     end

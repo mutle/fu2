@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080728150523) do
+ActiveRecord::Schema.define(:version => 20081121122637) do
 
   create_table "channel_users", :force => true do |t|
     t.integer  "channel_id",                   :null => false
@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(:version => 20080728150523) do
     t.datetime "last_post"
   end
 
-  add_index "channels", ["created_at"], :name => "index_channels_on_created_at"
-  add_index "channels", ["permalink"], :name => "index_channels_on_permalink"
   add_index "channels", ["title"], :name => "index_channels_on_title"
+  add_index "channels", ["permalink"], :name => "index_channels_on_permalink"
+  add_index "channels", ["created_at"], :name => "index_channels_on_created_at"
 
   create_table "invites", :force => true do |t|
     t.integer  "user_id"
@@ -57,17 +57,29 @@ ActiveRecord::Schema.define(:version => 20080728150523) do
     t.datetime "updated_at"
   end
 
+  create_table "messages", :force => true do |t|
+    t.integer  "sender_id"
+    t.string   "sender_display_name"
+    t.integer  "reciever_id"
+    t.integer  "status"
+    t.datetime "time_sent"
+    t.string   "subject"
+    t.text     "message_body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "posts", :force => true do |t|
-    t.integer  "channel_id",                 :null => false
-    t.integer  "user_id",                    :null => false
-    t.text     "body",       :default => "", :null => false
+    t.integer  "channel_id", :null => false
+    t.integer  "user_id",    :null => false
+    t.text     "body",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "posts", ["channel_id"], :name => "index_posts_on_channel_id"
-  add_index "posts", ["created_at"], :name => "index_posts_on_created_at"
   add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
+  add_index "posts", ["created_at"], :name => "index_posts_on_created_at"
 
   create_table "stylesheets", :force => true do |t|
     t.integer  "user_id"
@@ -104,10 +116,11 @@ ActiveRecord::Schema.define(:version => 20080728150523) do
     t.integer  "account_type",                            :default => 0
     t.string   "color",                                   :default => ""
     t.integer  "stylesheet_id",                           :default => 0,  :null => false
+    t.integer  "number_unread_messages",                  :default => 0
   end
 
-  add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
-  add_index "users", ["crypted_password"], :name => "index_users_on_crypted_password"
   add_index "users", ["login"], :name => "index_users_on_login"
+  add_index "users", ["crypted_password"], :name => "index_users_on_crypted_password"
+  add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
 
 end
