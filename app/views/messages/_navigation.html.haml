@@ -1,0 +1,5 @@
+%ul#messages_navigation
+  %li#messages_navigation_inbox= link_to "Inbox", inbox_messages_path
+  %li#messages_navigation_outbox= link_to "Sent", sent_messages_path
+  %li#messages_navigation_new= link_to "New message", :controller => 'messages', :action => 'new'
+  %li#messages_navigation_ntoes Notes

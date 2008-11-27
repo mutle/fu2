@@ -1,0 +1,6 @@
+%h2 Sent messages
+=render :partial => "navigation"
+%ul#outgoing_messages
+  -@outgoing_messages.each do |message|
+    %li
+      =link_to message.subject, message_path(message)

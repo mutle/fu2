@@ -4,8 +4,7 @@ class CreateMessages < ActiveRecord::Migration
       t.column :sender_id,                :integer
       t.column :sender_display_name,      :string
       t.column :reciever_id,              :integer
-      t.column :status,                   :integer
-      t.column :time_sent,                :datetime
+      t.column :status,                   :integer, :default => 0
       t.column :subject,                  :string
       t.column :message_body,             :text
 

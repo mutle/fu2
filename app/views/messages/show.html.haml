@@ -1,0 +1,8 @@
+%h2 Inbox
+=render :partial => "navigation"
+-if current_user.id == @message.reciever_id || current_user.id == @message.sender_id
+  =@message.subject
+  =@message.message_body
+  #messages_reply [Replybox]
+-else
+  .error Don't you try an hack the system! This message is not for you!

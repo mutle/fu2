@@ -1,0 +1,6 @@
+%h2 Inbox
+=render :partial => "navigation"
+%ul#messages_incoming_list
+  -@incoming_messages.each do |message|
+    %li
+      =link_to message.subject, message_path(message)

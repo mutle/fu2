@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
     t.datetime "last_post"
   end
 
-  add_index "channels", ["title"], :name => "index_channels_on_title"
-  add_index "channels", ["permalink"], :name => "index_channels_on_permalink"
   add_index "channels", ["created_at"], :name => "index_channels_on_created_at"
+  add_index "channels", ["permalink"], :name => "index_channels_on_permalink"
+  add_index "channels", ["title"], :name => "index_channels_on_title"
 
   create_table "invites", :force => true do |t|
     t.integer  "user_id"
@@ -61,8 +61,7 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
     t.integer  "sender_id"
     t.string   "sender_display_name"
     t.integer  "reciever_id"
-    t.integer  "status"
-    t.datetime "time_sent"
+    t.integer  "status",              :default => 0
     t.string   "subject"
     t.text     "message_body"
     t.datetime "created_at"
@@ -78,8 +77,8 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
   end
 
   add_index "posts", ["channel_id"], :name => "index_posts_on_channel_id"
-  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
   add_index "posts", ["created_at"], :name => "index_posts_on_created_at"
+  add_index "posts", ["user_id"], :name => "index_posts_on_user_id"
 
   create_table "stylesheets", :force => true do |t|
     t.integer  "user_id"
@@ -119,8 +118,8 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
     t.integer  "number_unread_messages",                  :default => 0
   end
 
-  add_index "users", ["login"], :name => "index_users_on_login"
-  add_index "users", ["crypted_password"], :name => "index_users_on_crypted_password"
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
+  add_index "users", ["crypted_password"], :name => "index_users_on_crypted_password"
+  add_index "users", ["login"], :name => "index_users_on_login"
 
 end
