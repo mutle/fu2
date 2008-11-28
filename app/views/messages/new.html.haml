@@ -1,8 +1,10 @@
 %h2 Write message
+%p
+  =error_messages_for(:message)
 -form_for :message, @message, :url => { :action => "create" } do |f|
   %p
     %label{:for => "reciever"} To:
-    %input{:id => "message_reciever", :name => "reciever_name", :size => "30", :type => "text"}
+    %input{:id => "message_receiver", :name => "receiver_name", :value => params[:receiver_name], :size => "30", :type => "text"}
   %p
     %label{:for => "subject"} Subject:
     =f.text_field :subject

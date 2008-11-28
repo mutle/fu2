@@ -60,8 +60,9 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
   create_table "messages", :force => true do |t|
     t.integer  "sender_id"
     t.string   "sender_display_name"
-    t.integer  "reciever_id"
-    t.integer  "status",              :default => 0
+    t.integer  "receiver_id"
+    t.string   "receiver_display_name"
+    t.integer  "status",                :default => 0
     t.string   "subject"
     t.text     "message_body"
     t.datetime "created_at"
@@ -114,8 +115,8 @@ ActiveRecord::Schema.define(:version => 20081121122637) do
     t.string   "display_name"
     t.integer  "account_type",                            :default => 0
     t.string   "color",                                   :default => ""
-    t.integer  "stylesheet_id",                           :default => 0,  :null => false
-    t.integer  "number_unread_messages",                  :default => 0
+    t.integer  "stylesheet_id",                           :default => 0,   :null => false
+    t.string   "number_unread_messages",                  :default => "0"
   end
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"

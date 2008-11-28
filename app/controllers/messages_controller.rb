@@ -22,11 +22,9 @@ class MessagesController < ApplicationController
   
   def show
     @message = Message.find params[:id]
-    if current_user.id == @message.reciever_id && @message.status == MSG_STATUS_UNREAD
+    if current_user.id == @message.receiver_id && @message.status == MSG_STATUS_UNREAD
       @message.status = MSG_STATUS_READ
       @message.save
-      current_user.number_unread_messages = current_user.number_unread_messages - 1
-      current_user.save
     end
   end
   
@@ -36,6 +34,16 @@ class MessagesController < ApplicationController
   
   def create
     
+    @message = Message.create(params[:message].merge({:sender_id => current_user.id, :sender_display_name => current_user.display_name}))
+    @message.receiver_name = params[:receiver_name]
+    
+    if @message.save
+      redirect_to message_path(@message)
+    else
+      render :action => "new"
+    end
+    
+=begin
     reciever = User.find(:first, :conditions => ['display_name = ?', params[:reciever_name]])
     
     ### Richtige Railsway Fehlerbehandlung einbauen
@@ -56,7 +64,7 @@ class MessagesController < ApplicationController
         redirect_to :action => "show", :id => @message.id
       end
     end
-
+=end
   end
 
 end

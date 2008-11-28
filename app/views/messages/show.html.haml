@@ -1,6 +1,6 @@
 %h2 Inbox
 =render :partial => "navigation"
--if current_user.id == @message.reciever_id || current_user.id == @message.sender_id
+-if current_user.id == @message.receiver_id || current_user.id == @message.sender_id
   =@message.subject
   =@message.message_body
   #messages_reply [Replybox]
