@@ -264,6 +264,61 @@ hr {
 	display:none;
 }
 
+
+/*   MESSAGESYSTEM   */
+
+ul#messages_navigation {
+  list-style-type: none;
+  padding: 0px;
+}
+
+ul#messages_navigation li {
+  float: left;
+  margin-right: 25px;
+}
+
+.messages_active_menu {
+  font-weight: bold;
+}
+
+
+ul#message_list {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.message_unread {
+  font_weight: bold;
+}
+
+.messages_who {
+  float: left;
+  width: 120px;
+}
+
+.messages_date {
+  float: right;
+  margin-left: 20px;
+}
+
+
+.messages_show_subject {
+  margin-bottom: 15px;
+}
+
+
+#content input[type=text]#message_receiver {
+  float: none;
+}
+#content input[type=text]#message_subject {
+  float: none;
+}
+
+#message_error #errorExplanation h2 {
+  font-size: 14px;
+}
+
+
 /* Editor Buttons */
 #unformat_button { background-image: url('/images/general/editor/erase.png'); background-repeat: no-repeat; width: 49px; }
 #bold_button { background-image: url('/images/general/editor/fett.png'); background-repeat: no-repeat; }

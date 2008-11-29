@@ -1,8 +1,9 @@
-%h2 Inbox
+%h2 Read message
 =render :partial => "navigation"
 -if current_user.id == @message.receiver_id || current_user.id == @message.sender_id
-  =@message.subject
-  =@message.message_body
-  #messages_reply [Replybox]
+  .messages_show_subject
+    =h(@message.subject)
+  .messages_show_body
+    =h(@message.message_body)
 -else
   .error Don't you try an hack the system! This message is not for you!

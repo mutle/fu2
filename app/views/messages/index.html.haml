@@ -1,6 +1,22 @@
 %h2 Inbox
 =render :partial => "navigation"
-%ul#messages_incoming_list
+%ul#message_list
   -@incoming_messages.each do |message|
-    %li
-      =link_to message.subject, message_path(message)
+    -if message.status == 0
+      %li.message_unread
+      .messages_who
+        =h(message.sender_display_name)
+      .messages_date
+        =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
+      .messages_subject
+        =link_to h(message.subject), message_path(message)
+      .clear
+    -else
+      %li
+      .messages_who
+        =h(message.sender_display_name)
+      .messages_date
+        =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
+      .messages_subject
+        =link_to h(message.subject), message_path(message)
+      .clear
