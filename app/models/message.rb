@@ -5,7 +5,10 @@ class Message < ActiveRecord::Base
   
   validates_associated :sender, :user
   
-  validates_presence_of :receiver_id
+  validates_presence_of :receiver_id, :message => "not found."
+  validates_presence_of :subject
+ 
+  #before_save :convert_html_special_chars_in_subject_and_body  #### NOCH MACHEN
  
   after_save :update_user_message_counter
 
@@ -17,8 +20,6 @@ class Message < ActiveRecord::Base
   def self.find_outgoing_messages_from_user(who)
     find :all, :conditions => ['sender_id = ?', who.id ], :order => "created_at DESC"
   end
-  
-  # Beim speichern der MEssage subject und body in htmlspecialchars umwandeln mit beforefilter
 
 
   def update_user_message_counter
@@ -29,6 +30,14 @@ class Message < ActiveRecord::Base
     receiver = User.find(:first, :conditions => ["display_name = ?", name])
     self.receiver_display_name = receiver ? receiver.display_name : nil
     self.receiver_id = receiver ? receiver.id : nil
-  end  
+  end
+  
+
+  protected
+    # before filter 
+    def convert_html_special_chars_in_subject_and_body
+      self.subject =  h(self.subject)
+      self.message_body =  h(self.message_body)
+    end
   
 end

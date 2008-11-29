@@ -1,4 +1,5 @@
 %h2 Write message
+=render :partial => "navigation"
 %p
   =error_messages_for(:message)
 -form_for :message, @message, :url => { :action => "create" } do |f|

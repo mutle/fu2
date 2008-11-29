@@ -9,6 +9,7 @@ class MessagesController < ApplicationController
   
   def index
     @incoming_messages = Message.find_incoming_messages_from_user(current_user)
+    @active_menu = :inbox
   end
   
   def inbox
@@ -18,6 +19,7 @@ class MessagesController < ApplicationController
 
   def sent
     @outgoing_messages = Message.find_outgoing_messages_from_user(current_user)
+    @active_menu = :sent
   end
   
   def show
@@ -30,41 +32,18 @@ class MessagesController < ApplicationController
   
   def new
     @message = Message.new
+    @active_menu = :new
   end
   
   def create
-    
     @message = Message.create(params[:message].merge({:sender_id => current_user.id, :sender_display_name => current_user.display_name}))
     @message.receiver_name = params[:receiver_name]
-    
+
     if @message.save
       redirect_to message_path(@message)
     else
       render :action => "new"
     end
-    
-=begin
-    reciever = User.find(:first, :conditions => ['display_name = ?', params[:reciever_name]])
-    
-    ### Richtige Railsway Fehlerbehandlung einbauen
-    
-    if reciever == nil
-      redirect_to :action => "new"
-    else
-      missing_fields = {:sender_id => current_user.id, :sender_display_name => current_user.display_name, :reciever_id => reciever.id}
-      @message = Message.create(params[:message].merge(missing_fields))
-      
-      reciever.number_unread_messages = reciever.number_unread_messages + 1
-      reciever.save
-      
-      if @message.save
-        redirect_to :action => "show", :id => @message.id
-      else
-        ### Eigentlich fehlemeldung + redirect zum messageeditor mit formular noch ausgefüllt
-        redirect_to :action => "show", :id => @message.id
-      end
-    end
-=end
   end
 
 end

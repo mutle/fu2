@@ -29,6 +29,6 @@
         %ul#menu
           %li= link_to "Settings", edit_user_path(current_user)
           %li= link_to "Stylesheets", stylesheets_path
-          %li= link_to "Inbox", channel_path(current_user.private_channel)
+          %li= link_to "Inbox (" << current_user.number_unread_messages << ")", inbox_messages_path
           %li= link_to "Logout", session_path, :method => :delete
         =yield
