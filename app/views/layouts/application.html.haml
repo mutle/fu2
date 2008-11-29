@@ -8,6 +8,7 @@
         =@channel.title
         |
       fu2
+    =stylesheet_link_tag "common"
     -if params[:stylesheet_id]
       =stylesheet_link_tag params[:stylesheet_id]
     -elsif current_user.stylesheet
