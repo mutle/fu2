@@ -264,6 +264,7 @@ hr {
 	display:none;
 }
 
+
 /* Editor Buttons */
 #unformat_button { background-image: url('/images/general/editor/erase.png'); background-repeat: no-repeat; width: 49px; }
 #bold_button { background-image: url('/images/general/editor/fett.png'); background-repeat: no-repeat; }

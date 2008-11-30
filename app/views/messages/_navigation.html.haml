@@ -1,0 +1,21 @@
+%ul#messages_navigation
+  
+  -if @active_menu == :inbox
+    %li#messages_navigation_inbox.messages_active_menu
+      =link_to "Inbox", inbox_messages_path
+  -else
+    %li#messages_navigation_inbox
+      =link_to "Inbox", inbox_messages_path
+  -if @active_menu == :sent
+    %li#messages_navigation_sent.messages_active_menu
+      =link_to "Sent", sent_messages_path
+  -else
+    %li#messages_navigation_sent
+      =link_to "Sent", sent_messages_path
+  -if @active_menu == :new
+    %li#messages_navigation_new.messages_active_menu
+      =link_to "New message", :controller => 'messages', :action => 'new'
+  -else
+    %li#messages_navigation_new
+      =link_to "New message", :controller => 'messages', :action => 'new'
+  .clear

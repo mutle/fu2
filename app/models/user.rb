@@ -28,6 +28,9 @@ class User < ActiveRecord::Base
   has_many :channel_visits
   has_many :uploads
   
+  has_many :messages
+  has_many :unread_messages, :class_name => "Message", :foreign_key => "receiver_id", :conditions => "status = 0"  ### STATUSKONSTANTEN VERWENDEN
+  
   belongs_to :stylesheet
 
   # Activates the user in the database.
@@ -115,6 +118,11 @@ class User < ActiveRecord::Base
   
   def display_color
     "color: #{color}" unless color.blank?
+  end
+  
+  def update_message_counter
+    self.number_unread_messages = unread_messages.count
+    save
   end
 
   protected

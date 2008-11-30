@@ -1,0 +1,52 @@
+/*   MESSAGESYSTEM   */
+
+ul#messages_navigation {
+  list-style-type: none;
+  padding: 0px;
+}
+
+ul#messages_navigation li {
+  float: left;
+  margin-right: 25px;
+}
+
+.messages_active_menu {
+  font-weight: bold;
+}
+
+
+ul#message_list {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.message_unread {
+  font_weight: bold;
+}
+
+.messages_who {
+  float: left;
+  width: 120px;
+}
+
+.messages_date {
+  float: right;
+  margin-left: 20px;
+}
+
+
+.messages_show_subject {
+  margin-bottom: 15px;
+}
+
+
+#content input[type=text]#message_receiver {
+  float: none;
+}
+#content input[type=text]#message_subject {
+  float: none;
+}
+
+#message_error #errorExplanation h2 {
+  font-size: 14px;
+}

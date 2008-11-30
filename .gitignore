@@ -7,3 +7,4 @@ config/mongrel_cluster.yml
 config/ultrasphinx/*.conf
 config/environments/production_mailer.rb
 public/uploads
+Thumbs.db
