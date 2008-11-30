@@ -1,9 +1,10 @@
 %h2 Read message
 =render :partial => "navigation"
--if current_user.id == @message.receiver_id || current_user.id == @message.sender_id
+-if current_user.id == @message.user_id || current_user.id == @message.sender_id
   .messages_show_subject
+    Subject:
     =h(@message.subject)
   .messages_show_body
-    =h(@message.message_body)
+    =h(@message.body)
 -else
   .error Don't you try an hack the system! This message is not for you!

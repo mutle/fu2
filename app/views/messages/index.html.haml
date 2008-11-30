@@ -2,19 +2,9 @@
 =render :partial => "navigation"
 %ul#message_list
   -@incoming_messages.each do |message|
-    -if message.status == 0
-      %li.message_unread
+    %li{:class => "#{'message_unread' if message.status == Message::STATUS_UNREAD}"}
       .messages_who
-        =h(message.sender_display_name)
-      .messages_date
-        =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
-      .messages_subject
-        =link_to h(message.subject), message_path(message)
-      .clear
-    -else
-      %li
-      .messages_who
-        =h(message.sender_display_name)
+        =h(message.sender.display_name)
       .messages_date
         =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
       .messages_subject

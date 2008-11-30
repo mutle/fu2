@@ -2,7 +2,7 @@
 -if current_user.id == @user.id
   =link_to "Edit", edit_user_path(current_user)
 -else
-  =link_to "Send a private Message", channel_path(@user.private_channel)
+  =link_to "Send a private Message", new_message_path(:receiver_name => @user.login)
 %h3= "Recent Posts (#{@user.posts.count} total)"
 -if @user.posts.count > 0
   %ul

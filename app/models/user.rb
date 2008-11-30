@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   has_many :uploads
   
   has_many :messages
-  has_many :unread_messages, :class_name => "Message", :foreign_key => "receiver_id", :conditions => "status = 0"  ### STATUSKONSTANTEN VERWENDEN
+  has_many :unread_messages, :class_name => "Message", :conditions => "status = #{Message::STATUS_UNREAD}"
   
   belongs_to :stylesheet
 
