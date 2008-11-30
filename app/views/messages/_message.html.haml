@@ -1,0 +1,8 @@
+-inbox ||= false
+.messages_who
+  =message_user_link (inbox ? message.sender : message.user)
+.messages_date
+  =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
+.messages_subject
+  =link_to h(message.subject), message_path(message)
+.clear

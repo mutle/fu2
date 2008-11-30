@@ -3,10 +3,4 @@
 %ul#message_list
   -@incoming_messages.each do |message|
     %li{:class => "#{'message_unread' if message.status == Message::STATUS_UNREAD}"}
-      .messages_who
-        =h(message.sender.display_name)
-      .messages_date
-        =message.created_at.strftime('%Y/%m/%d %H:%M:%S')
-      .messages_subject
-        =link_to h(message.subject), message_path(message)
-      .clear
+      =render :partial => message, :locals => {:inbox => true}
