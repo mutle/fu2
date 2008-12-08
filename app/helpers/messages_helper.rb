@@ -4,4 +4,11 @@ module MessagesHelper
     link_to h(user.display_name), new_message_path(:receiver_name => user.login)
   end
   
+  def format_message_body(message)
+    text = h(message)
+    text = simple_format(text)
+    text = auto_link(text)
+    return text
+  end
+  
 end

@@ -24,6 +24,7 @@ class MessagesController < ApplicationController
       @message.status = Message::STATUS_READ
       @message.save
     end
+    @new_message = Message.new
   end
   
   def new
