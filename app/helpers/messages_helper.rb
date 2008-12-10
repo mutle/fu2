@@ -5,7 +5,7 @@ module MessagesHelper
   end
   
   def format_message_body(message)
-    text = h(message)
+    text = sanitize(message)
     text = simple_format(text)
     text = auto_link(text)
     return text

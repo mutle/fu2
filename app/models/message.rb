@@ -36,4 +36,9 @@ class Message < ActiveRecord::Base
     self.user_id = @receiver ? @receiver.id : nil
   end
   
+  def quote_message=(message)
+    self.body = "<blockquote>#{message.body}</blockquote>\n\n"
+    self.subject = "Re: #{message.subject}"
+  end
+  
 end

@@ -7,8 +7,8 @@
   .messages_show_body
     =format_message_body(@message.body)
   %h2 Reply
-  -form_for :message, @message, :url => { :action => "create" } do |f|
-    %input{:type => 'hidden', :name => 'message[receiver_name]', :value => User.find(:first, :conditions => "id = #{@message.sender_id}").display_name}
+  -form_for :message, @new_message, :url => messages_path do |f|
+    =f.hidden_field :receiver_name
     %p
       %label{:for => "subject"} Subject:
       =f.text_field :subject

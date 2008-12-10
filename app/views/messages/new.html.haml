@@ -2,7 +2,7 @@
 =render :partial => "navigation"
 #message_error
   =error_messages_for(:message)
--form_for :message, @message, :url => { :action => "create" } do |f|
+-form_for :message, @message, :url => messages_path do |f|
   %p
     %label{:for => "reciever"} To:
     / =f.text_field :receiver_name, :size => 30
