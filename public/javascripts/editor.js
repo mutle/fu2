@@ -93,7 +93,7 @@ Object.extend(Control.TextArea.ToolBar.Blogage.prototype,{
     });
     
    this.toolbar.addButton('Zitat',function(event){
-     this.wrapSelection('<blockquote>\n', '\n</blockquote>');
+     this.wrapSelection('<blockquote>', '</blockquote>\n');
     },{
      id: 'blockquote_button'
     });    

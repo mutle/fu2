@@ -26,6 +26,8 @@ mySettings = {
 		{name:'Italic', key:'I', openWith:'(!(<em>|!|<i>)!)', closeWith:'(!(</em>|!|</i>)!)' },
 		{name:'Stroke through', key:'S', openWith:'<del>', closeWith:'</del>' },
 		{separator:'---------------' },
+		{name:'Quote', openWith:'<blockquote>', closeWith:'</blockquote>\n' },
+		{separator:'---------------' },
 		{name:'Ul', openWith:'<ul>\n', closeWith:'</ul>\n' },
 		{name:'Ol', openWith:'<ol>\n', closeWith:'</ol>\n' },
 		{name:'Li', openWith:'<li>', closeWith:'</li>' },
