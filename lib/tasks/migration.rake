@@ -6,7 +6,12 @@ namespace :migration do
     MODELS = [Channel, ChannelUser, ChannelVisit, Invite, Message, Post, Stylesheet, Upload, User]
     `mkdir -p db/bootstrap`
     MODELS.each do |model|
-      out = model.all.inject({}) { |m,x| m[x.id] = x.attributes; m }
+      out = {}
+      n = 0
+      while((objs = model.all(:offset => n, :limit => 50)) && objs.size > 0) do
+        objs.each { |x| out[x.id] = x.attributes }
+        n += 50
+      end
       File.open("db/bootstrap/#{model.name.underscore.pluralize}.yml", "w") { |f| f.write out.to_yaml }
     end
   end
