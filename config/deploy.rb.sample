@@ -61,6 +61,13 @@ end
 
 after "deploy", "sphinx:configure"
 
+namespace :bundler do
+  task :bundle do
+    run "mkdir -p #{shared_path}/bundler_gems #{release_path}/vendor/bundler_gems; rm -R #{release_path}/vendor/bundler_gems/*; ln -s #{shared_path}/bundler_gems/* #{release_path}/vendor/bundler_gems/; cd #{release_path}; gem bundle"
+  end
+end
+after "deploy:update_code", "bundler:bundle"
+
 
 # Custom Tasks
 desc "Copies configuration files in Location"
