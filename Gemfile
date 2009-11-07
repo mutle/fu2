@@ -5,7 +5,6 @@ bundle_path "vendor/bundler_gems"
 gem "rails", "2.3.4"
 gem "pg"
 gem "haml"
-gem "will_paginate"
 
 gem "chronic"
 
