@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :users, :member => { :activate => :get }
+  map.resources :users, :member => { :activate => :get, :block => :put }
   map.resources :invites, :member => { :approve => :put }
 
   map.resource :session, :controller => "session"
