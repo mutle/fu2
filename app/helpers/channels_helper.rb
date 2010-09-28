@@ -6,7 +6,8 @@ module ChannelsHelper
   end
   
   def user_link(user)
-    link_to h(user.display_name), user_path(user), :style => user.display_color
+    # link_to h(user.display_name), user_path(user), :style => user.display_color
+    link_to h(user.login), user_path(user), :style => user.display_color
   end
   
   def user_name(user)
