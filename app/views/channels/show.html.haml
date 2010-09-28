@@ -9,6 +9,7 @@
     You can't read the content of this channel
 -if @channel.can_write?(current_user)
   %h3 Add a comment  
+  %a{:name => "comments"}
   -form_for :post, :url => channel_posts_path(@channel) do |f|
     %p
       =f.text_area :body, :class => 'comment_box'

@@ -65,6 +65,13 @@ class UsersController < ApplicationController
       redirect_to user_path(User.find(params[:id].to_i))
     end
   end
+
+  def block
+    @user = current_user
+    block_user = User.find(params[:id].to_i)
+    @user.block_user(block_user)
+    @user.save
+  end
   
   # def activate
   #   self.current_user = params[:activation_code].blank? ? :false : User.find_by_activation_code(params[:activation_code])

@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 
+  serialize :block_users
+
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
@@ -123,6 +125,11 @@ class User < ActiveRecord::Base
   def update_message_counter
     self.number_unread_messages = unread_messages.count
     save
+  end
+
+  def block_user(u)
+    self.block_users ||= []
+    self.block_users << u.id.to_i
   end
 
   protected

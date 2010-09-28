@@ -3,6 +3,7 @@
   =link_to "Edit", edit_user_path(current_user)
 -else
   =link_to "Send a private Message", new_message_path(:receiver_name => @user.login)
+  =link_to "Block", block_user_path(@user.id), :method => :put
 %h3= "Recent Posts (#{@user.posts.count} total)"
 -if @user.posts.count > 0
   %ul
