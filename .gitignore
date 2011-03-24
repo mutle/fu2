@@ -9,3 +9,7 @@ config/environments/production_mailer.rb
 public/uploads
 Thumbs.db
 db/schema.rb
+bin
+db/development.sqlite3
+vendor/bundler_gems
+config/ultrasphinx/development.base
