@@ -16,7 +16,9 @@
     -else
       =stylesheet_link_tag "application"
     =stylesheet_link_tag "/javascripts/markitup/skins/markitup/style.css", "/javascripts/markitup/sets/html/style.css" #, :cache => "markitup"
-    =javascript_include_tag "jquery#{".min.js" if RAILS_ENV == "production"}", "markitup/jquery.markitup", "markitup/sets/html/set", "application", :cache => "base"
+    =#javascript_include_tag "jquery#{".min.js" if RAILS_ENV == "production"}", "markitup/jquery.markitup", "markitup/sets/html/set", "application", :cache => "base"
+    =stylesheet_link_tag "jquery-ui/jquery-ui-1.8.11.custom"
+    =javascript_include_tag "jquery-1.5.1.min", "jquery-ui-1.8.11.custom.min.js", "markitup/jquery.markitup", "markitup/sets/html/set", "application", :cache => "base"
   %body
     #main
       #content

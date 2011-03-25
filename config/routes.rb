@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resource :session, :controller => "session"
   
-  map.resources :channels, :collection => { :search => :get } do |channels|
+  map.resources :channels, :collection => { :search => :get, :channel_names => :get } do |channels|
     channels.resources :posts
   end
   

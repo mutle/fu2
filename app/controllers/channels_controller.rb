@@ -33,6 +33,11 @@ class ChannelsController < ApplicationController
     @search = Ultrasphinx::Search.new(:query => @query, :per_page => 20, :page => (params[:page] || 1).to_i)
     @search.excerpt
     @correction = Ultrasphinx::Spell.correct(@search.query)
+    
+    respond_to do |format|
+      format.html
+      format.json { render :json => @search.results }
+    end
   end
   
 end

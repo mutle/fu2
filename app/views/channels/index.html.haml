@@ -1,6 +1,6 @@
 %h2 Search
 -form_tag search_channels_path, :method => :get do
-  =text_field_tag "search", "", :style => "float: none;"
+  =text_field_tag "search", "", :style => "float: none;", :autocomplete => "off"
   =submit_tag "Go", :name => ''
 %h2 Recent Activities
 %ul#recent_acitivities
