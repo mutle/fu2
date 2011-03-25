@@ -19,11 +19,7 @@ class Post < ActiveRecord::Base
   end
   
   def can_read?(user)
-    if user.block_users && user.block_users.any? && !user.block_users.include?(self.user_id)
-      false
-    else
-      channel.can_read?(user)
-    end
+    channel.can_read?(user)
   end
   
 end
