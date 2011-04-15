@@ -1,0 +1,52 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    actionmailer (2.3.4)
+      actionpack (= 2.3.4)
+    actionpack (2.3.4)
+      activesupport (= 2.3.4)
+      rack (~> 1.0.0)
+    activerecord (2.3.4)
+      activesupport (= 2.3.4)
+    activeresource (2.3.4)
+      activesupport (= 2.3.4)
+    activesupport (2.3.4)
+    chronic (0.3.0)
+    diff-lcs (1.1.2)
+    haml (3.0.25)
+    kgio (2.3.3)
+    pg (0.10.1)
+    rack (1.0.1)
+    rails (2.3.4)
+      actionmailer (= 2.3.4)
+      actionpack (= 2.3.4)
+      activerecord (= 2.3.4)
+      activeresource (= 2.3.4)
+      activesupport (= 2.3.4)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    rspec (2.1.0)
+      rspec-core (~> 2.1.0)
+      rspec-expectations (~> 2.1.0)
+      rspec-mocks (~> 2.1.0)
+    rspec-core (2.1.0)
+    rspec-expectations (2.1.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.1.0)
+    rspec-rails (2.1.0)
+      rspec (~> 2.1.0)
+    unicorn (3.5.0)
+      kgio (~> 2.3)
+      rack
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  chronic
+  haml
+  pg
+  rails (= 2.3.4)
+  rspec
+  rspec-rails
+  unicorn
