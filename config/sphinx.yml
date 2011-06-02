@@ -1,2 +1,5 @@
 development:
   min_infix_len: 3
+production:
+  min_infix_len: 3
+  searchd_file_path: /var/db/sphinx/
