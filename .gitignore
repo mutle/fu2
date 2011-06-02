@@ -13,3 +13,4 @@ bin
 db/development.sqlite3
 vendor/bundler_gems
 config/ultrasphinx/development.base
+*.swp
