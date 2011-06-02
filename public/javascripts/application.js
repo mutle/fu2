@@ -16,7 +16,7 @@ $(document).ready(function() {
           return;
         }
 
-        lastXhr = $.getJSON( "channels/search", {"search": "title:*"+term+"*"}, function( data, status, xhr ) {
+        lastXhr = $.getJSON( "channels/search", {"search": "title:"+term+""}, function( data, status, xhr ) {
           cache[ term ] = data;
           if ( xhr === lastXhr ) {
           	response( data );
@@ -24,7 +24,7 @@ $(document).ready(function() {
         });
       },
       focus: function( event, ui ) {
-        var title = ui.item.title.replace(/<\/?strong>/gi, '');
+        var title = ui.item.title;
         $('input#search').val( title );
         return false;
       },
@@ -34,8 +34,7 @@ $(document).ready(function() {
       }
     })
     .data( "autocomplete" )._renderItem = function( ul, item ) {
-      var title = item.title.replace(/</, "&lt;").replace(/>/, "&gt;");
-      title = title.replace(/&lt;(\/?)strong&gt;/gi, '<$1strong>');
+      var title = item.display_title; //.replace(/</, "&lt;").replace(/>/, "&gt;");
       return $( "<li></li>" )
       .data( "item.autocomplete", item )
       .append( "<a>" + title + "</a>" )

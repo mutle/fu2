@@ -113,3 +113,7 @@ ul#message_list {
 #message_error #errorExplanation h2 {
   font-size: 14px;
 }
+
+.match {
+  font-weight: bold;
+}

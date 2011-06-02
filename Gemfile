@@ -3,8 +3,7 @@ source :rubygems
 gem "rails", "2.3.11"
 gem "pg"
 gem "haml"
-
-gem "chronic"
+gem "thinking-sphinx", "1.4.6"
 
 group :development do
   gem "unicorn"

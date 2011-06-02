@@ -30,13 +30,16 @@ class ChannelsController < ApplicationController
   
   def search
     @query = params[:search].to_s
-    @search = Ultrasphinx::Search.new(:query => @query, :per_page => 20, :page => (params[:page] || 1).to_i)
-    @search.excerpt
-    @correction = Ultrasphinx::Spell.correct(@search.query)
+    if @query =~ /^title:(.*)$/
+      @search = Channel.search($1, :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
+    else
+      @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
+    end
+    # @correction = Ultrasphinx::Spell.correct(@search.query)
     
     respond_to do |format|
       format.html
-      format.json { render :json => @search.results }
+      format.json { render :json => @search.map { |r| {:title => r.title, :display_title => r.excerpts.title, :id => r.id} } }
     end
   end
   

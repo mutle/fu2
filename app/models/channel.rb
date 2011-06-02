@@ -11,7 +11,10 @@ class Channel < ActiveRecord::Base
   before_create :generate_permalink
   after_create :add_first_post
   
-  is_indexed :fields => ['created_at', 'title']
+  define_index do
+    indexes title
+    set_property :field_weights => {:title => 10}
+  end
   
   def self.recent_channels(_user, page)
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => 50
