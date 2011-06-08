@@ -1,5 +1,7 @@
 development:
   min_infix_len: 3
+  html_strip: true
 production:
   min_infix_len: 3
+  html_strip: true
   searchd_file_path: /var/db/sphinx/

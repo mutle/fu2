@@ -6,9 +6,6 @@ class Post < ActiveRecord::Base
   after_create :delete_channel_visits
   after_create :update_channel_last_post
   
-  # is_indexed  :fields => ['created_at', 'body'],
-  #             :include => [{:association_name => 'channel', :field => 'default_read'}],
-  #             :conditions => ["default_read = true"]
   define_index do
     indexes body
     has channel(:default_read)

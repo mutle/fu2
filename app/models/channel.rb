@@ -13,7 +13,7 @@ class Channel < ActiveRecord::Base
   
   define_index do
     indexes title
-    set_property :field_weights => {:title => 10}
+    set_property :field_weights => {:title => 100}
   end
   
   def self.recent_channels(_user, page)

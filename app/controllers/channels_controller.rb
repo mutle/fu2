@@ -35,7 +35,6 @@ class ChannelsController < ApplicationController
     else
       @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
     end
-    # @correction = Ultrasphinx::Spell.correct(@search.query)
     
     respond_to do |format|
       format.html
