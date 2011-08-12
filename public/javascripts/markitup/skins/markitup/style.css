@@ -54,6 +54,16 @@
 	background-image:url(images/handle.png);
 	cursor:n-resize;
 }
+@media all and (max-device-width: 480px){ 
+.markItUp{
+        width:400px;
+} 
+.markItUpEditor {
+        width:380px;
+}
+
+}
+
 /***************************************************************************************/
 /* first row of buttons */
 .markItUpHeader ul li	{
