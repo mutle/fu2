@@ -1,4 +1,5 @@
 %h2=h @channel.title
+%p= link_to "Bottom", channel_path(@channel, :anchor => "comments")
 -if @channel.can_read?(current_user)
   -@channel.posts.each do |post|
     -if post.can_read?(current_user)
