@@ -6,7 +6,7 @@
         .date
           -if channel.posts.count > 0
             -last_post = channel.posts.last
-            =last_post.created_at.strftime('%Y/%m/%d %H:%M:%S')
+            =link_to last_post.created_at.strftime('%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
             / =time_ago_in_words(channel.posts.last.created_at)
             / ago
           -else
