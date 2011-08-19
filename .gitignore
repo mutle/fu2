@@ -14,3 +14,8 @@ db/development.sqlite3
 vendor/bundler_gems
 config/ultrasphinx/development.base
 *.swp
+.bundle
+db/*.sqlite3
+log/*.log
+tmp
+.sass-cache/

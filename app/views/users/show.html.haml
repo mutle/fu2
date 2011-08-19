@@ -7,7 +7,7 @@
 %h3= "Recent Posts (#{@user.posts.count} total)"
 -if @user.posts.count > 0
   %ul
-    -@user.posts.find(:all, :limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post|
+    -@user.posts.all(:limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post|
       -next unless post and post.channel
       %li
         .date

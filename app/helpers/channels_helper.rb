@@ -9,12 +9,12 @@ module ChannelsHelper
   end
   
   def user_link(user)
-    # link_to h(user.display_name), user_path(user), :style => user.display_color
+    return "" unless user
     link_to h(user.login), user_path(user), :style => user.display_color
   end
   
   def user_name(user)
-    "&lt;#{user_link(user)}&gt;"
+    "&lt;".html_safe + user_link(user) + "&gt;".html_safe
   end
   
 end

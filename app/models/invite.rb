@@ -12,7 +12,7 @@ class Invite < ActiveRecord::Base
   
   def send_invite
     if !sent? and can_send?
-      UserMailer.deliver_invite(self)
+      UserMailer.invite(self).deliver
       update_attributes(:sent => true, :approved => true)
     end
   end

@@ -21,7 +21,7 @@ class Upload < ActiveRecord::Base
   end
   
   def file_path
-    "#{RAILS_ROOT}/public/#{download_path}"
+    "#{Rails.root}/public/#{download_path}"
   end
   
   def image?

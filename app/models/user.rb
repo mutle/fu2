@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
   
-  validates_format_of       :color, :with => /^(\#([0-9a-fA-F]{6}))?$/
+  # validates_format_of       :color, :with => /^(\#([0-9a-fA-F]{6}))?$/
   
   before_save :encrypt_password
   
@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   end
   
   def private_channel
-    Channel.find(:first, :conditions => ["user_id = ? AND title = ? AND default_read = ?", id, "#{login}/Mailbox", false])
+    Channel.first(:conditions => ["user_id = ? AND title = ? AND default_read = ?", id, "#{login}/Mailbox", false])
   end
 
   def active?
@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   end
   
   def self.all_users
-    self.find(:all, :order => "LOWER(display_name)")
+    self.all(:order => "LOWER(display_name)")
   end
 
   def password
@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
-    u = find :first, :conditions => ['LOWER(login) = LOWER(?) and activated_at IS NOT NULL', login] # need to get the salt
+    u = first :conditions => ['LOWER(login) = LOWER(?) and activated_at IS NOT NULL', login] # need to get the salt
     p u
     p u.authenticated?(password)
     u && u.authenticated?(password) ? u : nil

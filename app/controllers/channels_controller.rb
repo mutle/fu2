@@ -1,24 +1,40 @@
 class ChannelsController < ApplicationController
   
+  layout "fu3"
+
   before_filter :login_required
+
+  respond_to :html, :json
   
   def index
     if current_user && current_user.password_hash.blank?
       redirect_to password_user_path(:id => current_user.id) and return
     end
     @recent_channels = Channel.recent_channels(current_user, (params[:page] || 1).to_i)
+    respond_with @recent_channels
   end
   
   def show
     if params[:id] == "all"
-      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
-      render :action => "all"
+      all
     else
-      @channel = Channel.find(params[:id], :include => :posts)
-      @channel.visit(current_user)
-      @post = @channel.posts.new
-      render
+      posts(false)
+      respond_with @channel
     end
+  end
+
+  def posts(respond=true)
+    @channel = Channel.find(params[:id], :include => :posts)
+    @channel.visit(current_user)
+    @post = Post.new
+    if respond
+      respond_with @channel.posts.all(:include => :user)
+    end
+  end
+
+  def all
+    @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+    render :template => "all"
   end
   
   def new

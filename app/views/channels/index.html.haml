@@ -1,5 +1,5 @@
 %h2 Search
--form_tag search_channels_path, :method => :get do
+=form_tag search_channels_path, :method => :get do
   =text_field_tag "search", "", :style => "float: none;", :autocomplete => "off"
   =submit_tag "Go", :name => ''
 %h2 Recent Activities
@@ -9,10 +9,10 @@
       %p
         -count = channel.posts.count
         -if count > 0
-          .name= user_name(channel.posts.find(:first, :order => "created_at DESC").user)
+          .name= user_name(channel.posts.first(:order => "created_at DESC").user)
         .date
-          -if count > 0
-            =link_to channel.last_post.strftime('%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
+          -if count > 0 && channel
+            =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
           -else
             No Posts yet.
         =link_to h(channel.title), channel_path(channel)

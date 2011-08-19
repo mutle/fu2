@@ -19,11 +19,11 @@ class Message < ActiveRecord::Base
 
   
   def self.find_incoming_messages_from_user(who)
-    find :all, :conditions => ['user_id = ?', who.id ], :order => "created_at DESC"
+    all :conditions => ['user_id = ?', who.id ], :order => "created_at DESC"
   end
   
   def self.find_outgoing_messages_from_user(who)
-    find :all, :conditions => ['sender_id = ?', who.id ], :order => "created_at DESC"
+    all :conditions => ['sender_id = ?', who.id ], :order => "created_at DESC"
   end
   
   def update_user_message_counter

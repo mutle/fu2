@@ -1,7 +1,7 @@
 class StylesheetsController < ApplicationController
   
   def index
-    @stylesheets = Stylesheet.find(:all, :order => "LOWER(title)")
+    @stylesheets = Stylesheet.all(:order => "LOWER(title)")
   end
   
   def show

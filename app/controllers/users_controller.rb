@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
   
   before_filter :login_required, :except => ["activate", "create", "password"]
+
+  respond_to :html, :json
   
   def index
     @users = User.all_users
+    respond_with @users
   end
   
   def activate
@@ -20,6 +23,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    respond_with @user
   end
 
   def create

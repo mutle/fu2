@@ -1,0 +1,90 @@
+body {
+  font-family: Helvetica, Verdana, sans-serif;
+  background-color: #fff;
+}
+
+#container {
+}
+
+#content {
+  margin-top: 1em;
+  border: 1px solid red;
+  background-color: #ccc;
+  padding: 20px;
+  padding-bottom: 2em;
+}
+
+h1#title {
+  text-align: center;
+  font-size: 2em;
+}
+
+.loading {
+  padding: 2em 0px;
+  text-align: center;
+}
+
+#channel_list {
+}
+
+#channel_list ul {
+  list-style: none;
+}
+
+#channel_list ul li {
+  padding: none;
+  line-height: 2em;
+  clear: both;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#channel_list ul li .title {
+  padding-left: 1.0em;
+}
+
+#channel_list ul  .channel.selected {
+  background-color: #000;
+  color: #fff;
+}
+
+#channel_list ul  .channel .unread_count {
+  display: inline;
+  float: right;
+  background-color: #000;
+  color: #fff;
+  padding: 0px 1em;
+  border: 2px solid #fff;
+  border-radius: 24px;
+  font-weight: bold;
+}
+
+#channel {
+}
+
+#channel .post {
+  padding: 15px;
+  border: 1px solid black;
+  margin-bottom: 1em;
+}
+
+#channel .post .user {
+  float: left;
+}
+
+#channel .post .date {
+  text-align: right;
+  margin-bottom: 1em;
+}
+
+#channel .comment {
+  padding: 15px;
+  border: 1px solid black;
+  margin-bottom: 1em;
+}
+
+#channel .comment  textarea {
+  width: 600px;
+  height: 250px;
+}

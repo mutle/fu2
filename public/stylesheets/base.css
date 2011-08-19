@@ -1,0 +1,496 @@
+body {
+  font-size: 16px;
+  font-family: Verdana, sans-serif;
+  text-align: center;
+  background-color: #ebebeb;
+}
+
+a {
+  color: #c82127;
+}
+
+.clear {
+  clear: both;
+}
+
+.left { text-align: left; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+blockquote {
+  border-left: 3px solid black;
+  margin: 0px 0px 0px 10px;
+  padding: 8px;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.strike_through {
+  text-decoration: line-through;
+}
+
+#login_container {
+  width: 450px;
+  margin: 200px auto;
+  text-align:center;
+  background-color: #dcf0f7;
+  border: 8px solid #5e5e5e;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+
+#login_container #content {
+  width: 350px;
+  margin: 10px auto 40px auto;
+  text-align: left;
+  font-size: 16px;
+}
+
+#login_container #content label {
+  width: 105px;
+  text-align: center;
+}
+
+#main #content label {
+  width: 250px;
+}
+
+#content label {
+  line-height: 26px;
+}
+
+#content input[type=text], #content input[type=password], #content .input, #content select {
+  float: right;
+  width: 230px;
+  font-size: 18px;
+  border: 1px solid black;
+  background-color: white;
+  line-height: 26px;
+}
+
+#content input[type=text].error, #content input[type=password].error {
+  border: 2px solid #C74B3F;
+}
+
+#content textarea {
+/*  float: right;
+  width: 420px;
+  height: 120px;
+*/
+  border: 1px solid black;
+}
+
+#content input#channel_title {
+  width: 420px;
+}
+
+/*#content textarea.comment_box {
+  float: left;
+  width: 550px;
+}*/
+
+#content form p {
+  clear: both;
+}
+
+#main #content form {
+  width: 550px;
+}
+
+#content .notice {
+  background-color: #f9fac5;
+  font-size: 14px;
+  padding: 5px 20px;
+  font-style: italic;
+}
+
+#content .forgot {
+  font-size: 12px;
+  line-height: 24px;
+}
+
+#content input[type=submit] {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+#main {
+  width: 800px;
+  margin: 30px auto;
+  text-align:center;
+  background-color: #dcf0f7;
+  border: 8px solid #5e5e5e;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px; 
+}
+
+#main #content {
+  width: 700px;
+  margin: 10px auto 40px auto;
+  text-align: left;
+  font-size: 16px;
+}
+
+#main #content #menu {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+}
+
+#main #content #menu li {
+  display: inline;
+  margin-right: 25px;
+}
+
+.post {
+  border-bottom: 1px solid #B0C0C7;
+}
+
+.post .name {
+  float: left;
+  width: 150px;
+}
+
+.post .date {
+  float: right;
+  margin-left: 20px;
+}
+
+.post .body {
+  margin-left: 160px;
+  margin-bottom: 16px;
+}
+
+hr {
+  height: 60px;
+  border: none;
+}
+
+#recent_acitivities {
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+
+#recent_acitivities li {
+  display: block;
+  margin: 0px;
+}
+
+#recent_acitivities li.visited {
+  background-color: #B0C0C7;
+}
+
+.date {
+  float: right;
+  font-size: 12px;
+}
+
+.name {
+  float: left;
+  width: 120px;
+}
+
+
+/*
+.editor {
+  background-color: #ddd;
+  border: 1px solid black;
+  height: 16px;
+  display: block;
+  padding: 0px;
+  margin: 0px;
+  line-height: 16px;
+}
+*/
+.editor, .editor_lite {
+	position:relative;
+	list-style:none;
+	border: 1px solid black;
+	background-color:#F6F6F6;
+	margin:0;
+	padding:0;
+	height:23px;
+	margin-bottom:2px;
+	clear: both;
+}
+
+.editor {
+/*  width: 480px;*/
+}
+
+/*.editor > li {
+  display: block;
+  height: 16px;
+  width: 16px;
+  margin: 0px 5px;
+  overflow: hidden;
+  float: left;
+  background-color: #ddd;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+*/
+
+.editor li, .editor_lite li {
+	list-style:none;
+	margin:0;
+	padding:0;
+	float:left;
+	text-align: center;
+}
+
+.editor li.divider, .editor_lite li.divider {
+  width: 13px;
+  height: 23px;
+/*  border:1px solid #fff;*/
+  background-image: url('/images/general/editor/spacer.png');
+  background-repeat: no-repeat;
+  border-right: 1px solid black;
+}
+
+.editor li a, .editor_lite li a {
+	width:31px;
+	height:23px;
+	float:left;
+	display:block;
+/*  border:1px solid #fff;*/
+	border-right: 1px solid black;
+	text-align: center;
+	background-position: center center;
+}
+
+.editor li a:hover, .editor_lite  li a:hover {
+	border-color:#900;
+}
+
+.editor li span, .editor_lite li span {
+	display:none;
+}
+
+/* Editor Buttons */
+#unformat_button { background-image: url('/images/general/editor/erase.png'); background-repeat: no-repeat; width: 49px; }
+#bold_button { background-image: url('/images/general/editor/fett.png'); background-repeat: no-repeat; }
+#italics_button { background-image: url('/images/general/editor/kursiv.png'); background-repeat: no-repeat; }
+#underline_button { background-image: url('/images/general/editor/unterstr.png'); background-repeat: no-repeat; }
+#strikethrough_button { background-image: url('/images/general/editor/durchgestr.png'); background-repeat: no-repeat; }
+#heading_1_button { background-image: url('/images/general/editor/h1.png'); background-repeat: no-repeat; }
+#heading_2_button { background-image: url('/images/general/editor/h2.png'); background-repeat: no-repeat; }
+#heading_3_button { background-image: url('/images/general/editor/h3.png'); background-repeat: no-repeat; }
+#link_button { background-image: url('/images/general/editor/link.png'); background-repeat: no-repeat; }
+#image_button { background-image: url('/images/general/editor/bild.png'); background-repeat: no-repeat; }
+#movie_button { background-image: url('/images/general/editor/video.png'); background-repeat: no-repeat; }
+#blockquote_button { background-image: url('/images/general/editor/zitat.png'); background-repeat: no-repeat; }
+#audio_button { background-image: url('/images/general/editor/audio.png'); background-repeat: no-repeat; }
+#code_button { background-image: url('/images/general/editor/code.png'); background-repeat: no-repeat; }
+
+/* -------------------------------------------------------------------
+// markItUp! Universal MarkUp Engine, JQuery plugin
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp * {
+	margin:0px; padding:0px;
+	outline:none;
+}
+.markItUp a:link,
+.markItUp a:visited {
+	color:#000;
+	text-decoration:none;
+}
+.markItUp  {
+	width:700px;
+	margin:5px 0 5px 0;
+	border:5px solid #F5F5F5;	
+}
+.markItUpContainer  {
+	border:1px solid #3C769D;	
+	background:#FFF url(images/bg-container.png) repeat-x top left;
+	padding:5px 5px 2px 5px;
+	font:11px Verdana, Arial, Helvetica, sans-serif;
+}
+.markItUpEditor {
+	font:12px 'Courier New', Courier, monospace;
+	padding:5px 5px 5px 35px;
+	border:3px solid #3C769D;
+	width:643px;
+	height:320px;
+	background-image:url(images/bg-editor.png);
+	background-repeat:no-repeat;
+	clear:both; display:block;
+	line-height:18px;
+	overflow:auto;
+}
+.markItUpPreviewFrame	{
+	overflow:auto;
+	background-color:#FFFFFF;
+	border:1px solid #3C769D;
+	width:99.9%;
+	height:300px;
+	margin:5px 0;
+}
+.markItUpFooter {
+	width:100%;
+	cursor:n-resize;
+}
+.markItUpResizeHandle {
+	overflow:hidden;
+	width:22px; height:5px;
+	margin-left:auto;
+	margin-right:auto;
+	background-image:url(images/handle.png);
+	cursor:n-resize;
+}
+/***************************************************************************************/
+/* first row of buttons */
+.markItUpHeader ul li	{
+	list-style:none;
+	float:left;
+	position:relative;
+}
+.markItUpHeader ul li ul{
+	display:none;
+}
+.markItUpHeader ul li:hover > ul{
+	display:block;
+}
+.markItUpHeader ul .markItUpDropMenu {
+	background:transparent url(images/menu.png) no-repeat 115% 50%;
+	margin-right:5px;
+}
+.markItUpHeader ul .markItUpDropMenu li {
+	margin-right:0px;
+}
+.markItUpHeader ul .markItUpSeparator {
+	margin:0 10px;
+	width:1px;
+	height:16px;
+	overflow:hidden;
+	background-color:#CCC;
+}
+.markItUpHeader ul ul .markItUpSeparator {
+	width:auto; height:1px;
+	margin:0px;
+}
+/* next rows of buttons */
+.markItUpHeader ul ul {
+	display:none;
+	position:absolute;
+	top:18px; left:0px;	
+	background:#F5F5F5;
+	border:1px solid #3C769D;
+	height:inherit;
+}
+.markItUpHeader ul ul li {
+	float:none;
+	border-bottom:1px solid #3C769D;
+}
+.markItUpHeader ul ul .markItUpDropMenu {
+	background:#F5F5F5 url(images/submenu.png) no-repeat 100% 50%;
+}
+/* next rows of buttons */
+.markItUpHeader ul ul ul {
+	position:absolute;
+	top:-1px; left:150px;
+}
+.markItUpHeader ul ul ul li {
+	float:none;
+}
+.markItUpHeader ul a {
+	display:block;
+	width:16px; height:16px;
+	text-indent:-10000px;
+	background-repeat:no-repeat;
+	padding:3px;
+	margin:0px;
+}
+.markItUpHeader ul ul a {
+	display:block;
+	padding-left:0px;
+	text-indent:0;
+	width:120px; 
+	padding:5px 5px 5px 25px;
+	background-position:2px 50%;
+}
+.markItUpHeader ul ul a:hover  {
+	color:#FFF;
+	background-color:#3C769D;
+}
+/***************************************************************************************/
+.html .markItUpEditor {
+	background-image:url(images/bg-editor-html.png);
+}
+.markdown .markItUpEditor {
+	background-image:url(images/bg-editor-markdown.png);
+}
+.textile .markItUpEditor {
+	background-image:url(images/bg-editor-textile.png);
+}
+.bbcode .markItUpEditor {
+	background-image:url(images/bg-editor-bbcode.png);
+}
+.wiki .markItUpEditor,
+.dotclear .markItUpEditor {
+	background-image:url(images/bg-editor-wiki.png);
+}
+
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp .markItUpButton1 a {
+	background-image:url(images/h1.png); 
+}
+.markItUp .markItUpButton2 a {
+	background-image:url(images/h2.png); 
+}
+.markItUp .markItUpButton3 a {
+	background-image:url(images/h3.png); 
+}
+.markItUp .markItUpButton4 a {
+	background-image:url(images/h4.png); 
+}
+.markItUp .markItUpButton5 a {
+	background-image:url(images/h5.png); 
+}
+.markItUp .markItUpButton6 a {
+	background-image:url(images/h6.png); 
+}
+.markItUp .markItUpButton7 a {
+	background-image:url(images/paragraph.png); 
+}
+
+.markItUp .markItUpButton8 a {
+	background-image:url(images/bold.png);
+}
+.markItUp .markItUpButton9 a {
+	background-image:url(images/italic.png);
+}
+.markItUp .markItUpButton10 a {
+	background-image:url(images/stroke.png);
+}
+
+.markItUp .markItUpButton11 a {
+	background-image:url(images/list-bullet.png);
+}
+.markItUp .markItUpButton12 a {
+	background-image:url(images/list-numeric.png);
+}
+.markItUp .markItUpButton13 a {
+	background-image:url(images/list-item.png);
+}
+
+.markItUp .markItUpButton14 a {
+	background-image:url(images/picture.png); 
+}
+.markItUp .markItUpButton15 a {
+	background-image:url(images/link.png);
+}
+
+.markItUp .clean a {
+	background-image:url(images/clean.png);
+}
+.markItUp .preview a {
+	background-image:url(images/preview.png);
+}

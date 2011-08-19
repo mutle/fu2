@@ -1,4 +1,4 @@
--form_for :stylesheet, :url => stylesheet_path(@stylesheet), :html => {:method => :put, :class => "normal"} do |f|
+=form_for :stylesheet, :url => stylesheet_path(@stylesheet), :html => {:method => :put, :class => "normal"} do |f|
   =render :partial => "form", :locals => {:f => f}
   %p
     =f.submit 'Save'
