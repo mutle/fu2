@@ -2,7 +2,10 @@ module ChannelsHelper
   
   def format_body(post)
     text = simple_format(post.body)
-    text = auto_link(text)
+    if text.length < 64000
+      text = auto_link(text)
+    end
+    text
   end
   
   def user_link(user)
