@@ -3,6 +3,9 @@ class ChannelsController < ApplicationController
   before_filter :login_required
   
   def index
+    if current_user && current_user.password_hash.blank?
+      redirect_to password_user_path(:id => current_user.id) and return
+    end
     @recent_channels = Channel.recent_channels(current_user, (params[:page] || 1).to_i)
   end
   

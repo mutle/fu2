@@ -1,14 +1,14 @@
 require 'digest/sha1'
+require 'bcrypt'
+
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
-  attr_accessor :password
-
   serialize :block_users
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
-  validates_length_of       :password, :within => 4..40, :if => :password_required?
+  # validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
@@ -69,9 +69,34 @@ class User < ActiveRecord::Base
     self.find(:all, :order => "LOWER(display_name)")
   end
 
+  def password
+    if password_hash.blank?
+      @password ||= ""
+    else
+      @password ||= BCrypt::Password.new(password_hash)
+    end
+  end
+
+  def password=(pw)
+    length = pw.to_s.size
+    if length < 4
+      errors.add(:password, " is too short (minimum is 4 characters)")
+    elsif length > 40
+      errors.add(:password, " is too long (maximum is 40 characters)")
+    end
+
+    if pw
+      @password = BCrypt::Password.create(pw)
+    else
+      @password = nil
+    end
+  end
+
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find :first, :conditions => ['LOWER(login) = LOWER(?) and activated_at IS NOT NULL', login] # need to get the salt
+    p u
+    p u.authenticated?(password)
     u && u.authenticated?(password) ? u : nil
   end
 
@@ -86,7 +111,11 @@ class User < ActiveRecord::Base
   end
 
   def authenticated?(password)
-    crypted_password == encrypt(password)
+    if password_hash.blank?
+      crypted_password == encrypt(password)
+    else
+      self.password == password
+    end
   end
 
   def remember_token?
@@ -136,12 +165,11 @@ class User < ActiveRecord::Base
     # before filter 
     def encrypt_password
       return if password.blank?
-      self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
-      self.crypted_password = encrypt(password)
+      self.password_hash = password
     end
       
     def password_required?
-      crypted_password.blank? || !password.blank?
+      crypted_password.blank? || password_hash.blank? || !password.blank?
     end
     
     def make_activation_code

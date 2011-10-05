@@ -35,7 +35,7 @@ Rails::Initializer.run do |config|
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
     :key => '_fu2_secure_session',
-    :secure => true,
+    :secure => false, #Rails.env.production?,
     :expire_after => 14 * 24 * 3600,
     :secret      => '6462fc5e86bcac03e72f823083da6747f2fa0e4755150eaf045e3aba0898889b1052da71fde94104ad0f1c0bfcde6c5f84f8ccd92d4c976dc3200b2e6e8c74fe'
   }

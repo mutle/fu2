@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  before_filter :login_required, :except => ["activate", "create"]
+  before_filter :login_required, :except => ["activate", "create", "password"]
   
   def index
     @users = User.all_users
@@ -55,11 +55,20 @@ class UsersController < ApplicationController
   def update
     if params[:id].to_i == current_user.id
       @user = current_user
-      @user.update_attributes(:display_name => params[:user][:display_name], :color => params[:user][:color], :stylesheet_id => params[:user][:stylesheet_id].to_i)
+      if params[:user][:email]
+        @user.update_attributes(:password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :email => params[:user][:email])
+      else
+        @user.update_attributes(:display_name => params[:user][:display_name], :color => params[:user][:color], :stylesheet_id => params[:user][:stylesheet_id].to_i)
+      end
       if @user.valid?
         redirect_to user_path(User.find(params[:id].to_i))
       else
-        render :action => "edit"
+        @user.password_confirmation = @user.password = nil
+        if params[:user][:email]
+          render :action => "password"
+        else
+          render :action => "edit"
+        end
       end
     else
       redirect_to user_path(User.find(params[:id].to_i))
@@ -81,5 +90,13 @@ class UsersController < ApplicationController
   #   end
   #   redirect_back_or_default('/')
   # end
+  
+  def password
+    if current_user && params[:id].to_i == current_user.id
+      @user = current_user
+    else
+      redirect_to user_path(User.find(params[:id].to_i))
+    end
+  end
 
 end
