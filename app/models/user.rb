@@ -151,9 +151,8 @@ class User < ActiveRecord::Base
     "color: #{color}" unless color.blank?
   end
   
-  def update_message_counter
-    self.number_unread_messages = unread_messages.count
-    save
+  def number_unread_messages 
+    Message.count(:conditions => {:user_id => id, :status => 0})
   end
 
   def block_user(u)

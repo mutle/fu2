@@ -12,8 +12,8 @@ class Message < ActiveRecord::Base
   validates_presence_of :user_id, :message => "not found."
   validates_presence_of :subject
  
-  after_save :update_user_message_counter
-  after_destroy :update_user_message_counter
+  # after_save :update_user_message_counter
+  # after_destroy :update_user_message_counter
   
   attr_reader :receiver_name
 
