@@ -7,7 +7,7 @@ class Message < ActiveRecord::Base
   belongs_to :user
   belongs_to :sender, :class_name => "User"
   
-  validates_associated :sender, :user
+  # validates_associated :sender, :user
   
   validates_presence_of :user_id, :message => "not found."
   validates_presence_of :subject
