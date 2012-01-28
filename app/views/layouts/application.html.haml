@@ -9,17 +9,15 @@
         =@channel.title
         |
       fu2
+    =stylesheet_link_tag "application"
     -if params[:stylesheet_id]
       =stylesheet_link_tag params[:stylesheet_id]
     -elsif current_user.stylesheet
       =stylesheet_link_tag current_user.stylesheet.id.to_s
     -else
-      =stylesheet_link_tag "application"
-    =stylesheet_link_tag "/javascripts/markitup/skins/markitup/style.css", "/javascripts/markitup/sets/html/style.css"
-    =stylesheet_link_tag "jquery-ui/jquery-ui-1.8.11.custom"
+      =stylesheet_link_tag "fu2_main"
     =javascript_include_tag "application"
-    =#javascript_include_tag "jquery#{".min.js" if Rails.env == "production"}", "markitup/jquery.markitup", "markitup/sets/html/set", "application", :cache => "base"
-    =javascript_include_tag "/javascripts/jquery-ui-1.8.11.custom.min.js", "/javascripts/markitup/jquery.markitup.js", "/javascripts/markitup/sets/html/set.js"
+    =csrf_meta_tags
   %body
     #main
       #content

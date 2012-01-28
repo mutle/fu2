@@ -1,6 +1,6 @@
 class ChannelsController < ApplicationController
   
-  layout "fu3"
+  # layout "fu3"
 
   before_filter :login_required
 
@@ -34,7 +34,7 @@ class ChannelsController < ApplicationController
 
   def all
     @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
-    render :template => "all"
+    render "all"
   end
   
   def new
