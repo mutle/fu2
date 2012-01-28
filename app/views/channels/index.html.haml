@@ -9,7 +9,7 @@
       %p
         -count = channel.posts.count
         -if count > 0
-          .name= user_name(channel.posts.first(:order => "created_at DESC").user)
+          .name= user_name(Post.first_channel_post(channel).first.user)
         .date
           -if count > 0 && channel
             =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
