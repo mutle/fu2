@@ -1,6 +1,7 @@
 class ChannelsController < ApplicationController
   
   # layout "fu3"
+  layout 'application'
 
   before_filter :login_required
 
