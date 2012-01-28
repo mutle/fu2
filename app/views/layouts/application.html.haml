@@ -13,7 +13,7 @@
     -if params[:stylesheet_id]
       =stylesheet_link_tag params[:stylesheet_id]
     -elsif current_user.stylesheet
-      =stylesheet_link_tag current_user.stylesheet.id.to_s
+      =stylesheet_link_tag "/stylesheets/#{current_user.stylesheet.id}.css"
     -else
       =stylesheet_link_tag "fu2_main"
     =javascript_include_tag "application"
