@@ -168,7 +168,7 @@ class User < ActiveRecord::Base
     end
       
     def password_required?
-      crypted_password.blank? || password_hash.blank? || !password.blank?
+      !password.blank? && (crypted_password.blank? || password_hash.blank?)
     end
     
     def make_activation_code
