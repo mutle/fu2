@@ -2,7 +2,7 @@
 class SessionController < ApplicationController
   
   layout 'unauthorized'
-  
+
   def new
   end
 
@@ -25,5 +25,15 @@ class SessionController < ApplicationController
   end
 
   def change_password
+  end
+
+  def authenticate
+    self.current_user = User.authenticate(params[:login], params[:password])
+    if logged_in?
+      self.current_user.enable_api_usage
+      render :json => {:api_key => self.current_user.api_key}
+    else
+      render :json => {:fail => true}
+    end
   end
 end

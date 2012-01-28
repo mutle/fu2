@@ -13,7 +13,11 @@ Fu2::Application.routes.draw do
     end
   end
 
-  resource :session, :controller => :session
+  resource :session, :controller => :session do
+    collection do
+      post :authenticate
+    end
+  end
   resources :channels do
     collection do
       get :search

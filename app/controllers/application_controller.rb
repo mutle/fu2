@@ -6,7 +6,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find(session[:user_id])
+    if params[:api_key]
+      @current_user ||= User.find_by_api_key(params[:api_key])
+    else
+      @current_user ||= User.find(session[:user_id])
+    end
   end
 
   def current_user=(user)
@@ -24,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    session[:user_id] && !current_user.nil?
+    (session[:user_id] || params[:api_key]) && !current_user.nil?
   end
 
   helper_method :current_user

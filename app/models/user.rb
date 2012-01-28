@@ -96,6 +96,7 @@ class User < ActiveRecord::Base
   def self.authenticate(login, password)
     u = first :conditions => ['LOWER(login) = LOWER(?) and activated_at IS NOT NULL', login] # need to get the salt
     p u
+    return nil unless u
     p u.authenticated?(password)
     u && u.authenticated?(password) ? u : nil
   end
@@ -158,6 +159,13 @@ class User < ActiveRecord::Base
   def block_user(u)
     self.block_users ||= []
     self.block_users << u.id.to_i
+  end
+
+  def enable_api_usage
+    if self.api_key.blank?
+      self.api_key = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+      save
+    end
   end
 
   protected
