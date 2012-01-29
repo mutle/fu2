@@ -1,11 +1,11 @@
 module ChannelsHelper
   
   def format_body(post)
-    text = simple_format(post.body)
+    text = simple_format(post.body, {}, :sanitize => false)
     if text.length < 64000
-      text = auto_link(text)
+      text = auto_link(text, :sanitize => false)
     end
-    text
+    text.html_safe
   end
   
   def user_link(user)
