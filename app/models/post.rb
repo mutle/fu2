@@ -25,5 +25,9 @@ class Post < ActiveRecord::Base
   def can_read?(user)
     channel.can_read?(user)
   end
+
+  def as_json(*args)
+    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login}
+  end
   
 end
