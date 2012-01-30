@@ -8,6 +8,9 @@
     -if result.is_a?(Channel)
       =link_to "Channel Title: #{result.title}", channel_path(result)
     -elsif result.is_a?(Post)
-      =link_to "Channel Title: #{result.channel.title}<br />Post: #{result.excerpts.body}", channel_path(result.channel, :anchor => "post_#{result.id}")
+      -post_link = channel_path(result.channel, :anchor => "post_#{result.id}")
+      =link_to "Channel Title: #{result.channel.title}", post_link
+      %br/
+      =link_to "Post: #{result.excerpts.body}".html_safe, post_link
       ==by #{user_name(result.channel.user)}
 =will_paginate(@search)
