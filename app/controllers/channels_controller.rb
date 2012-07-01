@@ -45,8 +45,11 @@ class ChannelsController < ApplicationController
   
   def create
     @channel = Channel.create(params[:channel].merge(:user_id => current_user.id))
-    
-    redirect_to channel_path(@channel)
+
+    respond_with @channel do |f|
+      f.html { redirect_to channel_path(@channel) }
+      j.json { render :json => @channel }
+    end
   end
   
   def search
