@@ -10,6 +10,8 @@ class Channel < ActiveRecord::Base
   
   before_create :generate_permalink
   after_create :add_first_post
+
+  attr_accessor :current_user
   
   define_index do
     indexes title
@@ -50,6 +52,10 @@ class Channel < ActiveRecord::Base
     return false unless _user
     return true if _user.id == user_id
     default_write
+  end
+
+  def as_json(*args)
+    {:created_at => created_at, :id => id, :last_post => last_post, :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? visited?(@current_user) : false}
   end
   
   def visited?(current_user)

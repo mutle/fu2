@@ -12,6 +12,7 @@ class ChannelsController < ApplicationController
       redirect_to password_user_path(:id => current_user.id) and return
     end
     @recent_channels = Channel.recent_channels(current_user, (params[:page] || 1).to_i)
+    @recent_channels.each { |c| c.current_user = current_user }
     respond_with @recent_channels
   end
   
