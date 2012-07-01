@@ -2,11 +2,16 @@ class PostsController < ApplicationController
   
   before_filter :login_required
   before_filter :load_channel
+
+  respond_to :html, :json
   
   def create
     @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id)
     
-    redirect_to channel_path(@channel, :anchor => "post_#{@post.id}")
+    respond_with @post do |f|
+      f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
+      f.json { render :json => @post }
+    end
   end
   
   def edit
