@@ -15,6 +15,10 @@ class ChannelsController < ApplicationController
     @recent_channels.each { |c| c.current_user = current_user }
     respond_with @recent_channels
   end
+
+  def live
+    render :layout => "fu3"
+  end
   
   def show
     if params[:id] == "all"
@@ -45,6 +49,7 @@ class ChannelsController < ApplicationController
   
   def create
     @channel = Channel.create(params[:channel].merge(:user_id => current_user.id))
+    notification :channel_create, @channel
 
     respond_with @channel do |f|
       f.html { redirect_to channel_path(@channel) }

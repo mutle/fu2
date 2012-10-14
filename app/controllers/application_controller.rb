@@ -31,5 +31,10 @@ class ApplicationController < ActionController::Base
     (session[:user_id] || params[:api_key]) && !current_user.nil?
   end
 
+  def notification(type, object)
+    $redis.publish 'fu2_live', {:type => type, :object => object.as_json}.to_json
+  end
+
+
   helper_method :current_user
 end

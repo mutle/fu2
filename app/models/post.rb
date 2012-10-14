@@ -27,7 +27,7 @@ class Post < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login}
+    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title}
   end
   
 end

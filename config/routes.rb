@@ -38,5 +38,6 @@ Fu2::Application.routes.draw do
 
   resources :uploads
   resources :stylesheets
+  match 'live' => 'channels#live', :as => :live
   match '/' => 'channels#index', :as => :root
 end
