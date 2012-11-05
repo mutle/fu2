@@ -117,3 +117,30 @@ ul#message_list {
 .match {
   font-weight: bold;
 }
+
+.post .date {
+  float: right;
+  margin-left: 20px;
+}
+
+.post .date a {
+  float: right;
+}
+
+.post .date .fave {
+  float: left;
+  width: 56px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.post .date .count {
+  text-align: right;
+  display: inline;
+  padding-right: 10px;
+}
+
+.post .date .fave .favorite {
+  text-align: right;
+}
+
