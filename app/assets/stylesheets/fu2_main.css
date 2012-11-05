@@ -98,24 +98,18 @@
 .post .date .fave {
   float: left;
   width: 56px;
-  text-align: center;
+  text-align: right;
   padding-right: 10px;
-  position: relative;
 }
 
 .post .date .count {
-  width: 20px;
-  position: absolute;
-  top: 0px; right: 36px;
-  z-index: 10;
   text-align: right;
+  display: inline;
+  padding-right: 10px;
 }
 
 .post .date .fave .favorite {
-  width: 46px;
   text-align: right;
-  position: absolute;
-  top: 0px; right: 10px;
 }
 
 .post .body {
