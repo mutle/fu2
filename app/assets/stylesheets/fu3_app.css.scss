@@ -1,0 +1,194 @@
+body {
+  font-family: Helvetica, Verdana, sans-serif;
+  background-color: #fff;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
+h2 {
+  font-size: 1.25em;
+  margin-bottom: 1em;
+}
+
+h3 {
+  font-size: 1.125em;
+  margin-bottom: 1em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+blockquote {
+  padding-left: 1.2em;
+  border-left: 4px solid #999;
+  margin-bottom: 1em;
+}
+
+channel {
+  display: block;
+  border-radius: 12px;
+  border: 1px solid black;
+  margin: 2em;
+  width: 660px;
+  padding: 20px;
+  background-color: #fafafa;
+
+  name {
+    display: block;
+    border-bottom: 1px solid black;
+    margin-bottom: 2em;
+  }
+}
+
+bubble.response {
+  margin-bottom: 0px;
+}
+bubble.selected {
+  background-color: #ccc;
+}
+bubble {
+  display: block;
+  width: 620px;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid black;
+  margin-bottom: 1em;
+
+  author {
+    float: left;
+    display: block;
+  }
+
+  date {
+    text-align: right;
+    display: block;
+  }
+
+  text {
+    display: block;
+    margin-top: 1em;
+
+    response {
+      text-align: right;
+
+      .response_text, .response_text_long {
+        display: block;
+        width: 520px;
+      }
+      .response_text_long {
+        height: 10em;
+      }
+      fieldset {
+        position: relative;
+      }
+      .submit {
+        position: absolute;
+        right: 0px; bottom: 0px;
+        float: left;
+        margin-left: 530px;
+      }
+    }
+
+    blockquote {
+      text-align: justify;
+    }
+  }
+}
+
+#container {
+}
+
+#content {
+  margin-top: 1em;
+  border: 1px solid red;
+  background-color: #ccc;
+  padding: 20px;
+  padding-bottom: 2em;
+}
+
+h1#title {
+  text-align: center;
+  font-size: 2em;
+}
+
+.loading {
+  padding: 2em 0px;
+  text-align: center;
+}
+
+#channel_list {
+}
+
+#channel_list ul {
+  list-style: none;
+}
+
+#channel_list ul li {
+  padding: none;
+  line-height: 2em;
+  clear: both;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#channel_list ul li .title {
+  padding-left: 1.0em;
+}
+
+#channel_list ul  .channel.selected {
+  background-color: #000;
+  color: #fff;
+}
+
+#channel_list ul  .channel .unread_count {
+  display: inline;
+  float: right;
+  background-color: #000;
+  color: #fff;
+  padding: 0px 1em;
+  border: 2px solid #fff;
+  border-radius: 24px;
+  font-weight: bold;
+}
+
+#channel {
+}
+
+#channel .post {
+  padding: 15px;
+  border: 1px solid black;
+  margin-bottom: 1em;
+}
+
+#channel .post .user {
+  float: left;
+}
+
+#channel .post .date {
+  text-align: right;
+  margin-bottom: 1em;
+}
+
+#channel .comment {
+  padding: 15px;
+  border: 1px solid black;
+  margin-bottom: 1em;
+}
+
+#channel .comment  textarea {
+  width: 600px;
+  height: 250px;
+}
