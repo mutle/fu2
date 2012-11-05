@@ -91,6 +91,33 @@
   margin-left: 20px;
 }
 
+.post .date a {
+  float: right;
+}
+
+.post .date .fave {
+  float: left;
+  width: 56px;
+  text-align: center;
+  padding-right: 10px;
+  position: relative;
+}
+
+.post .date .count {
+  width: 20px;
+  position: absolute;
+  top: 0px; right: 36px;
+  z-index: 10;
+  text-align: right;
+}
+
+.post .date .fave .favorite {
+  width: 46px;
+  text-align: right;
+  position: absolute;
+  top: 0px; right: 10px;
+}
+
 .post .body {
   margin-left: 160px;
   margin-bottom: 16px;

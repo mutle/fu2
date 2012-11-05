@@ -32,6 +32,8 @@ class User < ActiveRecord::Base
   
   has_many :messages
   has_many :unread_messages, :class_name => "Message", :conditions => "status = #{Message::STATUS_UNREAD}"
+
+  has_many :faves
   
   belongs_to :stylesheet
 

@@ -45,4 +45,19 @@ $(document).ready(function() {
     setTimeout("$('input#search').attr('autocomplete', 'off');", 500);
 
   }
+
+  $(".fave").click(function() {
+    var self = $(this);
+    var post = self.find(".favorite").attr("data-post-id");
+    $.ajax({url:"/posts/"+post+"/fave", dataType: "json", type: "post"}).done(function(msg) {
+      self.find(".count").text(""+msg.count);
+      var img = self.find('img');
+      if(msg.status == true) {
+        img.attr("src", img.attr("src").replace('off', 'on'));
+      } else {
+        img.attr("src", img.attr("src").replace('on', 'off'));
+      }
+    });
+    return false;
+  });
 });

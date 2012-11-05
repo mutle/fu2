@@ -15,3 +15,10 @@
           ago
         In
         =link_to post.channel.title, channel_path(post.channel, :anchor => "post_#{post.id}")
+%h3 Faves
+%ul
+  -@user.faves.includes(:post => :channel).each do |fave|
+    %li
+      =link_to fave.post.body[0..40], channel_path(fave.post.channel, :anchor => "post_#{fave.post.id}")
+      in 
+      =link_to fave.post.channel.title, channel_path(fave.post.channel)

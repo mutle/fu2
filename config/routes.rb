@@ -29,6 +29,13 @@ Fu2::Application.routes.draw do
     resources :posts
   end
 
+  resources :posts do
+    member do
+      post :fave
+    end
+  end
+
+
   resources :messages do
     collection do
       get :inbox

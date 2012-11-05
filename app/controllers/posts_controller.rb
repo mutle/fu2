@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   
   before_filter :login_required
-  before_filter :load_channel
+  before_filter :load_channel, :except => :fave
 
   respond_to :html, :json
   
@@ -35,6 +35,18 @@ class PostsController < ApplicationController
     @post.destroy if @post.user_id == current_user.id
     
     redirect_to channel_path(@channel)
+  end
+  
+  def fave
+    @post = Post.find(params[:id].to_i)
+    if @post.faved_by? @current_user
+      @post.unfave @current_user
+      notification :post_unfave, @post
+    else
+      @post.fave @current_user
+      notification :post_fave, @post
+    end
+    render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count}
   end
   
   private

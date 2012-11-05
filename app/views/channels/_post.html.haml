@@ -2,6 +2,9 @@
 =div_for post do
   .name= user_name(post.user)
   .date
+    .fave
+      .count= post.faves.count
+      =link_to image_tag("favorite_#{post.faved_by?(current_user) ? "on" : "off"}.png"), "#", :class => "favorite", "data-post-id" => post.id, :title => "Faved by:\n"+post.faves.map { |f| f.user.login }.join("\n")
     =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}")
     / =time_ago_in_words(post.created_at)
     / ago

@@ -2,6 +2,7 @@ class Post < ActiveRecord::Base
   
   belongs_to :channel
   belongs_to :user
+  has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
   
@@ -31,6 +32,22 @@ class Post < ActiveRecord::Base
   
   def can_read?(user)
     channel.can_read?(user)
+  end
+  
+  def faves_for(user)
+     faves.where(:user_id => user.id)
+  end
+
+  def faved_by?(user)
+    faves_for(user).count > 0
+  end
+
+  def fave(user)
+    faves.create :user_id => user.id
+  end
+
+  def unfave(user)
+    faves_for(user).destroy_all
   end
 
   def as_json(*args)
