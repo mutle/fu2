@@ -168,6 +168,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    {:id => id, :login => login, :display_name => display_name, :display_color => display_color}
+  end
+
   protected
     # before filter 
     def encrypt_password

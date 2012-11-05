@@ -1,6 +1,7 @@
 module ChannelsHelper
   
   def format_body(post)
+    return auto_link(RDiscount.new(post.body).to_html, :sanitize => false).html_safe if post.markdown?
     text = simple_format(post.body, {}, :sanitize => false)
     if text.length < 64000
       text = auto_link(text, :sanitize => false)

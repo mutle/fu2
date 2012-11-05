@@ -11,6 +11,7 @@ gem "rails_autolink"
 gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
+gem "rdiscount"
 
 # Gems used only for assets and not required
 # in production environments by default.

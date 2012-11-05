@@ -17,7 +17,7 @@ class ChannelsController < ApplicationController
   end
 
   def live
-    render :layout => "fu3"
+    render :layout => "nextgen"
   end
   
   def show

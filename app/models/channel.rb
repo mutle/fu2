@@ -18,8 +18,8 @@ class Channel < ActiveRecord::Base
     set_property :field_weights => {:title => 100}
   end
   
-  def self.recent_channels(_user, page)
-    self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => 50
+  def self.recent_channels(_user, page, per_page = 50)
+    self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => per_page
   end
   
   def self.all_channels(_user, page)

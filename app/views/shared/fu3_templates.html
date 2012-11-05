@@ -36,3 +36,34 @@
     <%= body %>
   </div>
 </script>
+
+<script type="text/x-handlebars" id="channel-view" data-template-name="channel-view">
+  <name>{{title}}</name>
+  <content></content>
+  <response>
+    <button class="respond">Respond</button>
+  </response>
+</script>
+
+<script type="text/x-handlebars" id="post-view" data-template-name="post-view">
+  <author>{{user_name}}</author>
+  <date>{{created_at}}</date>
+  <text>
+    {{{body}}}
+  </text>
+  <actions>
+    <action class="star">*</action>
+    <action class="respond">R</action>
+  </actions>
+</script>
+
+<script type="text/x-handlebars" id="response-view" data-template-name="response-view">
+  <text>
+    <response>
+      <textarea class="response_text_long"></textarea>
+      <fieldset>
+        <button class="submit">Comment</button>
+      </fieldset>
+    <response>
+  </text>
+</script>

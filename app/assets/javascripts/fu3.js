@@ -7,5 +7,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require underscore
+//= require handlebars
+//= require markdown
+//= require json2
 //= require backbone
-//= require fu3_app
+//= require fu2_live

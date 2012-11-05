@@ -7,6 +7,9 @@ class Post < ActiveRecord::Base
   
   after_create :delete_channel_visits
   after_create :update_channel_last_post
+
+  before_create :set_markdown
+  # before_update :set_markdown
   
   define_index do
     indexes body
@@ -21,13 +24,17 @@ class Post < ActiveRecord::Base
   def update_channel_last_post
     channel.update_attribute(:last_post, created_at)
   end
+
+  def set_markdown
+    self.markdown = true
+  end
   
   def can_read?(user)
     channel.can_read?(user)
   end
 
   def as_json(*args)
-    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title}
+    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?}
   end
   
 end
