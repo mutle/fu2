@@ -18,6 +18,7 @@
 %h3 Faves
 %ul
   -@user.faves.includes(:post => :channel).each do |fave|
+    -next unless fave.post
     %li
       =link_to fave.post.body[0..40], channel_path(fave.post.channel, :anchor => "post_#{fave.post.id}")
       in 
