@@ -6,7 +6,7 @@ class PostsController < ApplicationController
   respond_to :html, :json
   
   def create
-    @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id)
+    @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)
     notification :post_create, @post
     
     respond_with @post do |f|

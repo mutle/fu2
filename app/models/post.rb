@@ -9,7 +9,7 @@ class Post < ActiveRecord::Base
   after_create :delete_channel_visits
   after_create :update_channel_last_post
 
-  before_create :set_markdown
+  # before_create :set_markdown
   # before_update :set_markdown
   
   define_index do
@@ -27,7 +27,7 @@ class Post < ActiveRecord::Base
   end
 
   def set_markdown
-    self.markdown = true
+    self.markdown = user.markdown?
   end
   
   def can_read?(user)

@@ -11,4 +11,7 @@
     %label{:for => "user_stylesheet_id"} Stylesheet:
     =f.select :stylesheet_id, [["Default", 0]] + Stylesheet.all(:order => "LOWER(title) DESC").map { |s| ["#{h(s.title)} by #{h(s.user.display_name)}", s.id] }
   %p
+    %label{:for => "markdown"} Markdown syntax:
+    =f.check_box :markdown
+  %p
     =f.submit

@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   before_create :set_display_name
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id
+  attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown
   
   after_create :create_private_channel
   

@@ -12,7 +12,7 @@ db/schema.rb
 db/development.sqlite3
 vendor/bundler_gems
 config/ultrasphinx/development.base
-*.swp
+*.sw[p,o,n]
 .bundle
 db/*.sqlite3
 log/*.log
