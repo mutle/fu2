@@ -17,6 +17,11 @@ a {
 .center { text-align: center; }
 .right { text-align: right; }
 
+[title] {
+  border-bottom: 1px dotted #BBB;
+}
+
+
 blockquote {
   border-left: 3px solid black;
   margin: 0px 0px 0px 10px;
