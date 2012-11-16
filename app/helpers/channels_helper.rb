@@ -2,9 +2,7 @@ module ChannelsHelper
   
   def format_body(post)
     body = post.body.gsub(/\r\n/, "\n")
-    p body
     body = body.gsub(/([^\n])\n([^\n])/, "\\1<br />\\2")
-    p body
     return auto_link(RDiscount.new(body).to_html, :sanitize => false).html_safe if post.markdown?
     text = simple_format(post.body, {}, :sanitize => false)
     if text.length < 64000
