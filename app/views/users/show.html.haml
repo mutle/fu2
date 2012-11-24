@@ -4,8 +4,8 @@
 -else
   =link_to "Send a private Message", new_message_path(:receiver_name => @user.login)
   =link_to "Block", block_user_path(@user.id), :method => :put
-%h3= "Recent Posts (#{@user.posts.count} total)"
--if @user.posts.count > 0
+%h3= "Recent Posts (#{@user.id == 13 ? 0 : @user.posts.count} total)"
+-if @user.posts.count > 0 && @user.id != 13
   %ul
     -@user.posts.all(:limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post|
       -next unless post and post.channel

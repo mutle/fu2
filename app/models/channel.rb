@@ -11,7 +11,7 @@ class Channel < ActiveRecord::Base
   before_create :generate_permalink
   after_create :add_first_post
 
-  attr_accessor :current_user
+  attr_accessor :current_user, :markdown
   
   define_index do
     indexes title
@@ -35,7 +35,7 @@ class Channel < ActiveRecord::Base
   end
   
   def add_first_post
-    posts.create(:body => @body || "... has nothing to say", :user_id => user_id) if @body
+    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown) if @body
   end
   
   def generate_permalink

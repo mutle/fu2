@@ -48,7 +48,7 @@ class ChannelsController < ApplicationController
   end
   
   def create
-    @channel = Channel.create(params[:channel].merge(:user_id => current_user.id))
+    @channel = Channel.create(params[:channel].merge(:user_id => current_user.id, :markdown => current_user.markdown?))
     notification :channel_create, @channel
 
     respond_with @channel do |f|
