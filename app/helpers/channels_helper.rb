@@ -13,20 +13,24 @@ module ChannelsHelper
     end
   end
 
+  PIPELINE_CONTEXT = {
+    :asset_root => "/images"
+  }
+
   MARKDOWN_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
     Pipeline::ImageMaxWidthFilter,
     Pipeline::MentionFilter,
     Pipeline::EmojiFilter,
     Pipeline::AutolinkFilter
-  ]
+  ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
     SimpleFormatFilter,
     Pipeline::ImageMaxWidthFilter,
     Pipeline::MentionFilter,
     Pipeline::EmojiFilter,
     Pipeline::AutolinkFilter
-  ]
+  ], PIPELINE_CONTEXT
   
   def format_body(post)
     pipeline = post.markdown? ? MARKDOWN_PIPELINE : SIMPLE_PIPELINE
