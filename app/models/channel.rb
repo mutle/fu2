@@ -1,5 +1,7 @@
 class Channel < ActiveRecord::Base
-  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   belongs_to :user
   has_many :posts, :order => "created_at"
   has_many :channel_users
@@ -13,10 +15,27 @@ class Channel < ActiveRecord::Base
 
   attr_accessor :current_user, :markdown
   
+  index_name "cheannels-#{Rails.env}"
+
+  mapping do
+    indexes :_id, index: :not_analyzed
+    indexes :title, analyzer: 'snowball', boost: 100
+    indexes :created_at, type: 'date', index: :not_analyzed
+  end
+  
   define_index do
     indexes title
     set_property :field_weights => {:title => 100}
   end
+
+  def to_indexed_json
+    {
+      _id: _id,
+      title: title,
+      created_at: created_at
+    }.to_json
+  end
+  
   
   def self.recent_channels(_user, page, per_page = 50)
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => per_page

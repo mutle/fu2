@@ -1,5 +1,7 @@
 class Post < ActiveRecord::Base
-  
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   belongs_to :channel
   belongs_to :user
   has_many :faves
@@ -12,10 +14,26 @@ class Post < ActiveRecord::Base
   # before_create :set_markdown
   # before_update :set_markdown
   
+  index_name "posts-#{Rails.env}"
+
+  mapping do
+    indexes :_id, index: :not_analyzed
+    indexes :body, analyzer: 'snowball'
+    indexes :created_at, type: 'date', index: :not_analyzed
+  end
+  
   define_index do
     indexes body
     has channel(:default_read)
     where sanitize_sql(['default_read', true])
+  end
+
+  def to_indexed_json
+    {
+      _id: _id,
+      body: body,
+      created_at: created_at
+    }.to_json
   end
   
   def delete_channel_visits

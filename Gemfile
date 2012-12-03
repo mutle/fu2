@@ -12,6 +12,7 @@ gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
 gem "html-pipeline", :require => "html/pipeline"
+gem "tire"
 
 # Gems used only for assets and not required
 # in production environments by default.
