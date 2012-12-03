@@ -22,7 +22,11 @@ class UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id])
+    @user = begin
+      User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      User.first(:conditions => ["LOWER(login) = LOWER(?)", params[:id]]) || raise(ActiveRecord::RecordNotFound)
+    end
     respond_with @user
   end
 

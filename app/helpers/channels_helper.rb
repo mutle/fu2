@@ -14,7 +14,8 @@ module ChannelsHelper
   end
 
   PIPELINE_CONTEXT = {
-    :asset_root => "/images"
+    :asset_root => "/images",
+    :base_url => "/users"
   }
 
   MARKDOWN_PIPELINE = Pipeline.new [
