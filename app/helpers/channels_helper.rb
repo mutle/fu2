@@ -32,6 +32,10 @@ module ChannelsHelper
     Pipeline::EmojiFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
+  TITLE_PIPELINE = Pipeline.new [
+    Pipeline::PlainTextInputFilter,
+    Pipeline::EmojiFilter
+  ], PIPELINE_CONTEXT
   
   def format_body(post)
     pipeline = post.markdown? ? MARKDOWN_PIPELINE : SIMPLE_PIPELINE
@@ -46,6 +50,10 @@ module ChannelsHelper
   
   def user_name(user)
     "&lt;".html_safe + user_link(user) + "&gt;".html_safe
+  end
+
+  def format_title(channel)
+    TITLE_PIPELINE.call(channel.title)[:output].to_s.html_safe
   end
   
 end

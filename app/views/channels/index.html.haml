@@ -15,7 +15,7 @@
             =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
           -else
             No Posts yet.
-        =link_to h(channel.title), channel_path(channel)
+        =link_to format_title(channel), channel_path(channel)
       .clear
 
 %br/
