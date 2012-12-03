@@ -2,7 +2,7 @@
 %p= link_to "Bottom", channel_path(@channel, :anchor => "comments")
 -if @channel.can_read?(current_user)
   -@channel.posts.each do |post|
-    -if post.can_read?(current_user) && post.user_id != 13
+    -if post.can_read?(current_user)
       =render :partial => "post", :object => post
   %hr/
 -else

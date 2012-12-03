@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "rails", "3.2.1"
+gem "rails", "3.2.9"
 gem "pg", "~>0.11"
 gem "haml", "3.2.0.alpha.10"
 gem "thinking-sphinx", "2.0.11"
@@ -11,7 +11,7 @@ gem "rails_autolink"
 gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
-gem "rdiscount"
+gem "html-pipeline", :require => "html/pipeline"
 
 # Gems used only for assets and not required
 # in production environments by default.

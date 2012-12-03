@@ -1,14 +1,37 @@
 module ChannelsHelper
+  include HTML
+
+
+  class SimpleFormatFilter < Pipeline::Filter
+    include ActionView::Helpers::TextHelper
+    def call
+      if html.size < 64000
+        simple_format(html, {}, :sanitize => false)
+      else
+        html
+      end
+    end
+  end
+
+  MARKDOWN_PIPELINE = Pipeline.new [
+    Pipeline::MarkdownFilter,
+    Pipeline::ImageMaxWidthFilter,
+    Pipeline::MentionFilter,
+    Pipeline::EmojiFilter,
+    Pipeline::AutolinkFilter
+  ]
+  SIMPLE_PIPELINE = Pipeline.new [
+    SimpleFormatFilter,
+    Pipeline::ImageMaxWidthFilter,
+    Pipeline::MentionFilter,
+    Pipeline::EmojiFilter,
+    Pipeline::AutolinkFilter
+  ]
   
   def format_body(post)
-    body = post.body.gsub(/\r\n/, "\n")
-    body = body.gsub(/([^\n])\n([^\n])/, "\\1<br />\\2")
-    return auto_link(RDiscount.new(body).to_html, :sanitize => false).html_safe if post.markdown?
-    text = simple_format(post.body, {}, :sanitize => false)
-    if text.length < 64000
-      text = auto_link(text, :sanitize => false)
-    end
-    text.html_safe
+    pipeline = post.markdown? ? MARKDOWN_PIPELINE : SIMPLE_PIPELINE
+    result = pipeline.call(post.body)
+    return result[:output].to_s.html_safe
   end
   
   def user_link(user)
