@@ -18,21 +18,21 @@ class Channel < ActiveRecord::Base
   index_name "cheannels-#{Rails.env}"
 
   mapping do
-    indexes :_id, index: :not_analyzed
-    indexes :title, analyzer: 'snowball', boost: 100
-    indexes :created_at, type: 'date', index: :not_analyzed
+    indexes :_id, :index => :not_analyzed
+    indexes :title, :analyzer => 'snowball', :boost => 100
+    indexes :created_at, :type => 'date', :index => :not_analyzed
   end
   
-  define_index do
-    indexes title
-    set_property :field_weights => {:title => 100}
-  end
+  # define_index do
+  #   indexes title
+  #   set_property :field_weights => {:title => 100}
+  # end
 
   def to_indexed_json
     {
-      _id: _id,
-      title: title,
-      created_at: created_at
+      :_id => _id,
+      :title => title,
+      :created_at => created_at
     }.to_json
   end
   

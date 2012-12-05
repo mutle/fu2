@@ -5,12 +5,14 @@
   %em No results found.
 -@search.each do |result|
   %p
-    -if result.is_a?(Channel)
-      =link_to "Channel Title: #{result.title}", channel_path(result)
-    -elsif result.is_a?(Post)
-      -post_link = channel_path(result.channel, :anchor => "post_#{result.id}")
-      =link_to "Channel Title: #{result.channel.title}", post_link
+    -if result.type == "channel"
+      -channel = result.load
+      =link_to "Channel Title: #{channel.title}", channel_path(channel)
+    -elsif result.type == "post"
+      -post = result.load(:include => "channel")
+      -post_link = channel_path(post.channel, :anchor => "post_#{post.id}")
+      =link_to "Channel Title: #{post.channel.title}", post_link
       %br/
-      =link_to "Post: #{result.excerpts.body}".html_safe, post_link
-      ==by #{user_name(result.channel.user)}
+      =link_to "Post: #{highlight h(post.body), @query}".html_safe, post_link
+      ==by #{user_name(post.channel.user)}
 =will_paginate(@search)

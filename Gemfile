@@ -3,7 +3,6 @@ source :rubygems
 gem "rails", "3.2.9"
 gem "pg", "~>0.11"
 gem "haml", "3.2.0.alpha.10"
-gem "thinking-sphinx", "2.0.11"
 gem "jquery-rails"
 gem 'json'
 gem "will_paginate"
