@@ -12,6 +12,11 @@ module ChannelsHelper
       end
     end
   end
+  class PreserveFormatting < Pipeline::Filter
+    def call
+      html.gsub /<([^\/a-zA-Z])/, '&lt;\1'
+    end
+  end
 
   PIPELINE_CONTEXT = {
     :asset_root => "/images",
@@ -20,14 +25,15 @@ module ChannelsHelper
 
   MARKDOWN_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
-    Pipeline::ImageMaxWidthFilter,
+    # Pipeline::ImageMaxWidthFilter,
     Pipeline::MentionFilter,
     Pipeline::EmojiFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
     SimpleFormatFilter,
-    Pipeline::ImageMaxWidthFilter,
+    # Pipeline::ImageMaxWidthFilter,
+    PreserveFormatting,
     Pipeline::MentionFilter,
     Pipeline::EmojiFilter,
     Pipeline::AutolinkFilter
