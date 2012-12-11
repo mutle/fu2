@@ -62,16 +62,16 @@ class ChannelsController < ApplicationController
     @query = params[:search].to_s
     page = (params[:page] || 1).to_i
     if @query =~ /^title:(.*)$/
-      @search = Channel.search($1, :per_page => 25, :page => page)
+      @search = Channel.search_channels($1, page)
     else
-      @search = Channel.search(@query, :per_page => 25, :page => page)
-      @search = Post.search(@query, :per_page => 25, :page => post_page)
+      @search = Channel.search_channels_and_posts(@query, page)
       # @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
     end
+    p @search
 
     respond_to do |format|
       format.html
-      format.json { render :json => @search.map { |r| o = r.load; {:title => o.title, :display_title => highlight(o.title, @query), :id => o.id} } }
+      format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight(r.title, @query), :id => r.id} } }
     end
   end
   

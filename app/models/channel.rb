@@ -15,7 +15,7 @@ class Channel < ActiveRecord::Base
 
   attr_accessor :current_user, :markdown
   
-  index_name "cheannels-#{Rails.env}"
+  index_name "channels-#{Rails.env}"
 
   mapping do
     indexes :_id, :index => :not_analyzed
@@ -43,6 +43,25 @@ class Channel < ActiveRecord::Base
   
   def self.all_channels(_user, page)
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "LOWER(title)", :page => page, :per_page => 100
+  end
+
+  def self.search_channels(title, page)
+    search :per_page => 25, :page => page, :load => true do
+      title.split(' ').each do |t|
+        query { prefix :title, t } 
+      end
+    end
+  end
+
+  def self.search_channels_and_posts(searchquery, page)
+    Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
+      per_page = 25
+      size per_page
+      from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
+      searchquery.split(' ').each do |q|
+        query { string q }
+      end
+    end.results
   end
   
   def body=(body)

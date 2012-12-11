@@ -5,11 +5,11 @@
   %em No results found.
 -@search.each do |result|
   %p
-    -if result.type == "channel"
-      -channel = result.load
+    -if result.instance_of? Channel
+      -channel = result
       =link_to "Channel Title: #{channel.title}", channel_path(channel)
-    -elsif result.type == "post"
-      -post = result.load(:include => "channel")
+    -elsif result.instance_of? Post
+      -post = result
       -post_link = channel_path(post.channel, :anchor => "post_#{post.id}")
       =link_to "Channel Title: #{post.channel.title}", post_link
       %br/
