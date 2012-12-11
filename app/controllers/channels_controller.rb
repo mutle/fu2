@@ -62,7 +62,8 @@ class ChannelsController < ApplicationController
     @query = params[:search].to_s
     page = (params[:page] || 1).to_i
     if @query =~ /^title:(.*)$/
-      @search = Channel.search_channels($1, page)
+      @query = $1
+      @search = Channel.search_channels(@query, page)
     else
       @search = Channel.search_channels_and_posts(@query, page)
       # @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
