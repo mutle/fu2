@@ -6,7 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui-1.8.11.custom.min
 //= require jquery.markitup
 //= require markitup-html
+//= require autocompleter
 //= require fu2
