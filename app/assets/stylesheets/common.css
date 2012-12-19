@@ -173,7 +173,7 @@ ul.autocompleter li:last-child {
   border-bottom: none;
 }
 
-ul.autocompleter li a:hover {
+ul.autocompleter li.highlight a {
   background-color: #000;
   color: #fff;
 }
