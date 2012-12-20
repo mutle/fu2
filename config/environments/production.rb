@@ -43,7 +43,7 @@ Fu2::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( fu2_main.css fu3.js fu3.css )
+  config.assets.precompile += %w( fu2_main.css reset.css fu3.js fu3.css )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
@@ -57,4 +57,6 @@ Fu2::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  config.force_ssl = true
 end
