@@ -76,7 +76,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.19)
     multi_json (1.5.0)
-    newrelic_rpm (3.4.1)
+    newrelic_rpm (3.5.4.33)
     nokogiri (1.5.5)
     pg (0.14.1)
     polyglot (0.3.3)
