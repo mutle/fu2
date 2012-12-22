@@ -29,7 +29,7 @@ class Post < ActiveRecord::Base
   # end
 
   def to_indexed_json
-    return {}.to_json if !channel.default_read?
+    return {}.to_json if !channel || !channel.default_read?
     {
       :_id => _id,
       :body => body,
