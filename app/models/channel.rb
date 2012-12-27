@@ -47,8 +47,10 @@ class Channel < ActiveRecord::Base
 
   def self.search_channels(title, page)
     search :per_page => 25, :page => page, :load => true do
-      title.split(' ').each do |t|
-        query { string "*#{t}*" } 
+      query do
+        title.split(' ').each do |t|
+          string "*#{t}*"
+        end
       end
     end
   end
