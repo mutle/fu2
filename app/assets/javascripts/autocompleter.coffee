@@ -31,7 +31,10 @@ class Autocompleter
           autocompleter.setHighlight autocompleter.list.find("li").first()
         return false
       input = $(this).val()
-      autocompleter.query "#{input}" if input.length >= 2
+      if input.length >= 2
+        autocompleter.query "#{input}" 
+      else if input.length == 0
+        autocompleter.list.hide()
     @o.blur ->
       window.console.log 'blur'
       autocompleter.list.hide()

@@ -72,7 +72,7 @@ class ChannelsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight(r.title, @query), :id => r.id} } }
+      format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
   end
   

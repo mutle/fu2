@@ -48,8 +48,10 @@ class Channel < ActiveRecord::Base
   def self.search_channels(title, page)
     search :per_page => 25, :page => page, :load => true do
       query do
-        title.split(' ').each do |t|
-          string "*#{t}*"
+        boolean do
+          title.split(' ').each do |t|
+            must { string "*#{t}*" }
+          end
         end
       end
     end

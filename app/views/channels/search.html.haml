@@ -13,6 +13,6 @@
       -post_link = channel_path(post.channel, :anchor => "post_#{post.id}")
       =link_to "Channel Title: #{post.channel.title}", post_link
       %br/
-      =link_to "Post: #{highlight h(post.body), @query}".html_safe, post_link
+      =link_to "Post: #{highlight_results h(post.body), @query}".html_safe, post_link
       ==by #{user_name(post.channel.user)}
 =will_paginate(@search)

@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
     $redis.publish 'fu2_live', {:type => type, :object => object.as_json}.to_json
   end
 
+  def highlight_results(text, query)
+    query.split(" ").inject(text) { |s,q| s = highlight(s, q) }
+  end
+  helper_method :highlight_results
 
   helper_method :current_user
 end
