@@ -8,7 +8,7 @@ class PostsController < ApplicationController
   def create
     @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)
     notification :post_create, @post
-    increment_metric "posts"
+    increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     
