@@ -32,6 +32,7 @@
         %ul#menu
           %li= link_to "Settings", edit_user_path(current_user)
           %li= link_to "Stylesheets", stylesheets_path
-          %li= link_to "Inbox (#{current_user.number_unread_messages})", inbox_messages_path
+          -n = current_user.number_unread_messages
+          %li= link_to "#{'<strong>' if n > 0}Inbox (#{n})#{'</strong>' if n > 0}".html_safe, inbox_messages_path
           %li= link_to "Logout", session_path, :method => :delete
         =yield

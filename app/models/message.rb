@@ -6,6 +6,9 @@ class Message < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :sender, :class_name => "User"
+
+  scope :incoming_messages_from_user, lambda { |u| where(:user_id => u.id).order("created_at DESC") }
+  scope :outgoing_messages_from_user, lambda { |u| where(:sender_id => u.id).order("created_at DESC") }
   
   # validates_associated :sender, :user
   

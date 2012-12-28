@@ -40,6 +40,7 @@ Fu2::Application.routes.draw do
     collection do
       get :inbox
       get :sent
+      delete :destroy_all
     end
   end
 

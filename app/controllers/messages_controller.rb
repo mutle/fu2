@@ -43,4 +43,13 @@ class MessagesController < ApplicationController
     end
   end
 
+  def destroy_all
+    @incoming_messages = Message.incoming_messages_from_user(current_user)
+    @incoming_messages.destroy_all
+    @outgoing_messages = Message.outgoing_messages_from_user(current_user)
+    @outgoing_messages.destroy_all
+    flash[:notice] = "All mesages removed..."
+    redirect_to messages_path
+  end
+
 end
