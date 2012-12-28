@@ -42,7 +42,7 @@ class Post < ActiveRecord::Base
   end
   
   def update_channel_last_post
-    channel.update_attribute(:last_post, created_at)
+    channel.update_attribute(:last_post, created_at) if channel
   end
 
   def set_markdown
