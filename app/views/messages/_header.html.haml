@@ -1,0 +1,13 @@
+-if !(@incoming_messages || []).any? && !(@outgoing_messages || []).any?
+  No messages found...
+-else
+  %li.header
+    .messages_who
+      -if @active_menu == :sent
+        To
+      -else
+        From
+    .messages_date
+      Date
+    .messages_subject
+      Subject

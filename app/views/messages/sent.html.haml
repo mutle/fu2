@@ -1,6 +1,7 @@
 %h2 Sent messages
 =render :partial => "navigation"
 %ul#message_list
+  =render :partial => "header"
   -@outgoing_messages.each do |message|
     %li
       =render :partial => message

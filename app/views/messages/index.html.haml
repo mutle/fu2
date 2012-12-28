@@ -1,13 +1,7 @@
 %h2 Inbox
 =render :partial => "navigation"
 %ul#message_list
-  %li.header
-    .messages_who
-      From
-    .messages_date
-      Date
-    .messages_subject
-      Subject
+  =render :partial => "header"
   -@incoming_messages.each do |message|
     %li{:class => "#{'message_unread' if message.status == Message::STATUS_UNREAD}"}
       =render :partial => message, :locals => {:inbox => true}

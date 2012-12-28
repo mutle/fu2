@@ -24,7 +24,7 @@ class MessagesController < ApplicationController
       @message.status = Message::STATUS_READ
       @message.save
     end
-    @new_message = Message.new(:receiver_name => @message.sender.login, :quote_message => @message)
+    @new_message = Message.new(:receiver_name => @message.sender.login, :quote_message => @message) if @message.sender
   end
   
   def new

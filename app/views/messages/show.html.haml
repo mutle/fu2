@@ -6,17 +6,18 @@
     =h(@message.subject)
   .messages_show_body
     =format_message_body(@message.body)
-  %h2 Reply
-  =form_for @new_message, :as => :message, :url => messages_path do |f|
-    =f.hidden_field :receiver_name
-    %p
-      %label{:for => "subject"} Subject:
-      =f.text_field :subject
-    %p
-      %label{:for => "body"} Message:
-      %br
-      =f.text_area :body
-    %p.right
-      =f.submit 'Send Message', :accesskey => "s"
+  -if @new_message
+    %h2 Reply
+    =form_for @new_message, :as => :message, :url => messages_path do |f|
+      =f.hidden_field :receiver_name
+      %p
+        %label{:for => "subject"} Subject:
+        =f.text_field :subject
+      %p
+        %label{:for => "body"} Message:
+        %br
+        =f.text_area :body
+      %p.right
+        =f.submit 'Send Message', :accesskey => "s"
 -else
   .error Don't you try an hack the system! This message is not for you!
