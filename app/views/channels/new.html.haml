@@ -3,9 +3,4 @@
   %p
     %label{:for => "channel_title"} Title:
     =f.text_field :title
-  %p
-    %label{:for => "channel_message"} Message:
-    %br
-    =f.text_area :body, :class => 'comment_box'
-  %p.right
-    =f.submit 'Create', :accesskey => "s"
+  =render :partial => "form", :locals => {:f => f}

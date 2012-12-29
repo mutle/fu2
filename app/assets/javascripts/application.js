@@ -8,5 +8,6 @@
 //= require jquery_ujs
 //= require jquery.markitup
 //= require markitup-html
+//= require jquery.filedrop
 //= require autocompleter
 //= require fu2

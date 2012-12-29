@@ -12,8 +12,5 @@
   %h3 Add a comment  
   %a{:name => "comments"}
   =form_for :post, :url => channel_posts_path(@channel) do |f|
-    %p
-      =f.text_area :body, :class => 'comment_box'
-    %p.right
-      =f.submit 'Add Comment', :accesskey => "s"
+    =render :partial => "form", :locals => {:f => f}
   .clear

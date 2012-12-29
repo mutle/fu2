@@ -14,6 +14,7 @@ a {
 }
 
 .left { text-align: left; }
+.fleft { float: left; }
 .center { text-align: center; }
 .right { text-align: right; }
 
@@ -188,4 +189,12 @@ ul.autocompleter li a {
   padding: 0px 12px;
   text-decoration: none;
   display: block;
+}
+
+.upload_info {
+  float: left;
+}
+
+.comment_box {
+  width: 100%;
 }

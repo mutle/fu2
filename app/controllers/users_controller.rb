@@ -63,7 +63,7 @@ class UsersController < ApplicationController
   def update
     if params[:id].to_i == current_user.id
       @user = current_user
-      if params[:user][:email]
+      if !params[:user][:email].blank?
         @user.update_attributes(:password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :email => params[:user][:email])
       else
         @user.update_attributes(:display_name => params[:user][:display_name], :color => params[:user][:color], :stylesheet_id => params[:user][:stylesheet_id].to_i, :markdown => params[:user][:markdown])
