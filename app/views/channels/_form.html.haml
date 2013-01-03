@@ -1,4 +1,4 @@
-=hidden_field_tag "syntax", @post && !@post.new_record? ? @post.markdown? : current_user.markdown? ? "md" : "html", :id => "syntax"
+=hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax"
 %p.comment_box_container
   =f.text_area :body, :class => 'comment_box'
 %p.right
