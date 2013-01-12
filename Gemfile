@@ -16,6 +16,7 @@ gem 'newrelic_rpm'
 gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'
+gem 'unicorn', '~> 4.5.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
