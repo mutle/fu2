@@ -1,12 +1,15 @@
 class Autocompleter
   constructor: (object, callback) ->
     autocompleter = this
-    window.console.log 'auto'
     @term = ""
     @callback = callback
     @o = $ object
     @list = $("<ul>").addClass("autocompleter").hide()
-    @list.insertAfter @o
+    if after = @o.attr("data-after")
+      console.log after
+      @list.insertAfter $(after)
+    else
+      @list.insertAfter @o
     @o.keyup (e)->
       key = e.keyCode
       window.console.log key

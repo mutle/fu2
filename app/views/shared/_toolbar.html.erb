@@ -1,0 +1,24 @@
+<div class="toolbar">
+  <div class="navigation">
+    <h3>Navigation</h3>
+    <ul>
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "New Channel", new_channel_path %></li>
+      <li><%= link_to "All Channels", channel_path(:all) %></li>
+      <li><%= link_to "All Users", users_path %></li>
+    </ul>
+    <ul>
+      <li><%= link_to "Settings", root_path %></li>
+      <li><%= link_to "Inbox", channel_path(:all) %></li>
+      <li><%= link_to "Logout", users_path %></li>
+    </ul>
+  </div>
+  <div class="search">
+    <h3>Search</h3>
+    <%= form_tag search_channels_path, :method => :get do %>
+      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search .submit" %>
+      <%= submit_tag "Go", :name => '', :class => "submit" %>
+    <% end %>
+  </div>
+  <div class="clear"></div>
+</div>

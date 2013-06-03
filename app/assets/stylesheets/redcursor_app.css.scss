@@ -3,6 +3,20 @@ body {
   background-color: #f2f2f2;
 }
 
+form {
+  label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+  input[type=text], input[type=password] {
+    display: block;
+    font-size: 16px;
+    width: 200px;
+    margin-bottom: 1em;
+    border: 1px solid #e2e2e2;
+  }
+}
+
 #login_container {
   margin: 100px auto;
   width: 600px;
@@ -38,15 +52,6 @@ body {
     }
     .password {
       margin-left: 50px;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5em;
-    }
-    input {
-      display: block;
-      font-size: 16px;
-      width: 200px;
     }
   }
 
@@ -205,7 +210,8 @@ body {
 
     .comment-box {
       position: relative;
-      height: 452px;
+      padding: 0px;
+      padding-top: 36px;
 
       h3 {
         color: #fff;
@@ -221,25 +227,25 @@ body {
         padding-left: 8px;
       }
 
+      .title {
+        padding-top: 1em;
+        border-bottom: 2px solid #e2e2e2;
+        padding-left: 8px;
+      }
+
       textarea {
-        position: absolute;
         border: none;
-        left: 0px;
-        top: 36px;
-        right: 0px;
+        width: 688px;
         height: 400px;
       }
 
       .actions {
-        position: absolute;
         border: none;
-        left: 0px;
-        top: 440px;
-        right: 0px;
         height: 46px;
         line-height: 46px;
         text-align: right;
         border-top: 2px solid #e2e2e2;
+        margin-bottom: -4px;
 
         input {
           font-size: 14px;
@@ -258,9 +264,40 @@ body {
   }
 
   #sidebar {
+    position: relative;
 
     h1#title {
+      height: 48px;
+      line-height: 48px;
       font-size: 32px;
+      border: 3px solid #ccc;
+      cursor: pointer;
+      background: #fff;
+      text-align: center;
+      border-radius: 8px;
+    }
+    h1#title.active {
+      color: #fff;
+      background: #444;
+    }
+    .title-toolbar {
+      display: none;
+    }
+
+    .title-toolbar.active {
+      display: block;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      margin-right: -23px;
+      background: #fff;
+      background: #444;
+      border: 3px solid #ccc;
+      border-left: none;
+      border-right: none;
+      height: 48px;
+      width: 38px;
+      z-index: 102;
     }
 
     .channels {
@@ -314,6 +351,66 @@ body {
       }
     }
 
+  }
+
+  .toolbar {
+    display: none;
+    position: absolute;
+    z-index: 100;
+    top: 32px;
+    border: 3px solid #ccc;
+    color: #fff;
+    background-color: #444;
+    padding: 16px;
+    border-radius: 8px;
+
+    h3 {
+      margin-bottom: 1em;
+      font-size: 18px;
+    }
+
+    a {
+      color: #fff;
+    }
+
+    .autocompleter {
+      list-style: none;
+      text-align: left;
+
+      li {
+        cursor: pointer;
+      }
+    }
+
+    form {
+      input {
+        display: inline;
+        background-color: #444;
+        color: #fff;
+      }
+      .submit {
+        height: 26px;
+      }
+      text-align: right;
+    }
+
+    .search, .navigation {
+      float: left;
+    }
+
+    .navigation {
+      ul {
+        list-style: none;
+        float: left;
+        margin-right: 46px;
+        li {
+        }
+      }
+    }
+  }
+  .toolbar.active {
+    display: block;
+    border-top-left-radius: 0px;
   }
 
 }

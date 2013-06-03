@@ -14,10 +14,12 @@
       <div class="container_12">
         <div id="sidebar" class="grid_3">
           <h1 id="title">Red Cursor</h1>
+          <div class="title-toolbar"></div>
           <%= render :partial => "shared/sidebar" %>
         </div>
 
         <div id="content" class="grid_9">
+          <%= render :partial => "shared/toolbar" %>
           <%= yield %>
         </div>
       </div>
