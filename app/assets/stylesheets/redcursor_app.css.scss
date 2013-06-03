@@ -238,6 +238,18 @@ form {
         width: 688px;
         height: 400px;
       }
+      .autocompleter {
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        position: absolute;
+        list-style: none;
+        max-height: 200px;
+        overflow-y: scroll;
+
+        img {
+          max-width: 16px;
+        }
+      }
 
       .actions {
         border: none;
@@ -413,4 +425,116 @@ form {
     border-top-left-radius: 0px;
   }
 
+}
+
+body.mobile {
+  width: 320px;
+  min-width: 320px;
+}
+
+#container.mobile {
+  padding-top: 8px;
+  margin: 0px;
+  padding: 2px;
+  width: 316px;
+
+  .container_12 {
+    margin: 0px;
+    width: 316px;
+  }
+  .grid_9, .grid_3 {
+    width: 316px;
+    margin: 0px;
+  }
+
+  #login_container {
+    margin: 0px auto;
+    width: 316px;
+
+    form {
+      padding-bottom: 66px;
+    }
+
+    p {
+      float: none;
+    }
+
+    .password {
+      margin-left: 16px;
+    }
+
+    .actions {
+      top: 186px;
+    }
+  }
+
+  #sidebar {
+    width: 316px;
+    padding-bottom: 1em;
+
+    h1#title.active {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+    .content {
+      display: none;
+    }
+    .title-toolbar.active {
+      display: none;
+    }
+  }
+
+  .toolbar {
+    top: 52px;
+    width: 278px;
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+
+    .search {
+      margin-top: 1em;
+    }
+  }
+  #content {
+    width: 316px;
+
+    h2 {
+      margin-bottom: 0.5em;
+      font-size: 20px;
+    }
+
+    .post {
+      .name {
+        line-height: 22px;
+      }
+      .fave {
+        border: none;
+      }
+      .date {
+        border-radius: none;
+        background: none;
+        border: none;
+        padding-top: 0px;
+        line-height: 22px;
+        font-size: 0.75em;
+        top: 22px;
+        left: 50px;
+        height: 22px;
+
+        .date-text {
+          width: auto;
+          text-align: right;
+        }
+      }
+
+    }
+    .comment-box {
+      textarea {
+        height: 200px;
+        width: 300px;
+        font-size: 1.1em;
+      }
+    }
+  }
+  
 }

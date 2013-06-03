@@ -6,16 +6,19 @@
     <%= javascript_include_tag "redcursor" %>
     <%= csrf_meta_tags %>
     <%# redcursor_templates %>
+    <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
   </head>
-  <body>
+  <body class="mobile">
 
-    <div id="container">
+    <div id="container" class="mobile">
 
       <div class="container_12">
         <div id="sidebar" class="grid_3">
           <h1 id="title">Red Cursor</h1>
           <div class="title-toolbar"></div>
-          <%= render :partial => "shared/sidebar" %>
+          <div class="content">
+            <%= render :partial => "shared/sidebar" %>
+          </div>
         </div>
 
         <div id="content" class="grid_9">

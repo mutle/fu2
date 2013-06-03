@@ -1,6 +1,7 @@
 class Autocompleter
   constructor: (object, callback) ->
     autocompleter = this
+    @minLength = 2
     @term = ""
     @callback = callback
     @o = $ object
@@ -34,7 +35,8 @@ class Autocompleter
           autocompleter.setHighlight autocompleter.list.find("li").first()
         return false
       input = $(this).val()
-      if input.length >= 2
+      console.log [input.length, autocompleter.minLength, input]
+      if input.length >= autocompleter.minLength
         autocompleter.query "#{input}" 
       else if input.length == 0
         autocompleter.list.hide()
