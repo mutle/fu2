@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>redcursor</title>
+    <%= stylesheet_link_tag    "redcursor" %>
+    <%= javascript_include_tag "redcursor" %>
+    <%= csrf_meta_tags %>
+    <%# redcursor_templates %>
+  </head>
+  <body>
+
+    <div id="container">
+
+      <div class="container_12">
+        <div id="sidebar" class="grid_3">
+          <h1 id="title">Red Cursor</h1>
+          <%= render :partial => "shared/sidebar" %>
+        </div>
+
+        <div id="content" class="grid_9">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

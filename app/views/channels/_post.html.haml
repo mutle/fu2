@@ -1,18 +1,20 @@
 %a{:name => "post_#{post.id}"}
 =div_for post do
-  .name= user_name(post.user)
+  .name
+    =image_tag avatar_url(post.user)
+    =user_name(post.user)
   .date
-    .fave
-      .count= post.faves.count
-      =link_to "#{image_tag("favorite_on.png", :class => "on", :style => post.faved_by?(current_user) ? "" : "display:none;")}#{image_tag("favorite_off.png", :class => "off", :style => !post.faved_by?(current_user) ? "" : "display:none;")}".html_safe, "#", :class => "favorite", "data-post-id" => post.id, :title => "Faved by:\n"+post.faves.map { |f| f.user.login }.join("\n")
-    =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}")
-    / =time_ago_in_words(post.created_at)
-    / ago
+    .fave{:title => "Faved by:\n#{post.faves.map { |f| f.user.login }.join("\n")}" }
+      .fave-text
+        .count= post.faves.count
+        =link_to "#{image_tag("favorite_on.png", :class => "on", :style => post.faved_by?(current_user) ? "" : "display:none;")}#{image_tag("favorite_off.png", :class => "off", :style => !post.faved_by?(current_user) ? "" : "display:none;")}".html_safe, "#", :class => "favorite", "data-post-id" => post.id
+    .date-text
+      =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}")
   .body
     =format_body(post)
-    -if post.user_id == current_user.id
-      / %br/
+  -if post.user_id == current_user.id
+    / %br/
+    .actions
       =link_to "Edit", edit_channel_post_path(@channel, post)
-      |
       =link_to "Delete", channel_post_path(@channel, post), :method => :delete, :confirm => "Are you sure?"
 .clear

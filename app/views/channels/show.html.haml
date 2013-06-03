@@ -1,5 +1,5 @@
+.bottom-link= link_to "Bottom", channel_path(@channel, :anchor => "comments")
 %h2= format_title(@channel)
-%p= link_to "Bottom", channel_path(@channel, :anchor => "comments")
 -if @channel.can_read?(current_user)
   -@channel.posts.each do |post|
     -if post.can_read?(current_user)
@@ -9,7 +9,6 @@
   %p
     You can't read the content of this channel
 -if @channel.can_write?(current_user)
-  %h3 Add a comment  
   %a{:name => "comments"}
   =form_for :post, :url => channel_posts_path(@channel) do |f|
     =render :partial => "form", :locals => {:f => f}

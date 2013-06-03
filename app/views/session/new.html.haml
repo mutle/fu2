@@ -1,13 +1,13 @@
 .notice
-  =flash[:notice] || "Sorry, but you have to be logged in to enter this site!"
+  =flash[:notice] || "Login to RedCursor"
 =form_tag session_path, :html => {:class => "normal"} do
-  %p
-    %label{:for => "login"} Username:
+  %p.login
+    %label{:for => "login"} Username
     =text_field_tag 'login'
-  %p
-    %label{:for => "password"} Password:
+  %p.password
+    %label{:for => "password"} Password
     =password_field_tag 'password'
-  %p
+  .actions
     %span.forgot
     %input{:type => "submit", :value => "Login"}
 .clear

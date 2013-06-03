@@ -55,11 +55,16 @@ module ChannelsHelper
   end
   
   def user_name(user)
-    "&lt;".html_safe + user_link(user) + "&gt;".html_safe
+    user_link(user)
   end
 
   def format_title(channel)
     TITLE_PIPELINE.call(channel.title)[:output].to_s.html_safe
   end
-  
+
+  def avatar_url(user, size=42)
+    gravatar_id = Digest::MD5.hexdigest(user.email.downcase)
+    "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+  end
+
 end

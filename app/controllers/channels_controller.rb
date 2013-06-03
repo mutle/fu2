@@ -1,8 +1,8 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
   
-  # layout "fu3"
-  layout 'application'
+  layout "redcursor"
+  # layout 'application'
 
   before_filter :login_required
 
