@@ -2,6 +2,15 @@
 =error_messages_for :user
 =form_for :user, :url => user_path(@user), :html => {:method => :put, :class => "normal"} do |f|
   %p
+    -if new_features?
+      %label{:for => "user_avatar"} Avatar:
+      =image_tag avatar_url(@user)
+      %br/
+      =link_to "Change", "http://www.gravatar.com/"
+    %p
+      %label{:for => "user_email"} Email:
+      =f.text_field :email, :disabled => true
+  %p
     %label{:for => "user_display_name"} Display Name:
     =f.text_field :display_name
   %p
