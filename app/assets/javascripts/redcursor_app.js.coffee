@@ -12,27 +12,27 @@ $ ->
           results.push item
         autocompleter.showResults results
   
-  if $('.comment_box').length
-    $('.comment_box a').click ->
-      return false
-    a = autocompleter $('.comment_box'), (term, autocompleter) ->
-      word = term.match /(\S+)$/
-      if word then input = word[1] else return
-      results = []
-      if input[0] == ':'
-        for emoji in window.Emojis
-          continue if emoji.indexOf(input.substring(1)) == -1 
-          item = 
-            display_title: "<img src='/images/emoji/#{emoji}.png' /> :#{emoji}:",
-            title: ":#{emoji}:"
-          results.push item
-        autocompleter.showResults results
-        pos = $('.comment_box').getCaretPosition()
-        autocompleter.list.css
-          left: pos.left
-          top: pos.top + 40
-      # else if input[0] == '@'
-    a.minLength = 1
+  # if $('.comment_box').length
+  #   $('.comment_box a').click ->
+  #     return false
+  #   a = autocompleter $('.comment_box'), (term, autocompleter) ->
+  #     word = term.match /(\S+)$/
+  #     if word then input = word[1] else return
+  #     results = []
+  #     if input[0] == ':'
+  #       for emoji in window.Emojis
+  #         continue if emoji.indexOf(input.substring(1)) == -1 
+  #         item = 
+  #           display_title: "<img src='/images/emoji/#{emoji}.png' /> :#{emoji}:",
+  #           title: ":#{emoji}:"
+  #         results.push item
+  #       autocompleter.showResults results
+  #       pos = $('.comment_box').getCaretPosition()
+  #       autocompleter.list.css
+  #         left: pos.left
+  #         top: pos.top + 40
+  #     # else if input[0] == '@'
+  #   a.minLength = 1
 
 
   $(".fave").click ->
