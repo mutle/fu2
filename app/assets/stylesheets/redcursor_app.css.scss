@@ -117,7 +117,12 @@ form {
         padding: 8px 16px;
         line-height: 42px;
         border-bottom: 2px solid #e2e2e2;
+        background-color: #fff;
         position: relative;
+      }
+      li.visited {
+        background-color: #e2e2e2;
+        border-bottom: 2px solid #fff;
       }
       li:first-child {
         .user-color {
@@ -564,7 +569,7 @@ body.mobile {
     margin: 0px;
     width: 316px;
   }
-  .grid_9, .grid_3 {
+  .grid_9, .grid_3, .grid_12 {
     width: 316px;
     margin: 0px;
   }
@@ -617,6 +622,14 @@ body.mobile {
       margin-top: 1em;
     }
   }
+  #content.grid_12 {
+    .toolbar {
+      width: 278px;
+      top: 50px;
+      margin-left: 0px;
+      border-top: none;
+    }
+  }
   #content {
     width: 316px;
 
@@ -628,40 +641,34 @@ body.mobile {
     #recent_acitivities {
       li {
         position: relative;
-        font-size: 18px;
-        line-height: 42px;
-        height: 42px;
-        padding-bottom: 8px;
-      }
-      li.visited {
-        background-color: #e2e2e2;
-      }
-      p {
-        text-align: right;
+        font-size: 14px;
+        line-height: 21px;
       }
       .name {
-        padding-left: 48px;
+        float: none;
+        width: 132px;
+        padding: 0px;
+      }
+      .user-mini {
+        height: 63px;
+        line-height: 21px;
+        text-align: left;
         img {
-          position: absolute;
-          left: 0px;
-          top: 0px;
+          display: block;
+          float: none;
         }
+
       }
       .channel-link {
         position: absolute;
-        left: 0px;
-        right: 0px;
         top: 0px;
-        padding-left: 48px;
-        text-align: right;
+        left: 82px;
       }
       .date {
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        top: 22px;
-        padding-left: 48px;
-        text-align: right;
+        margin-top: -1.5em;
+      }
+      .user-color {
+        height: 63px;
       }
     }
 
