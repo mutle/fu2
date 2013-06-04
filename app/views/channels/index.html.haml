@@ -3,27 +3,27 @@
   =form_tag search_channels_path, :method => :get do
     =text_field_tag "search", "", :style => "float: none;", :autocomplete => "off"
     =submit_tag "Go", :name => ''
-%h2 Recent Activities
+  %h2 Recent Activities
 %ul#recent_acitivities
   -@recent_channels.each do |channel|
-    %li{:class => "#{'visited' unless channel.visited?(current_user)}"}
-      %p
-        -count = channel.posts.count
-        .name
-          -if count > 0
-            -u = Post.first_channel_post(channel).first.user
-            -if new_features?
-              =image_tag avatar_url(u, 42)
+    %li{:class => "#{'visited' if channel.visited?(current_user)}"}
+      -count = channel.posts.count
+      .name
+        -if count > 0
+          -u = Post.first_channel_post(channel).first.user
+          -if new_features?
+            .user-color{:style => "background-color: #{u.color}"}
+            =render :partial => "shared/user", :object => u
+          -else
             =user_name(u)
-          -else
-            &nbsp;
-        .date
-          -if count > 0 && channel
-            =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
-          -else
-            No Posts yet.
-        =link_to format_title(channel), channel_path(channel), :class => "channel-link"
-      .clear
+        -else
+          &nbsp;
+      .date
+        -if count > 0 && channel
+          =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
+        -else
+          No Posts yet.
+      =link_to format_title(channel), channel_path(channel), :class => "channel-link"
 
 %br/
 %br/

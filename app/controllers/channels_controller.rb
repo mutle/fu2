@@ -9,6 +9,7 @@ class ChannelsController < ApplicationController
   respond_to :html, :json
   
   def index
+    @column_width = 12
     if current_user && current_user.password_hash.blank?
       redirect_to password_user_path(:id => current_user.id) and return
     end
