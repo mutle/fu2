@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   
+  layout :default_layout
   before_filter :login_required, :except => ["activate", "create", "password"]
 
   respond_to :html, :json

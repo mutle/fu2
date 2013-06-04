@@ -1,4 +1,5 @@
 $ ->
+  mobile = $('body').hasClass('mobile')
   if $('input#search').length
     autocompleter $('input#search'), (term, autocompleter) ->
       $.getJSON "/channels/search", {"search": "title:"+term+""}, (data, status, xhr) ->
@@ -55,4 +56,4 @@ $ ->
       $(".toolbar").addClass("active")
       $(".title-toolbar").addClass("active")
       $(this).addClass("active")
-      $(".toolbar input.search-field").focus()
+      $(".toolbar input.search-field").focus() if !mobile

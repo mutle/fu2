@@ -4,14 +4,20 @@
     %li{:class => "#{'visited' unless channel.visited?(current_user)}"}
       %p
         -count = channel.posts.count
-        -if count > 0
-          .name= user_name(Post.first_channel_post(channel).first.user)
+        .name
+          -if count > 0
+            -u = Post.first_channel_post(channel).first.user
+            -if new_features?
+              =image_tag avatar_url(u, 42)
+            =user_name(u)
+          -else
+            &nbsp;
         .date
           -if count > 0 && channel
             =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
           -else
             No Posts yet.
-        =link_to format_title(channel), channel_path(channel)
+        =link_to format_title(channel), channel_path(channel), :class => "channel-link"
       .clear
 
 %br/

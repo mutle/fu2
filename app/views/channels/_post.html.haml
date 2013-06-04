@@ -1,7 +1,8 @@
 %a{:name => "post_#{post.id}"}
 =div_for post do
   .name
-    =image_tag avatar_url(post.user)
+    -if new_features?
+      =image_tag avatar_url(post.user)
     =user_name(post.user)
   .date
     .fave{:title => "Faved by:\n#{post.faves.map { |f| f.user.login }.join("\n")}" }

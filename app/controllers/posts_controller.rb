@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   
-  layout "redcursor"
+  layout :default_layout
   before_filter :login_required
   before_filter :load_channel, :except => :fave
 

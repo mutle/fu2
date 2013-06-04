@@ -1,7 +1,7 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
   
-  layout "redcursor"
+  layout :default_layout
   # layout 'application'
 
   before_filter :login_required
@@ -79,6 +79,11 @@ class ChannelsController < ApplicationController
       format.html
       format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
+  end
+
+  def desktop
+    cookies['desktop'] = cookies['desktop'] == "true" ? "false" : "true"
+    redirect_to request.referer
   end
   
 end

@@ -6,11 +6,13 @@
     <%= javascript_include_tag "redcursor" %>
     <%= csrf_meta_tags %>
     <%# redcursor_templates %>
-    <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+    <% if mobile? %>
+      <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+    <% end %>
   </head>
-  <body class="mobile">
+  <body<%= ' class="mobile"'.html_safe if mobile? %>>
 
-    <div id="container" class="mobile">
+    <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
 
       <div class="container_12">
         <div id="sidebar" class="grid_3">
@@ -27,6 +29,12 @@
         </div>
       </div>
     </div>
+
+    <% if mobile? %>
+      <%= link_to "Desktop Version", desktop_channels_path %>
+    <% elsif mobile_device? %>
+      <%= link_to "Mobile Version", desktop_channels_path %>
+    <% end %>
 
   </body>
 </html>

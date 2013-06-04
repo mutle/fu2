@@ -92,6 +92,39 @@ form {
       float: right;
     }
 
+    #recent_acitivities {
+      list-style: none;
+      background-color: #fff;
+      padding: 16px;
+      border: 2px solid #e2e2e2;
+      border-radius: 8px;
+
+      li {
+        line-height: 32px;
+        border-bottom: 2px solid #e2e2e2;
+        padding-bottom: 0.5em;
+        margin-bottom: 0.5em;
+      }
+      li:last-child {
+        border-bottom: none;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      .name {
+        float: left;
+        width: 20%;
+      }
+      .date {
+        float: right;
+      }
+    }
+
     .post, .comment-box {
       margin-bottom: 1em;
       background-color: #fff;
@@ -501,6 +534,43 @@ body.mobile {
     h2 {
       margin-bottom: 0.5em;
       font-size: 20px;
+    }
+
+    #recent_acitivities {
+      li {
+        position: relative;
+        font-size: 18px;
+        line-height: 21px;
+        height: 42px;
+      }
+      p {
+        text-align: right;
+      }
+      .name {
+        padding-left: 48px;
+        padding-top: 9px;
+        img {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+        }
+      }
+      .channel-link {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        padding-left: 48px;
+        text-align: right;
+      }
+      .date {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 22px;
+        padding-left: 48px;
+        text-align: right;
+      }
     }
 
     .post {
