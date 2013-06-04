@@ -50,13 +50,13 @@ class ApplicationController < ActionController::Base
     request.user_agent =~ /(Android|iPhone|iPod|Windows Phone)/
   end
   def mobile?
-    true # mobile_device? && cookies['desktop'] != "true"
+    params['mobile'] == "true" || (mobile_device? && cookies['desktop'] != "true")
   end
   helper_method :mobile_device?
   helper_method :mobile?
 
   def new_features?
-    false # current_user.id == 1
+    current_user.id == 1
   end
   helper_method :new_features?
 
