@@ -8,9 +8,9 @@
       <li><%= link_to "All Users", users_path %></li>
     </ul>
     <ul>
-      <li><%= link_to "Settings", root_path %></li>
-      <li><%= link_to "Inbox", channel_path(:all) %></li>
-      <li><%= link_to "Logout", users_path %></li>
+      <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+      <li><%= link_to "Inbox", inbox_messages_path %></li>
+      <li><%= link_to "Logout", session_path, :method => :delete %></li>
     </ul>
   </div>
   <div class="search">

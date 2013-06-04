@@ -1,5 +1,5 @@
 .notice
-  =flash[:notice] || "Login to RedCursor"
+  =flash[:notice] || "Login to #{new_features? ? "RedCursor" : "fu2"}"
 =form_tag session_path, :html => {:class => "normal"} do
   %p.login
     %label{:for => "login"} Username
