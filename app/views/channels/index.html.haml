@@ -23,14 +23,15 @@
             No Posts yet.
         =link_to format_title(channel), channel_path(channel), :class => "channel-link"
       -else
-        -if count > 0
-          .name= user_name(Post.first_channel_post(channel).first.user)
-        .date
-          -if count > 0 && channel
-            =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
-          -else
-            No Posts yet.
-        =link_to h(channel.title), channel_path(channel)
+        %p
+          -if count > 0
+            .name= user_name(Post.first_channel_post(channel).first.user)
+          .date
+            -if count > 0 && channel
+              =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
+            -else
+              No Posts yet.
+          =link_to h(channel.title), channel_path(channel)
 
 %br/
 %br/

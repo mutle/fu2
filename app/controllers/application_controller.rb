@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
   helper_method :mobile?
 
   def new_features?
-    logged_in? && current_user.id == 1 && params["new_features"] != "false"
+    logged_in? && current_user.new_features && params["new_features"] != "false"
   end
   helper_method :new_features?
 

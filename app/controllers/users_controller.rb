@@ -67,7 +67,7 @@ class UsersController < ApplicationController
       if !params[:user][:email].blank?
         @user.update_attributes(:password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :email => params[:user][:email])
       else
-        @user.update_attributes(:display_name => params[:user][:display_name], :color => params[:user][:color], :stylesheet_id => params[:user][:stylesheet_id].to_i, :markdown => params[:user][:markdown])
+        @user.update_attributes(:display_name => params[:user][:display_name], :color => params[:user][:color], :stylesheet_id => params[:user][:stylesheet_id].to_i, :markdown => params[:user][:markdown], :new_features => params[:user][:new_features] == "1")
       end
       if @user.valid?
         redirect_to user_path(User.find(params[:id].to_i))
