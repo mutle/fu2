@@ -1,5 +1,8 @@
 <% recent_channels = Channel.recent_channels(current_user, 1) %>
 <ul class="channels">
+  <li>
+    <%= link_to "Home", root_path %>
+  </li>
   <% recent_channels.each do |c| %>
     <li>
       <div class="channel mention">
