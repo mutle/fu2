@@ -1,4 +1,5 @@
-%h2= "All Users (#{@users.size} total)"
-%ul
--@users.each do |user|
-  %li= link_to user_link(user), user_path(user)
+.block
+  %h2= "All Users (#{@users.size} total)"
+  %ul
+  -@users.each do |user|
+    %li= link_to user_link(user), user_path(user)

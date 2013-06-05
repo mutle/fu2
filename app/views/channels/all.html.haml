@@ -1,7 +1,7 @@
 %h2 All Channels
 %ul#recent_acitivities
   -@channels.each do |channel|
-    %li
+    %li.visited
       %p
         .date
           -if channel.posts.count > 0

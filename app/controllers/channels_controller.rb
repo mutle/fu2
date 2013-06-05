@@ -41,6 +41,7 @@ class ChannelsController < ApplicationController
   end
 
   def all
+    @column_width = 12
     @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
     render "all"
   end
