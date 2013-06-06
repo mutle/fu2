@@ -256,10 +256,15 @@ form {
         width: 26%;
         padding-right: 10px;
         line-height: 21px;
+		text-align: left;
       }
       .user-mini {
         padding-left: 8px;
         text-align: center;
+		
+		.user-name {
+		  padding-left: 10px;
+		}		
       }
       .user-color {
         position: absolute;
