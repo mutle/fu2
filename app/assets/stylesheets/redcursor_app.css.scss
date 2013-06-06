@@ -186,18 +186,18 @@ form {
       }
     }
     .bottom-link {
-      float: right;
-	  position: fixed; 
-	  z-index: 100;
-	  background: rgb(68,68,68);
-	  padding: 10px;
-	  right: 30px;
-	  top: 50px;
-	  border-radius: 8px;
-	  a {
-		color: rgb(255, 255, 255);
-		font-size: 300%;
-	  }
+      position: fixed; 
+      z-index: 110;
+      background: #444;
+      padding: 10px;
+      right: 30px;
+      top: 50px;
+      border-radius: 8px;
+      a {
+        color: #fff;
+        font-size: 300%;
+        text-decoration: none;
+      }
     }
 	
 
@@ -256,15 +256,15 @@ form {
         width: 26%;
         padding-right: 10px;
         line-height: 21px;
-		text-align: left;
+        text-align: left;
       }
       .user-mini {
         padding-left: 8px;
         text-align: center;
 		
-		.user-name {
-		  padding-left: 10px;
-		}		
+        .user-name {
+          padding-left: 10px;
+        }		
       }
       .user-color {
         position: absolute;
@@ -444,9 +444,9 @@ form {
           color: #A0A0A0;
         }
 		
-		a:hover {
-		  color: #000;
-		}
+        a:hover {
+          color: #000;
+        }
       }
     }
 
@@ -796,6 +796,13 @@ body.mobile {
       margin-bottom: 0.5em;
       font-size: 20px;
     }
+    .bottom-link {
+      right: 2px;
+      top: 60px;
+      padding: 8px;
+      font-size: 12px;
+      line-height: 12px;
+    }
 
     #recent_acitivities {
       li {
@@ -855,15 +862,14 @@ body.mobile {
         }
       }
 	  
-	  .actions {
-	    a {
-		  color: #000;
-		}
-		a:hover {
-		  color: #000;
-		}
-	  } 
-
+      .actions {
+        a {
+          color: #000;
+        }
+        a:hover {
+          color: #000;
+        }
+      } 
     }
     .comment-box {
       textarea {
@@ -873,5 +879,4 @@ body.mobile {
       }
     }
   }
-  
 }
