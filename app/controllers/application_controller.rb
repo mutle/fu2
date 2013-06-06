@@ -45,4 +45,23 @@ class ApplicationController < ActionController::Base
   helper_method :highlight_results
 
   helper_method :current_user
+
+  def mobile_device?
+    request.user_agent =~ /(Android|iPhone|iPod|Windows Phone)/
+  end
+  def mobile?
+    params['mobile'] == "true" || (mobile_device? && cookies['desktop'] != "true")
+  end
+  helper_method :mobile_device?
+  helper_method :mobile?
+
+  def new_features?
+    logged_in? && current_user.new_features && params["new_features"] != "false"
+  end
+  helper_method :new_features?
+
+  protected
+  def default_layout
+    new_features? ? "redcursor" : "application"
+  end
 end

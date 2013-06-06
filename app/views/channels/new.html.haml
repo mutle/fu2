@@ -1,6 +1,3 @@
-%h2 Create a new Channel
 =form_for :channel, :url => channels_path do |f|
   %p
-    %label{:for => "channel_title"} Title:
-    =f.text_field :title
-  =render :partial => "form", :locals => {:f => f}
+  =render :partial => "form", :locals => {:f => f, :type => "Channel", :title => true}

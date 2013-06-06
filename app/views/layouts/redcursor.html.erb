@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      <% if @channel %><%= @channel.title %> | <% end %>
+      Red Cursor
+    </title>
+    <%= stylesheet_link_tag    "redcursor" %>
+    <%= javascript_include_tag "redcursor" %>
+    <%= csrf_meta_tags %>
+    <%# redcursor_templates %>
+    <% if mobile? %>
+      <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+    <% end %>
+  </head>
+  <body<%= ' class="mobile"'.html_safe if mobile? %>>
+
+    <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
+
+      <div class="container_12">
+        <% column_width = @column_width || 9 %>
+        <% sidebar_width = 12 - column_width %>
+        <div id="sidebar" class="grid_<%= sidebar_width %>">
+          <h1 id="title">
+            Red Cursor
+            <% if (n = current_user.number_unread_messages) > 0 %>
+              <div class="count"><%= link_to n, inbox_messages_path %></div>
+            <% end %>
+          </h1>
+          <div class="title-toolbar"></div>
+          <% if sidebar_width > 0 %>
+            <div class="content">
+              <%= render :partial => "shared/sidebar" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div id="content" class="grid_<%= column_width %>">
+          <%= render :partial => "shared/toolbar" %>
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+
+    <% if mobile? %>
+      <%= link_to "Desktop Version", desktop_channels_path %>
+    <% elsif mobile_device? %>
+      <%= link_to "Mobile Version", desktop_channels_path %>
+    <% end %>
+
+  </body>
+</html>

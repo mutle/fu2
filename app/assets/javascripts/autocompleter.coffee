@@ -1,12 +1,16 @@
 class Autocompleter
   constructor: (object, callback) ->
     autocompleter = this
-    window.console.log 'auto'
+    @minLength = 2
     @term = ""
     @callback = callback
     @o = $ object
     @list = $("<ul>").addClass("autocompleter").hide()
-    @list.insertAfter @o
+    if after = @o.attr("data-after")
+      console.log after
+      @list.insertAfter $(after)
+    else
+      @list.insertAfter @o
     @o.keyup (e)->
       key = e.keyCode
       window.console.log key
@@ -31,7 +35,8 @@ class Autocompleter
           autocompleter.setHighlight autocompleter.list.find("li").first()
         return false
       input = $(this).val()
-      if input.length >= 2
+      console.log [input.length, autocompleter.minLength, input]
+      if input.length >= autocompleter.minLength
         autocompleter.query "#{input}" 
       else if input.length == 0
         autocompleter.list.hide()

@@ -1,14 +1,15 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
   
-  # layout "fu3"
-  layout 'application'
+  layout :default_layout
+  # layout 'application'
 
   before_filter :login_required
 
   respond_to :html, :json
   
   def index
+    @column_width = 12
     if current_user && current_user.password_hash.blank?
       redirect_to password_user_path(:id => current_user.id) and return
     end
@@ -40,6 +41,7 @@ class ChannelsController < ApplicationController
   end
 
   def all
+    @column_width = 12
     @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
     render "all"
   end
@@ -79,6 +81,11 @@ class ChannelsController < ApplicationController
       format.html
       format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
+  end
+
+  def desktop
+    cookies['desktop'] = cookies['desktop'] == "true" ? "false" : "true"
+    redirect_to request.referer
   end
   
 end

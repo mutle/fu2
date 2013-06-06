@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   
+  layout :default_layout
   before_filter :login_required
   before_filter :load_channel, :except => :fave
 
