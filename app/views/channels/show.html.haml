@@ -1,4 +1,4 @@
-.bottom-link= link_to "Bottom", channel_path(@channel, :anchor => "comments")
+.bottom-link= link_to "&#2B07;", channel_path(@channel, :anchor => "comments")
 %h2= format_title(@channel)
 -if @channel.can_read?(current_user)
   -@channel.posts.each do |post|
