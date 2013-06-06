@@ -1,8 +1,9 @@
 -inbox ||= false
 .messages_who
   -if new_features?
-    .user-color{:style => "background-color: #{message.user.color rescue ''}"}
-    =render :partial => "shared/user", :object => message.user if message.user
+    -u = inbox ? message.sender : message.user
+    .user-color{:style => "background-color: #{u.color rescue ''}"}
+    =render :partial => "shared/user", :object => u if u
   -else
     =message_user_link (inbox ? message.sender : message.user)
 .messages_date
