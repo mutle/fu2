@@ -187,7 +187,19 @@ form {
     }
     .bottom-link {
       float: right;
+	  position: fixed; 
+	  z-index: 100;
+	  background: rgb(68,68,68);
+	  padding: 10px;
+	  right: 30px;
+	  top: 50px;
+	  border-radius: 8px;
+	  a {
+		color: rgb(255, 255, 255);
+		font-size: 300%;
+	  }
     }
+	
 
     .user-mini {
       display: block;
