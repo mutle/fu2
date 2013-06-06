@@ -1,5 +1,10 @@
 $ ->
   mobile = $('body').hasClass('mobile')
+
+  syntax = $('#syntax').val()
+  if syntax && syntax == "html"
+    $('.comment_box').markItUp(mySettings)
+
   if $('input#search').length
     autocompleter $('input#search'), (term, autocompleter) ->
       $.getJSON "/channels/search", {"search": "title:"+term+""}, (data, status, xhr) ->

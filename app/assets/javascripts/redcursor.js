@@ -7,6 +7,8 @@
 //= require underscore
 //= require jquery
 //= require jquery_ujs
+//= require jquery.markitup
+//= require markitup-html
 //= require jquery.filedrop
 //= require jquery.caretposition
 //= require autocompleter

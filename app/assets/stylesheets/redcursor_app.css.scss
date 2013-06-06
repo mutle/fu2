@@ -422,6 +422,10 @@ form {
         p {
           margin-bottom: 1em;
         }
+        ul {
+          padding-left: 1em;
+          margin-bottom: 1em;
+        }
 
         img {
           max-width: 656px;
@@ -483,6 +487,18 @@ form {
         border: none;
         width: 688px;
         height: 400px;
+      }
+      .markItUp {
+        width: 688px;
+        border: none;
+        padding-left: 8px;
+
+        .markItUpContainer {
+          border: none;
+        }
+      }
+      textarea.markItUpEditor {
+        width: 628px;
       }
       .autocompleter {
         background-color: #fff;
