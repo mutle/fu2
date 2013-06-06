@@ -93,7 +93,12 @@ form {
       border: 2px solid #e2e2e2;
       border-radius: 8px;
 
+      ul {
+        margin-left: 2em;
+      }
+
       p {
+        padding-left: 12px;
         margin-bottom: 0.5em;
         margin-top: 0.5em;
       }
