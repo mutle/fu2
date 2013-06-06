@@ -22,6 +22,7 @@ Fu2::Application.routes.draw do
     collection do
       get :search
       get :channel_names
+      get :desktop
     end
     member do
       get :posts

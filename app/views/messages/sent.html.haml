@@ -1,7 +1,9 @@
-%h2 Sent messages
-=render :partial => "navigation"
-%ul#message_list
-  =render :partial => "header"
-  -@outgoing_messages.each do |message|
-    %li
-      =render :partial => message
+.block
+  %h2 Sent messages
+  =render :partial => "navigation"
+  %ul#message_list
+    -if !new_features?
+      =render :partial => "header"
+    -@outgoing_messages.each do |message|
+      %li
+        =render :partial => message

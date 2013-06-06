@@ -1,0 +1,26 @@
+
+<!doctype html>
+<html>
+  <head>
+    <title>redcursor</title>
+    <% if new_features? %>
+    <%= stylesheet_link_tag    "redcursor" %>
+    <%= javascript_include_tag "redcursor" %>
+    <%= csrf_meta_tags %>
+    <%# redcursor_templates %>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <% else %>
+    <%= stylesheet_link_tag    "application" %>
+    <% end %>
+  </head>
+  <body<%= ' class="mobile"'.html_safe if mobile? %>>
+
+    <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
+
+      <div id="login_container">
+        <%= yield %>
+      </div>
+    </div>
+
+  </body>
+</html>

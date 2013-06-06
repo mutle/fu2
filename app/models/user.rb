@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   before_create :set_display_name
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown
+  attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features
   
   after_create :create_private_channel
   
@@ -172,6 +172,18 @@ class User < ActiveRecord::Base
 
   def as_json(*args)
     {:id => id, :login => login, :display_name => display_name, :display_color => display_color}
+  end
+
+  def new_features
+    $redis.sismember("users:new_features", id)
+  end
+
+  def new_features=(v)
+    if !v
+      $redis.srem("users:new_features", id)
+    else
+      $redis.sadd("users:new_features", id)
+    end
   end
 
   protected

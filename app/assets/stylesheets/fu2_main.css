@@ -1,4 +1,7 @@
 
+.bottom-link {
+  float: right;
+}
 
 #content input[type=text], #content input[type=password], #content .input, #content select {
   float: right;
@@ -91,6 +94,10 @@
   margin-left: 20px;
 }
 
+.post .date .date-text {
+  float: right;
+}
+
 .post .date a {
   float: right;
 }
@@ -110,6 +117,11 @@
 
 .post .date .fave .favorite {
   text-align: right;
+}
+
+.post .actions {
+  margin-left: 160px;
+  margin-bottom: 16px;
 }
 
 .post .body {

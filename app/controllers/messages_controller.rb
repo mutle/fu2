@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   
+  layout :default_layout
   before_filter :login_required
   
   

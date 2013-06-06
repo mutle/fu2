@@ -1,6 +1,14 @@
-=hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax"
-%p.comment_box_container
+-type ||= "Comment"
+-action ||= "Add"
+-title ||= false
+.comment-box
+  %h3= "#{action} a #{type}"
+  -if title
+    %p.title
+      %label{:for => "channel_title"} Title:
+      =f.text_field :title
+  =hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax"
   =f.text_area :body, :class => 'comment_box'
-%p.right
-  %span.upload_info
-  =f.submit @post && !@post.new_record? ? 'Update Comment' : 'Add Comment', :accesskey => "s"
+  .actions
+    %span.upload_info
+      =f.submit "#{action} #{type}", :accesskey => "s"
