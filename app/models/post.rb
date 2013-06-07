@@ -44,7 +44,7 @@ class Post < ActiveRecord::Base
   def scan_for_mentions
     body.scan Channel::MentionPattern do |mention|
       login = mention[0]
-      if u = User.where(:login => login).first
+      if u = User.where("LOWER(login) = LOWER(:login)", :login => login).first
         channel.add_mention(u)
       end
     end
