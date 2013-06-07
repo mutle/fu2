@@ -18,20 +18,9 @@ module ChannelsHelper
     end
   end
   class BetterMentionFilter < Pipeline::MentionFilter
-    BetterMentionPattern = /
-      (?:^|\W)                   # beginning of string or non-word char
-      @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
-      (?!\/)                     # without a trailing slash
-      (?=
-        \.+[ \t\W]|              # dots followed by space or non-word character
-        \.+$|                    # dots at end of line
-        [^0-9a-zA-Z_.]|          # non-word character except dot
-        $                        # end of line
-      )
-    /ix
 
     def self.mentioned_logins_in(text)
-      text.gsub BetterMentionPattern do |match|
+      text.gsub Channel::MentionPattern do |match|
         login = $1
         yield match, login, false
       end

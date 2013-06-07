@@ -2,6 +2,18 @@ class Channel < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
+  MentionPattern = /
+    (?:^|\W|\n)                   # beginning of string or non-word char
+    @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
+    (?!\/)                     # without a trailing slash
+    (?=
+      \.+[ \t\W]|              # dots followed by space or non-word character
+      \.+$|                    # dots at end of line
+      [^0-9a-zA-Z_.]|          # non-word character except dot
+      $                        # end of line
+    )
+  /ix
+
   belongs_to :user
   has_many :posts, :order => "created_at"
   has_many :channel_users
@@ -99,17 +111,35 @@ class Channel < ActiveRecord::Base
   def as_json(*args)
     {:created_at => created_at, :id => id, :last_post => last_post, :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? visited?(@current_user) : false}
   end
+
+  def last_read_id(current_user)
+    $redis.zscore("last-post:#{current_user.id}", id) || 0
+  end
+
+  def num_unread(current_user)
+    posts.where("id > :last_id", :last_id => last_read_id(current_user)).count
+  end
   
-  def visited?(current_user)
-    channel_visits.count(:conditions => ["user_id = ?", current_user.id]) > 0 
+  def has_posts?(current_user)
+    i = last_read_id(current_user)
+    i == 0 || i < posts.last.id
   end
   
   def visit(current_user)
-    channel_visits.create(:user_id => current_user.id)
+    $redis.zadd "last-post:#{current_user.id}", posts.last.id, id
+    $redis.zadd "mentions:#{current_user.id}", 0, id
   end
   
   def delete_visits
     channel_visits.delete_all
+  end
+
+  def num_mentions(current_user)
+    ($redis.zscore("mentions:#{current_user.id}", id) || 0).to_i
+  end
+
+  def add_mention(user)
+    $redis.zincrby "mentions:#{user.id}", 1, id 
   end
   
 end
