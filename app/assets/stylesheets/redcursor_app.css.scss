@@ -282,6 +282,9 @@ form {
         float: right;
         padding-left: 10px;
       }
+      .post-count {
+        float: left;
+      }
     }
 
     .pagination {
@@ -623,21 +626,13 @@ form {
           padding: 8px;
           top: 0; left: 0; right: 0; bottom: 0;
           color: #fff;
+          z-index: 2;
+          width: 110px;
+          overflow: hidden;
         }
 
-        .count {
+        .post-count {
           float: right;
-          border: 1px solid #e2e2e2;
-          border-radius: 16px;
-          padding: 0px 8px;
-          margin-right: 10px;
-          color: #000;
-          background-color: #fff;
-        }
-
-        .count.mention {
-          background-color: #d43;
-          color: #fff;
         }
       }
 
@@ -730,6 +725,30 @@ form {
     display: block;
     border-top-left-radius: 0px;
   }
+
+  .post-count {
+    border: 2px solid #e2e2e2;
+    border-radius: 16px;
+    padding: 0px 12px;
+    margin-right: 4px;
+    color: #000;
+    background-color: #fff;
+  }
+  .post-count.mentions {
+    background-color: #d43;
+    color: #fff;
+    z-index: 10;
+  }
+  .post-count.unread {
+    z-index: 11;
+  }
+  .post-count.mentions + .post-count.unread {
+    margin-right: -12px;
+    padding-right: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
 
 }
 
