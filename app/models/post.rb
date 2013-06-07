@@ -8,8 +8,8 @@ class Post < ActiveRecord::Base
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
   
-  after_create :delete_channel_visits
   after_create :update_channel_last_post
+  after_create :scan_for_mentions
 
   # before_create :set_markdown
   # before_update :set_markdown
@@ -37,12 +37,17 @@ class Post < ActiveRecord::Base
     }.to_json
   end
   
-  def delete_channel_visits
-    channel.delete_visits
-  end
-  
   def update_channel_last_post
     channel.update_attribute(:last_post, created_at) if channel
+  end
+
+  def scan_for_mentions
+    body.scan Channel::MentionPattern do |mention|
+      login = mention[0]
+      if u = User.where(:login => login).first
+        channel.add_mention(u)
+      end
+    end
   end
 
   def set_markdown
