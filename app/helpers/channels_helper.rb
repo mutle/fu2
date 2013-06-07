@@ -76,4 +76,17 @@ module ChannelsHelper
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 
+  def channel_anchor(channel, current_user)
+    id = channel.next_post(current_user)
+    if id > 0
+      if id == channel.last_post_id
+        "comments"
+      else
+        "post_#{id}"
+      end
+    else
+      ""
+    end
+  end
+
 end

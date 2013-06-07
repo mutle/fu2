@@ -112,8 +112,23 @@ class Channel < ActiveRecord::Base
     {:created_at => created_at, :id => id, :last_post => last_post, :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? visited?(@current_user) : false}
   end
 
+  def next_post(current_user_id)
+    i = last_read_id(current_user_id)
+    return 0 if i == 0
+    p = posts.where("id > :last_id", :last_id => i).first
+    if p
+      p.id
+    else
+      i
+    end
+  end
+
   def last_read_id(current_user)
     $redis.zscore("last-post:#{current_user.id}", id) || 0
+  end
+
+  def last_post_id
+    posts.last.id
   end
 
   def num_unread(current_user)
@@ -126,7 +141,7 @@ class Channel < ActiveRecord::Base
   end
   
   def visit(current_user)
-    $redis.zadd "last-post:#{current_user.id}", posts.last.id, id
+    $redis.zadd "last-post:#{current_user.id}", last_post_id, id
     $redis.zadd "mentions:#{current_user.id}", 0, id
   end
   
