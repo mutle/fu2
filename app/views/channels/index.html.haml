@@ -19,7 +19,7 @@
             &nbsp;
         .date
           -if count > 0 && channel
-            =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
+            =link_to channel.last_post.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => channel_anchor(channel, current_user))
           -else
             No Posts yet.
         -if (mentions = channel.num_mentions(current_user)) > 0
