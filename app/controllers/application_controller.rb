@@ -49,8 +49,11 @@ class ApplicationController < ActionController::Base
   def mobile_device?
     request.user_agent =~ /(Android|iPhone|iPod|Windows Phone)/
   end
+  def mobile_device_blacklisted?
+    request.user_agent =~ /(Nexus 7)/
+  end
   def mobile?
-    params['mobile'] == "true" || (mobile_device? && cookies['desktop'] != "true")
+    params['mobile'] == "true" || (mobile_device? && !mobile_device_blacklisted? && cookies['desktop'] != "true")
   end
   helper_method :mobile_device?
   helper_method :mobile?
