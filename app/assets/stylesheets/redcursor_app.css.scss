@@ -1,6 +1,7 @@
 body {
   font-family: Helvetica, Arial, sans-serif;
-  background-color: #f2f2f2;
+  background-color: #fff;
+  margin: 0px;
 }
 
 form {
@@ -80,8 +81,140 @@ form {
   }
 }
 
+.header {
+  background: #e2e2e2;
+  background-color: #f2f2f2;
+  height: 48px;
+
+  .content {
+    width: 960px;
+    margin: 0px auto;
+  }
+
+  .toolbar {
+    line-height: 48px;
+  }
+
+  h1#title {
+    font-size: 28px;
+    line-height: 48px;
+    float: left;
+  }
+
+  .search {
+    float: right;
+    height: 24px;
+    margin: 11px 0px;
+    position: relative;
+
+    input {
+      height: 24px;
+      background: #fff url("/images/emoji/mag.png") no-repeat 2px 2px;
+      background-size: 20px;
+      border-radius: 4px;
+      padding-left: 32px;
+      width: 220px;
+    }
+    .autocompleter {
+      position: absolute;
+      left: 0px; top: 28px;
+      width: 252px;
+      background: #fff;
+      list-style: none;
+      text-align: left;
+      border: 2px solid #d9d9d9;
+      z-index: 20;
+
+      li {
+        cursor: pointer;
+        border-bottom: 1px solid #f8f8f8;
+        padding: 0px 6px;
+
+        a {
+          color: #000;
+        }
+      }
+      li:hover {
+        background-color: #d9d9d9;
+      }
+      li:last-child {
+        border: none;
+      }
+    }
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .button {
+    display: inline-block;
+    margin: 10px 12px;
+    background-color: #f8f8f8;
+    border: 2px solid #d9d9d9;
+    border-radius: 4px;
+    height: 24px;
+    line-height: 24px;
+    padding: 0px 12px 4px;
+  }
+
+  .buttons {
+    height: 28px;
+    margin: 10px 32px;
+    border: 2px solid #d9d9d9;
+    border-radius: 4px;
+    float: left;
+    line-height: 24px;
+
+    li {
+      background-color: #f8f8f8;
+      display: block;
+      float: left;
+      padding-bottom: 4px;
+      height: 24px;
+      border-right: 2px solid #d9d9d9;
+      position: relative;
+
+      a {
+        padding: 0px 12px;
+      }
+
+      .count {
+        position: absolute;
+        font-size: 12px;
+        line-height: 14px;
+        right: 0px;
+        top: -10px;
+        z-index: 10;
+        padding: 1px 3px;
+        background-color: #d43;
+        border: 1px solid #a33528;
+        border-radius: 12px;
+        a {
+          display: block;
+          text-decoration: none;
+          color: #fff;
+          padding: 0px;
+        }
+      }
+    }
+    
+    li:first-child {
+      border-radius-top-left: 4px;
+      border-radius-bottom-left: 4px;
+    }
+
+    li:last-child {
+      border: none;
+      border-radius-top-right: 4px;
+      border-radius-bottom-right: 4px;
+    }
+  }
+}
+
 #container {
-  padding-top: 2em;
+  padding-top: 1em;
 
   #content {
     h2 {
@@ -580,7 +713,6 @@ form {
       background: #444;
     }
     .title-toolbar {
-      display: none;
     }
 
     .title-toolbar.active {
@@ -686,15 +818,6 @@ form {
       color: #fff;
     }
 
-    .autocompleter {
-      list-style: none;
-      text-align: left;
-
-      li {
-        cursor: pointer;
-      }
-    }
-
     form {
       input {
         display: inline;
@@ -755,6 +878,64 @@ form {
 body.mobile {
   width: 320px;
   min-width: 320px;
+
+  .header {
+    width: 320px;
+    height: 106px;
+    position: relative;
+
+    h1#title {
+      font-size: 18px;
+      line-height: 22px
+    }
+
+    .toolbar {
+      position: absolute;
+      width: 320px;
+      top: 28px;
+
+      .buttons {
+        float: none;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        margin: 0px;
+        a {
+          padding: 0px 8px 4px;
+        }
+
+        .count a {
+          padding: 0px;
+        }
+      }
+      .actions {
+        position: absolute;
+        top: -10px;
+        right: 0px;
+      }
+      .button {
+        margin: 0px;
+        padding: 0px 8px 4px;
+      }
+
+      .search {
+        float: none;
+        position: absolute;
+        padding: 4px;
+        top: 28px;
+
+        input {
+          font-size: 16px;
+          background-size: 16px;
+          height: 16px;
+          width: 270px;
+        }
+      }
+
+    }
+
+  }
+
 }
 
 #container.mobile {

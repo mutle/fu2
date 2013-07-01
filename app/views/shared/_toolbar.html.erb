@@ -1,24 +1,23 @@
 <div class="toolbar">
-  <div class="navigation">
-    <h3>Navigation</h3>
-    <ul>
-      <li><%= link_to "Home", root_path %></li>
-      <li><%= link_to "New Channel", new_channel_path %></li>
-      <li><%= link_to "All Channels", channel_path(:all) %></li>
-      <li><%= link_to "All Users", users_path %></li>
-    </ul>
-    <ul>
-      <li><%= link_to "Settings", edit_user_path(current_user) %></li>
-      <li><%= link_to "Inbox", inbox_messages_path %></li>
-      <li><%= link_to "Logout", session_path, :method => :delete %></li>
-    </ul>
-  </div>
   <div class="search">
-    <h3>Search</h3>
     <%= form_tag search_channels_path, :method => :get do %>
-      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search .submit" %>
-      <%= submit_tag "Go", :name => '', :class => "submit" %>
+      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
     <% end %>
   </div>
-  <div class="clear"></div>
+  <ul class="buttons">
+    <li><%= link_to image_tag("/images/emoji/newspaper.png"), root_path, :title => "Home" %></li>
+    <li>
+      <% if (n = current_user.number_unread_messages) > 0 %>
+        <div class="count"><%= link_to n, inbox_messages_path %></div>
+      <% end %>
+      <%= link_to image_tag("/images/emoji/envelope.png"), inbox_messages_path, :title => "Notifications" %>
+    </li>
+    <li><%= link_to image_tag("/images/emoji/bookmark_tabs.png"), channel_path(:all), :title => "Channels" %></li>
+    <li><%= link_to image_tag("/images/emoji/family.png"), users_path, :title => "Users" %></li>
+    <li><%= link_to image_tag("/images/emoji/wrench.png"), edit_user_path(current_user), :title => "Settings" %></li>
+  </ul>
+  <div class="actions">
+    <%= link_to image_tag("/images/emoji/memo.png"), new_channel_path, :title => "New channel", :class => "button" %>
+    <%= link_to image_tag("/images/emoji/lock.png"), session_path, :title => "Logout", :class => "button", :method => :delete %>
+  </div>
 </div>

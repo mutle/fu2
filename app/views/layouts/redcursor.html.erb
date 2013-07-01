@@ -15,18 +15,21 @@
   </head>
   <body<%= ' class="mobile"'.html_safe if mobile? %>>
 
+    <div class="header">
+      <div class="content">
+        <h1 id="title">
+          Red Cursor
+        </h1>
+        <%= render :partial => "shared/toolbar" %>
+      </div>
+    </div>
+
     <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
 
       <div class="container_12">
         <% column_width = @column_width || 9 %>
         <% sidebar_width = 12 - column_width %>
         <div id="sidebar" class="grid_<%= sidebar_width %>">
-          <h1 id="title">
-            Red Cursor
-            <% if (n = current_user.number_unread_messages) > 0 %>
-              <div class="count"><%= link_to n, inbox_messages_path %></div>
-            <% end %>
-          </h1>
           <div class="title-toolbar"></div>
           <% if sidebar_width > 0 %>
             <div class="content">
@@ -36,7 +39,6 @@
         </div>
 
         <div id="content" class="grid_<%= column_width %>">
-          <%= render :partial => "shared/toolbar" %>
           <%= yield %>
         </div>
       </div>

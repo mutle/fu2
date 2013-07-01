@@ -65,9 +65,9 @@ class Autocompleter
     if @list.length == 0
       @list.hide()
       return
-    @list.css "left", @o.css "left"
-    @list.css "top", @o.css "top"
-    @list.width(@o.width())
+    # @list.css "left", @o.css "left"
+    # @list.css "top", @o.css "top"
+    # @list.width(@o.width())
     @list.empty()
     @list.append $("<li>").html("<a data-title=\"#{r.title}\" href=\"#{r.url}\">#{r.display_title}</a>") for r in results
     @list.show()
