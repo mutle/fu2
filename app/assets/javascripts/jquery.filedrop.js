@@ -82,6 +82,7 @@
 
     function drop(e) {
       if( opts.drop.call(this, e) === false ) return false;
+      if( e.dataTransfer === null ) return false;
       files = e.dataTransfer.files;
       if (files === null || files === undefined || files.length === 0) {
         opts.error(errors[0]);

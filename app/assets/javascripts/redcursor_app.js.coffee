@@ -4,6 +4,28 @@ $ ->
   syntax = $('#syntax').val()
   if syntax && syntax == "html"
     $('.comment_box').markItUp(mySettings)
+  insertImage = (url) ->
+    if syntax && syntax == "html"
+      $.markItUp
+        target: $('.comment_box')
+        placeHolder: "<img src=\"#{url}\" />"
+    else
+      $('.comment_box').append "![](#{url})"
+  $('.comment_box').filedrop
+    url: '/images'
+    paramname: 'image[image_file]'
+    allowedfiletypes: ['image/jpeg','image/png','image/gif']
+    headers:
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    maxfiles: 1
+    maxfilesize: 2
+    uploadStarted: (i, file, len) ->
+      $(".upload_info").html('Uploading "'+file.name+'"')
+    uploadFinished: (i, file, response, time) ->
+      $(".upload_info").html('Finished uploading "'+file.name+'"')
+      insertImage(response.url)
+    progressUpdated: (i, file, progress) ->
+      $(".upload_info").html('Uploading "'+file.name+'" ('+progress+"%)")
 
   if $('input#search').length
     autocompleter $('input#search'), (term, autocompleter) ->
