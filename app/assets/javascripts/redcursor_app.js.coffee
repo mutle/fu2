@@ -12,7 +12,7 @@ $ ->
     else
       $('.comment_box').append "![](#{url})"
   $('.comment_box').filedrop
-    url: '/images'
+    url: '/images.json'
     paramname: 'image[image_file]'
     allowedfiletypes: ['image/jpeg','image/png','image/gif']
     headers:
