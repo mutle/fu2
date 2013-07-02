@@ -29,7 +29,7 @@ module CarrierWave
           true
         end
         def url(options = {})
-          "http://files.fu2.redcursor.de/#{path}"
+          "#{server_url}/#{path}"
         end
       end
 
