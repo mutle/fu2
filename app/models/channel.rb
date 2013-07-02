@@ -128,7 +128,7 @@ class Channel < ActiveRecord::Base
   end
 
   def last_post_id
-    posts.last.id
+    posts.last.try(:id)
   end
 
   def num_unread(current_user)
