@@ -60,7 +60,7 @@ module ChannelsHelper
 
   def user_link(user)
     return "" unless user
-    link_to h(user.display_name), user_path(user), :style => user.display_color
+    link_to format_title(user.display_name), user_path(user), :style => user.display_color
   end
 
   def user_name(user)
@@ -68,7 +68,7 @@ module ChannelsHelper
   end
 
   def format_title(channel)
-    TITLE_PIPELINE.call(channel.title)[:output].to_s.html_safe
+    TITLE_PIPELINE.call(channel.is_a?(String) ? channel : channel.title)[:output].to_s.gsub(/<\/?div>/,'').html_safe
   end
 
   def avatar_url(user, size=42)

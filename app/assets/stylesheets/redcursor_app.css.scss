@@ -343,7 +343,7 @@ form {
       display: block;
       height: 42px;
       line-height: 42px;
-      img {
+      img.avatar {
         float: left;
       }
       .user-name {
@@ -488,7 +488,7 @@ form {
         height: 42px;
         line-height: 42px;
 
-        img {
+        img.avatar {
           position: absolute;
           border-top-left-radius: 8px;
           left: 0px;

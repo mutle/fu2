@@ -1,4 +1,4 @@
-%h2{:style => @user.display_color}=h @user.display_name
+%h2{:style => @user.display_color}= format_title(@user.display_name)
 -if current_user.id == @user.id
   =link_to "Edit", edit_user_path(current_user)
 -else
