@@ -62,7 +62,7 @@ $ ->
   #   a.minLength = 1
 
 
-  $(".fave").click ->
+  $(".fave").live 'click', ->
     self = $(this)
     post = self.find(".favorite").attr("data-post-id")
     $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
@@ -73,17 +73,6 @@ $ ->
       else
         self.find(".off").show()
     return false
-
-  $("#title").click ->
-    if $(this).hasClass("active")
-      $(".toolbar").removeClass("active")
-      $(".title-toolbar").removeClass("active")
-      $(this).removeClass("active")
-    else
-      $(".toolbar").addClass("active")
-      $(".title-toolbar").addClass("active")
-      $(this).addClass("active")
-      $(".toolbar input.search-field").focus() if !mobile
 
   refreshPosts = () ->
     last_id = $('.post').last().attr("id").replace(/^post_/, ''.replace(/^post_/, ''))
