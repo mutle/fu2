@@ -31,15 +31,6 @@ class ChannelsController < ApplicationController
     end
   end
 
-  def posts(respond=true)
-    @channel = Channel.find(params[:id], :include => :posts)
-    @channel.visit(current_user)
-    @post = Post.new
-    if respond
-      respond_with @channel.posts.all(:include => :user)
-    end
-  end
-
   def all
     @column_width = 12
     @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
@@ -88,4 +79,23 @@ class ChannelsController < ApplicationController
     redirect_to request.referer
   end
   
+  private
+  def posts(respond=true)
+    @channel = Channel.find(params[:id], :include => :posts)
+    @channel.visit(current_user)
+    @post = Post.new
+    if respond
+      respond_with @channel.posts.all(:include => :user)
+    end
+  end
+
+  def posts(respond=true)
+    @channel = Channel.find(params[:id], :include => :posts)
+    @channel.visit(current_user)
+    @post = Post.new
+    if respond
+      respond_with @channel.posts.all(:include => :user)
+    end
+  end
+
 end

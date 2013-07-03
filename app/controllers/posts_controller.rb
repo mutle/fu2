@@ -5,6 +5,13 @@ class PostsController < ApplicationController
   before_filter :load_channel, :except => :fave
 
   respond_to :html, :json
+
+  layout false, :only => [:index]
+
+  def index
+    @posts = Post.since(@channel, params[:last_id])
+    respond_with @posts
+  end
   
   def create
     @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)

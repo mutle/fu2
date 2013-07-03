@@ -84,3 +84,13 @@ $ ->
       $(".title-toolbar").addClass("active")
       $(this).addClass("active")
       $(".toolbar input.search-field").focus() if !mobile
+
+  refreshPosts = () ->
+    last_id = $('.post').last().attr("id").replace(/^post_/, ''.replace(/^post_/, ''))
+    ourl = document.location.href.replace(/#.*$/, '')
+    url = "#{ourl}/posts?last_id=#{last_id}"
+    $.get url, (data) ->
+      $(data).insertBefore('.comment-box-form')
+
+  if $('.comment_box').length
+    setInterval refreshPosts, 15 * 1000

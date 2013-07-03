@@ -1,0 +1,5 @@
+<% if @channel.can_read?(current_user) %>
+  <% @posts.each do |post| %>
+    <%= render :partial => "channels/post", :object => post if post.can_read?(current_user) %>
+  <% end %>
+<% end %>
