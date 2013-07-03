@@ -74,6 +74,19 @@ $ ->
         self.find(".off").show()
     return false
 
+  $(".post-reply").live 'click', ->
+    self = $(this)
+    post = self.parent(".post").find(".body")
+    console.log post.text()
+    return false
+
+  $(".post-unread").live 'click', ->
+    self = $(this)
+    post = self.parents(".date").find(".favorite").attr("data-post-id")
+    $.ajax(url:"/posts/"+post+"/unread", dataType: "json", type: "post").done (msg) ->
+      console.log msg
+    return false
+
   refreshPosts = () ->
     last_id = $('.post').last().attr("id").replace(/^post_/, ''.replace(/^post_/, ''))
     ourl = document.location.href.replace(/#.*$/, '')

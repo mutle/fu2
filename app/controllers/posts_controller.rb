@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   
   layout :default_layout
   before_filter :login_required
-  before_filter :load_channel, :except => :fave
+  before_filter :load_channel, :except => [:fave, :unread]
 
   respond_to :html, :json
 
@@ -58,6 +58,12 @@ class PostsController < ApplicationController
       notification :post_fave, @post
     end
     render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count}
+  end
+
+  def unread
+    @post = Post.find(params[:id].to_i)
+    @post.channel.visit(current_user, @post.id)
+    render :json => {:status => "OK"}
   end
   
   private

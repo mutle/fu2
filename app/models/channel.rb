@@ -141,11 +141,13 @@ class Channel < ActiveRecord::Base
     i == 0 || i < posts.last.id
   end
   
-  def visit(current_user)
+  def visit(current_user, post_id=nil)
+    if post_id
+      $redis.zadd "mentions:#{current_user.id}", 0, id
+    end
+    post_id ||= last_post_id
     i = last_read_id(current_user).to_i
     $redis.zadd "last-post:#{current_user.id}", last_post_id, id
-    $redis.zadd "mentions:#{current_user.id}", 0, id
-    p i
     i
   end
   
