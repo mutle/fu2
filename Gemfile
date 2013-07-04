@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "rails", "3.2.11"
+gem "rails", "3.2.13"
 gem "pg", "~>0.14.1"
 gem "haml", "3.2.0.alpha.10"
 gem "jquery-rails"
