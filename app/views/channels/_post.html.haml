@@ -9,7 +9,7 @@
       =user_name(post.user)
   .date
     .date-content
-      .post-options
+      .post-options{:style => "display: none;"}
         =link_to "Link", channel_path(@channel, :anchor => "post_#{post.id}")
         =link_to "Reply", "#", :class => "post-reply"
         =link_to "Mark unread", "#", :class => "post-unread"
@@ -18,8 +18,8 @@
           .count= post.faves.count
           =link_to "#{image_tag("favorite_on.png", :class => "on", :style => post.faved_by?(current_user) ? "" : "display:none;")}#{image_tag("favorite_off.png", :class => "off", :style => !post.faved_by?(current_user) ? "" : "display:none;")}".html_safe, "#", :class => "favorite", "data-post-id" => post.id
       .date-text
-        =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}")
-  .body
+        =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}"), :class => "post-date-link"
+  .body{"data-raw-body" => u(post.body)}
     =format_body(post)
   -if post.user_id == current_user.id
     / %br/
