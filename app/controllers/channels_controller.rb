@@ -61,6 +61,7 @@ class ChannelsController < ApplicationController
     channel = params[:channel]
     @channel.text = channel[:text]
     @channel.title = channel[:title]
+    @channel.updated_by = current_user.id
     @channel.save
     redirect_to channel_path(@channel)
   end

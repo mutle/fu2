@@ -156,5 +156,9 @@ class Channel < ActiveRecord::Base
   def add_mention(user)
     $redis.zincrby "mentions:#{user.id}", 1, id 
   end
+
+  def updated_by_user
+    updated_by && User.find(updated_by)
+  end
   
 end

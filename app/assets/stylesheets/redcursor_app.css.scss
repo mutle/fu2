@@ -340,9 +340,16 @@ form {
         text-decoration: none;
       }
     }
+    .channel-header {
+      .description {
+        float: left;
+        margin: 10px;
+      }
+    }
     .channel-actions {
       text-align: right;
       margin-bottom: 10px;
+      margin-top: 10px;
       margin-right: 10px;
     }
     .channel-header-edit {

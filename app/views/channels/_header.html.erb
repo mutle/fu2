@@ -1,19 +1,29 @@
 <div class="channel-header">
   <h2><%= format_title(@channel) %></h2>
-  <% if !@channel.text.blank? %>
     <div class="block">
-      <%= format_text @channel.text %>
+      <% if !@channel.text.blank? %>
+        <%= format_text @channel.text %>
+        <div class="description">
+          Updated at <%= @channel.updated_at.try(:strftime, '%Y/%m/%d %H:%M:%S') %>
+          <% if u = @channel.updated_by_user %>
+            by <%= format_title u.display_name %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="description">No description...</div>
+      <% end %>
       <div class="channel-actions">
         <%= link_to "Edit", "#", :class => "edit-channel-link" %>
       </div>
     </div>
-  <% end %>
 
 </div>
 
 <div class="channel-header-edit" style="display: none;">
   <%= form_for @channel, :url => channel_path(@channel), :method => :put do |f| %>
-    <%= f.text_field :title, :class => "channel-title" %>
+    <div class="title">
+      <%= f.text_field :title, :class => "channel-title" %>
+    </div>
     <div class="block">
       <%= f.text_area :text %>
       <div class="channel-actions">
