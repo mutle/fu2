@@ -83,3 +83,12 @@ $ ->
 
   if $('.comment_box').length
     setInterval refreshPosts, 15 * 1000
+
+  $(".edit-channel-link").click ->
+    $(".channel-header").hide()
+    $(".channel-header-edit").show()
+    return false
+  $(".cancel-edit-channel-link").click ->
+    $(".channel-header").show()
+    $(".channel-header-edit").hide()
+    return false
