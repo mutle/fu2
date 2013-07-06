@@ -33,6 +33,7 @@ class Channel < ActiveRecord::Base
     indexes :_id, :index => :not_analyzed
     indexes :title, :analyzer => 'snowball', :boost => 100
     indexes :created_at, :type => 'date', :index => :not_analyzed
+    indexes :text, :analyzer => 'snowball', :boost => 10
   end
   
   # define_index do
