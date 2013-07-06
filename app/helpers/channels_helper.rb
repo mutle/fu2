@@ -58,6 +58,11 @@ module ChannelsHelper
     return result[:output].to_s.html_safe
   end
 
+  def format_text(text)
+    result = MARKDOWN_PIPELINE.call(text)
+    return result[:output].to_s.html_safe
+  end
+
   def user_link(user)
     return "" unless user
     link_to format_title(user.display_name), user_path(user), :style => user.display_color

@@ -55,6 +55,15 @@ class ChannelsController < ApplicationController
       f.json { render :json => @channel }
     end
   end
+
+  def update
+    @channel = Channel.find params[:id]
+    channel = params[:channel]
+    @channel.text = channel[:text]
+    @channel.title = channel[:title]
+    @channel.save
+    redirect_to channel_path(@channel)
+  end
   
   def search
     @query = params[:search].to_s
