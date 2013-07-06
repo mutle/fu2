@@ -1,6 +1,6 @@
 .bottom-link= link_to "\u2B07".html_safe, channel_path(@channel, :anchor => "comments")
-%h2= format_title(@channel)
 -if @channel.can_read?(current_user)
+  =render :partial => "header"
   -@channel.posts.each do |post|
     -if post.can_read?(current_user)
       =render :partial => "post", :object => post

@@ -218,8 +218,11 @@ form {
 
   #content {
     h2 {
-      margin-bottom: 2em;
       font-size: 32px;
+      margin-bottom: 0.5em;
+    }
+    .channel-header, .channel-header-edit {
+      margin-bottom: 2em;
     }
     .block {
       background-color: #fff;
@@ -335,6 +338,20 @@ form {
         color: #fff;
         font-size: 300%;
         text-decoration: none;
+      }
+    }
+    .channel-actions {
+      text-align: right;
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
+    .channel-header-edit {
+      .title {
+        margin-bottom: 0.5em;
+      }
+      input.channel-title {
+        font-size: 28px;
+
       }
     }
 	
