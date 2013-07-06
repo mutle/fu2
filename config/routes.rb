@@ -23,6 +23,7 @@ Fu2::Application.routes.draw do
       get :search
       get :channel_names
       get :desktop
+      get :live
     end
     resources :posts
   end
@@ -44,6 +45,5 @@ Fu2::Application.routes.draw do
 
   resources :images
   resources :stylesheets
-  match 'live' => 'channels#live', :as => :live
   match '/' => 'channels#index', :as => :root
 end

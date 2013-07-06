@@ -8,18 +8,25 @@ class ChannelsController < ApplicationController
 
   respond_to :html, :json
   
-  def index
+  def index(respond=true)
     @column_width = 12
     if current_user && current_user.password_hash.blank?
       redirect_to password_user_path(:id => current_user.id) and return
     end
     @recent_channels = Channel.recent_channels(current_user, (params[:page] || 1).to_i)
     @recent_channels.each { |c| c.current_user = current_user }
-    respond_with @recent_channels
+    if respond
+      respond_with @recent_channels
+    end
   end
 
   def live
-    render :layout => "nextgen"
+    if Post.most_recent.first.id > params[:last_id].to_i
+      index(false)
+      render :action => "index", :layout => false
+    else
+      render :text => ""
+    end
   end
   
   def show

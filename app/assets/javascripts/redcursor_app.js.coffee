@@ -81,8 +81,18 @@ $ ->
     $.get url, (data) ->
       $(data).insertBefore('.comment-box-form')
 
+  refreshChannels = () ->
+    last_id = $('#recent_acitivities .channel').first().attr("data-last-id")
+    url = "/channels/live?last_id=#{last_id}"
+    $.get url, (data) ->
+      if data.length
+        $("#content").empty().append $(data)
+
   if $('.comment_box').length
     setInterval refreshPosts, 15 * 1000
+
+  if $('#recent_acitivities.refresh').length
+    setInterval refreshChannels, 15 * 1000
 
   $(".edit-channel-link").click ->
     $(".channel-header").hide()
