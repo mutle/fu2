@@ -6,7 +6,7 @@
   <% recent_channels.each do |c| %>
     <li>
       <% unread = c.num_unread(current_user); mentions = c.num_mentions(current_user) %>
-      <%= link_to c.title, channel_path(c) %>
+      <%= link_to c.title, channel_path(c, :anchor => channel_anchor(c, current_user)) %>
       <% if unread >  0 || mentions > 0%>
         <div class="channel">
           <% if mentions > 0 %><div class="post-count mentions"><%= mentions %></div><% end %>
