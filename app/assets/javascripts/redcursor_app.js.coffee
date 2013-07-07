@@ -4,6 +4,13 @@ $ ->
   syntax = $('#syntax').val()
   if syntax && syntax == "html"
     $('.comment_box').markItUp(mySettings)
+  insertText = (text) ->
+    if syntax && syntax == "html"
+      $.markItUp
+        target: $('.comment_box')
+        placeHolder: text
+    else
+      $('.comment_box').append text
   insertImage = (url) ->
     if syntax && syntax == "html"
       $.markItUp
@@ -72,6 +79,33 @@ $ ->
         self.find(".on").show()
       else
         self.find(".off").show()
+    return false
+
+  $(".post-date-link").live 'click', ->
+    self = $(this)
+    self.parents(".date-content").find(".post-options").toggle()
+    return false
+
+  $(".post-reply").live 'click', ->
+    self = $(this)
+    post = self.parents(".post").find(".body")
+    text = decodeURIComponent(post.attr("data-raw-body"))
+    if syntax && syntax == "html"
+      text = "<blockquote>#{text}</blockquote>"
+    else
+      text = text.replace(/</g, '&amp;lt;').replace(/>/g, '&amp;gt;').replace(/(^|\n)/g, "\n> ").replace(/^\n/, '')
+    console.log text
+    $(".comment-box textarea").focus()
+    insertText("#{text}\n\n")
+    self.parents(".date-content").find(".post-options").toggle()
+    return false
+
+  $(".post-unread").live 'click', ->
+    self = $(this)
+    post = self.attr("data-prev-post-id")
+    console.log post
+    $.ajax(url:"/posts/"+post+"/unread", dataType: "json", type: "post").done (msg) ->
+      self.parents(".date-content").find(".post-options").toggle()
     return false
 
   refreshPosts = () ->
