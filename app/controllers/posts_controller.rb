@@ -10,6 +10,8 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.since(@channel, params[:last_id])
+    @last_read_id = @channel.last_read_id(current_user)
+    @last_post_id = 0
     respond_with @posts
   end
   

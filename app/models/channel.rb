@@ -147,7 +147,7 @@ class Channel < ActiveRecord::Base
     end
     post_id ||= last_post_id
     i = last_read_id(current_user).to_i
-    $redis.zadd "last-post:#{current_user.id}", last_post_id, id
+    $redis.zadd "last-post:#{current_user.id}", post_id, id
     i
   end
   

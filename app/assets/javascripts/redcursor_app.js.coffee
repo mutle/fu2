@@ -98,7 +98,8 @@ $ ->
 
   $(".post-unread").live 'click', ->
     self = $(this)
-    post = self.parents(".date").find(".favorite").attr("data-post-id")
+    post = self.attr("data-prev-post-id")
+    console.log post
     $.ajax(url:"/posts/"+post+"/unread", dataType: "json", type: "post").done (msg) ->
       self.parents(".date-content").find(".post-options").toggle()
     return false
