@@ -102,10 +102,6 @@ $ ->
         $(".bottom-link .arrow-up").hide()
         $(".bottom-link .arrow-down").show()
 
-      console.log 'scroll'
-      console.log e
-      
-
   if $('#recent_acitivities.refresh').length
     setInterval refreshChannels, 15 * 1000
 
