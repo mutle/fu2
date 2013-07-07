@@ -89,7 +89,11 @@ $ ->
   $(".post-reply").live 'click', ->
     self = $(this)
     post = self.parents(".post").find(".body")
-    text = decodeURIComponent(post.attr("data-raw-body")).replace(/</g, '&amp;lt;').replace(/>/g, '&amp;gt;').replace(/(^|\n)/g, "\n> ").replace(/^\n/, '')
+    text = decodeURIComponent(post.attr("data-raw-body"))
+    if syntax && syntax == "html"
+      text = "<blockquote>#{text}</blockquote>"
+    else
+      text = text.replace(/</g, '&amp;lt;').replace(/>/g, '&amp;gt;').replace(/(^|\n)/g, "\n> ").replace(/^\n/, '')
     console.log text
     $(".comment-box textarea").focus()
     insertText("#{text}\n\n")
