@@ -1055,6 +1055,9 @@ body.mobile {
       padding: 8px;
       font-size: 12px;
       line-height: 12px;
+      img {
+        max-width: 18px;
+      }
     }
 
     #recent_acitivities {

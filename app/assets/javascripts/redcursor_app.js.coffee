@@ -90,6 +90,21 @@ $ ->
 
   if $('.comment_box').length
     setInterval refreshPosts, 15 * 1000
+    $(document).scroll (e) ->
+      docViewTop = $(window).scrollTop()
+      docViewBottom = docViewTop + $(window).height()
+      elemTop = $('.comment_box').offset().top;
+      elemBottom = elemTop + $('.comment_box').height()
+      if (elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop)
+        $(".bottom-link .arrow-up").show()
+        $(".bottom-link .arrow-down").hide()
+      else
+        $(".bottom-link .arrow-up").hide()
+        $(".bottom-link .arrow-down").show()
+
+      console.log 'scroll'
+      console.log e
+      
 
   if $('#recent_acitivities.refresh').length
     setInterval refreshChannels, 15 * 1000
