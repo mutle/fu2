@@ -31,6 +31,7 @@ Fu2::Application.routes.draw do
   resources :posts do
     member do
       post :fave
+      post :unread
     end
   end
 

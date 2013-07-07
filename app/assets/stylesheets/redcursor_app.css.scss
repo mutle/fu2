@@ -534,6 +534,10 @@ form {
         right: 0px;
         top: 0px;
         border-left: 1px solid #e2e2e2;
+        
+        .date-content {
+          position: relative;
+        }
 
         .fave {
           float: left;
@@ -560,6 +564,25 @@ form {
         }
         .date-text a {
           padding-left: 10px;
+        }
+        .post-options {
+          position: absolute;
+          z-index: 10;
+          left: -8px;
+          right: -16px;
+          top: 34px;
+          margin: 0px;
+          background-color: #444;
+          border: 1px solid #e2e2e2;
+
+          a {
+            display: block;
+            padding: 5px 10px;
+            border-bottom: 1px solid #e2e2e2;
+          }
+          a:last-child {
+            border: none;
+          }
         }
       }
 
