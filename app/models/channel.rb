@@ -142,8 +142,11 @@ class Channel < ActiveRecord::Base
   end
   
   def visit(current_user)
+    i = last_read_id(current_user).to_i
     $redis.zadd "last-post:#{current_user.id}", last_post_id, id
     $redis.zadd "mentions:#{current_user.id}", 0, id
+    p i
+    i
   end
   
   def delete_visits

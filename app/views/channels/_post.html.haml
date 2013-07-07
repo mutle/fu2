@@ -1,5 +1,5 @@
 %a{:name => "post_#{post.id}"}
-=div_for post do
+=div_for post, :class => "#{'unread' if post.id > @last_read_id}" do
   -if new_features?
     .user-color{:style => "background-color: #{post.user.color}"}
   .name

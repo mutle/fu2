@@ -99,16 +99,7 @@ class ChannelsController < ApplicationController
   private
   def posts(respond=true)
     @channel = Channel.find(params[:id], :include => :posts)
-    @channel.visit(current_user)
-    @post = Post.new
-    if respond
-      respond_with @channel.posts.all(:include => :user)
-    end
-  end
-
-  def posts(respond=true)
-    @channel = Channel.find(params[:id], :include => :posts)
-    @channel.visit(current_user)
+    @last_read_id = @channel.visit(current_user)
     @post = Post.new
     if respond
       respond_with @channel.posts.all(:include => :user)

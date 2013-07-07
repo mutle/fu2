@@ -627,6 +627,11 @@ form {
       }
     }
 
+    .post.unread {
+      .date, .name {
+        background-color: #888;
+      }
+    }
     .comment-box {
       position: relative;
       padding: 0px;

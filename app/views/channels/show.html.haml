@@ -1,6 +1,6 @@
 .bottom-link
   =link_to image_tag("/images/emoji/arrow_down.png"), channel_path(@channel, :anchor => "comments"), :class => "arrow-down"
-  =link_to image_tag("/images/emoji/arrow_up.png"), channel_path(@channel, :anchor => "top"), :class => "arrow-up"
+  =link_to image_tag("/images/emoji/arrow_up.png"), channel_path(@channel, :anchor => "top"), :class => "arrow-up", :style => "display: none;"
 -if @channel.can_read?(current_user)
   =render :partial => "header"
   -@channel.posts.each do |post|
