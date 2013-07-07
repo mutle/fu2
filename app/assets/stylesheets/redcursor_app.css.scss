@@ -634,6 +634,11 @@ form {
         background-color: #888;
       }
     }
+    .post.mention {
+      .date, .name {
+        background-color: #744 !important;
+      }
+    }
     .comment-box {
       position: relative;
       padding: 0px;

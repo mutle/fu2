@@ -52,6 +52,14 @@ class Post < ActiveRecord::Base
     end
   end
 
+  def mentions?(user)
+    body.scan Channel::MentionPattern do |mention|
+      login = mention[0]
+      return true if login.downcase == user.login.downcase
+    end
+    false
+  end
+
   def set_markdown
     self.markdown = user.markdown?
   end
