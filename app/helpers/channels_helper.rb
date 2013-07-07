@@ -77,8 +77,12 @@ module ChannelsHelper
   end
 
   def avatar_url(user, size=42)
-    gravatar_id = Digest::MD5.hexdigest(user.email.downcase)
-    "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+    if user.avatar_url.blank?
+      gravatar_id = Digest::MD5.hexdigest(user.email.downcase)
+      "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+    else
+      user.avatar_url
+    end
   end
 
   def channel_anchor(channel, current_user)

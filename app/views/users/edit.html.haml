@@ -2,12 +2,16 @@
   %h2 Edit your Profile
   =error_messages_for :user
   =form_for :user, :url => user_path(@user), :html => {:method => :put, :class => "normal"} do |f|
-    %p
-      -if new_features?
-        %label{:for => "user_avatar"} Avatar:
+    -if new_features?
+      %p
+        %label{:for => "user_avatar"} Gravatar-Avatar:
         =image_tag avatar_url(@user)
         %br/
         =link_to "Change", "http://www.gravatar.com/"
+      %p
+        %label{:for => "avatar_url"} Custom Avatar:
+        %strong Note: Avatar should be 42x42 pixels in size.
+        =f.text_field :avatar_url
       %p
         %label{:for => "user_email"} Email:
         =f.text_field :email, :disabled => true

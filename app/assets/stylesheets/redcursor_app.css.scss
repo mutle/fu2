@@ -369,6 +369,8 @@ form {
       line-height: 42px;
       img.avatar {
         float: left;
+        max-width: 42px;
+        max-height: 42px;
       }
       .user-name {
       }
