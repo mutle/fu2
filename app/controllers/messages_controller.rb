@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
   end
   
   def create
-    @message = Message.new(params[:message].merge({:sender_id => current_user.id}))
+    @message = Message.new(message_params.merge({:sender_id => current_user.id}))
 
     if @message.save
       redirect_to message_path(@message)
@@ -51,6 +51,11 @@ class MessagesController < ApplicationController
     @outgoing_messages.destroy_all
     flash[:notice] = "All mesages removed..."
     redirect_to messages_path
+  end
+
+  private
+  def message_params
+    params.require(:message).permit(:subject, :body, :user_id, :receiver_name)
   end
 
 end
