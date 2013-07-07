@@ -59,4 +59,6 @@ Fu2::Application.configure do
   config.active_support.deprecation = :notify
 
   config.force_ssl = true
+
+  config.eager_load = true
 end

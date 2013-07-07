@@ -69,7 +69,7 @@ $ ->
   #   a.minLength = 1
 
 
-  $(".fave").live 'click', ->
+  $(".fave").on 'click', ->
     self = $(this)
     post = self.find(".favorite").attr("data-post-id")
     $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
@@ -81,12 +81,12 @@ $ ->
         self.find(".off").show()
     return false
 
-  $(".post-date-link").live 'click', ->
+  $(".post-date-link").on 'click', ->
     self = $(this)
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-reply").live 'click', ->
+  $(".post-reply").on 'click', ->
     self = $(this)
     post = self.parents(".post").find(".body")
     text = decodeURIComponent(post.attr("data-raw-body"))
@@ -100,7 +100,7 @@ $ ->
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-unread").live 'click', ->
+  $(".post-unread").on 'click', ->
     self = $(this)
     post = self.attr("data-prev-post-id")
     console.log post

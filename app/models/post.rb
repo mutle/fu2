@@ -33,7 +33,7 @@ class Post < ActiveRecord::Base
   def to_indexed_json
     return {}.to_json if !channel || !channel.default_read?
     {
-      :_id => _id,
+      :_id => id,
       :body => body,
       :created_at => created_at
     }.to_json
