@@ -25,13 +25,16 @@ Fu2::Application.routes.draw do
       get :desktop
       get :live
     end
-    resources :posts
+    resources :posts do
+      member do
+        post :unread
+      end
+    end
   end
 
   resources :posts do
     member do
       post :fave
-      post :unread
     end
   end
 
