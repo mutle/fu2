@@ -103,8 +103,9 @@ $ ->
   $(".post-unread").on 'click', ->
     self = $(this)
     post = self.attr("data-prev-post-id")
-    console.log post
-    $.ajax(url:"/posts/"+post+"/unread", dataType: "json", type: "post").done (msg) ->
+    ourl = document.location.href.replace(/#.*$/, '')
+    url = "#{ourl}/posts/#{post}/unread"
+    $.ajax(url:url, dataType: "json", type: "post").done (msg) ->
       self.parents(".date-content").find(".post-options").toggle()
     return false
 

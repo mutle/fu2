@@ -142,10 +142,10 @@ class Channel < ActiveRecord::Base
   end
   
   def visit(current_user, post_id=nil)
-    if post_id
+    if !post_id
       $redis.zadd "mentions:#{current_user.id}", 0, id
     end
-    post_id ||= last_post_id
+    post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     i

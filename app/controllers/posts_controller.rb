@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   
   layout :default_layout
   before_filter :login_required
-  before_filter :load_channel, :except => [:fave, :unread]
+  before_filter :load_channel, :except => [:fave]
 
   respond_to :html, :json
 
@@ -63,8 +63,8 @@ class PostsController < ApplicationController
   end
 
   def unread
-    @post = Post.find(params[:id].to_i)
-    @post.channel.visit(current_user, @post.id)
+    @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
+    @channel.visit(current_user, @post_id)
     render :json => {:status => "OK"}
   end
   
@@ -74,3 +74,7 @@ class PostsController < ApplicationController
   end
   
 end
+
+
+
+
