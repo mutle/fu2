@@ -15,7 +15,7 @@ class Channel < ActiveRecord::Base
   /ix
 
   belongs_to :user
-  has_many :posts, :order => "created_at"
+  has_many :posts, lambda { order("created_at") }
   has_many :channel_users
   has_many :channel_visits
   
@@ -43,7 +43,7 @@ class Channel < ActiveRecord::Base
 
   def to_indexed_json
     {
-      :_id => _id,
+      :_id => id,
       :title => title,
       :created_at => created_at
     }.to_json

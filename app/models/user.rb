@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   serialize :block_users
 
+  scope :with_login, lambda { |login| where("LOWER(login) = LOWER(:login) and activated_at IS NOT NULL", :login => login) }
+
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
@@ -22,7 +24,7 @@ class User < ActiveRecord::Base
   before_create :set_display_name
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
+  # attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
   
   after_create :create_private_channel
   
@@ -31,7 +33,7 @@ class User < ActiveRecord::Base
   has_many :uploads
   
   has_many :messages
-  has_many :unread_messages, :class_name => "Message", :conditions => "status = #{Message::STATUS_UNREAD}"
+  has_many :unread_messages, lambda { where("status = #{Message::STATUS_UNREAD}") }, :class_name => "Message"
 
   has_many :faves
   
@@ -96,10 +98,8 @@ class User < ActiveRecord::Base
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
-    u = first :conditions => ['LOWER(login) = LOWER(?) and activated_at IS NOT NULL', login] # need to get the salt
-    p u
+    u = with_login(login).first
     return nil unless u
-    p u.authenticated?(password)
     u && u.authenticated?(password) ? u : nil
   end
 
