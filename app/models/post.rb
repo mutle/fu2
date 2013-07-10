@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
   has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
-  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("created_at DESC") } 
+  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("id") } 
   scope :most_recent, order("created_at DESC").limit(1)
   
   after_create :update_channel_last_post
