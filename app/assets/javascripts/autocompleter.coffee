@@ -43,11 +43,11 @@ class Autocompleter
     @o.blur ->
       window.console.log 'blur'
       autocompleter.list.hide()
-    $(".autocompleter li").live "mousedown", ->
+    $(".autocompleter li").on "mousedown", ->
       window.location.href = $(this).find("a").attr "href"
-    $(".autocompleter li").live "mouseenter", ->
+    $(".autocompleter li").on "mouseenter", ->
       autocompleter.setHighlight this
-    $(".autocompleter li").live "mouseleave", ->
+    $(".autocompleter li").on "mouseleave", ->
       autocompleter.removeHighlight()
   setHighlight: (e) ->
     @removeHighlight()

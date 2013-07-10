@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
   scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("id") } 
-  scope :most_recent, order("created_at DESC").limit(1)
+  scope :most_recent, proc { order("created_at DESC").limit(1) }
   
   after_create :update_channel_last_post
   after_create :scan_for_mentions
@@ -33,7 +33,7 @@ class Post < ActiveRecord::Base
   def to_indexed_json
     return {}.to_json if !channel || !channel.default_read?
     {
-      :_id => _id,
+      :_id => id,
       :body => body,
       :created_at => created_at
     }.to_json
