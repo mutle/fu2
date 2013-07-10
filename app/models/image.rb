@@ -1,5 +1,4 @@
 class Image < ActiveRecord::Base
-  attr_accessible :filename, :image_file, :user_id
   mount_uploader :image_file, ImageUploader
   belongs_to :user
 
