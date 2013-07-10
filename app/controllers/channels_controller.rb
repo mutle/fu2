@@ -10,10 +10,8 @@ class ChannelsController < ApplicationController
   
   def index(respond=true)
     @column_width = 12
-    if current_user && current_user.password_hash.blank?
-      redirect_to password_user_path(:id => current_user.id) and return
-    end
-    @recent_channels = Channel.recent_channels(current_user, (params[:page] || 1).to_i)
+    @page = (params[:page] || 1).to_i
+    @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
     if respond
       respond_with @recent_channels

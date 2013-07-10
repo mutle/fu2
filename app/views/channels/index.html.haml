@@ -4,10 +4,10 @@
     =text_field_tag "search", "", :style => "float: none;", :autocomplete => "off"
     =submit_tag "Go", :name => ''
   %h2 Recent Activities
-%ul#recent_acitivities.refresh
+%ul#recent_acitivities{:class => "#{'refresh' if @page == 1}"}
   -@recent_channels.each do |channel|
     -has_posts = channel.has_posts?(current_user)
-    %li{:class => "#{'visited' if has_posts} channel", "data-last-id" => channel.last_post_id }
+    %li{:class => "#{'visited' if has_posts} channel", "data-last-id" => channel.last_post_id}
       -count = channel.posts.count
       -if new_features?
         .name

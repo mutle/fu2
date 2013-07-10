@@ -110,7 +110,7 @@ $ ->
     return false
 
   refreshPosts = () ->
-    last_id = $('.post').last().attr("id").replace(/^post_/, ''.replace(/^post_/, ''))
+    last_id = $('.post').last().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
     url = "#{ourl}/posts?last_id=#{last_id}"
     $.get url, (data) ->
