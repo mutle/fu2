@@ -13,6 +13,9 @@
         =#link_to "Link", channel_path(@channel, :anchor => "post_#{post.id}")
         =link_to "Reply", "#", :class => "post-reply"
         =link_to "Mark unread", "#", :class => "post-unread", "data-prev-post-id" => @last_post_id
+        -if post.user_id == current_user.id
+          =link_to "Edit", edit_channel_post_path(@channel, post)
+          =link_to "Delete", channel_post_path(@channel, post), :method => :delete, :confirm => "Are you sure?"
       .fave{:title => "Faved by:\n#{post.faves.map { |f| f.user.login }.join("\n")}" }
         .fave-text
           .count= post.faves.count
@@ -21,9 +24,4 @@
         =link_to post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S'), channel_path(@channel, :anchor => "post_#{post.id}"), :class => "post-date-link"
   .body{"data-raw-body" => u(post.body)}
     =format_body(post)
-  -if post.user_id == current_user.id
-    / %br/
-    .actions
-      =link_to "Edit", edit_channel_post_path(@channel, post)
-      =link_to "Delete", channel_post_path(@channel, post), :method => :delete, :confirm => "Are you sure?"
 .clear

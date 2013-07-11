@@ -567,21 +567,22 @@ form {
         }
         .post-options {
           position: absolute;
-          z-index: 10;
-          left: -8px;
+          z-index: 30;
+          left: -452px;
           right: -16px;
           top: 34px;
           margin: 0px;
-          background-color: #444;
-          border: 1px solid #e2e2e2;
 
           a {
             display: block;
-            padding: 5px 10px;
-            border-bottom: 1px solid #e2e2e2;
+            background-color: #444;
+            float: right;
+            padding: 5px 24px;
+            border: 1px solid #e2e2e2;
+            border-left: none;
           }
-          a:last-child {
-            border: none;
+          a:last--child {
+            border-left: 1px solid #e2e2e2;
           }
         }
       }
