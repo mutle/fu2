@@ -38,7 +38,12 @@ class ChannelsController < ApplicationController
 
   def all
     @column_width = 12
-    @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+    @letter = params[:letter]
+    if @letter.blank?
+      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+    else
+      @channels = Channel.with_letter(@letter)
+    end
     render "all"
   end
   

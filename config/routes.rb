@@ -24,6 +24,7 @@ Fu2::Application.routes.draw do
       get :channel_names
       get :desktop
       get :live
+      get :all
     end
     resources :posts do
       member do

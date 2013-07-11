@@ -2,6 +2,8 @@ class Channel < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
+  scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
     @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
