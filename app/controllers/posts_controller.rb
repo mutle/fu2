@@ -6,10 +6,6 @@ class PostsController < ApplicationController
 
   respond_to :html, :json
 
-  layout false, :only => [:index]
-  # WTF Rails?
-  layout "redcursor", :only => [:edit]
-
   def index
     @posts = Post.since(@channel, params[:last_id])
     @last_read_id = @channel.last_read_id(current_user)
@@ -73,6 +69,11 @@ class PostsController < ApplicationController
   private
   def load_channel
     @channel = Channel.find(params[:channel_id].to_i)
+  end
+
+  def default_layout
+    return false if params[:action] == "index"
+    "redcursor"
   end
   
 end
