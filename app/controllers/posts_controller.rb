@@ -7,6 +7,8 @@ class PostsController < ApplicationController
   respond_to :html, :json
 
   layout false, :only => [:index]
+  # WTF Rails?
+  layout "redcursor", :only => [:edit]
 
   def index
     @posts = Post.since(@channel, params[:last_id])
