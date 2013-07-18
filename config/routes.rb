@@ -37,6 +37,9 @@ Fu2::Application.routes.draw do
     member do
       post :fave
     end
+    collection do
+      get :faved
+    end
   end
 
 

@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   
   layout :default_layout
   before_filter :login_required
-  before_filter :load_channel, :except => [:fave]
+  before_filter :load_channel, :except => [:fave, :faved]
 
   respond_to :html, :json
 
@@ -64,6 +64,10 @@ class PostsController < ApplicationController
     @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
     render :json => {:status => "OK"}
+  end
+
+  def faved
+    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
   end
   
   private
