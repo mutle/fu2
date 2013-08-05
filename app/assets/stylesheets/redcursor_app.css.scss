@@ -603,8 +603,13 @@ form {
         }
 
         blockquote p {
-          margin-top: 0px;
+          margin-top: 0.5em;
+		  margin-bottom: 0.5em;
         }
+		
+		blockquote br {
+		  margin-bottom: 1em;
+		}
 
         blockquote p:last-child {
           margin-bottom: 0px;
