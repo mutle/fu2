@@ -18,12 +18,12 @@ Fu2::Application.routes.draw do
       post :authenticate
     end
   end
+
   resources :channels do
     collection do
       get :search
       get :channel_names
       get :desktop
-      get :live
       get :all
     end
     resources :posts do
@@ -42,13 +42,15 @@ Fu2::Application.routes.draw do
     end
   end
 
-
   resources :messages do
     collection do
       get :inbox
       get :sent
       delete :destroy_all
     end
+  end
+
+  resources :notifications do
   end
 
   resources :images

@@ -18,10 +18,4 @@ class ChannelTest < ActiveSupport::TestCase
     c = create_channel("foo", nil)
     assert_equal 1, c.posts.size
   end
-
-  test "generate a permalink" do
-    c = create_channel("Lorem ipsum", nil)
-    assert_equal "Lorem-ipsum", c.permalink
-  end
-
 end

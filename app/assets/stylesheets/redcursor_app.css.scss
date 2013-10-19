@@ -25,7 +25,8 @@ form {
   border: 2px solid #e2e2e2;
   border-radius: 8px;
 
-  .notice {
+  h2 {
+    font-weight: normal;
     font-size: 18px;
     height: 26px;
     line-height: 26px;
@@ -38,6 +39,13 @@ form {
     border-bottom: 1px solid #e2e2e2;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+  }
+
+  .notice {
+    background-color: #ffc;
+    padding: 1em;
+    padding-left: 8px;
+    font-weight: bold;
   }
 
   form {
@@ -199,7 +207,7 @@ form {
         }
       }
     }
-    
+
     li:first-child {
       border-radius-top-left: 4px;
       border-radius-bottom-left: 4px;
@@ -327,7 +335,7 @@ form {
       }
     }
     .bottom-link {
-      position: fixed; 
+      position: fixed;
       z-index: 110;
       background: #444;
       padding: 10px;
@@ -361,7 +369,7 @@ form {
 
       }
     }
-	
+
 
     .user-mini {
       display: block;
@@ -424,10 +432,10 @@ form {
       }
       .user-mini {
         padding-left: 8px;
-		
+
         .user-name {
           padding-left: 10px;
-        }		
+        }
       }
       .user-color {
         position: absolute;
@@ -534,7 +542,7 @@ form {
         right: 0px;
         top: 0px;
         border-left: 1px solid #e2e2e2;
-        
+
         .date-content {
           position: relative;
         }
@@ -624,7 +632,7 @@ form {
           padding-left: 4em;
           margin-bottom: 0em;
         }
-        
+
 
         img {
           max-width: 656px;
@@ -650,7 +658,7 @@ form {
           text-decoration: none;
           color: #A0A0A0;
         }
-		
+
         a:hover {
           color: #000;
         }
@@ -1163,7 +1171,7 @@ body.mobile {
           text-align: right;
         }
       }
-	  
+
       .actions {
         a {
           color: #000;
@@ -1171,7 +1179,7 @@ body.mobile {
         a:hover {
           color: #000;
         }
-      } 
+      }
     }
     .comment-box {
       textarea {

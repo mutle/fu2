@@ -1,5 +1,7 @@
+%h2
+  Login to RedCursor
 .notice
-  =flash[:notice] || "Login to #{new_features? ? "RedCursor" : "fu2"}"
+  =flash[:notice] || ""
 =form_tag session_path, :html => {:class => "normal"} do
   %p.login
     %label{:for => "login"} Username
