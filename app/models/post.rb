@@ -48,6 +48,7 @@ class Post < ActiveRecord::Base
       login = mention[0]
       if u = User.where("LOWER(login) = LOWER(:login)", :login => login).first
         channel.add_mention(u)
+        Notification.mention(user, u, channel, self)
       end
     end
   end

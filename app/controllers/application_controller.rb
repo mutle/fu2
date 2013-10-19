@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  layout "redcursor"
 
   def login_required
     logged_in? || redirect_to(new_session_path)

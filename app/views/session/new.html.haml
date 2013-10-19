@@ -1,7 +1,8 @@
 %h2
   Login to RedCursor
-.notice
-  =flash[:notice] || ""
+-if !flash[:notice].blank?
+  .notice
+    =flash[:notice]
 =form_tag session_path, :html => {:class => "normal"} do
   %p.login
     %label{:for => "login"} Username
