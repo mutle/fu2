@@ -42,6 +42,7 @@ $ ->
   last_id = 0
   notify_new = false
   update_view = false
+  pause_polling = false
   send_button = $(".messages .response .send")
   messages = $(".messages .message-list")
   month_names = ["January", "February", "March", "April", "May", "June",
@@ -134,7 +135,7 @@ $ ->
         addUserNotification(n)
 
   refreshNotifications = (firstRun=false) ->
-    console.log "refresh #{last_id}"
+    return if pause_polling
     $.getJSON "/notifications.json?last_id=#{last_id}", (data) ->
       addNotifications(data)
       updateUsers()
@@ -171,12 +172,14 @@ $ ->
       $.post "/notifications.json", {user_id: user.id, message: message}, cb
 
   send_button.click ->
+    pause_polling = true
     postMessage users[show_user_id], inputValue(), (data) ->
       addUserNotification(data)
       showMessage(data)
       messages.show()
       $(".messages .empty").hide()
       resetInput()
+      pause_polling = false
 
   $.getJSON "/users.json", (data) ->
     data = _.sortBy data, (u) ->

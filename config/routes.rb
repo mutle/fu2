@@ -1,4 +1,8 @@
+require "resque_web"
+
 Fu2::Application.routes.draw do
+  mount ResqueWeb::Engine => "/resque"
+
   resources :users do
     member do
       put :block
