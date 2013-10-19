@@ -1,0 +1,59 @@
+.profile {
+
+  .avatar {
+    max-width: 140px;
+    max-height: 140px;
+  }
+
+  .user-info {
+    margin-bottom: 2em;
+  }
+
+  .box {
+    h3 {
+      background-color: #eee;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 1.5em;
+      font-size: 20px;
+    }
+
+    ul {
+      display: block;
+
+      li {
+        display: block;
+      }
+
+      .user-post {
+        padding-bottom: 0.5em;
+        border-bottom: 1px solid #000;
+        margin-bottom: 1.5em;
+        font-size: 13px;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        a {
+          display: block;
+          text-decoration: none;
+          color: #000;
+        }
+
+        .excerpt {
+          margin-bottom: 0.25em;
+          font-size: 16px;
+          overflow: hidden;
+        }
+
+        .date {
+          float: right;
+          color: #999;
+        }
+      }
+    }
+
+  }
+
+}

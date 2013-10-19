@@ -1,0 +1,38 @@
+<div class="profile">
+
+  <div class="container_12 user-info">
+    <div class="box grid_2">
+      <%= image_tag avatar_url(@user, 140), :class => "avatar" %>
+    </div>
+
+    <div class="box grid_10">
+      <h2><%= format_title(@user.display_name) %></h2>
+      <p><%= link_to "Message", notifications_path(:anchor => @user.id) %></p>
+    </div>
+  </div>
+
+  <div class="container_12">
+    <div class="box grid_5 prefix_2">
+      <h3>Recent Posts (<%= @user.posts.count %> total)</h3>
+      <% if @user.posts.count > 0 %>
+        <ul>
+          <% @user.posts.all(:limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post| %>
+            <% next unless post and post.channel %>
+            <%= render :partial => "post", :object => post %>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+
+    <div class="box grid_5">
+      <h3>Faves</h3>
+      <ul>
+        <% @user.faves.includes(:post => :channel).limit(10).each do |fave| %>
+          <% next unless fave.post %>
+          <%= render :partial => "post", :object => fave.post %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+</div>

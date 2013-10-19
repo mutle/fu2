@@ -7,7 +7,7 @@ class Notification < ActiveRecord::Base
   belongs_to :post
 
   scope :for_user, proc { |user|
-    where(:user_id => user.id).order("notifications.created_at DESC")
+    where(:user_id => user.id).order("notifications.id DESC")
   }
   scope :since, proc { |id| where("id > ?", id) }
 
@@ -23,7 +23,7 @@ class Notification < ActiveRecord::Base
       create(attrs)
     end
 
-    def message(from, to, message)
+    def message(from, to, message, no_response=false)
       attrs = {
         :user_id => to.id,
         :created_by_id => from.id,
@@ -31,21 +31,31 @@ class Notification < ActiveRecord::Base
         :message => message
       }
       m = create(attrs)
-      if from.id != to.id
+      if !no_response && from.id != to.id
         attrs = {
           :user_id => from.id,
           :created_by_id => to.id,
           :notification_type => "response",
           :message => message
         }
-        return create(attrs)
+        create(attrs)
       end
+      m.process_fubot_message
       m
     end
   end
 
   def message
     render_message(super || default_message)
+  end
+
+  def process_fubot_message
+    if user_id == 40 && notification_type == "message"
+      response = Fubot.new.call(self.message)
+      if response
+        self.class.message(user, created_by, response.text, true)
+      end
+    end
   end
 
   private

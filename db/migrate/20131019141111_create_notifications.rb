@@ -10,8 +10,8 @@ class CreateNotifications < ActiveRecord::Migration
       t.integer :post_id
       t.text :message
       t.text :metadata
-      t.boolean :read
-      t.boolean :deleted
+      t.boolean :read, :default => false
+      t.boolean :deleted, :default => false
 
       t.timestamps
     end

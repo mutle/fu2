@@ -29,5 +29,5 @@ end
 group :test do
   gem "rspec"
   gem "rspec-rails"
+  gem "test-unit"
 end
-

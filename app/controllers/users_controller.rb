@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
 
-  layout :default_layout
   before_filter :login_required, :except => ["activate", "create"]
 
   respond_to :html, :json
@@ -28,6 +27,7 @@ class UsersController < ApplicationController
     rescue ActiveRecord::RecordNotFound
       User.first(:conditions => ["LOWER(login) = LOWER(?)", params[:id]]) || raise(ActiveRecord::RecordNotFound)
     end
+    @column_width = 12
     respond_with @user
   end
 

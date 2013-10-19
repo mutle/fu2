@@ -1,14 +1,13 @@
-<h2>Redcursor IM</h2>
-
 <div class="notifications" data-user-id="<%= current_user.id %>">
   <ul class="users">
+    <li class="divider"></li>
   </ul>
   <div class="messages">
-    <messages>
-    </messages>
+    <div class="message-list">
+    </div>
 
     <div class="empty">
-      No messages from this user.
+      No messages from <span class="username"></span>.
     </div>
 
     <div class="welcome">
@@ -19,7 +18,7 @@
       <div class="form">
         <input type="text" class="input" />
         <textarea class="input-text"></textarea>
-        <button class="send">Send</button>
+        <button class="send" accesskey="s">Send</button>
       </div>
     </div>
 
