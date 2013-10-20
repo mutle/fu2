@@ -1,4 +1,8 @@
+require "resque_web"
+
 Fu2::Application.routes.draw do
+  mount ResqueWeb::Engine => "/resque"
+
   resources :users do
     member do
       put :block
@@ -18,6 +22,7 @@ Fu2::Application.routes.draw do
       post :authenticate
     end
   end
+
   resources :channels do
     collection do
       get :search
@@ -42,12 +47,17 @@ Fu2::Application.routes.draw do
     end
   end
 
-
   resources :messages do
     collection do
       get :inbox
       get :sent
       delete :destroy_all
+    end
+  end
+
+  resources :notifications do
+    member do
+      post :read
     end
   end
 

@@ -1,0 +1,10 @@
+<div class="profile">
+  <h2>All Users (<%= @users.size %> total)</h2>
+  <% @users.each_slice(3) do |slice| %>
+    <div class="container_12 user-info user-info-list">
+      <% slice.each do |user| %>
+        <%= render :partial => "profile", :locals => {:user => user, :avatar_size => 70, :avatar_grid_size => 1, :grid_size => 3} %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

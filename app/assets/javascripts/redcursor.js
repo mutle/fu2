@@ -14,3 +14,4 @@
 //= require autocompleter
 //= require emoji
 //= require redcursor_app
+//= require notifications

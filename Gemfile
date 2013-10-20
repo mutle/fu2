@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem "rails", "3.2.13"
 gem "pg", "~>0.14.1"
 gem "haml", "3.2.0.alpha.10"
-gem "jquery-rails"
+gem "jquery-rails", ">=3.0.4"
 gem 'json'
 gem "will_paginate"
 gem "rails_autolink"
@@ -17,6 +17,8 @@ gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'
 gem 'unicorn', '~> 4.5.0'
+gem 'resque'
+gem 'resque-web', require: 'resque_web'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -29,5 +31,5 @@ end
 group :test do
   gem "rspec"
   gem "rspec-rails"
+  gem "test-unit"
 end
-

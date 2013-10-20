@@ -45,7 +45,7 @@ $ ->
             url: "/channels/#{result.id}"
           results.push item
         autocompleter.showResults results
-  
+
   # if $('.comment_box').length
   #   $('.comment_box a').click ->
   #     return false
@@ -55,8 +55,8 @@ $ ->
   #     results = []
   #     if input[0] == ':'
   #       for emoji in window.Emojis
-  #         continue if emoji.indexOf(input.substring(1)) == -1 
-  #         item = 
+  #         continue if emoji.indexOf(input.substring(1)) == -1
+  #         item =
   #           display_title: "<img src='/images/emoji/#{emoji}.png' /> :#{emoji}:",
   #           title: ":#{emoji}:"
   #         results.push item
@@ -69,7 +69,7 @@ $ ->
   #   a.minLength = 1
 
 
-  $(".fave").live 'click', ->
+  $(".fave").on 'click', ->
     self = $(this)
     post = self.find(".favorite").attr("data-post-id")
     $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
@@ -81,12 +81,12 @@ $ ->
         self.find(".off").show()
     return false
 
-  $(".post-date-link").live 'click', ->
+  $(".post-date-link").on 'click', ->
     self = $(this)
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-reply").live 'click', ->
+  $(".post-reply").on 'click', ->
     self = $(this)
     post = self.parents(".post").find(".body")
     text = decodeURIComponent(post.attr("data-raw-body"))
@@ -100,7 +100,7 @@ $ ->
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-unread").live 'click', ->
+  $(".post-unread").on 'click', ->
     self = $(this)
     post = self.attr("data-prev-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
