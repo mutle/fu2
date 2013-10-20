@@ -9,7 +9,7 @@
       <h3>Recent Posts (<%= @user.posts.count %> total)</h3>
       <% if @user.posts.count > 0 %>
         <ul>
-          <% @user.posts.all(:limit => 10, :order => "posts.created_at DESC", :include => :channel, :conditions => ["channels.default_read = ? AND channels.default_write = ?", true, true]).each do |post| %>
+          <% @user_posts.each do |post| %>
             <% next unless post and post.channel %>
             <%= render :partial => "post", :object => post %>
           <% end %>
@@ -20,7 +20,7 @@
     <div class="box grid_5">
       <h3>Faves</h3>
       <ul>
-        <% @user.faves.includes(:post => :channel).limit(10).each do |fave| %>
+        <% @user_faves.each do |fave| %>
           <% next unless fave.post %>
           <%= render :partial => "post", :object => fave.post %>
         <% end %>

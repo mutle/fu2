@@ -3,7 +3,17 @@
   <%= image_tag avatar_url(user, avatar_size), :class => "avatar" %>
 </div>
 
+<% if grid_size > 3 then grid_size -= 3; third_box = true; end %>
 <div class="box grid_<%= grid_size %>">
   <h2><%= link_to format_title(user.display_name), user_path(user) %></h2>
-  <p><%= link_to image_tag("/images/emoji/email.png"), notifications_path(:anchor => user.id), :class => "user-link" %></p>
+  <p><%= link_to image_tag("/images/emoji/envelope.png"), notifications_path(:anchor => user.id), :class => "user-link" %></p>
 </div>
+
+<% if third_box %>
+  <div class="box grid_3 right stats">
+    <p><span class="label">Posts:</span> <%= @user.posts.count %></p>
+    <p><span class="label">Channels created:</span> <%= @user_channel_count %></p>
+    <p><span class="label">Faves given:</span> <%= @user.faves.count %></p>
+    <p><span class="label">Faves received:</span> <%= @user_faves_received %></p>
+  </div>
+<% end %>

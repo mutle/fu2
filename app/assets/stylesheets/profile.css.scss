@@ -1,5 +1,19 @@
 .profile {
 
+  .right {
+    text-align: right;
+  }
+
+  .stats {
+    text-align: right;
+    font-size: 18px;
+    .label {
+      font-weight: bold;
+      display: inline-block;
+      float: left;
+    }
+  }
+
   .avatar {
     max-width: 140px;
     max-height: 140px;
@@ -19,7 +33,7 @@
     }
 
     h2 {
-      font-size: 20px !important;
+      font-size: 36px !important;
 
       a {
         display: block;
@@ -33,6 +47,9 @@
         max-width: 24px;
         max-height: 24px;
       }
+    }
+    h2 {
+      font-size: 20px !important;
     }
   }
 
