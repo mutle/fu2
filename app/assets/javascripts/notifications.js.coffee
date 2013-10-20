@@ -42,6 +42,7 @@ $ ->
   last_id = 0
   notify_new = false
   update_view = false
+  first_run = true
   pause_polling = false
   send_button = $(".messages .response .send")
   messages = $(".messages .message-list")
@@ -59,6 +60,9 @@ $ ->
     $(".notifications .empty").css("height", "#{height}px")
     $(".notifications .welcome").css("height", "#{height}px")
   $(window).resize -> resize()
+
+  scrollMessages = () ->
+    messages.scrollTop(messages[0].scrollHeight)
 
   inputValue = () ->
     if $(".input-text").hasClass("active")
@@ -82,8 +86,12 @@ $ ->
     for id,n of user_notifications
       unread = _.filter n, (notif) -> notif.read == false
       unread_counts[id] = (unread || {}).length
-      indicator = $("li.user-#{id}").addClass("active").find(" .indicator").show().text(unread_counts[id])
-      console.log unread_counts[id]
+      user = $("li.user-#{id}").addClass("active").removeClass("activity")
+      indicator = user.find(" .indicator").show()
+      last_count = parseInt(indicator.text())
+      if last_count < unread_counts[id]
+        user.addClass("activity")
+      indicator.text(unread_counts[id])
       indicator.hide() if unread_counts[id] == 0
     $(".users .user.active").prependTo($(".users"))
 
@@ -117,6 +125,7 @@ $ ->
     message = _.template(templateMessage, _.extend(_.clone(n), {own: (n.avatar_id == user_id)}))
     messages.append createTimestamp(n)
     messages.append $(message)
+    scrollMessages()
 
   addUserNotification = (n) ->
     last_id = n.id if n.id > last_id
@@ -134,16 +143,20 @@ $ ->
       if n.created_by_id?
         addUserNotification(n)
 
-  refreshNotifications = (firstRun=false) ->
+  refreshNotifications = () ->
     return if pause_polling
     $.getJSON "/notifications.json?last_id=#{last_id}", (data) ->
+      return if pause_polling
       addNotifications(data)
       updateUsers()
-      if firstRun
+      if first_run
+        console.log 'first run'
         if match = window.location.hash.match(/^#([0-9]+)$/)
           showUser(parseInt(match[1]))
         notify_new = true
-        setInterval refreshNotifications, 5 * 1000
+        first_run = false
+        update_view = false
+        window.setInterval refreshNotifications, 5 * 1000
       else if update_view
         console.log 'update view'
         update_view = false
@@ -163,8 +176,8 @@ $ ->
       $(".messages .empty").show().find(".username").html(users[id].display_name_html)
       messages.hide()
     send_button.attr("disabled", false)
+    scrollMessages()
     hash = "##{id}"
-    messages.scrollTop(messages[0].scrollHeight)
     window.location.hash = hash if window.location.hash != hash
 
   postMessage = (user, message, cb) ->
@@ -193,5 +206,5 @@ $ ->
     $(".users .user").click ->
       showUser parseInt($(this).data("user-id"))
 
-    refreshNotifications(true)
+    refreshNotifications()
   resize()

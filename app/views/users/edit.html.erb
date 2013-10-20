@@ -1,0 +1,52 @@
+<div class="profile">
+
+  <%= error_messages_for :user %>
+
+  <%= form_for :user, :url => user_path(@user), :html => {:method => :put, :class => "normal"} do |f| %>
+    <div class="container_12 user-info">
+      <div class="box grid_2">
+        <%= image_tag avatar_url(@user, 140), :class => "avatar" %>
+      </div>
+
+      <div class="box grid_10">
+        <h2>Settings for <%= format_title(@user.display_name) %></h2>
+
+        <p class="first-form-element">
+          <%= f.label :email, "Email:" %>
+          <%= f.text_field :email, :disabled => true %>
+        </p>
+        <p>
+          <%= f.label :avatar_url, "Gravatar avatar:" %>
+          <%= link_to "Set/Change Avatar on Gravatar.com", "http://www.gravatar.com" %>
+          <span class="note"><strong>Note:</strong> The Gravatar avatar is used if no Custom Avatar URL is set</span>
+        </p>
+        <p>
+          <%= f.label :avatar_url, "Custom avatar URL:" %>
+          <%= f.text_field :avatar_url %>
+          <span class="note"><strong>Note:</strong> Custom avatars should be 42x42 pixels in size.</span>
+        </p>
+        <p>
+          <%= f.label :display_name, "Display Name:" %>
+          <%= f.text_field :display_name %>
+        </p>
+        <p>
+          <%= f.label :color, "Color:" %>
+          <%= f.text_field :color %>
+        </p>
+        <p class="checkbox">
+          <%= f.label :markdown, "Enable Markdown syntax" %>
+          <%= f.check_box :markdown %>
+          <br />
+        </p>
+        <p class="checkbox">
+          <%= f.label :new_features, "Enable Beta features" %>
+          <%= f.check_box :new_features %>
+        </p>
+        <p>
+          <%= f.submit %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+
+</div>

@@ -45,8 +45,9 @@ class Notification < ActiveRecord::Base
     end
   end
 
-  def message
-    render_message(super || default_message)
+  def message(rendered=true)
+    m = super() || default_message
+    rendered ? render_message(m) : m
   end
 
   def process_fubot_message
@@ -55,7 +56,7 @@ class Notification < ActiveRecord::Base
 
   def process_fubot_message!
     if user_id == 40 && notification_type == "message"
-      response = Fubot.new.call(self.message)
+      response = Fubot.new.call(self.message(false))
       if response
         self.class.message(user, created_by, response.text, true)
       end

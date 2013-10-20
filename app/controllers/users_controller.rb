@@ -56,6 +56,7 @@ class UsersController < ApplicationController
   def edit
     if params[:id].to_i == current_user.id
       @user = current_user
+      @column_width = 12
     else
       redirect_to user_path(User.find(params[:id].to_i))
     end

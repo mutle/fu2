@@ -28,6 +28,13 @@
       overflow: hidden;
     }
     .indicator {
+      background-color: #d43;
+      border-radius: 16px;
+      height: 32px;
+      line-height: 32px;
+      margin-top: 8px;
+      padding: 0px 12px;
+      color: #fff;
       float: right;
     }
   }
@@ -58,6 +65,10 @@
       &.active {
         color: #000;
         border-bottom: 1px solid #000;
+      }
+
+      &.activity {
+        background-color: #ffd;
       }
     }
 
@@ -118,7 +129,7 @@
       .body {
         margin-left: 160px;
         margin-right: 0px;
-        padding-left: 8px;
+        // padding-left: 8px;
 
         .content {
           padding: 12px;
@@ -127,12 +138,31 @@
           background-color: #381;
           font-size: 18px;
 
+          img {
+            max-width: 508px;
+          }
+
           p {
             margin-bottom: 1em;
 
             &:last-child {
               margin-bottom: 0px;
             }
+          }
+
+          &:after {
+            left: 148px;
+          	border: solid transparent;
+          	content: " ";
+          	height: 0;
+          	width: 0;
+          	position: absolute;
+          	pointer-events: none;
+          	border-right: 12px solid #381;
+            border-left: none;
+          	border-width: 12px;
+          	top: 0px;
+          	margin-top: 12px;
           }
         }
       }
@@ -145,6 +175,7 @@
           right: 0px;
           left: auto;
           width: 42px;
+          margin-left: 12px;
 
           .avatar {
           }
@@ -154,7 +185,7 @@
         }
 
         .body {
-          margin-right: 42px;
+          margin-right: 54px;
           margin-left: 0px;
           padding-left: 0px;
           padding-right: 8px;
@@ -162,6 +193,13 @@
           .content {
             color: #000;
             background-color: #f2f2f2;
+
+            &:after {
+              right: 50px;
+              left: auto;
+              border-left: 12px solid #f2f2f2;
+              border-right: none;
+            }
           }
         }
       }
