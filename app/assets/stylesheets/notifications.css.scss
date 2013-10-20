@@ -45,7 +45,7 @@
     display: block;
     width: 220px;
     float: left;
-    border-right: 1px solid #000;
+    // border-right: 1px solid #000;
     overflow-y: scroll;
     overflow-x: hidden;
     height: 500px;
@@ -57,15 +57,15 @@
 
     .user {
       padding-right: 8px;
-      padding-bottom: 0.25em;
-      margin-bottom: 0.25em;
+      padding-bottom: 4px;
+      margin-bottom: 4px;
       border-bottom: 1px solid #999;
       color: #999;
       cursor: pointer;
 
       &.active {
         color: #000;
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid #999;
       }
 
       &.activity {
@@ -79,9 +79,17 @@
 
     .divider {
       display: block;
-      background-color: #999;
-      height: 20px;
-      margin-bottom: 0.25em;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 6px 0px;
+      font-size: 13px;
+      margin-bottom: 4px;
+      margin-top: -5px;
+      color: #888;
+    }
+
+    .divider-top {
+      margin-top: 0px;
     }
   }
 
@@ -236,12 +244,13 @@
     }
 
     .response {
-      border-top: 1px solid #000;
+      border-top: 1px solid #aaa;
       padding: 22px 0px;
       line-height: 25px;
       text-align: right;
       font-size: 18px;
       top: 500px;
+      margin-left: -232px;
       // left: 0px;
       // right: 0px;
       // bottom: 0px;
@@ -249,6 +258,7 @@
       background-color: #fff;
 
       .form {
+        margin-left: 232px;
         position: relative;
       }
 
@@ -262,6 +272,7 @@
         top: 0px;
         border: 1px solid #000;
         background-color: #fff;
+        border-radius: 4px;
       }
 
       .input {

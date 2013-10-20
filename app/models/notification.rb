@@ -12,7 +12,8 @@ class Notification < ActiveRecord::Base
   scope :since, proc { |id| where("id > ?", id) }
   scope :read, proc { where("read = ?", true) }
   scope :unread, proc { where("read = ?", false) }
-  scope :messages_from, proc { |user| where(:created_by_id => user.id) }
+  scope :messages, proc { where(:notification_type => "message") }
+  scope :from, proc { |user| messages.where(:created_by_id => user.id) }
 
   class << self
     def mention(from, to, channel, post)

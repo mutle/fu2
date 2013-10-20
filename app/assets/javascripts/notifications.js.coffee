@@ -63,6 +63,7 @@ $ ->
     messages.css("height", "#{height}px")
     $(".notifications .empty").css("height", "#{height}px")
     $(".notifications .welcome").css("height", "#{height}px")
+    scrollMessages()
   $(window).resize -> resize()
 
   scrollMessages = () ->
@@ -75,13 +76,14 @@ $ ->
       $(".input").val()
 
   resetInput = () ->
-    $(".input-text").text("").removeClass("active")
+    $(".input-text").val("").removeClass("active")
     $(".messages .response .input").val("").show()
+    resize()
 
   $(".input").keydown (e) ->
     if e.which == 13
       $(this).hide()
-      $(".input-text").addClass("active").focus().text($(this).val()+"\n")
+      $(".input-text").addClass("active").focus().val($(this).val()+"\n")
       resize()
       return false
     true
@@ -99,6 +101,7 @@ $ ->
       indicator.text(unread_counts[id])
       indicator.hide() if unread_counts[id] == 0
     $(".users .user.active").prependTo($(".users"))
+    $(".users .divider-top").prependTo($(".users"))
 
   displayUserId = (n) ->
     if n.notification_type == "response" then n.user_id else n.created_by_id
@@ -166,7 +169,7 @@ $ ->
           notify_new = true
           first_run = false
           update_view = false
-          window.setInterval refreshNotifications, 5 * 1000
+          window.setInterval refreshNotifications, 8 * 1000
         else if update_view
           update_view = false
           showUser(show_user_id)

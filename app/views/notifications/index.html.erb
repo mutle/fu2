@@ -1,6 +1,7 @@
 <div class="notifications" data-user-id="<%= current_user.id %>">
   <ul class="users">
-    <li class="divider"></li>
+    <li class="divider divider-top">Conversations</li>
+    <li class="divider">No history yet</li>
   </ul>
   <div class="messages">
     <div class="message-list">
@@ -8,22 +9,19 @@
 
     <div class="empty">
       <div class="message">
-        No messages from <span class="username"></span>.
-      </div>
-      <div class="message">
         <%= image_tag "notifications-welcome-arrow-down.png" %>
-        Write your message.
+        Write a message to <span class="username"></span>.
       </div>
     </div>
 
     <div class="welcome">
       <div class="message">
         <%= image_tag "notifications-welcome-arrow-left.png" %>
-        Select a user to talk to.
+        Select a user to chat with&hellip;
       </div>
       <div class="message">
         <%= image_tag "notifications-welcome-arrow-down.png" %>
-        Write your message.
+        and write your message.
       </div>
     </div>
 
