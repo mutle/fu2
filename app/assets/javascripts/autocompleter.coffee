@@ -40,15 +40,16 @@ class Autocompleter
         autocompleter.query "#{input}"
       else if input.length == 0
         autocompleter.list.hide()
-    @o.blur ->
+    $(document).on "click", ".autocompleter li", ->
+      window.location.href = $(this).find("a").attr "href"
+      console.log 'click'
+    $(document).on "mouseenter", ".autocompleter li", ->
+      autocompleter.setHighlight this
+    $(document).on "mouseleave", ".autocompleter li", ->
+      autocompleter.removeHighlight()
+    $(document).on "blur", object, ->
       window.console.log 'blur'
       autocompleter.list.hide()
-    $(".autocompleter li").on "mousedown", ->
-      window.location.href = $(this).find("a").attr "href"
-    $(".autocompleter li").on "mouseenter", ->
-      autocompleter.setHighlight this
-    $(".autocompleter li").on "mouseleave", ->
-      autocompleter.removeHighlight()
   setHighlight: (e) ->
     @removeHighlight()
     $(e).addClass "highlight"

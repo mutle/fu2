@@ -35,7 +35,7 @@ $ ->
       $(".upload_info").html('Uploading "'+file.name+'" ('+progress+"%)")
 
   if $('input#search').length
-    autocompleter $('input#search'), (term, autocompleter) ->
+    autocompleter 'input#search', (term, autocompleter) ->
       $.getJSON "/channels/search", {"search": "title:"+term+""}, (data, status, xhr) ->
         results = []
         for result in data
@@ -69,7 +69,7 @@ $ ->
   #   a.minLength = 1
 
 
-  $(".fave").on 'click', ->
+  $(document).on 'click', ".fave", ->
     self = $(this)
     post = self.find(".favorite").attr("data-post-id")
     $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
@@ -81,12 +81,12 @@ $ ->
         self.find(".off").show()
     return false
 
-  $(".post-date-link").on 'click', ->
+  $(document).on 'click', ".post-date-link", ->
     self = $(this)
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-reply").on 'click', ->
+  $(document).on 'click', ".post-reply", ->
     self = $(this)
     post = self.parents(".post").find(".body")
     text = decodeURIComponent(post.attr("data-raw-body"))
@@ -100,7 +100,7 @@ $ ->
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(".post-unread").on 'click', ->
+  $(document).on 'click', ".post-unread", ->
     self = $(this)
     post = self.attr("data-prev-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
