@@ -5,7 +5,8 @@ class UsersController < ApplicationController
   respond_to :html, :json
 
   def index
-    @users = User.all_users
+    @users = User.all_users.reject { |u| u.login =~ /-disabled$/ }
+    @column_width = 12
     respond_with @users
   end
 

@@ -37,17 +37,17 @@ class Autocompleter
       input = $(this).val()
       console.log [input.length, autocompleter.minLength, input]
       if input.length >= autocompleter.minLength
-        autocompleter.query "#{input}" 
+        autocompleter.query "#{input}"
       else if input.length == 0
         autocompleter.list.hide()
     @o.blur ->
       window.console.log 'blur'
       autocompleter.list.hide()
-    $(".autocompleter li").live "mousedown", ->
+    $(".autocompleter li").on "mousedown", ->
       window.location.href = $(this).find("a").attr "href"
-    $(".autocompleter li").live "mouseenter", ->
+    $(".autocompleter li").on "mouseenter", ->
       autocompleter.setHighlight this
-    $(".autocompleter li").live "mouseleave", ->
+    $(".autocompleter li").on "mouseleave", ->
       autocompleter.removeHighlight()
   setHighlight: (e) ->
     @removeHighlight()

@@ -5,8 +5,35 @@
     max-height: 140px;
   }
 
+  .grid_1 .avatar {
+    max-width: 70px;
+    max-height: 70px;
+  }
+
   .user-info {
     margin-bottom: 2em;
+
+    a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    h2 {
+      font-size: 20px !important;
+
+      a {
+        display: block;
+      }
+    }
+  }
+
+  .user-info-list {
+    .user-link {
+      img {
+        max-width: 24px;
+        max-height: 24px;
+      }
+    }
   }
 
   form {

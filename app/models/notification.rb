@@ -10,6 +10,9 @@ class Notification < ActiveRecord::Base
     where(:user_id => user.id).order("notifications.id DESC")
   }
   scope :since, proc { |id| where("id > ?", id) }
+  scope :read, proc { where("read = ?", true) }
+  scope :unread, proc { where("read = ?", false) }
+  scope :messages_from, proc { |user| where(:created_by_id => user.id) }
 
   class << self
     def mention(from, to, channel, post)
@@ -34,6 +37,7 @@ class Notification < ActiveRecord::Base
       if !no_response && from.id != to.id
         attrs = {
           :user_id => from.id,
+          :reference_notification_id => m.id,
           :created_by_id => to.id,
           :notification_type => "response",
           :message => message

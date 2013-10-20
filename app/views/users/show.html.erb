@@ -1,14 +1,7 @@
 <div class="profile">
 
   <div class="container_12 user-info">
-    <div class="box grid_2">
-      <%= image_tag avatar_url(@user, 140), :class => "avatar" %>
-    </div>
-
-    <div class="box grid_10">
-      <h2><%= format_title(@user.display_name) %></h2>
-      <p><%= link_to "Message", notifications_path(:anchor => @user.id) %></p>
-    </div>
+    <%= render :partial => "profile", :locals => {:user => @user} %>
   </div>
 
   <div class="container_12">

@@ -53,7 +53,11 @@ $ ->
   send_button.attr("disabled", true)
 
   resize = () ->
-    response_height = parseInt($(".notifications .response").css("height")) + 44
+    input_height = 0
+    if $(".input-text").hasClass("active")
+      input_height = parseInt($(".notifications .input-text").css("height")) - parseInt($(".notifications .input").css("height"))
+    response_height = parseInt($(".notifications .response").css("height")) + 44 + input_height
+    console.log response_height
     height = $(window).height() - $(".notifications").get(0).offsetTop - response_height - 30
     $(".notifications .users").css("height", "#{height}px")
     messages.css("height", "#{height}px")
@@ -78,13 +82,14 @@ $ ->
     if e.which == 13
       $(this).hide()
       $(".input-text").addClass("active").focus().text($(this).val()+"\n")
+      resize()
       return false
     true
 
   updateUsers = () ->
     $(".users .indicator").hide()
     for id,n of user_notifications
-      unread = _.filter n, (notif) -> notif.read == false
+      unread = _.filter n, (notif) -> notif.read == false && notif.notification_type == "message"
       unread_counts[id] = (unread || {}).length
       user = $("li.user-#{id}").addClass("active").removeClass("activity")
       indicator = user.find(" .indicator").show()
@@ -128,7 +133,7 @@ $ ->
     scrollMessages()
 
   addUserNotification = (n) ->
-    last_id = n.id if n.id > last_id
+    last_id = parseInt(n.id) if n.id > last_id
     user_notifications[n.created_by_id] ?= []
     if notify_new
       user_notifications[n.created_by_id].push(n)
@@ -145,22 +150,26 @@ $ ->
 
   refreshNotifications = () ->
     return if pause_polling
-    $.getJSON "/notifications.json?last_id=#{last_id}", (data) ->
-      return if pause_polling
-      addNotifications(data)
-      updateUsers()
-      if first_run
-        console.log 'first run'
-        if match = window.location.hash.match(/^#([0-9]+)$/)
-          showUser(parseInt(match[1]))
-        notify_new = true
-        first_run = false
-        update_view = false
-        window.setInterval refreshNotifications, 5 * 1000
-      else if update_view
-        console.log 'update view'
-        update_view = false
-        showUser(show_user_id)
+    $.ajax
+      dataType: "json",
+      url: "/notifications.json?last_id=#{last_id}&cache=#{(new Date()).getTime()}",
+      error: (xhr, status, error) ->
+        console.log [xhr, status, error]
+        console.log error.stack
+      success: (data) ->
+        return if pause_polling
+        addNotifications(data)
+        updateUsers()
+        if first_run
+          if match = window.location.hash.match(/^#([0-9]+)$/)
+            showUser(parseInt(match[1]))
+          notify_new = true
+          first_run = false
+          update_view = false
+          window.setInterval refreshNotifications, 5 * 1000
+        else if update_view
+          update_view = false
+          showUser(show_user_id)
 
   showUser = (id) ->
     show_user_id = id
@@ -178,7 +187,22 @@ $ ->
     send_button.attr("disabled", false)
     scrollMessages()
     hash = "##{id}"
+    $(".users .user").removeClass("selected")
+    $(".users .user-#{id}").addClass("selected")
     window.location.hash = hash if window.location.hash != hash
+    if unread_counts[id] > 0
+      updateCount(id)
+
+  updateCount = (id) ->
+    $.ajax
+      dataType: "json",
+      type: "POST",
+      url: "/notifications/#{id}/read.json",
+      success: (data) ->
+        _.each user_notifications[id], (n) ->
+          n.read = true
+        unread_counts[id] = 0
+        updateUsers()
 
   postMessage = (user, message, cb) ->
     if user?
@@ -198,8 +222,9 @@ $ ->
     data = _.sortBy data, (u) ->
       u.display_name
     for user in data
-      continue if user.login.match(/-disabled/)
+      continue if user.login.match(/-disabled/) || (user.id == 40 && user_id != 1)
       users[user.id] = user
+      continue if user.id == user_id
       item = _.template templateUser, _.extend(_.clone(user), showIndicator: true, tag: 'li')
       $(".users").append $(item)
 

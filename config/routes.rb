@@ -56,6 +56,9 @@ Fu2::Application.routes.draw do
   end
 
   resources :notifications do
+    member do
+      post :read
+    end
   end
 
   resources :images
