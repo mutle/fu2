@@ -1,13 +1,12 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
-  
+
   layout :default_layout
-  # layout 'application'
 
   before_filter :login_required
 
   respond_to :html, :json
-  
+
   def index(respond=true)
     @column_width = 12
     @page = (params[:page] || 1).to_i
@@ -26,7 +25,7 @@ class ChannelsController < ApplicationController
       render :text => ""
     end
   end
-  
+
   def show
     if params[:id] == "all"
       all
@@ -38,14 +37,19 @@ class ChannelsController < ApplicationController
 
   def all
     @column_width = 12
-    @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+    @letter = params[:letter]
+    if @letter.blank?
+      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+    else
+      @channels = Channel.with_letter(@letter)
+    end
     render "all"
   end
-  
+
   def new
     @channel = Channel.new
   end
-  
+
   def create
     @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
     notification :channel_create, @channel
@@ -70,7 +74,7 @@ class ChannelsController < ApplicationController
     @channel.save
     redirect_to channel_path(@channel)
   end
-  
+
   def search
     @query = params[:search].to_s
     page = (params[:page] || 1).to_i
@@ -81,7 +85,6 @@ class ChannelsController < ApplicationController
       @search = Channel.search_channels_and_posts(@query, page)
       # @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
     end
-    p @search
 
     respond_to do |format|
       format.html
@@ -93,7 +96,7 @@ class ChannelsController < ApplicationController
     cookies['desktop'] = cookies['desktop'] == "true" ? "false" : "true"
     redirect_to request.referer
   end
-  
+
   private
   def posts(respond=true)
     @channel = Channel.find(params[:id], :include => :posts)

@@ -1,6 +1,6 @@
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class SessionController < ApplicationController
-  
+
   layout 'unauthorized'
 
   def new
@@ -13,7 +13,7 @@ class SessionController < ApplicationController
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else
-      Rails.logger.info "login failed"
+      flash[:notice] = "Login or Password incorrect!"
       render :action => 'new'
     end
   end

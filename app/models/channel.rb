@@ -2,6 +2,8 @@ class Channel < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
+  scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
     @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
@@ -18,15 +20,15 @@ class Channel < ActiveRecord::Base
   has_many :posts, lambda { order("created_at") }
   has_many :channel_users
   has_many :channel_visits
-  
+
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create
-  
+
   before_create :generate_permalink
   after_create :add_first_post
 
   attr_accessor :current_user, :markdown
-  
+
   index_name "channels-#{Rails.env}"
 
   mapping do
@@ -35,7 +37,7 @@ class Channel < ActiveRecord::Base
     indexes :created_at, :type => 'date', :index => :not_analyzed
     indexes :text, :analyzer => 'snowball', :boost => 10
   end
-  
+
   # define_index do
   #   indexes title
   #   set_property :field_weights => {:title => 100}
@@ -48,12 +50,12 @@ class Channel < ActiveRecord::Base
       :created_at => created_at
     }.to_json
   end
-  
-  
+
+
   def self.recent_channels(_user, page, per_page = 50)
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => per_page
   end
-  
+
   def self.all_channels(_user, page)
     self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "LOWER(title)", :page => page, :per_page => 100
   end
@@ -80,29 +82,29 @@ class Channel < ActiveRecord::Base
       end
     end.results
   end
-  
+
   def body=(body)
     @body ||= body
   end
-  
+
   def body
     ""
   end
-  
+
   def add_first_post
-    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown) if @body
+    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown)
   end
-  
+
   def generate_permalink
     self.permalink = title.gsub(/ /, '_').gsub(/[^a-zA-Z0-9_\-]/, '')
   end
-  
+
   def can_read?(_user)
     return false unless _user
     return true if _user.id == user_id
     default_read
   end
-  
+
   def can_write?(_user)
     return false unless _user
     return true if _user.id == user_id
@@ -135,12 +137,12 @@ class Channel < ActiveRecord::Base
   def num_unread(current_user)
     posts.where("id > :last_id", :last_id => last_read_id(current_user)).count
   end
-  
+
   def has_posts?(current_user)
     i = last_read_id(current_user)
     i == 0 || i < posts.last.id
   end
-  
+
   def visit(current_user, post_id=nil)
     if !post_id
       $redis.zadd "mentions:#{current_user.id}", 0, id
@@ -150,7 +152,7 @@ class Channel < ActiveRecord::Base
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     i
   end
-  
+
   def delete_visits
     channel_visits.delete_all
   end
@@ -160,11 +162,11 @@ class Channel < ActiveRecord::Base
   end
 
   def add_mention(user)
-    $redis.zincrby "mentions:#{user.id}", 1, id 
+    $redis.zincrby "mentions:#{user.id}", 1, id
   end
 
   def updated_by_user
     updated_by && User.find(updated_by)
   end
-  
+
 end

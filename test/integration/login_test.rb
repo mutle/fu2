@@ -6,42 +6,41 @@ class LoginTest < ActionController::IntegrationTest
     User.delete_all
   end
 
+  def assert_password_incorrect
+    assert_response :success
+    assert_select(".notice", :text => "Login or Password incorrect!" )
+  end
+
   test "login required" do
-    visit '/'
-    assert current_path =~ /session/
+    get '/'
+    assert_redirected_to("/session/new")
   end
 
   test "login page" do
-    visit '/session/new'
-    assert response.ok?
+    get '/session/new'
+    assert_response :success
   end
 
   test "login with invalid user name" do
     login("testuser", "testpw")
-    assert response.ok?
-    assert has_css?(".notice", :text => "Login or Password incorrect!" )
+    assert_password_incorrect
   end
 
   test "login with incorrect password" do
     create_user "testuser", "nottestpw"
     login("testuser", "testpw")
-    assert response.ok?
-    assert has_css?(".notice", :text => "Login or Password incorrect!" )
+    assert_password_incorrect
   end
 
   test "login with inactive account" do
     create_user "testuser", "testpw", false
     login("testuser", "testpw")
-    assert response.ok?
-    assert has_css?(".notice", :text => "Login or Password incorrect!" )
+    assert_password_incorrect
   end
 
   test "successful login" do
     create_user "testuser", "testpw"
     login("testuser", "testpw")
-    p body
-    p current_url
-    assert response.ok?
-    assert has_css?(".notice", :text => "Logged in successfully")
+    assert_redirected_to("/")
   end
 end

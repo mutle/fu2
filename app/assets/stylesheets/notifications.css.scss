@@ -1,0 +1,305 @@
+// Place all the styles related to the notifications controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.notifications {
+  img.avatar {
+    max-width: 42px;
+    max-height: 42px;
+  }
+
+  .user {
+    display: block;
+    height: 42px;
+    line-height: 42px;
+    overflow: hidden;
+
+    a {
+      display: block;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .name {
+      padding-left: 8px;
+    }
+    .name div {
+      display: inline-block;
+      overflow: hidden;
+    }
+    .indicator {
+      background-color: #d43;
+      border-radius: 16px;
+      height: 32px;
+      line-height: 32px;
+      margin-top: 8px;
+      padding: 0px 12px;
+      color: #fff;
+      float: right;
+      display: none;
+    }
+  }
+
+  .users {
+    -webkit-mask-image: -webkit-gradient(linear, left 95%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    display: block;
+    width: 220px;
+    float: left;
+    // border-right: 1px solid #000;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 500px;
+    padding-bottom: 30px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .user {
+      padding-right: 8px;
+      padding-bottom: 4px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #999;
+      color: #999;
+      cursor: pointer;
+
+      &.active {
+        color: #000;
+        border-bottom: 1px solid #999;
+      }
+
+      &.activity {
+        background-color: #ffd;
+      }
+
+      &.selected {
+        background-color: #fafafa;
+      }
+    }
+
+    .divider {
+      display: block;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 6px 0px;
+      font-size: 13px;
+      margin-bottom: 4px;
+      margin-top: -5px;
+      color: #888;
+    }
+
+    .divider-top {
+      margin-top: 0px;
+    }
+  }
+
+  .messages {
+    margin-left: 220px;
+    padding: 0px 0px 0px 12px;
+    position: relative;
+
+    .message-list {
+      -webkit-mask-image: -webkit-gradient(linear, left 25, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      padding-top: 20px;
+      display: none;
+      height: 500px;
+      padding-right: 8px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+    }
+
+    timestamp {
+      display: block;
+      text-align: center;
+      color: #999;
+      margin-bottom: 0.5em;
+      font-size: 12px;
+    }
+
+    message {
+      display: block;
+      padding: 0px;
+      position: relative;
+      margin-bottom: 1.5em;
+
+      from {
+        display: block;
+        text-align: left;
+        position: absolute;
+        width: 160px;
+        left: 0px;
+        top: 0px;
+
+        .avatar {
+        }
+      }
+
+      .body {
+        margin-left: 160px;
+        margin-right: 0px;
+        // padding-left: 8px;
+
+        .content {
+          padding: 12px;
+          border-radius: 4px;
+          color: #fff;
+          background-color: #381;
+          font-size: 18px;
+
+          img {
+            max-width: 508px;
+          }
+
+          p {
+            margin-bottom: 1em;
+
+            &:last-child {
+              margin-bottom: 0px;
+            }
+          }
+
+          &:after {
+            left: 148px;
+          	border: solid transparent;
+          	content: " ";
+          	height: 0;
+          	width: 0;
+          	position: absolute;
+          	pointer-events: none;
+          	border-right: 12px solid #381;
+            border-left: none;
+          	border-width: 12px;
+          	top: 0px;
+          	margin-top: 12px;
+          }
+        }
+      }
+
+      &.own {
+        text-align: right;
+
+        from {
+          text-align: right;
+          right: 0px;
+          left: auto;
+          width: 42px;
+          margin-left: 12px;
+
+          .avatar {
+          }
+          .name {
+            display: none;
+          }
+        }
+
+        .body {
+          margin-right: 54px;
+          margin-left: 0px;
+          padding-left: 0px;
+          padding-right: 8px;
+
+          .content {
+            color: #000;
+            background-color: #f2f2f2;
+
+            &:after {
+              right: 50px;
+              left: auto;
+              border-left: 12px solid #f2f2f2;
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+
+    .empty, .welcome {
+      font-size: 22px;
+      color: #aaa;
+      text-align: center;
+      vertical-align: center;
+      padding-bottom: 12px;
+
+      .message {
+        padding-top: 120px;
+        line-height: 40px;
+
+        img {
+          margin-right: 24px;
+        }
+      }
+    }
+
+    .empty {
+      display: none;
+
+      .username div {
+        display: inline;
+      }
+    }
+
+    .response {
+      border-top: 1px solid #aaa;
+      padding: 22px 0px;
+      line-height: 25px;
+      text-align: right;
+      font-size: 18px;
+      top: 500px;
+      margin-left: -232px;
+      // left: 0px;
+      // right: 0px;
+      // bottom: 0px;
+      // position: absolute;
+      background-color: #fff;
+
+      .form {
+        margin-left: 232px;
+        position: relative;
+      }
+
+      .input, .input-text {
+        position: absolute;
+        font-size: 16px;
+        line-height: 25px;
+        text-align: left;
+        right: 108px;
+        left: 0px;
+        top: 0px;
+        border: 1px solid #000;
+        background-color: #fff;
+        border-radius: 4px;
+      }
+
+      .input {
+      }
+
+      .input-text {
+        height: 120px;
+        display: none;
+
+        &.active {
+          display: block;
+        }
+      }
+
+      .send {
+        font-size: 18px;
+        color: #fff;
+        width: 100px;
+        line-height: 24px;
+        background-color: #381;
+        border: none;
+        border-radius: 16px;
+
+        &:disabled {
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+}

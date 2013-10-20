@@ -15,28 +15,28 @@ class User < ActiveRecord::Base
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
-  
+
   # validates_format_of       :color, :with => /^(\#([0-9a-fA-F]{6}))?$/
-  
+
   before_save :encrypt_password
-  
-  before_create :make_activation_code 
+
+  before_create :make_activation_code
   before_create :set_display_name
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   # attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
-  
+
   after_create :create_private_channel
-  
+
   has_many :posts
   has_many :channel_visits
   has_many :uploads
-  
+
   has_many :messages
   has_many :unread_messages, lambda { where("status = #{Message::STATUS_UNREAD}") }, :class_name => "Message"
 
   has_many :faves
-  
+
   belongs_to :stylesheet
 
   # Activates the user in the database.
@@ -46,15 +46,15 @@ class User < ActiveRecord::Base
     self.activation_code = nil
     save(false)
   end
-  
+
   def can_invite?
     id == 1
   end
-  
+
   def set_display_name
     self.display_name = login
   end
-  
+
   def private_channel
     Channel.first(:conditions => ["user_id = ? AND title = ? AND default_read = ?", id, "#{login}/Mailbox", false])
   end
@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   def pending?
     @activated
   end
-  
+
   def self.all_users
     self.all(:order => "LOWER(display_name)")
   end
@@ -122,7 +122,7 @@ class User < ActiveRecord::Base
   end
 
   def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at 
+    remember_token_expires_at && Time.now.utc < remember_token_expires_at
   end
 
   # These create and unset the fields required for remembering users between browser closes
@@ -145,16 +145,16 @@ class User < ActiveRecord::Base
     self.remember_token            = nil
     save # (false)
   end
-  
+
   def create_private_channel
     Channel.create(:title => "#{login}/Mailbox", :user_id => id, :default_read => false, :default_write => true)
   end
-  
+
   def display_color
     "color: #{color}" unless color.blank?
   end
-  
-  def number_unread_messages 
+
+  def number_unread_messages
     Message.count(:conditions => {:user_id => id, :status => 0})
   end
 
@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:id => id, :login => login, :display_name => display_name, :display_color => display_color}
+    {:id => id, :login => login, :display_name => display_name, :display_name_html => RenderPipeline.title(display_name), :display_color => display_color, :avatar_url => avatar_image_url}
   end
 
   def new_features
@@ -186,20 +186,29 @@ class User < ActiveRecord::Base
     end
   end
 
+  def avatar_image_url(size=42)
+    if avatar_url.blank?
+      gravatar_id = Digest::MD5.hexdigest(email.downcase)
+      "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+    else
+      avatar_url
+    end
+  end
+
   protected
-    # before filter 
+    # before filter
     def encrypt_password
       return if password.blank?
       self.password_hash = password
     end
-      
+
     def password_required?
       !@password.nil? && (crypted_password.blank? || password_hash.blank?)
     end
-    
+
     def make_activation_code
 
       self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     end
-    
+
 end

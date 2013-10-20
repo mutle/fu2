@@ -37,7 +37,7 @@ class Autocompleter
       input = $(this).val()
       console.log [input.length, autocompleter.minLength, input]
       if input.length >= autocompleter.minLength
-        autocompleter.query "#{input}" 
+        autocompleter.query "#{input}"
       else if input.length == 0
         autocompleter.list.hide()
     @o.blur ->

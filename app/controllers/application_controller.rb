@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  layout "redcursor"
 
   def login_required
     logged_in? || redirect_to(new_session_path)
@@ -59,12 +60,13 @@ class ApplicationController < ActionController::Base
   helper_method :mobile?
 
   def new_features?
-    logged_in? && current_user.new_features && params["new_features"] != "false"
+    true # logged_in? && current_user.new_features && params["new_features"] != "false"
   end
   helper_method :new_features?
 
   protected
+
   def default_layout
-    new_features? ? "redcursor" : "application"
+    "redcursor"
   end
 end

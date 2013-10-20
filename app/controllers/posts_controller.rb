@@ -2,11 +2,9 @@ class PostsController < ApplicationController
   
   layout :default_layout
   before_filter :login_required
-  before_filter :load_channel, :except => [:fave]
+  before_filter :load_channel, :except => [:fave, :faved]
 
   respond_to :html, :json
-
-  layout false, :only => [:index]
 
   def index
     @posts = Post.since(@channel, params[:last_id])
@@ -67,10 +65,19 @@ class PostsController < ApplicationController
     @channel.visit(current_user, @post_id)
     render :json => {:status => "OK"}
   end
+
+  def faved
+    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
+  end
   
   private
   def load_channel
     @channel = Channel.find(params[:channel_id].to_i)
+  end
+
+  def default_layout
+    return false if params[:action] == "index"
+    "redcursor"
   end
   
 end

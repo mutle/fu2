@@ -4,7 +4,7 @@ gem "bundler", "~>1.3.5"
 gem "rails", "~>4.0.0"
 gem "pg", "~>0.15.1"
 gem "haml", "~>4.0.3"
-gem "jquery-rails"
+gem "jquery-rails", ">=3.0.4"
 gem 'json'
 gem "will_paginate"
 gem "rails_autolink"
@@ -20,9 +20,11 @@ gem 'net_dav'
 gem "sass-rails"
 gem "coffee-rails"
 gem 'unicorn', '~> 4.6.3'
+gem 'resque'
+gem 'resque-web', require: 'resque_web'
 
 group :test do
   gem "rspec"
   gem "rspec-rails"
+  gem "test-unit"
 end
-

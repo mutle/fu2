@@ -25,7 +25,8 @@ form {
   border: 2px solid #e2e2e2;
   border-radius: 8px;
 
-  .notice {
+  h2 {
+    font-weight: normal;
     font-size: 18px;
     height: 26px;
     line-height: 26px;
@@ -38,6 +39,13 @@ form {
     border-bottom: 1px solid #e2e2e2;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+  }
+
+  .notice {
+    background-color: #ffc;
+    padding: 1em;
+    padding-left: 8px;
+    font-weight: bold;
   }
 
   form {
@@ -199,7 +207,7 @@ form {
         }
       }
     }
-    
+
     li:first-child {
       border-radius-top-left: 4px;
       border-radius-bottom-left: 4px;
@@ -327,7 +335,7 @@ form {
       }
     }
     .bottom-link {
-      position: fixed; 
+      position: fixed;
       z-index: 110;
       background: #444;
       padding: 10px;
@@ -364,7 +372,7 @@ form {
         height: 400px;
       }
     }
-	
+
 
     .user-mini {
       display: block;
@@ -427,10 +435,10 @@ form {
       }
       .user-mini {
         padding-left: 8px;
-		
+
         .user-name {
           padding-left: 10px;
-        }		
+        }
       }
       .user-color {
         position: absolute;
@@ -537,7 +545,7 @@ form {
         right: 0px;
         top: 0px;
         border-left: 1px solid #e2e2e2;
-        
+
         .date-content {
           position: relative;
         }
@@ -570,26 +578,31 @@ form {
         }
         .post-options {
           position: absolute;
-          z-index: 10;
-          left: -8px;
+          z-index: 30;
+          left: -452px;
           right: -16px;
           top: 34px;
           margin: 0px;
-          background-color: #444;
-          border: 1px solid #e2e2e2;
 
           a {
             display: block;
-            padding: 5px 10px;
-            border-bottom: 1px solid #e2e2e2;
+            background-color: #444;
+            float: right;
+            padding: 5px 24px;
+            border: 1px solid #e2e2e2;
+            border-left: none;
           }
-          a:last-child {
-            border: none;
+          a:last--child {
+            border-left: 1px solid #e2e2e2;
           }
         }
       }
 
       .body {
+      	[title] {
+      	  border-bottom: 1px dotted #BBB;
+      	}
+
         padding-top: 1em;
         margin-top: 1.5em;
         margin-left: 8px;
@@ -622,7 +635,7 @@ form {
           padding-left: 4em;
           margin-bottom: 0em;
         }
-        
+
 
         img {
           max-width: 656px;
@@ -648,7 +661,7 @@ form {
           text-decoration: none;
           color: #A0A0A0;
         }
-		
+
         a:hover {
           color: #000;
         }
@@ -739,6 +752,12 @@ form {
           margin-right: -2px;
           cursor: pointer;
         }
+      }
+    }
+
+    .select_letters {
+      li {
+        display: inline;
       }
     }
 
@@ -1155,7 +1174,7 @@ body.mobile {
           text-align: right;
         }
       }
-	  
+
       .actions {
         a {
           color: #000;
@@ -1163,7 +1182,7 @@ body.mobile {
         a:hover {
           color: #000;
         }
-      } 
+      }
     }
     .comment-box {
       textarea {

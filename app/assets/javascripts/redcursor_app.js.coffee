@@ -45,7 +45,7 @@ $ ->
             url: "/channels/#{result.id}"
           results.push item
         autocompleter.showResults results
-  
+
   # if $('.comment_box').length
   #   $('.comment_box a').click ->
   #     return false
@@ -55,8 +55,8 @@ $ ->
   #     results = []
   #     if input[0] == ':'
   #       for emoji in window.Emojis
-  #         continue if emoji.indexOf(input.substring(1)) == -1 
-  #         item = 
+  #         continue if emoji.indexOf(input.substring(1)) == -1
+  #         item =
   #           display_title: "<img src='/images/emoji/#{emoji}.png' /> :#{emoji}:",
   #           title: ":#{emoji}:"
   #         results.push item
