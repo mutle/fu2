@@ -286,7 +286,7 @@
 					}
 					string = { block:lines.join('\n')};
 					start = caretPosition;
-					len = string.block.length + (($.browser.opera) ? n : 0);
+					len = string.block.length + ((navigator.userAgent.indexOf("Opera")) ? n : 0);
 				} else if (ctrlKey === true) {
 					string = build(selection);
 					start = caretPosition + string.openWith.length;
@@ -342,14 +342,14 @@
 
 			// Substract linefeed in Opera
 			function fixOperaBug(string) {
-				if ($.browser.opera) {
+				if (navigator.userAgent.indexOf("Opera")) {
 					return string.length - string.replace(/\n*/g, '').length;
 				}
 				return 0;
 			}
 			// Substract linefeed in IE
 			function fixIeBug(string) {
-				if ($.browser.msie) {
+				if (false) {
 					return string.length - string.replace(/\r*/g, '').length;
 				}
 				return 0;
@@ -369,7 +369,7 @@
 			function set(start, len) {
 				if (textarea.createTextRange){
 					// quick fix to make it work on Opera 9.5
-					if ($.browser.opera && $.browser.version >= 9.5 && len == 0) {
+					if (navigator.userAgent.indexOf("Opera") && len == 0) {
 						return false;
 					}
 					range = textarea.createTextRange();
@@ -391,7 +391,7 @@
 				scrollPosition = textarea.scrollTop;
 				if (document.selection) {
 					selection = document.selection.createRange().text;
-					if ($.browser.msie) { // ie
+					if (false) { // ie
 						var range = document.selection.createRange(), rangeCopy = range.duplicate();
 						rangeCopy.moveToElementText(textarea);
 						caretPosition = -1;
