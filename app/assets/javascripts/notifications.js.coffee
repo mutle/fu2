@@ -178,6 +178,7 @@ $ ->
     show_user_id = id
     $(".messages .empty").hide()
     $(".messages .welcome").hide()
+    $(".messages").addClass("active")
     notifications = user_notifications[id]
     messages.empty()
     if notifications?
