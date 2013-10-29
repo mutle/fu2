@@ -11,6 +11,7 @@ class Notification < ActiveRecord::Base
   scope :read, proc { where("read = ?", true) }
   scope :unread, proc { where("read = ?", false) }
   scope :messages, proc { where(:notification_type => "message") }
+  scope :toolbar_notifications, proc { where(:notification_type => ["message", "mention"]) }
   scope :from, proc { |user| messages.where(:created_by_id => user.id) }
 
   class << self

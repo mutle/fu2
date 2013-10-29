@@ -10,7 +10,6 @@
 //= require jquery.markitup
 //= require markitup-html
 //= require jquery.filedrop
-//= require jquery.caretposition
 //= require autocompleter
 //= require emoji
 //= require redcursor_app
