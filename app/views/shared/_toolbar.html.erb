@@ -7,9 +7,14 @@
   <ul class="buttons">
     <li><%= link_to image_tag("/images/emoji/newspaper.png"), root_path, :title => "Home" %></li>
     <li>
-      <% if (n = Notification.for_user(current_user).toolbar_notifications.unread.count) > 0 %>
-        <div class="count"><%= link_to n, notifications_path %></div>
-      <% end %>
+      <div class="counters">
+        <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
+          <div class="count"><%= link_to n, notifications_path %></div>
+        <% end %>
+        <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
+          <div class="count mentions"><%= link_to n, notifications_path %></div>
+        <% end %>
+      </div>
       <%= link_to image_tag("/images/emoji/envelope.png"), notifications_path, :title => "Notifications" %>
     </li>
     <li><%= link_to image_tag("/images/emoji/bookmark_tabs.png"), channel_path(:all), :title => "Channels" %></li>
