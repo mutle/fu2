@@ -203,7 +203,7 @@ $ ->
     $(".users .user").removeClass("selected")
     $(".users .user-#{id}").addClass("selected")
     window.location.hash = hash if window.location.hash != hash
-    if unread_counts[id] > 0
+    if unread_counts[id] > 0 || unread_mention_counts[id] > 0
       updateCount(id)
 
   updateCount = (id) ->
