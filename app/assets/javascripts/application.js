@@ -4,10 +4,13 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
+//= require underscore
 //= require jquery
 //= require jquery_ujs
 //= require jquery.markitup
 //= require markitup-html
 //= require jquery.filedrop
 //= require autocompleter
-//= require fu2
+//= require emoji
+//= require redcursor_app
+//= require notifications

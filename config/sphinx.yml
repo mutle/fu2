@@ -1,9 +1,0 @@
-development:
-  min_infix_len: 3
-  html_strip: true
-  enable_star: true
-production:
-  min_infix_len: 3
-  html_strip: true
-  enable_star: true
-  searchd_file_path: /var/db/sphinx/
