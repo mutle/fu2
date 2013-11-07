@@ -23,13 +23,13 @@ $ ->
       return "<img class=\"autocomplete-image\" src=\"/images/emoji/#{value}.png\"></img> #{value}"
 
   completerStrategies = [mentionStrategy, emojiStrategy]
-
-
   mobile = $('body').hasClass('mobile')
-
   syntax = $('#syntax').val()
-  if syntax && syntax == "html"
-    $('.comment_box').markItUp(mySettings)
+  if syntax
+    $('.comment_box').textcomplete completerStrategies
+    if syntax == "html"
+      $('.comment_box').markItUp(mySettings)
+
   insertText = (text) ->
     if syntax && syntax == "html"
       $.markItUp
@@ -71,9 +71,6 @@ $ ->
             url: "/channels/#{result.id}"
           results.push item
         autocompleter.showResults results
-
-  if $('.comment_box').length
-    $('.comment_box').textcomplete completerStrategies
 
   $(document).on 'click', ".fave", ->
     self = $(this)
