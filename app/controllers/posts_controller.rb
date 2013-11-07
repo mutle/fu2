@@ -34,7 +34,7 @@ class PostsController < ApplicationController
   def update
     @post = @channel.posts.find(params[:id].to_i)
     raise ActiveRecord::RecordNotFound unless @post.user_id == @current_user.id
-    @post.update_attributes(params[:post])
+    @post.update_attributes(post_params)
     notification :post_update, @post
 
     redirect_to channel_path(@channel, :anchor => "post_#{@post.id}")
@@ -71,6 +71,10 @@ class PostsController < ApplicationController
   end
 
   private
+  def post_params
+    params.require(:post).permit(:body)
+  end
+
   def load_channel
     @channel = Channel.find(params[:channel_id].to_i)
   end
