@@ -6,7 +6,7 @@ class Channel < ActiveRecord::Base
 
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
-    @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
+    @((?>[^\s\.,\/-][^\s\.:,\/]*))  # @username
     (?!\/)                     # without a trailing slash
     (?=
       \.+[ \t\W]|              # dots followed by space or non-word character

@@ -7,7 +7,7 @@ class Post < ActiveRecord::Base
   has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
-  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("id") } 
+  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
 
   after_create :update_channel_last_post
@@ -44,9 +44,12 @@ class Post < ActiveRecord::Base
   end
 
   def scan_for_mentions
+    mentioned = {}
     body.scan Channel::MentionPattern do |mention|
       login = mention[0]
       if u = User.where("LOWER(login) = LOWER(:login)", :login => login).first
+        next if mentioned[u.id]
+        mentioned[u.id] = true
         channel.add_mention(u)
         Notification.mention(user, u, channel, self)
       end
