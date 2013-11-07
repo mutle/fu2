@@ -51,7 +51,7 @@ class ChannelsController < ApplicationController
   end
 
   def create
-    @channel = Channel.create(params[:channel].merge(:user_id => current_user.id, :markdown => current_user.markdown?))
+    @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
     notification :channel_create, @channel
     increment_metric "posts.all"
     increment_metric "posts.user.#{current_user.id}"
@@ -106,6 +106,10 @@ class ChannelsController < ApplicationController
     if respond
       respond_with @channel.posts.all(:include => :user)
     end
+  end
+
+  def channel_params
+    params.require(:channel).permit(:title, :text, :body)
   end
 
 end

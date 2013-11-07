@@ -9,6 +9,7 @@ class SessionController < ApplicationController
   def create
     self.current_user = User.authenticate(params[:login], params[:password])
     if logged_in?
+      Rails.logger.info "logged in"
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else

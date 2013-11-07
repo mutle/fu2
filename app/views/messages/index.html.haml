@@ -1,9 +1,0 @@
-.block
-  %h2 Inbox
-  =render :partial => "navigation"
-  %ul#message_list
-    -if !new_features?
-      =render :partial => "header"
-    -@incoming_messages.each do |message|
-      %li{:class => "#{'message_unread' if message.status == Message::STATUS_UNREAD}"}
-        =render :partial => message, :locals => {:inbox => true}

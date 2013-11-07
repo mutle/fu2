@@ -377,7 +377,10 @@ form {
       }
       input.channel-title {
         font-size: 28px;
-
+      }
+      textarea {
+        width: 600px;
+        height: 400px;
       }
     }
 
@@ -490,6 +493,11 @@ form {
       padding: 16px;
       border: 2px solid #e2e2e2;
       border-radius: 8px;
+
+      .autocomplete-image {
+        max-width: 22px;
+        max-height: 22px;
+      }
     }
 
     .post {
@@ -622,11 +630,15 @@ form {
         }
 
         blockquote p {
-          margin-top: 0px;
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
         }
 
         blockquote p:last-child {
           margin-bottom: 0px;
+        }
+        blockquote br {
+          margin-bottom: 1em;
         }
         p {
           margin-bottom: 1em;

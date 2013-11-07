@@ -6,7 +6,7 @@ class Channel < ActiveRecord::Base
 
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
-    @((?>[^\s\.,\/-][^\s\.,\/]*))  # @username
+    @((?>[^\s\.,\/-][^\s\.:,\/]*))  # @username
     (?!\/)                     # without a trailing slash
     (?=
       \.+[ \t\W]|              # dots followed by space or non-word character
@@ -17,9 +17,8 @@ class Channel < ActiveRecord::Base
   /ix
 
   belongs_to :user
-  has_many :posts, :order => "created_at"
+  has_many :posts, lambda { order("created_at") }
   has_many :channel_users
-  has_many :channel_visits
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create
@@ -151,10 +150,6 @@ class Channel < ActiveRecord::Base
     i = last_read_id(current_user).to_i
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     i
-  end
-
-  def delete_visits
-    channel_visits.delete_all
   end
 
   def num_mentions(current_user)

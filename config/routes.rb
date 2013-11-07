@@ -63,5 +63,5 @@ Fu2::Application.routes.draw do
 
   resources :images
   resources :stylesheets
-  match '/' => 'channels#index', :as => :root
+  get '/' => 'channels#index', :as => :root
 end

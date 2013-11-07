@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem "rails", "3.2.13"
-gem "pg", "~>0.14.1"
-gem "haml", "3.2.0.alpha.10"
+gem "bundler", "~>1.3.5"
+gem "rails", "~>4.0.0"
+gem "pg", "~>0.15.1"
+gem "haml", "~>4.0.3"
 gem "jquery-rails", ">=3.0.4"
 gem 'json'
 gem "will_paginate"
@@ -16,17 +17,11 @@ gem 'newrelic_rpm'
 gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'
-gem 'unicorn', '~> 4.5.0'
+gem "sass-rails"
+gem "coffee-rails"
+gem 'unicorn', '~> 4.6.3'
 gem 'resque'
 gem 'resque-web', require: 'resque_web'
-
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails', "  ~> 3.2.4"
-  gem 'coffee-rails', "~> 3.2.2"
-  gem 'uglifier'
-end
 
 group :test do
   gem "rspec"

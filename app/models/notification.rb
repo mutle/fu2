@@ -1,6 +1,4 @@
 class Notification < ActiveRecord::Base
-  attr_accessible :created_by_name, :created_by_id, :deleted, :message, :metadata, :notification_type, :read, :reference_notification_id, :user_id, :channel_id, :post_id
-
   belongs_to :user
   belongs_to :created_by, :class_name => "User"
   belongs_to :channel
