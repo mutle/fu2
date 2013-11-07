@@ -3,7 +3,7 @@ $ ->
   mentionStrategy =
     match: /(^|\s)@(\w*)$/,
     search: (term, callback) ->
-      regexp = new RegExp('^' + term)
+      regexp = new RegExp('^' + term, 'i')
       callback $.grep window.Users, (user) ->
         return regexp.test(user.login)
     replace: (value) ->
@@ -14,7 +14,7 @@ $ ->
   emojiStrategy =
     match: /(^|\s):(\w*)$/,
     search: (term, callback) ->
-      regexp = new RegExp('^' + term)
+      regexp = new RegExp('^' + term, 'i')
       callback $.grep window.Emojis, (emoji) ->
         return regexp.test(emoji)
     replace: (value) ->
