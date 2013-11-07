@@ -43,7 +43,10 @@ $ ->
         target: $('.comment_box')
         placeHolder: "<img src=\"#{url}\" />"
     else
-      $('.comment_box').append "![](#{url})"
+      t = $('.comment_box').val()
+      t += "\n\n" if t != ''
+      t += "![](#{url})"
+      $('.comment_box').val(t)
   $('.comment_box').filedrop
     url: '/images.json'
     paramname: 'image[image_file]'
