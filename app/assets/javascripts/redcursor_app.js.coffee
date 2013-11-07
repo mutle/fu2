@@ -7,7 +7,7 @@ $ ->
       callback $.grep window.Users, (user) ->
         return regexp.test(user.login)
     replace: (value) ->
-      return '$1@' + value + ' '
+      return '$1@' + value.login + ' '
     template: (user) ->
       return "<img class=\"autocomplete-image\" src=\"#{user.avatar_url}.png\"></img> #{user.login}"
 
