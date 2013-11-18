@@ -17,6 +17,7 @@ gem 'newrelic_rpm'
 gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'
+gem 'syslog-logger'
 gem "sass-rails"
 gem "coffee-rails"
 gem 'unicorn', '~> 4.6.3'

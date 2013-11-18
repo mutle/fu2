@@ -61,4 +61,7 @@ Fu2::Application.configure do
   config.force_ssl = true
 
   config.eager_load = true
+
+  config.logger = Logger::Syslog.new("app", Syslog::LOG_LOCAL5)
+
 end
