@@ -62,6 +62,6 @@ Fu2::Application.configure do
 
   config.eager_load = true
 
-  config.logger = Logger::Syslog.new("app", Syslog::LOG_LOCAL5)
+  config.logger = Logger::Syslog.new("local0", Syslog::LOG_LOCAL5)
 
 end
