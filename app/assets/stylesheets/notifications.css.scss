@@ -4,6 +4,8 @@
 
 .mobile {
   .notifications {
+    position: relative;
+
     .users {
       width: 100%;
     }
@@ -11,20 +13,42 @@
     .messages {
       width: 100%;
       display: none;
+
+      .message-list {
+        height: auto;
+        overflow-y: auto;
+      }
     }
 
     .messages.active {
+      background: #fff;
       display: block;
-      margin-left: 0px;
+      position: absolute;
+      left: 0px;
       z-index: 2;
+      margin-left: 0px;
+
+      .back {
+        color: #fff;
+        background: #666;
+        border: 0px;
+        border-radius: 4px;
+        font-size: 16px;
+        position: absolute;
+        z-index: 2;
+        padding: 4px 12px;
+        left: 0px;
+        top: 0px;
+      }
     }
 
     .response {
-      display: none;
       margin-left: 0px;
+      top: 0px;
 
       .form {
         margin-left: 0px;
+        position: inherit;
       }
     }
   }

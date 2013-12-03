@@ -55,6 +55,7 @@ $ ->
   send_button.attr("disabled", true)
 
   resize = () ->
+    return if mobile = $('body').hasClass('mobile')
     input_height = 0
     if $(".input-text").hasClass("active")
       input_height = parseInt($(".notifications .input-text").css("height")) - parseInt($(".notifications .input").css("height"))
@@ -89,6 +90,10 @@ $ ->
       resize()
       return false
     true
+
+  $(".back").click () ->
+    $(".messages").removeClass("active")
+    window.location.hash = ""
 
   updateUsers = () ->
     $(".users .indicator").hide()
