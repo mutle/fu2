@@ -2,6 +2,58 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.mobile {
+  .notifications {
+    position: relative;
+
+    .users {
+      width: 100%;
+    }
+
+    .messages {
+      width: 100%;
+      display: none;
+
+      .message-list {
+        height: auto;
+        overflow-y: auto;
+      }
+    }
+
+    .messages.active {
+      background: #fff;
+      display: block;
+      position: absolute;
+      left: 0px;
+      z-index: 2;
+      margin-left: 0px;
+
+      .back {
+        color: #fff;
+        background: #666;
+        border: 0px;
+        border-radius: 4px;
+        font-size: 16px;
+        position: absolute;
+        z-index: 2;
+        padding: 4px 12px;
+        left: 0px;
+        top: 0px;
+      }
+    }
+
+    .response {
+      margin-left: 0px;
+      top: 0px;
+
+      .form {
+        margin-left: 0px;
+        position: inherit;
+      }
+    }
+  }
+}
+
 .notifications {
   img.avatar {
     max-width: 42px;

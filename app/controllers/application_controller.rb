@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
     request.user_agent =~ /(Nexus 7)/
   end
   def mobile?
-    params['mobile'] == "true" || (mobile_device? && !mobile_device_blacklisted? && cookies['desktop'] != "true")
+    true #params['mobile'] == "true" || (mobile_device? && !mobile_device_blacklisted? && cookies['desktop'] != "true")
   end
   helper_method :mobile_device?
   helper_method :mobile?

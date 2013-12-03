@@ -68,6 +68,10 @@ class Notification < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    super(*args).merge(:message_raw => message(false))
+  end
+
   private
 
   def render_message(message)
