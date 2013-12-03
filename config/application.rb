@@ -45,5 +45,10 @@ module Fu2
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+
+    config.action_dispatch.default_headers = {
+      'X-XSS-Protection' => '0'
+    }
+
   end
 end

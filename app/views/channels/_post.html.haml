@@ -1,13 +1,9 @@
 %a{:name => "post_#{post.id}"}
 -channel = @channel || post.channel
 =div_for post, :class => "#{'unread ' if @last_read_id && post.id > @last_read_id}#{'mention' if post.mentions?(current_user)}", "data-post-id" => post.id do
-  -if new_features?
-    .user-color{:style => "background-color: #{post.user.color}"}
+  .user-color{:style => "background-color: #{post.user.color}"}
   .name
-    -if new_features?
-      =render :partial => "shared/user", :object => post.user
-    -else
-      =user_name(post.user)
+    =render :partial => "shared/user", :object => post.user
   .date
     .date-content
       .post-options{:style => "display: none;"}
