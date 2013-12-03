@@ -188,14 +188,20 @@ form {
         padding: 0px 12px;
       }
 
-      .count {
+      .counters {
         position: absolute;
-        font-size: 12px;
-        line-height: 14px;
-        right: 0px;
+        right: -3px;
         top: -10px;
         z-index: 10;
         padding: 1px 3px;
+      }
+
+      .count {
+        float: right;
+        font-size: 12px;
+        line-height: 14px;
+        padding: 1px 3px;
+        margin-left: 3px;
         background-color: #d43;
         border: 1px solid #a33528;
         border-radius: 12px;
@@ -205,6 +211,11 @@ form {
           color: #fff;
           padding: 0px;
         }
+      }
+
+      .count.mentions {
+        background-color: #4d3;
+        border: 1px solid #35a328;
       }
     }
 
@@ -366,7 +377,10 @@ form {
       }
       input.channel-title {
         font-size: 28px;
-
+      }
+      textarea {
+        width: 600px;
+        height: 400px;
       }
     }
 
@@ -479,6 +493,11 @@ form {
       padding: 16px;
       border: 2px solid #e2e2e2;
       border-radius: 8px;
+
+      .autocomplete-image {
+        max-width: 22px;
+        max-height: 22px;
+      }
     }
 
     .post {
@@ -611,11 +630,15 @@ form {
         }
 
         blockquote p {
-          margin-top: 0px;
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
         }
 
         blockquote p:last-child {
           margin-bottom: 0px;
+        }
+        blockquote br {
+          margin-bottom: 1em;
         }
         p {
           margin-bottom: 1em;

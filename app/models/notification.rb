@@ -1,6 +1,4 @@
 class Notification < ActiveRecord::Base
-  attr_accessible :created_by_name, :created_by_id, :deleted, :message, :metadata, :notification_type, :read, :reference_notification_id, :user_id, :channel_id, :post_id
-
   belongs_to :user
   belongs_to :created_by, :class_name => "User"
   belongs_to :channel
@@ -13,6 +11,8 @@ class Notification < ActiveRecord::Base
   scope :read, proc { where("read = ?", true) }
   scope :unread, proc { where("read = ?", false) }
   scope :messages, proc { where(:notification_type => "message") }
+  scope :mentions, proc { where(:notification_type => "mention") }
+  scope :toolbar_notifications, proc { where(:notification_type => ["message", "mention"]) }
   scope :from, proc { |user| messages.where(:created_by_id => user.id) }
 
   class << self
@@ -66,6 +66,10 @@ class Notification < ActiveRecord::Base
         self.class.message(user, created_by, response.text, true)
       end
     end
+  end
+
+  def as_json(*args)
+    super(*args).merge(:message_raw => message(false))
   end
 
   private

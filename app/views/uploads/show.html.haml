@@ -1,7 +1,0 @@
-%h2= "#{@upload.file_name}.#{@upload.file_ext}"
-%p= "Uploaded by #{user_name(@upload.user)}"
-%h3 Download Url
-=link_to download_url(@upload), download_url(@upload)
--if @upload.image?
-  %h3 Image Url
-  %input{:id => 'image_code', :value => image_code(@upload), :style => "width: 100%;", :onclick => "$('image_code').focus(); $('image_code').select();"}

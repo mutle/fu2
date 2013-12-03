@@ -24,7 +24,7 @@ class NotificationsController < ApplicationController
 
   def read
     from = User.find(params[:id])
-    Notification.for_user(current_user).messages.from(from).unread.update_all(:read => true)
+    Notification.for_user(current_user).toolbar_notifications.from(from).unread.update_all(:read => true)
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end

@@ -1,9 +1,35 @@
 $ ->
-  mobile = $('body').hasClass('mobile')
 
+  mentionStrategy =
+    match: /(^|\s)@(\w*)$/,
+    search: (term, callback) ->
+      regexp = new RegExp('^' + term, 'i')
+      callback $.grep window.Users, (user) ->
+        return regexp.test(user.login)
+    replace: (value) ->
+      return '$1@' + value.login + ' '
+    template: (user) ->
+      return "<img class=\"autocomplete-image\" src=\"#{user.avatar_url}.png\"></img> #{user.login}"
+
+  emojiStrategy =
+    match: /(^|\s):(\w*)$/,
+    search: (term, callback) ->
+      regexp = new RegExp('^' + term, 'i')
+      callback $.grep window.Emojis, (emoji) ->
+        return regexp.test(emoji)
+    replace: (value) ->
+      return '$1:' + value + ': '
+    template: (value) ->
+      return "<img class=\"autocomplete-image\" src=\"/images/emoji/#{value}.png\"></img> #{value}"
+
+  completerStrategies = [mentionStrategy, emojiStrategy]
+  mobile = $('body').hasClass('mobile')
   syntax = $('#syntax').val()
-  if syntax && syntax == "html"
-    $('.comment_box').markItUp(mySettings)
+  if syntax
+    $('.comment_box').textcomplete completerStrategies
+    if syntax == "html"
+      $('.comment_box').markItUp(mySettings)
+
   insertText = (text) ->
     if syntax && syntax == "html"
       $.markItUp
@@ -17,7 +43,10 @@ $ ->
         target: $('.comment_box')
         placeHolder: "<img src=\"#{url}\" />"
     else
-      $('.comment_box').append "![](#{url})"
+      t = $('.comment_box').val()
+      t += "\n\n" if t != ''
+      t += "![](#{url})"
+      $('.comment_box').val(t)
   $('.comment_box').filedrop
     url: '/images.json'
     paramname: 'image[image_file]'
@@ -45,29 +74,6 @@ $ ->
             url: "/channels/#{result.id}"
           results.push item
         autocompleter.showResults results
-
-  # if $('.comment_box').length
-  #   $('.comment_box a').click ->
-  #     return false
-  #   a = autocompleter $('.comment_box'), (term, autocompleter) ->
-  #     word = term.match /(\S+)$/
-  #     if word then input = word[1] else return
-  #     results = []
-  #     if input[0] == ':'
-  #       for emoji in window.Emojis
-  #         continue if emoji.indexOf(input.substring(1)) == -1
-  #         item =
-  #           display_title: "<img src='/images/emoji/#{emoji}.png' /> :#{emoji}:",
-  #           title: ":#{emoji}:"
-  #         results.push item
-  #       autocompleter.showResults results
-  #       pos = $('.comment_box').getCaretPosition()
-  #       autocompleter.list.css
-  #         left: pos.left
-  #         top: pos.top + 40
-  #     # else if input[0] == '@'
-  #   a.minLength = 1
-
 
   $(document).on 'click', ".fave", ->
     self = $(this)

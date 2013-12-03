@@ -5,7 +5,8 @@
 templateUser = "
 <<%= typeof(tag) == \"undefined\" ? 'div' : tag %> class=\"user user-<%= id %>\" data-user-id=\"<%= id %>\">
   <% if(typeof(showIndicator) !== \"undefined\" && showIndicator) { %>
-  <div class=\"indicator\">0</div>
+  <div class=\"indicator message\">0</div>
+  <div class=\"indicator mention\">0</div>
   <% } else { %>
     <a href=\"/users/<%= id %>\">
   <% } %>
@@ -36,6 +37,7 @@ $ ->
   show_user_id = 0
   users = {}
   unread_counts = {}
+  unread_mention_counts = {}
   notifications = {}
   user_notifications = {}
   loadedParts = 0
@@ -93,13 +95,21 @@ $ ->
     for id,n of user_notifications
       unread = _.filter n, (notif) -> notif.read == false && notif.notification_type == "message"
       unread_counts[id] = (unread || {}).length
+      unread_mention = _.filter n, (notif) -> notif.read == false && notif.notification_type == "mention"
+      unread_mention_counts[id] = (unread_mention || {}).length
       user = $("li.user-#{id}").addClass("active").removeClass("activity")
-      indicator = user.find(" .indicator").show()
+      indicator = user.find(" .indicator.message").show()
+      indicator_mention = user.find(" .indicator.mention").show()
       last_count = parseInt(indicator.text())
       if last_count < unread_counts[id]
         user.addClass("activity")
+      last_count = parseInt(indicator_mention.text())
+      if last_count < unread_mention_counts[id]
+        user.addClass("activity")
       indicator.text(unread_counts[id])
+      indicator_mention.text(unread_mention_counts[id])
       indicator.hide() if unread_counts[id] == 0
+      indicator_mention.hide() if unread_mention_counts[id] == 0
     $(".users .user.active").prependTo($(".users"))
     $(".users .divider-top").prependTo($(".users"))
 
@@ -194,7 +204,7 @@ $ ->
     $(".users .user").removeClass("selected")
     $(".users .user-#{id}").addClass("selected")
     window.location.hash = hash if window.location.hash != hash
-    if unread_counts[id] > 0
+    if unread_counts[id] > 0 || unread_mention_counts[id] > 0
       updateCount(id)
 
   updateCount = (id) ->
@@ -206,6 +216,7 @@ $ ->
         _.each user_notifications[id], (n) ->
           n.read = true
         unread_counts[id] = 0
+        unread_mention_counts[id] = 0
         updateUsers()
 
   postMessage = (user, message, cb) ->

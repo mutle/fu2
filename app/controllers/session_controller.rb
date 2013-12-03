@@ -9,6 +9,7 @@ class SessionController < ApplicationController
   def create
     self.current_user = User.authenticate(params[:login], params[:password])
     if logged_in?
+      Rails.logger.info "logged in"
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
     else
@@ -32,7 +33,7 @@ class SessionController < ApplicationController
     self.current_user = User.authenticate(params[:login], params[:password])
     if logged_in?
       self.current_user.enable_api_usage
-      render :json => {:api_key => self.current_user.api_key}
+      render :json => {:api_key => self.current_user.api_key, :user_id => self.current_user.id}
     else
       render :json => {:fail => true}
     end
