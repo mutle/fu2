@@ -129,7 +129,7 @@ $ ->
       minutes = "0#{minutes}"
     year = if d.getFullYear() != this_year then " #{d.getFullYear()}" else ""
     date = if today.getFullYear() == d.getFullYear() && today.getMonth() == d.getMonth() && today.getDate() == d.getDate() then ""
-    else "#{month_names[d.getMonth()-1]} #{d.getDate()}#{year} - "
+    else "#{month_names[d.getMonth()]} #{d.getDate()}#{year} - "
     "#{date}#{d.getHours()}:#{minutes}"
 
   createTimestamp = (n) ->
