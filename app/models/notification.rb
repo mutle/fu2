@@ -17,6 +17,7 @@ class Notification < ActiveRecord::Base
 
   class << self
     def mention(from, to, channel, post)
+      return if from.id == to.id
       attrs = {
         :user_id => to.id,
         :created_by_id => from.id,
