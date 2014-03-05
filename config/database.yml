@@ -30,7 +30,10 @@ test:
   adapter: postgresql
   encoding: utf8
   database: fu2_test
-  username: postgres
+  username: fu2
+  password: fu2
+  host: localhost
+  pool: 20
 
 production:
   adapter: mysql
