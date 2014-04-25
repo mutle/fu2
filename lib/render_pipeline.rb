@@ -56,7 +56,6 @@ module RenderPipeline
         EMBEDS.each do |k,embed|
           if content =~ embed[:pattern]
             html = embed[:callback].call(content, $1)
-            p html
             next if html == content
             node.replace(html)
           end
