@@ -18,7 +18,7 @@ Fubot.command /image (.*)/ do
       images = images['responseData']['results']
       if images && images.size > 0
         s = images.size - 1
-        s = 1 if s < 0
+        s = 1 if !s || s <= 0
         r = Random.rand(s)
         image = images[r]
         bot.reply "![](#{image['unescapedUrl']}#.png)"
