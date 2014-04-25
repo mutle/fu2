@@ -11,18 +11,58 @@ module RenderPipeline
       end
     end
   end
+
   class PreserveFormatting < Pipeline::Filter
     def call
       html.gsub /<([^\/a-zA-Z])/, '&lt;\1'
     end
   end
-  class BetterMentionFilter < Pipeline::MentionFilter
 
+  class BetterMentionFilter < Pipeline::MentionFilter
     def self.mentioned_logins_in(text)
       text.gsub Channel::MentionPattern do |match|
         login = $1
         yield match, login, false
       end
+    end
+  end
+
+  class AutoEmbedFilter < Pipeline::Filter
+    EMBEDS = {
+      twitter: {
+        pattern: %r{https?://twitter\.com/[^/]+/status/(\d+)},
+        callback: proc do |content, id|
+          tweet = $redis.get "Tweets:#{id}"
+          if !tweet
+            Resque.enqueue(FetchTweetJob, id)
+            content
+          else
+            content.gsub(EMBEDS[:twitter][:pattern], tweet)
+          end
+        end
+      },
+      youtube: {
+        pattern: %r{https?://www\.youtube\.com/watch\?v=([A-Za-z\-0-9]+)},
+        callback: proc do |content, id|
+          content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
+        end
+      }
+    }
+
+    def call
+      doc.search('text()').each do |node|
+        next unless node.respond_to?(:to_html)
+        content = node.to_html
+        EMBEDS.each do |k,embed|
+          if content =~ embed[:pattern]
+            html = embed[:callback].call(content, $1)
+            p html
+            next if html == content
+            node.replace(html)
+          end
+        end
+      end
+      doc
     end
   end
 
@@ -36,7 +76,8 @@ module RenderPipeline
     # Pipeline::ImageMaxWidthFilter,
     BetterMentionFilter,
     Pipeline::EmojiFilter,
-    Pipeline::AutolinkFilter
+    AutoEmbedFilter,
+    # Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
     SimpleFormatFilter,
@@ -44,7 +85,8 @@ module RenderPipeline
     PreserveFormatting,
     BetterMentionFilter,
     Pipeline::EmojiFilter,
-    Pipeline::AutolinkFilter
+    AutoEmbedFilter,
+    # Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
     Pipeline::PlainTextInputFilter,
@@ -54,6 +96,7 @@ module RenderPipeline
     Pipeline::MarkdownFilter,
     BetterMentionFilter,
     Pipeline::EmojiFilter,
+    AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
 
