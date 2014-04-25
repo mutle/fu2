@@ -76,7 +76,7 @@ module RenderPipeline
     BetterMentionFilter,
     Pipeline::EmojiFilter,
     AutoEmbedFilter,
-    # Pipeline::AutolinkFilter
+    Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
     SimpleFormatFilter,
@@ -85,7 +85,7 @@ module RenderPipeline
     BetterMentionFilter,
     Pipeline::EmojiFilter,
     AutoEmbedFilter,
-    # Pipeline::AutolinkFilter
+    Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
     Pipeline::PlainTextInputFilter,
