@@ -11,7 +11,6 @@ class FubotJob < Resque::Job
   end
 
   def perform
-    Rails.logger.info [@type, @id]
     if @type == :notification
       @notification = Notification.find(@id)
       @notification.process_fubot_message!

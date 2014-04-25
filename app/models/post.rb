@@ -96,8 +96,7 @@ class Post < ActiveRecord::Base
   end
 
   def process_fubot_message
-    Rails.logger.info "ENQUEUE"
-    Resque.enqueue(FubotJob, :post, self.id)
+    Resque.enqueue(FubotJob, :post, self.id) if self.user_id != User.fubot.id
   end
 
   def process_fubot_message!
