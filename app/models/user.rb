@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
   end
 
   def private_channel
-    Channel.first(:conditions => ["user_id = ? AND title = ? AND default_read = ?", id, "#{login}/Mailbox", false])
+    Channel.where("user_id = ? AND title = ? AND default_read = ?", id, "#{login}/Mailbox", false).first
   end
 
   def active?
@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
 
   def self.all_users
-    self.all(:order => "LOWER(display_name)")
+    self.order("LOWER(display_name)").all
   end
 
   def password

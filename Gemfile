@@ -11,6 +11,10 @@ gem "rails_autolink"
 gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
+gem "github-markdown"
+gem "gemoji"
+gem "rinku"
+gem "escape_utils"
 gem "html-pipeline", :require => "html/pipeline"
 gem "tire"
 gem 'newrelic_rpm'

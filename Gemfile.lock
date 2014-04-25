@@ -205,7 +205,10 @@ DEPENDENCIES
   carrierwave
   coffee-rails
   dynamic_form
+  escape_utils
   faraday
+  gemoji
+  github-markdown
   haml (~> 4.0.3)
   html-pipeline
   jquery-rails (>= 3.0.4)
@@ -220,6 +223,7 @@ DEPENDENCIES
   resque
   resque-web
   resqued
+  rinku
   rspec
   rspec-rails
   sass-rails
