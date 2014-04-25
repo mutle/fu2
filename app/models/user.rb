@@ -39,6 +39,12 @@ class User < ActiveRecord::Base
 
   belongs_to :stylesheet
 
+  class << self
+    def fubot
+      find_by_login("fubot")
+    end
+  end
+
   # Activates the user in the database.
   def activate
     @activated = true

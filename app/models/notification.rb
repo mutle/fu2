@@ -57,11 +57,11 @@ class Notification < ActiveRecord::Base
   end
 
   def process_fubot_message
-    Resque.enqueue(FubotJob, self.id) if user_id == 40 && notification_type == "message"
+    Resque.enqueue(FubotJob, :notification, self.id) if user_id == User.fubot.id && notification_type == "message"
   end
 
   def process_fubot_message!
-    if user_id == 40 && notification_type == "message"
+    if user_id == User.fubot.id && notification_type == "message"
       response = Fubot.new.call(self.message(false))
       if response
         self.class.message(user, created_by, response.text, true)
