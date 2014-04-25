@@ -30,7 +30,7 @@ module RenderPipeline
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
       twitter: {
-        pattern: %r{https?://twitter\.com/[^/]+/status/(\d+)},
+        pattern: %r{https?://(m\.)?twitter\.com/[^/]+/status/(\d+)},
         callback: proc do |content, id|
           tweet = $redis.get "Tweets:#{id}"
           if !tweet
@@ -42,7 +42,7 @@ module RenderPipeline
         end
       },
       youtube: {
-        pattern: %r{https?://www\.youtube\.com/watch\?v=([A-Za-z\-0-9]+)},
+        pattern: %r{https?://(www\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-0-9]+)},
         callback: proc do |content, id|
           content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
         end
@@ -55,7 +55,7 @@ module RenderPipeline
         content = node.to_html
         EMBEDS.each do |k,embed|
           if content =~ embed[:pattern]
-            html = embed[:callback].call(content, $1)
+            html = embed[:callback].call(content, $2)
             next if html == content
             node.replace(html)
           end
@@ -76,7 +76,7 @@ module RenderPipeline
     BetterMentionFilter,
     Pipeline::EmojiFilter,
     AutoEmbedFilter,
-    # Pipeline::AutolinkFilter
+    Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
     SimpleFormatFilter,
@@ -85,7 +85,7 @@ module RenderPipeline
     BetterMentionFilter,
     Pipeline::EmojiFilter,
     AutoEmbedFilter,
-    # Pipeline::AutolinkFilter
+    Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
     Pipeline::PlainTextInputFilter,
