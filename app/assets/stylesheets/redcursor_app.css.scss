@@ -64,6 +64,16 @@ form {
     }
   }
 
+  form.activate {
+    p {
+      float: none;
+    }
+
+    .actions {
+      top: 240px;
+    }
+  }
+
   .actions {
     position: absolute;
     left: 0px;
@@ -1212,4 +1222,10 @@ body.mobile {
       }
     }
   }
+}
+
+.notice {
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0px;
 }
