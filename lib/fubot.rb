@@ -27,8 +27,10 @@ class Fubot
   end
 
   def call(message)
+    Rails.logger.info message
     self.class.commands.each do |pattern,command|
       if results = pattern.match(message)
+        Rails.logger.info results
         return command.new.call(self, results, message)
       end
     end

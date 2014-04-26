@@ -242,7 +242,7 @@ $ ->
     data = _.sortBy data, (u) ->
       u.display_name
     for user in data
-      continue if user.login.match(/-disabled/) || (user.id == 40 && user_id != 1)
+      continue if user.login.match(/-disabled/)
       users[user.id] = user
       continue if user.id == user_id
       item = _.template templateUser, _.extend(_.clone(user), showIndicator: true, tag: 'li')

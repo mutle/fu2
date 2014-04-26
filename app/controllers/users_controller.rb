@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     # reset_session
     @invite = Invite.find_by_activation_code(params[:user][:activation_code])
     raise ActiveRecord::RecordNotFound unless @invite
-    @user = User.new(params[:user].merge(:email => @invite.email))
+    @user = User.new(user_params.merge(:email => @invite.email))
     @user.save
     if @user.valid?
       @user.activate
@@ -114,4 +114,8 @@ class UsersController < ApplicationController
     end
   end
 
+  private
+  def user_params
+    params.require(:user).permit(:login, :password, :password_confirmation, :invite_user_id, :activation_code)
+  end
 end

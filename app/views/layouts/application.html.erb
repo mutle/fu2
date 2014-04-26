@@ -25,6 +25,10 @@
       </div>
     </div>
 
+    <% if !flash[:notice].blank? %>
+      <div class="notice"><%= flash[:notice] %></div>
+    <% end %>
+
     <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
 
       <div class="container_12">

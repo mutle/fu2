@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
 
   after_create :update_channel_last_post
   after_create :scan_for_mentions
+  after_create :process_fubot_message
 
   # before_create :set_markdown
   # before_update :set_markdown
@@ -41,6 +42,7 @@ class Post < ActiveRecord::Base
 
   def update_channel_last_post
     channel.update_attribute(:last_post, created_at) if channel
+    true
   end
 
   def scan_for_mentions
@@ -54,6 +56,7 @@ class Post < ActiveRecord::Base
         Notification.mention(user, u, channel, self)
       end
     end
+    true
   end
 
   def mentions?(user)
@@ -90,6 +93,17 @@ class Post < ActiveRecord::Base
 
   def as_json(*args)
     {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?}
+  end
+
+  def process_fubot_message
+    Resque.enqueue(FubotJob, :post, self.id) if self.user_id != User.fubot.id
+  end
+
+  def process_fubot_message!
+    response = Fubot.new.call(self.body)
+    if response
+      channel.posts.create(:body => response.text, :user => User.fubot, :markdown => true)
+    end
   end
 
 end
