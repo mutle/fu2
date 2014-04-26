@@ -100,23 +100,54 @@ form {
 }
 
 .header {
-  background: #e2e2e2;
-  background-color: #f2f2f2;
-  height: 48px;
+
+  background: #303030;
+  height: 55px;
+  line-height: 55px;
 
   .content {
-    width: 960px;
-    margin: 0px auto;
+    max-width: 960px;
+    margin: 0 auto;
   }
 
-  .toolbar {
-    line-height: 48px;
-  }
-
-  h1#title {
-    font-size: 28px;
-    line-height: 48px;
+  #title {
     float: left;
+    img { width: 119px; }
+  }
+
+  #main-navigation {
+    float: left;
+  }
+
+  #secondary-navigation {
+    float: right;
+  }
+
+  #main-navigation, #secondary-navigation {
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: inline-block;
+    }
+    
+    a, .dropdown .toggle {
+      color: #cfcfcf;
+      text-decoration: none;
+    }
+
+    .dropdown {
+
+      position: relative;
+
+      .content {
+        display: none;
+        position: absolute;
+        top: 55px;
+      }
+    }
   }
 
   .search {
@@ -158,86 +189,6 @@ form {
       li:last-child {
         border: none;
       }
-    }
-  }
-
-  img {
-    width: 24px;
-    height: 24px;
-  }
-
-  .button {
-    display: inline-block;
-    margin: 10px 12px;
-    background-color: #f8f8f8;
-    border: 2px solid #d9d9d9;
-    border-radius: 4px;
-    height: 24px;
-    line-height: 24px;
-    padding: 0px 12px 4px;
-  }
-
-  .buttons {
-    height: 28px;
-    margin: 10px 32px;
-    border: 2px solid #d9d9d9;
-    border-radius: 4px;
-    float: left;
-    line-height: 24px;
-
-    li {
-      background-color: #f8f8f8;
-      display: block;
-      float: left;
-      padding-bottom: 4px;
-      height: 24px;
-      border-right: 2px solid #d9d9d9;
-      position: relative;
-
-      a {
-        padding: 0px 12px;
-      }
-
-      .counters {
-        position: absolute;
-        right: -3px;
-        top: -10px;
-        z-index: 10;
-        padding: 1px 3px;
-      }
-
-      .count {
-        float: right;
-        font-size: 12px;
-        line-height: 14px;
-        padding: 1px 3px;
-        margin-left: 3px;
-        background-color: #d43;
-        border: 1px solid #a33528;
-        border-radius: 12px;
-        a {
-          display: block;
-          text-decoration: none;
-          color: #fff;
-          padding: 0px;
-        }
-      }
-
-      .count.mentions {
-        background-color: #4d3;
-        border: 1px solid #35a328;
-      }
-    }
-
-    li:first-child {
-      border-radius-top-left: 4px;
-      border-radius-bottom-left: 4px;
-    }
-
-    li:last-child {
-      border: none;
-      border-radius-top-right: 4px;
-      border-radius-bottom-right: 4px;
     }
   }
 }

@@ -1,8 +1,46 @@
+<ul id="main-navigation">
+  <li>
+    <%= link_to 'Home', root_path %>
+  </li>
+  <li>
+    <%= link_to 'Notifications', notifications_path, :title => 'Notifications' %>
+    <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
+        <span class="count mentions"><%= link_to "(#{n})", notifications_path %></span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to 'Messages', notifications_path, :title => 'Messages' %>
+    <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
+        <span class="count mentions"><%= link_to "(#{n})", notifications_path %></span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to 'New channel', new_channel_path %>
+  </li>
+</ul>
+
+<ul id="secondary-navigation">
+  <li class="dropdown">
+    <span class="toggle">Search</span>
+    <div class="content">
+      <%= form_tag search_channels_path, :method => :get do %>
+        <%= text_field_tag 'search', nil, :autocomplete => 'off', :class => 'search-field', 'data-after' => '.search form' %>
+      <% end %>
+    </div>
+  </li>
+  <li class="dropdown">
+    <span class="toggle">Search</span>
+    <div class="content"></div>
+  </li>
+  <li>
+    <%= link_to 'Logout', session_path, :method => :delete %>
+  </li>
+</ul>
+
+<!--
 <div class="toolbar">
   <div class="search">
-    <%= form_tag search_channels_path, :method => :get do %>
-      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
-    <% end %>
+
   </div>
   <ul class="buttons">
     <li><%= link_to image_tag("/images/emoji/newspaper.png"), root_path, :title => "Home" %></li>
@@ -26,3 +64,4 @@
     <%= link_to image_tag("/images/emoji/lock.png"), session_path, :title => "Logout", :class => "button", :method => :delete %>
   </div>
 </div>
+-->
