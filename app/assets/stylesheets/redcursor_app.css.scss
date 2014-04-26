@@ -1,6 +1,11 @@
+//@import url('http://fonts.googleapis.com/css?family=Lato');
+@import url('http://fonts.googleapis.com/css?family=Lato:300,400');
+
 body {
-  font-family: Helvetica, Arial, sans-serif;
-  background-color: #fff;
+  font-family: 'Lato', Helvetica, Arial, 'sans-serif';
+  color: #363636;
+  font-size: 16px;
+  background-color: #f1f1f1;
   margin: 0px;
 }
 
@@ -101,7 +106,7 @@ form {
 
 .header {
 
-  background: #303030;
+  background: #444;//#363636;
   height: 55px;
   line-height: 55px;
 
@@ -112,15 +117,22 @@ form {
 
   #title {
     float: left;
-    img { width: 119px; }
+    margin-right: 30px;
+    img {
+      width: 119px;
+      position: relative;
+      top: -2px;
+    }
   }
 
   #main-navigation {
     float: left;
+    li { margin-right: 18px; }
   }
 
   #secondary-navigation {
     float: right;
+    li { margin-left: 18px; }
   }
 
   #main-navigation, #secondary-navigation {
@@ -134,8 +146,11 @@ form {
     }
     
     a, .dropdown .toggle {
+      font-size: 14px;
+      font-weight: 300;
       color: #cfcfcf;
       text-decoration: none;
+      padding-left: 18px;
     }
 
     .dropdown {
@@ -148,6 +163,26 @@ form {
         top: 55px;
       }
     }
+
+    .home a { background: url('navigation-icons@2x.png')  0 3px;  }
+    .notifications a { background: url('navigation-icons@2x.png')  0 -14px;  }
+    .messages a.label { background: url('navigation-icons@2x.png')  0 -34px;  }
+    .newchannel a { background: url('navigation-icons@2x.png')  0 -56px;  }
+
+    .search .toggle { background: url('navigation-icons@2x.png')  0 -76px;  }
+    .more .toggle { background: url('navigation-icons@2x.png')  0 -96px;  }
+    .logout a { background: url('navigation-icons@2x.png')  0 -116px;  }
+
+    .home a, .notifications a, .messages a.label, .newchannel a,
+    .search .toggle, .more .toggle, .logout a {
+      background-size: 12px auto;
+      background-repeat: no-repeat;
+    }
+
+    .messages a.counter {
+      padding-left: 0;
+    }
+
   }
 
   .search {
@@ -198,16 +233,18 @@ form {
 
   #content {
     h2 {
-      font-size: 32px;
-      margin-bottom: 0.5em;
+      font-size: 46px;
+      margin-bottom: 26px;
+      font-weight: 300;
     }
     .channel-header, .channel-header-edit {
-      margin-bottom: 2em;
+      margin-bottom: 26px;
     }
     .block {
       background-color: #fff;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
+      -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+         -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+              box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
 
       ul {
         margin-left: 2em;
@@ -324,8 +361,24 @@ form {
       .description {
         float: left;
         margin: 10px;
+        color: #808080;
+      }
+      .description.empty {
+        color: #808080;
+      }
+      .edit-channel-link {
+        color: #808080;
       }
     }
+    .channel-header .block:hover {
+      .description.empty {
+        color: inherit;
+      }
+      .edit-channel-link {
+        color: #f97e76;
+      }
+    }
+
     .channel-actions {
       text-align: right;
       margin-bottom: 10px;
@@ -348,12 +401,15 @@ form {
 
     .user-mini {
       display: block;
-      height: 42px;
-      line-height: 42px;
+      height: 60px;
+      line-height: 60px;
       img.avatar {
         float: left;
-        max-width: 42px;
-        max-height: 42px;
+        max-width: 60px;
+        max-height: 60px;
+        -webkit-border-radius: 3px;
+           -moz-border-radius: 3px;
+                border-radius: 3px;
       }
       .user-name {
       }
@@ -361,68 +417,75 @@ form {
       }
     }
 
+    .post .user-mini {
+
+      height: 42px;
+      line-height: 42px;
+      font-size: 16px;
+      font-weight: 300;
+
+      img.avatar {
+        max-width: 42px;
+        max-height: 42px;
+        -webkit-border-radius: 0;
+           -moz-border-radius: 0;
+                border-radius: 0;
+      }
+
+    }
+
+
+
     #recent_acitivities {
       list-style: none;
-      background-color: #fff;
       padding: 0px;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
       margin-top: 1em;
 
       li {
-        padding: 8px 16px;
-        line-height: 42px;
-        border-bottom: 2px solid #fff;
+        padding: 10px 25px 10px 16px;
+        margin-bottom: 10px;
+        line-height: 60px;
         position: relative;
-        background-color: #e2e2e2;
+        background-color: #fff;
+        -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+           -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+                box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
       }
       li.visited {
         background-color: #fff;
         border-bottom: 2px solid #e2e2e2;
       }
-      li:first-child {
-        .user-color {
-          border-top-left-radius: 8px;
-        }
-      }
       li:last-child {
         border-bottom: none;
         margin-bottom: 0px;
-        .user-color {
-          border-bottom-left-radius: 8px;
-        }
       }
 
       a {
-        color: #000;
+        color: #363636;
         text-decoration: none;
       }
 
       .name {
         float: left;
-        width: 26%;
+        width: 20%;
         padding-right: 10px;
         line-height: 21px;
         text-align: left;
       }
-      .user-mini {
-        padding-left: 8px;
-
-        .user-name {
-          padding-left: 10px;
-        }
+      .user-mini .user-name {
+        padding-left: 10px;
       }
       .user-color {
         position: absolute;
         top: 0px;
         left: 0px;
-        height: 42px;
-        padding-bottom: 16px;
-        width: 12px;
+        bottom: 0;
+        width: 6px;
       }
       .date {
         float: right;
         padding-left: 10px;
+        a { color: #808080; }
       }
       .post-count {
         float: left;
@@ -449,11 +512,14 @@ form {
     }
 
     .post, .comment-box {
-      margin-bottom: 1em;
+      margin-bottom: 26px;
       background-color: #fff;
       padding: 16px;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
+
+      -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+         -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+              box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+
 
       .autocomplete-image {
         max-width: 22px;
@@ -466,11 +532,10 @@ form {
 
       .user-color {
         position: absolute;
-        top: 40px;
-        left: 0px;
-        bottom: 0px;
-        width: 12px;
-        border-bottom-left-radius: 8px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 6px;
       }
 
       .date, .name {
@@ -481,9 +546,10 @@ form {
         padding-right: 16px;
         background-color: #444;
         color: #fff;
+        font-weight: 300;
+        font-size: 14px;
         padding-bottom: 8px;
         padding-left: 8px;
-        border-bottom: 1px solid #e2e2e2;
         a {
           color: #fff;
           text-decoration: none;
@@ -491,8 +557,6 @@ form {
       }
 
       .name {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
         z-index: 2;
         left: 0px;
         top: 0px;
@@ -517,11 +581,9 @@ form {
       }
 
       .date {
-        border-top-right-radius: 8px;
         z-index: 10;
         right: 0px;
         top: 0px;
-        border-left: 1px solid #e2e2e2;
 
         .date-content {
           position: relative;
@@ -530,7 +592,6 @@ form {
         .fave {
           float: left;
           padding-right: 10px;
-          border-right: 1px solid #e2e2e2;
           margin-top: -8px;
           padding-bottom: 8px;
           .fave-text {
@@ -547,7 +608,7 @@ form {
         }
 
         .date-text {
-          width: 220px;
+          width: 190px;
           text-align: right;
         }
         .date-text a {
@@ -566,16 +627,19 @@ form {
             background-color: #444;
             float: right;
             padding: 5px 24px;
-            border: 1px solid #e2e2e2;
+            border-top: 1px solid #e2e2e2;
             border-left: none;
           }
-          a:last--child {
+          a:last-child {
             border-left: 1px solid #e2e2e2;
           }
         }
       }
 
       .body {
+
+        line-height: 24px;
+
       	[title] {
       	  border-bottom: 1px dotted #BBB;
       	}
@@ -673,9 +737,9 @@ form {
         height: 36px;
         line-height: 36px;
         background-color: #444;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        padding-left: 8px;
+        padding-left: 10px;
+        font-size: 16px;
+        font-weight: 300;
       }
 
       .title {
@@ -719,18 +783,15 @@ form {
         height: 46px;
         line-height: 46px;
         text-align: right;
-        border-top: 2px solid #e2e2e2;
         margin-bottom: -4px;
 
         input {
           font-size: 14px;
           color: #000;
           background-color: #e2e2e2;
-          border: 2px solid #ccc;
+          border: 0;
           padding: 10px;
-          border-radius: 0px;
-          border-bottom-right-radius: 8px;
-          margin-right: -2px;
+          margin-right: 3px;
           cursor: pointer;
         }
       }
@@ -792,7 +853,6 @@ form {
       top: 0px;
       right: 0px;
       margin-right: -23px;
-      background: #fff;
       background: #444;
       border: 3px solid #ccc;
       border-left: none;
@@ -804,44 +864,35 @@ form {
 
     .channels {
       margin-bottom: 2em;
-      margin-top: 2em;
-      background-color: #fff;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
-      background-color: #fff;
+      margin-top: 11px;
       list-style: none;
 
       li {
-        height: 48px;
-        line-height: 32px;
-        background-color: #444;
-        border-bottom: 1px solid #e2e2e2;
+        height: 30px;
         overflow: hidden;
         position: relative;
-
-        .channel {
-          padding: 8px 0px;
-        }
 
         a {
           position: absolute;
           display: block;
-          padding: 8px;
+          padding: 0 0 8px 0;
           top: 0; left: 0; right: 0; bottom: 0;
-          color: #fff;
+          color: #999;
           z-index: 2;
-          width: 110px;
+          width: 220px;
+          white-space: nowrap;
           overflow: hidden;
+          font-weight: 300;
+          text-decoration: none;
+        }
+
+        a:hover {
+          color: #444;
         }
 
         .post-count {
           float: right;
         }
-      }
-
-      li:first-child {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
       }
     }
 
@@ -1179,4 +1230,12 @@ body.mobile {
   text-align: center;
   margin-top: 0.5em;
   margin-bottom: 0px;
+}
+
+.clearfix:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }
