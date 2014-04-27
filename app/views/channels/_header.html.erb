@@ -1,6 +1,6 @@
 <div class="channel-header">
   <h2><%= format_title(@channel) %></h2>
-    <div class="block">
+    <div class="block clearfix">
       <% if !@channel.text.blank? %>
         <%= format_text @channel.text %>
         <div class="description">
@@ -10,7 +10,7 @@
           <% end %>
         </div>
       <% else %>
-        <div class="description">No description...</div>
+        <div class="description empty">No description...</div>
       <% end %>
       <div class="channel-actions">
         <%= link_to "Edit", "#", :class => "edit-channel-link" %>

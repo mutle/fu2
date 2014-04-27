@@ -192,7 +192,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def avatar_image_url(size=42)
+  def avatar_image_url(size=60)
     if avatar_url.blank?
       gravatar_id = Digest::MD5.hexdigest(email.downcase)
       "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
