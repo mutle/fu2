@@ -72,7 +72,7 @@ class Notification < ActiveRecord::Base
 
   def send_fubot_message(m)
     return if !m
-    self.class.message(user, created_by, response.text, true)
+    self.class.message(user, created_by, m.text, true)
   end
 
   private
