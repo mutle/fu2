@@ -13,7 +13,8 @@ Fubot.command /deploy ?([^ ]*)/ do
       bot.reply "You are not allowed to deploy."
     else
       bot.reply "Deploying #{branch} to production."
-      bot.reply system(DEPLOY_SCRIPT.call(branch))
+      script = DEPLOY_SCRIPT.call(branch)
+      bot.reply `#{script}`
       bot.reply "Deploy completed."
     end
   end
