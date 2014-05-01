@@ -96,14 +96,22 @@ class Post < ActiveRecord::Base
   end
 
   def process_fubot_message
-    Resque.enqueue(FubotJob, :post, self.id) if self.user_id != User.fubot.id
+    if Rails.env.development?
+      process_fubot_message!
+    else
+      Resque.enqueue(FubotJob, :post, self.id) if self.user_id != User.fubot.id
+    end
   end
 
   def process_fubot_message!
-    response = Fubot.new.call(self.body)
-    if response
-      channel.posts.create(:body => response.text, :user => User.fubot, :markdown => true)
-    end
+    return if self.user_id == User.fubot.id
+    Fubot.new(self, user).call(self.body)
+  end
+
+  def send_fubot_message(m)
+    return if !m
+    p m
+    channel.posts.create(:body => m.text.to_s, :user => User.fubot, :markdown => true)
   end
 
 end

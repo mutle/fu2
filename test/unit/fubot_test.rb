@@ -20,4 +20,18 @@ class FubotTest < ActiveSupport::TestCase
     assert_not_nil @bot.call("/help")
   end
 
+  test "command requires trigger pattern" do
+    assert_nil @bot.call("help")
+    assert_nil @bot.call("/foo help")
+    assert_not_nil @bot.call("/help")
+    assert_not_nil @bot.call("fubot help")
+  end
+
+  test "responder" do
+    r = "1"
+    @bot = Fubot.new(r)
+    r.expects(:send_fubot_message)
+    @bot.call("/help")
+  end
+
 end
