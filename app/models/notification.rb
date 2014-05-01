@@ -62,15 +62,17 @@ class Notification < ActiveRecord::Base
 
   def process_fubot_message!
     if user_id == User.fubot.id && notification_type == "message"
-      response = Fubot.new.call(self.message(false))
-      if response
-        self.class.message(user, created_by, response.text, true)
-      end
+      Fubot.new(self, created_by).call(self.message(false))
     end
   end
 
   def as_json(*args)
     super(*args).merge(:message_raw => message(false))
+  end
+
+  def send_fubot_message(m)
+    return if !m
+    self.class.message(user, created_by, response.text, true)
   end
 
   private

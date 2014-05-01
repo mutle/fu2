@@ -27,4 +27,11 @@ class FubotTest < ActiveSupport::TestCase
     assert_not_nil @bot.call("fubot help")
   end
 
+  test "responder" do
+    r = "1"
+    @bot = Fubot.new(r)
+    r.expects(:send_fubot_message)
+    @bot.call("/help")
+  end
+
 end

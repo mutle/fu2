@@ -4,6 +4,7 @@ class Fubot
     /\/?fubot /,
     /\//,
   ]
+  attr_accessor :user, :responder
 
   class << self
     def commands
@@ -28,6 +29,11 @@ class Fubot
     def initialize(text)
       @text = text
     end
+  end
+
+  def initialize(responder=nil, user=nil)
+    @responder = responder
+    @user = user
   end
 
   def match_line(line)
@@ -58,7 +64,9 @@ class Fubot
   end
 
   def reply(message)
-    Fubot::Message.new(message)
+    m = Fubot::Message.new(message)
+    @responder.send_fubot_message m if @responder
+    m
   end
 
 end

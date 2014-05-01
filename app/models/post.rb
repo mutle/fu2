@@ -105,10 +105,13 @@ class Post < ActiveRecord::Base
 
   def process_fubot_message!
     return if self.user_id == User.fubot.id
-    response = Fubot.new.call(self.body)
-    if response
-      channel.posts.create(:body => response.text, :user => User.fubot, :markdown => true)
-    end
+    Fubot.new(self, user).call(self.body)
+  end
+
+  def send_fubot_message(m)
+    return if !m
+    p m
+    channel.posts.create(:body => m.text.to_s, :user => User.fubot, :markdown => true)
   end
 
 end

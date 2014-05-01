@@ -72,9 +72,12 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.4)
     mime-types (1.23)
     mini_portile (0.5.0)
     minitest (4.7.5)
+    mocha (1.0.0)
+      metaclass (~> 0.0.1)
     mono_logger (1.1.0)
     multi_json (1.7.7)
     multipart-post (2.0.0)
@@ -206,6 +209,7 @@ DEPENDENCIES
   html-pipeline
   jquery-rails (>= 3.0.4)
   json
+  mocha
   net_dav
   newrelic_rpm
   pg (~> 0.15.1)
