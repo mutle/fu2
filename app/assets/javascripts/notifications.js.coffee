@@ -184,7 +184,7 @@ $ ->
           notify_new = true
           first_run = false
           update_view = false
-          window.setInterval refreshNotifications, 8 * 1000
+          window.setInterval refreshNotifications, 4 * 1000
         else if update_view
           update_view = false
           showUser(show_user_id)
