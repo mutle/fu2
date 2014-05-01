@@ -1,6 +1,3 @@
-require 'open-uri'
-require 'json'
-
 module ImageSearch
   class << self
 

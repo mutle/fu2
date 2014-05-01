@@ -1,3 +1,6 @@
+require 'open-uri'
+require 'json'
+
 class Fubot
 
   TRIGGER_PATTERNS = [
