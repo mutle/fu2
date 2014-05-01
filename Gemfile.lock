@@ -125,6 +125,10 @@ GEM
       resque
       sass-rails
       twitter-bootstrap-rails
+    resqued (0.7.10)
+      kgio (~> 2.6)
+      mono_logger (~> 1.0)
+      resque (>= 1.9.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rinku (1.7.3)
@@ -218,6 +222,7 @@ DEPENDENCIES
   redis
   resque
   resque-web
+  resqued
   rspec
   rspec-rails
   sass-rails

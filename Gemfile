@@ -23,6 +23,7 @@ gem "coffee-rails"
 gem 'unicorn', '~> 4.6.3'
 gem 'resque'
 gem 'resque-web', require: 'resque_web'
+gem 'resqued'
 gem 'faraday'
 
 group :test do
