@@ -111,7 +111,7 @@ class Channel < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:created_at => created_at, :id => id, :last_post => last_post, :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? visited?(@current_user) : false}
+    {:created_at => created_at, :id => id, :last_post => last_post, :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
   end
 
   def next_post(current_user_id)
