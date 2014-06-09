@@ -30,7 +30,7 @@ module RenderPipeline
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
       twitter: {
-        pattern: %r{https?://(m\.)?twitter\.com/[^/]+/status/(\d+)},
+        pattern: %r{https?://(m\.|mobile\.)?twitter\.com/[^/]+/statuse?s?/(\d+)},
         callback: proc do |content, id|
           tweet = $redis.get "Tweets:#{id}"
           if !tweet
