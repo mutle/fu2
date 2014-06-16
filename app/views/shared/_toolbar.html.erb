@@ -1,28 +1,33 @@
-<div class="toolbar">
-  <div class="search">
-    <%= form_tag search_channels_path, :method => :get do %>
-      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
+<ul id="main-navigation">
+  <li class="home">
+    <%= link_to 'Home', root_path %>
+  </li>
+  <li class="messages">
+    <%= link_to 'Messages', notifications_path, :class => 'label' %>
+    <% notifications = Notification.for_user(current_user) %>
+    <% if (mgs = notifications.messages.unread.count) > 0 || (mns = notifications.mentions.unread.count) > 0  %>
+        <%= link_to "(#{mgs||0}/#{mns||0})", notifications_path, :class => 'counter' %>
     <% end %>
-  </div>
-  <ul class="buttons">
-    <li><%= link_to image_tag("/images/emoji/newspaper.png"), root_path, :title => "Home" %></li>
-    <li>
-      <div class="counters">
-        <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
-          <div class="count"><%= link_to n, notifications_path %></div>
-        <% end %>
-        <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
-          <div class="count mentions"><%= link_to n, notifications_path %></div>
-        <% end %>
-      </div>
-      <%= link_to image_tag("/images/emoji/envelope.png"), notifications_path, :title => "Notifications" %>
-    </li>
-    <li><%= link_to image_tag("/images/emoji/bookmark_tabs.png"), channel_path(:all), :title => "Channels" %></li>
-    <li><%= link_to image_tag("/images/emoji/family.png"), users_path, :title => "Users" %></li>
-    <li><%= link_to image_tag("/images/emoji/wrench.png"), edit_user_path(current_user), :title => "Settings" %></li>
-  </ul>
-  <div class="actions">
-    <%= link_to image_tag("/images/emoji/memo.png"), new_channel_path, :title => "New channel", :class => "button" %>
-    <%= link_to image_tag("/images/emoji/lock.png"), session_path, :title => "Logout", :class => "button", :method => :delete %>
-  </div>
-</div>
+  </li>
+  <li class="newchannel">
+    <%= link_to 'New channel', new_channel_path %>
+  </li>
+</ul>
+
+<ul id="secondary-navigation">
+  <li class="dropdown search">
+    <span class="toggle">Search</span>
+    <div class="content">
+      <%= form_tag search_channels_path, :method => :get do %>
+        <%= text_field_tag 'search', nil, :autocomplete => 'off', :class => 'search-field', 'data-after' => '.search form' %>
+      <% end %>
+    </div>
+  </li>
+  <li class="dropdown more">
+    <span class="toggle">More</span>
+    <div class="content"></div>
+  </li>
+  <li class="logout">
+    <%= link_to 'Logout', session_path, :method => :delete %>
+  </li>
+</ul>

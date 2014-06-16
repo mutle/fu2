@@ -23,7 +23,7 @@ module ChannelsHelper
     RenderPipeline.title(channel.is_a?(String) ? channel : channel.title).gsub(/<\/?div>/,'').html_safe
   end
 
-  def avatar_url(user, size=42)
+  def avatar_url(user, size=60)
     user.avatar_image_url(size)
   end
 

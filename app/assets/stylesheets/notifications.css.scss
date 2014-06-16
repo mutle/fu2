@@ -55,7 +55,11 @@
 }
 
 .notifications {
+
   img.avatar {
+    position: absolute;
+    left: 0px;
+    top: 0px;
     max-width: 42px;
     max-height: 42px;
   }
@@ -112,15 +116,20 @@
 
     .user {
       padding-right: 8px;
+      margin-right: 2px;
       padding-bottom: 4px;
       margin-bottom: 4px;
-      border-bottom: 1px solid #999;
-      color: #999;
       cursor: pointer;
+      position: relative;
+      padding-left: 50px;
+
+      background-color: #fff;
+      -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+         -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+              box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
 
       &.active {
         color: #000;
-        border-bottom: 1px solid #999;
       }
 
       &.activity {
@@ -138,9 +147,8 @@
       text-align: center;
       padding: 6px 0px;
       font-size: 13px;
-      margin-bottom: 4px;
-      margin-top: -5px;
-      color: #888;
+      margin-bottom: 8px;
+      margin-top: 8px;
     }
 
     .divider-top {
@@ -189,6 +197,7 @@
         width: 160px;
         left: 0px;
         top: 0px;
+        padding-left: 50px;
 
         .avatar {
         }
@@ -201,10 +210,12 @@
 
         .content {
           padding: 12px;
-          border-radius: 4px;
-          color: #fff;
-          background-color: #381;
+          color: #000;
+          background-color: #ccc;
           font-size: 18px;
+          -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+             -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
+                  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.15);
 
           img {
             max-width: 508px;
@@ -226,7 +237,7 @@
           	width: 0;
           	position: absolute;
           	pointer-events: none;
-          	border-right: 12px solid #381;
+          	border-right: 12px solid #ccc;
             border-left: none;
           	border-width: 12px;
           	top: 0px;
@@ -244,6 +255,7 @@
           left: auto;
           width: 42px;
           margin-left: 12px;
+          padding-left: 0px;
 
           .avatar {
           }
@@ -260,12 +272,12 @@
 
           .content {
             color: #000;
-            background-color: #f2f2f2;
+            background-color: #fff;
 
             &:after {
               right: 50px;
               left: auto;
-              border-left: 12px solid #f2f2f2;
+              border-left: 12px solid #fff;
               border-right: none;
             }
           }
@@ -310,7 +322,7 @@
       // right: 0px;
       // bottom: 0px;
       // position: absolute;
-      background-color: #fff;
+      background-color: #f1f1f1;
 
       .form {
         margin-left: 232px;
@@ -325,7 +337,8 @@
         right: 108px;
         left: 0px;
         top: 0px;
-        border: 1px solid #000;
+        width: 580px;
+        border: 1px solid #666;
         background-color: #fff;
         border-radius: 4px;
       }
@@ -347,7 +360,7 @@
         color: #fff;
         width: 100px;
         line-height: 24px;
-        background-color: #381;
+        background-color: #666;
         border: none;
         border-radius: 16px;
 
