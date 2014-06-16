@@ -5,7 +5,7 @@
     <% end %>
   </div>
   <ul class="buttons">
-    <li><%= link_to image_tag("/images/emoji/newspaper.png"), root_path, :title => "Home" %></li>
+    <li><%= link_to octicon('home'), root_path, :title => "Home" %></li>
     <li>
       <div class="counters">
         <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
@@ -15,14 +15,14 @@
           <div class="count mentions"><%= link_to n, notifications_path %></div>
         <% end %>
       </div>
-      <%= link_to image_tag("/images/emoji/envelope.png"), notifications_path, :title => "Notifications" %>
+      <%= link_to octicon('mail'), notifications_path, :title => "Notifications" %>
     </li>
-    <li><%= link_to image_tag("/images/emoji/bookmark_tabs.png"), channel_path(:all), :title => "Channels" %></li>
-    <li><%= link_to image_tag("/images/emoji/family.png"), users_path, :title => "Users" %></li>
-    <li><%= link_to image_tag("/images/emoji/wrench.png"), edit_user_path(current_user), :title => "Settings" %></li>
+    <li><%= link_to octicon('book'), channel_path(:all), :title => "Channels" %></li>
+    <li><%= link_to octicon('organization'), users_path, :title => "Users" %></li>
+    <li><%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings" %></li>
   </ul>
   <div class="actions">
-    <%= link_to image_tag("/images/emoji/memo.png"), new_channel_path, :title => "New channel", :class => "button" %>
-    <%= link_to image_tag("/images/emoji/lock.png"), session_path, :title => "Logout", :class => "button", :method => :delete %>
+    <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
+    <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
   </div>
 </div>

@@ -111,6 +111,11 @@ form {
 
   .toolbar {
     line-height: 48px;
+
+    .actions a {
+      color: #000;
+      font-size: 22px;
+    }
   }
 
   h1#title {
@@ -196,6 +201,11 @@ form {
 
       a {
         padding: 0px 12px;
+        color: #000;
+        font-size: 22px;
+      }
+      a:visited {
+        color: #000;
       }
 
       .counters {
@@ -204,6 +214,7 @@ form {
         top: -10px;
         z-index: 10;
         padding: 1px 3px;
+        font-size: 14px;
       }
 
       .count {
@@ -220,6 +231,7 @@ form {
           text-decoration: none;
           color: #fff;
           padding: 0px;
+          font-size: 14px;
         }
       }
 
@@ -689,7 +701,6 @@ form {
           float: left;
           padding: 0px 16px;
           text-decoration: none;
-          color: #A0A0A0;
         }
 
         a:hover {

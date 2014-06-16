@@ -6,7 +6,7 @@
 <% if grid_size > 3 then grid_size -= 3; third_box = true; end %>
 <div class="box grid_<%= grid_size %>">
   <h2><%= link_to format_title(user.display_name), user_path(user) %></h2>
-  <p><%= link_to image_tag("/images/emoji/envelope.png"), notifications_path(:anchor => user.id), :class => "user-link" %></p>
+  <p><%= link_to octicon('mail', true), notifications_path(:anchor => user.id), :class => "user-link" %></p>
 </div>
 
 <% if third_box %>
