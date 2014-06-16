@@ -92,7 +92,7 @@ class Post < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?}
+    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?, :html_body => html_body}
   end
 
   def process_fubot_message
@@ -110,8 +110,12 @@ class Post < ActiveRecord::Base
 
   def send_fubot_message(m)
     return if !m
-    p m
     channel.posts.create(:body => m.text.to_s, :user => User.fubot, :markdown => true)
+  end
+
+  def html_body
+    result = markdown? ? RenderPipeline.markdown(body) : RenderPipeline.simple(body)
+    result.html_safe
   end
 
 end
