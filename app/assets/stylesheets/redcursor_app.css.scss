@@ -1,4 +1,5 @@
 $small-phone: "only screen and (max-width : 320px)";
+$large-phone: "only screen and (min-width : 321px)";
 $small-screen: "only screen and (min-width : 800px)";
 $large-screen: "only screen and (min-width: 1200px)";
 
@@ -105,8 +106,7 @@ form {
 }
 
 .header {
-  background: #e2e2e2;
-  background-color: #f2f2f2;
+  background-color: #ae2424;
 
   .content {
     @media #{$small-screen} {
@@ -118,32 +118,37 @@ form {
     }
   }
 
+  .octicon {
+    font-size: 28px;
+    color: #fff;
+  }
+
+  a {
+    display: block;
+    float: left;
+    font-size: 24px;
+    padding: 0px 6px;
+    color: #fff;
+    margin: 0px;
+  }
+
+  .bottom-link {
+    display: inline;
+    float: none;
+  }
+
+  .button {
+    margin: 0px 12px;
+    @media #{$large-phone} {
+      margin-left: 24px;
+    }
+  }
+
   .toolbar {
     display: inline-block;
-    padding: 4px 0px;
     margin: 0px;
     position: relative;
-
-    a {
-      display: block;
-      float: left;
-      background-color: #f8f8f8;
-      border: 2px solid #d9d9d9;
-      border-right: none;
-      line-height: 24px;
-      padding: 0px 10px;
-      color: #000;
-      margin: 0px;
-
-      &.last {
-        border-right: 2px solid #d9d9d9;
-      }
-    }
-
-    .button {
-      margin: 0px 8px;
-      border-right: 2px solid #d9d9d9;
-    }
+    padding: 6px 0px;
 
     .counters {
       position: absolute;
@@ -158,15 +163,14 @@ form {
       float: left;
       font-size: 12px;
       line-height: 14px;
-      padding: 1px 3px;
+      padding: 1px 4px;
       margin-right: 3px;
-      background-color: #d43;
-      border: 1px solid #a33528;
+      background-color: #e07f18;
       border-radius: 12px;
       a {
         display: block;
         text-decoration: none;
-        background-color: #d43;
+        background-color: #e07f18;
         line-height: 14px;
         color: #fff;
         padding: 0px;
@@ -177,7 +181,6 @@ form {
 
     .count.mentions {
       background-color: #4d3;
-      border: 1px solid #35a328;
       a {
         background-color: #4d3;
       }
@@ -188,29 +191,51 @@ form {
     float: left;
     display: block;
     height: 32px;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 32px;
     margin: 0px;
     padding: 0px;
-    padding-right: 16px;
+    padding-right: 12px;
     margin-top: 4px;
+    color: #fff;
+    padding: 6px 0px;
+
+    @media #{$large-phone} {
+      font-size: 26px;
+      line-height: 32px;
+      margin-top: 0px;
+      padding-right: 16px;
+    }
   }
 
   .search {
-    padding: 5px 0px;
+    padding: 0px;
     display: block;
     position: relative;
     float: right;
+    padding: 6px 0px;
+
+    form {
+      display: inline-block;
+
+      .octicon {
+        color: #666;
+        position: absolute;
+        top: 8px;
+        left: 4px;
+        font-size: 20px;
+        line-height: 32px;
+      }
+    }
 
     input {
-      height: 24px;
-      background: #fff url("/images/emoji/mag.png") no-repeat 2px 2px;
-      background-size: 20px;
+      height: 32px;
       border-radius: 4px;
       margin: 0px;
       padding: 0px;
-      padding-left: 32px;
+      padding-left: 28px;
       width: 120px;
+      font-size: 18px;
       @media #{$small-screen} {
         width: 220px;
       }
@@ -225,6 +250,7 @@ form {
       text-align: left;
       border: 2px solid #d9d9d9;
       z-index: 20;
+      font-size: 14px;
 
       @media #{$small-screen} {
         right: auto;
@@ -418,20 +444,7 @@ form {
         border-top-right-radius: 8px;
       }
     }
-    .bottom-link {
-      position: fixed;
-      z-index: 110;
-      background: #444;
-      padding: 10px;
-      right: 30px;
-      top: 50px;
-      border-radius: 8px;
-      a {
-        color: #fff;
-        font-size: 300%;
-        text-decoration: none;
-      }
-    }
+
     .channel-header {
       .description {
         float: left;

@@ -1,7 +1,10 @@
 <div class="search">
   <%= form_tag search_channels_path, :method => :get do %>
+    <%= octicon("search") %>
     <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
   <% end %>
+
+  <%= link_to octicon("arrow-down"), "", :class => "bottom-link" %>
 </div>
 
 <nav class="toolbar">
