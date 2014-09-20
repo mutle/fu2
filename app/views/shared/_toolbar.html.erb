@@ -1,28 +1,26 @@
-<div class="toolbar">
-  <div class="search">
-    <%= form_tag search_channels_path, :method => :get do %>
-      <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
+<div class="search">
+  <%= form_tag search_channels_path, :method => :get do %>
+    <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
+  <% end %>
+</div>
+
+<nav class="toolbar">
+  <%= link_to octicon('home'), root_path, :title => "Home" %>
+
+  <div class="counters">
+    <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
+      <div class="count"><%= link_to n, notifications_path %></div>
+    <% end %>
+    <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
+      <div class="count mentions"><%= link_to n, notifications_path %></div>
     <% end %>
   </div>
-  <ul class="buttons">
-    <li><%= link_to octicon('home'), root_path, :title => "Home" %></li>
-    <li>
-      <div class="counters">
-        <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
-          <div class="count"><%= link_to n, notifications_path %></div>
-        <% end %>
-        <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
-          <div class="count mentions"><%= link_to n, notifications_path %></div>
-        <% end %>
-      </div>
-      <%= link_to octicon('mail'), notifications_path, :title => "Notifications" %>
-    </li>
-    <li><%= link_to octicon('book'), channel_path(:all), :title => "Channels" %></li>
-    <li><%= link_to octicon('organization'), users_path, :title => "Users" %></li>
-    <li><%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings" %></li>
-  </ul>
-  <div class="actions">
-    <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
-    <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
-  </div>
-</div>
+  <%= link_to octicon('mail'), notifications_path, :title => "Notifications" %>
+
+  <%= link_to octicon('book'), channel_path(:all), :title => "Channels" %>
+  <%= link_to octicon('organization'), users_path, :title => "Users" %>
+  <%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings", :class => "last" %>
+
+  <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
+  <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
+</nav>

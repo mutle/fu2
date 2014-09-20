@@ -16,37 +16,24 @@
   <body<%= ' class="mobile"'.html_safe if mobile? %>>
     <a name="top"></a>
 
-    <div class="header">
+    <header class="header">
       <div class="content">
         <h1 id="title">
           Red Cursor
         </h1>
         <%= render :partial => "shared/toolbar" %>
       </div>
-    </div>
+    </header>
 
     <% if !flash[:notice].blank? %>
       <div class="notice"><%= flash[:notice] %></div>
     <% end %>
 
-    <div id="container"<%= ' class="mobile"'.html_safe if mobile? %>>
+    <div id="container">
 
-      <div class="container_12">
-        <% column_width = @column_width || 9 %>
-        <% sidebar_width = 12 - column_width %>
-        <div id="sidebar" class="grid_<%= sidebar_width %>">
-          <div class="title-toolbar"></div>
-          <% if sidebar_width > 0 %>
-            <div class="content">
-              <%= render :partial => "shared/sidebar" %>
-            </div>
-          <% end %>
-        </div>
-
-        <div id="content" class="grid_<%= column_width %>">
-          <%= yield %>
-        </div>
-      </div>
+      <section id="content">
+        <%= yield %>
+      </section>
     </div>
 
     <% if mobile? %>
