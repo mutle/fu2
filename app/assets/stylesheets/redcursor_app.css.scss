@@ -244,7 +244,7 @@ form {
     .autocompleter {
       position: absolute;
       width: 250px;
-      top: 28px;
+      top: 45px;
       right: 0px;
       background: #fff;
       list-style: none;
@@ -266,9 +266,12 @@ form {
           display: block;
           padding: 8px 12px;
           color: #000;
+          font-size: 16px;
+          text-decoration: none;
+          float: none;
         }
       }
-      li:hover {
+      li.highlight a {
         background-color: #d9d9d9;
       }
       li:last-child {
