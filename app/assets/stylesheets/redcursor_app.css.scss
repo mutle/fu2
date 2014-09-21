@@ -879,6 +879,18 @@ form {
           margin-right: -2px;
           cursor: pointer;
         }
+
+        .top-link {
+          display: inline-block;
+          float: left;
+          color: #ae2424;
+          padding: 0px 16px;
+          line-height: 46px;
+
+          span {
+            font-size: 28px;
+          }
+        }
       }
     }
 

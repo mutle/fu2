@@ -139,6 +139,10 @@ $ ->
     window.scrollTo 0,document.body.scrollHeight
     return false
 
+  $(".top-link").click ->
+    window.scrollTo 0,0
+    return false
+
   $(".edit-channel-link").click ->
     $(".channel-header").hide()
     $(".channel-header-edit").show()
