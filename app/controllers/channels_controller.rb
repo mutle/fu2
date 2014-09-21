@@ -98,8 +98,9 @@ class ChannelsController < ApplicationController
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
+    @posts = @channel.posts.includes(:user, :faves).load
     if respond
-      respond_with @channel.posts.all.includes(:user, :faves)
+      respond_with @posts
     end
   end
 
