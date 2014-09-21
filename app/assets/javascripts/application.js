@@ -9,6 +9,7 @@
 //= require jquery_ujs
 //= require jquery.markitup
 //= require jquery.textcomplete
+//= require jquery.form.min
 //= require markitup-html
 //= require jquery.filedrop
 //= require autocompleter

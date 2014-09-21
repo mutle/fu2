@@ -115,12 +115,13 @@ $ ->
       self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  refreshPosts = () ->
+  refreshPosts = (callback) ->
     last_id = $('.post').last().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
     url = "#{ourl}/posts?last_id=#{last_id}"
     $.get url, (data) ->
       $(data).insertBefore('.comment-box-form')
+      callback() if callback?
 
   refreshChannels = () ->
     last_id = $('#recent_activities .channel').first().attr("data-last-id")
@@ -129,8 +130,14 @@ $ ->
       if data.length
         $("#content").empty().append $(data)
 
-  if $('.comment_box').length
+  if $('.comment-box-form').length
     setInterval refreshPosts, 15 * 1000
+    $('.comment-box-form form').ajaxForm ->
+      refreshPosts ->
+        $('.comment-box-form textarea').val ''
+    $('.comment-box-form textarea').keydown (e) ->
+      if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
+        $(this).parents('form').submit()
 
   if $('#recent_activities.refresh').length
     setInterval refreshChannels, 15 * 1000
