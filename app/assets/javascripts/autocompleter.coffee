@@ -38,9 +38,10 @@ class Autocompleter
 
     @o.keyup (e)->
       key = e.keyCode
-      if key == 38 || key == 40 # up or down
+      if key == 38 || key == 40 || key == 13 # up, down or enter
         return false
       else if key == 27 # esc
+        autocompleter.list.find("li.highlight").removeClass("highlight")
         autocompleter.list.hide()
         return true
       input = $(this).val()
@@ -48,6 +49,8 @@ class Autocompleter
         autocompleter.query "#{input}"
       else if input.length == 0
         autocompleter.list.hide()
+    $(document).on "focus", object, ->
+      autocompleter.list.show() if $(object).val() != ''
     $(document).on "blur", object, ->
       autocompleter.list.hide()
     $(document).on "mousedown", ".autocompleter li", ->
