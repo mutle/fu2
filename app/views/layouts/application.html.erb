@@ -35,12 +35,5 @@
         <%= yield %>
       </section>
     </div>
-
-    <% if mobile? %>
-      <%= link_to "Desktop Version", desktop_channels_path %>
-    <% elsif mobile_device? %>
-      <%= link_to "Mobile Version", desktop_channels_path %>
-    <% end %>
-
   </body>
 </html>
