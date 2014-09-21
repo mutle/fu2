@@ -1,3 +1,5 @@
+$small-screen: "only screen and (min-width : 800px)";
+
 .profile {
 
   .right {
@@ -26,6 +28,12 @@
 
   .user-info {
     margin-bottom: 2em;
+    clear: both;
+
+    .avatar-box {
+      float: left;
+      margin-right: 16px;
+    }
 
     a {
       color: #000;
@@ -42,7 +50,17 @@
   }
 
   .user-info-list {
-    .user-link {
+    .user-info {
+      float: left;
+      margin-right: 32px;
+      min-width: 60%;
+      @media #{$small-screen} {
+        min-width: 25%;
+      }
+      clear: none;
+    }
+
+    .user-link, .avatar-box {
       img {
         max-width: 24px;
         max-height: 24px;

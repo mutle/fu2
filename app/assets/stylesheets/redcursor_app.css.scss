@@ -1,3 +1,8 @@
+$small-phone: "only screen and (max-width : 320px)";
+$large-phone: "only screen and (min-width : 321px)";
+$small-screen: "only screen and (min-width : 800px)";
+$large-screen: "only screen and (min-width: 1200px)";
+
 body {
   font-family: Helvetica, Arial, sans-serif;
   background-color: #fff;
@@ -12,18 +17,26 @@ form {
   input[type=text], input[type=password] {
     display: block;
     font-size: 16px;
-    width: 200px;
     margin-bottom: 1em;
     border: 1px solid #e2e2e2;
   }
 }
 
 #login_container {
-  margin: 100px auto;
-  width: 600px;
+  margin: 100px 10%;
   background-color: #fff;
   border: 2px solid #e2e2e2;
   border-radius: 8px;
+
+  @media #{$small-phone} {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  @media #{$large-screen} {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
 
   h2 {
     font-weight: normal;
@@ -50,17 +63,13 @@ form {
 
   form {
     padding-top: 26px;
-    padding-bottom: 146px;
-    position: relative;
 
     p {
-      float: left;
-    }
-    .login {
-      margin-left: 16px;
-    }
-    .password {
-      margin-left: 50px;
+      padding-left: 16px;
+
+      input {
+        width: 92%;
+      }
     }
   }
 
@@ -75,14 +84,11 @@ form {
   }
 
   .actions {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 128px;
     height: 46px;
     line-height: 46px;
     text-align: right;
     border-top: 2px solid #e2e2e2;
+    padding-right: 16px;
 
     input {
       display: inline;
@@ -100,60 +106,165 @@ form {
 }
 
 .header {
-  background: #e2e2e2;
-  background-color: #f2f2f2;
-  height: 48px;
+  background-color: #ae2424;
 
   .content {
-    width: 960px;
-    margin: 0px auto;
+    @media #{$small-screen} {
+      margin: 0px 5%;
+    }
+
+    @media #{$large-screen} {
+      max-width: 960px;
+      margin: 0px auto;
+    }
+  }
+
+  .octicon {
+    font-size: 28px;
+    color: #fff;
+  }
+
+  a {
+    display: block;
+    float: left;
+    font-size: 24px;
+    padding: 0px 6px;
+    color: #fff;
+    margin: 0px;
+  }
+
+  .bottom-link {
+    display: inline;
+    float: none;
+  }
+
+  .button {
+    margin: 0px 12px;
+    @media #{$large-phone} {
+      margin-left: 24px;
+    }
   }
 
   .toolbar {
-    line-height: 48px;
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+    padding: 6px 0px;
 
-    .actions a {
-      color: #000;
-      font-size: 22px;
+    .counters {
+      position: absolute;
+      left: 38px;
+      top: 0px;
+      z-index: 10;
+      padding: 1px 3px;
+      font-size: 14px;
+    }
+
+    .count {
+      float: left;
+      font-size: 12px;
+      line-height: 14px;
+      padding: 1px 4px;
+      margin-right: 3px;
+      background-color: #e07f18;
+      border-radius: 12px;
+      a {
+        display: block;
+        text-decoration: none;
+        background-color: #e07f18;
+        line-height: 14px;
+        color: #fff;
+        padding: 0px;
+        font-size: 14px;
+        border: none;
+      }
+    }
+
+    .count.mentions {
+      background-color: #4d3;
+      a {
+        background-color: #4d3;
+      }
     }
   }
 
   h1#title {
-    font-size: 28px;
-    line-height: 48px;
     float: left;
+    display: block;
+    height: 32px;
+    font-size: 20px;
+    line-height: 32px;
+    margin: 0px;
+    padding: 0px;
+    padding-right: 12px;
+    margin-top: 4px;
+    color: #fff;
+    padding: 6px 0px;
+
+    @media #{$large-phone} {
+      font-size: 26px;
+      line-height: 32px;
+      margin-top: 0px;
+      padding-right: 16px;
+    }
   }
 
   .search {
-    float: right;
-    height: 24px;
-    margin: 11px 0px;
+    padding: 0px;
+    display: block;
     position: relative;
+    float: right;
+    padding: 6px 0px;
+
+    form {
+      display: inline-block;
+
+      .octicon {
+        color: #666;
+        position: absolute;
+        top: 8px;
+        left: 4px;
+        font-size: 20px;
+        line-height: 32px;
+      }
+    }
 
     input {
-      height: 24px;
-      background: #fff url("/images/emoji/mag.png") no-repeat 2px 2px;
-      background-size: 20px;
+      height: 32px;
       border-radius: 4px;
-      padding-left: 32px;
-      width: 220px;
+      margin: 0px;
+      padding: 0px;
+      padding-left: 28px;
+      width: 120px;
+      font-size: 18px;
+      @media #{$small-screen} {
+        width: 220px;
+      }
     }
     .autocompleter {
       position: absolute;
-      left: 0px; top: 28px;
-      width: 252px;
+      width: 250px;
+      top: 28px;
+      right: 0px;
       background: #fff;
       list-style: none;
       text-align: left;
       border: 2px solid #d9d9d9;
       z-index: 20;
+      font-size: 14px;
+
+      @media #{$small-screen} {
+        right: auto;
+        left: 0px;
+      }
 
       li {
         cursor: pointer;
         border-bottom: 1px solid #f8f8f8;
-        padding: 0px 6px;
 
         a {
+          display: block;
+          padding: 8px 12px;
           color: #000;
         }
       }
@@ -171,23 +282,11 @@ form {
     height: 24px;
   }
 
-  .button {
-    display: inline-block;
-    margin: 10px 12px;
-    background-color: #f8f8f8;
-    border: 2px solid #d9d9d9;
-    border-radius: 4px;
-    height: 24px;
-    line-height: 24px;
-    padding: 0px 12px 4px;
-  }
-
   .buttons {
-    height: 28px;
-    margin: 10px 32px;
+    display: inline-block;
+    margin: 0px 32px;
     border: 2px solid #d9d9d9;
     border-radius: 4px;
-    float: left;
     line-height: 24px;
 
     li {
@@ -195,49 +294,18 @@ form {
       display: block;
       float: left;
       padding-bottom: 4px;
-      height: 24px;
       border-right: 2px solid #d9d9d9;
       position: relative;
 
       a {
+        display: block;
         padding: 0px 12px;
+        height: 24px;
         color: #000;
         font-size: 22px;
       }
       a:visited {
         color: #000;
-      }
-
-      .counters {
-        position: absolute;
-        right: -3px;
-        top: -10px;
-        z-index: 10;
-        padding: 1px 3px;
-        font-size: 14px;
-      }
-
-      .count {
-        float: right;
-        font-size: 12px;
-        line-height: 14px;
-        padding: 1px 3px;
-        margin-left: 3px;
-        background-color: #d43;
-        border: 1px solid #a33528;
-        border-radius: 12px;
-        a {
-          display: block;
-          text-decoration: none;
-          color: #fff;
-          padding: 0px;
-          font-size: 14px;
-        }
-      }
-
-      .count.mentions {
-        background-color: #4d3;
-        border: 1px solid #35a328;
       }
     }
 
@@ -256,6 +324,16 @@ form {
 
 #container {
   padding-top: 1em;
+
+  @media #{$small-screen} {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  @media #{$large-screen} {
+    max-width: 960px;
+    margin: 0px auto;
+  }
 
   #content {
     h2 {
@@ -367,20 +445,7 @@ form {
         border-top-right-radius: 8px;
       }
     }
-    .bottom-link {
-      position: fixed;
-      z-index: 110;
-      background: #444;
-      padding: 10px;
-      right: 30px;
-      top: 50px;
-      border-radius: 8px;
-      a {
-        color: #fff;
-        font-size: 300%;
-        text-decoration: none;
-      }
-    }
+
     .channel-header {
       .description {
         float: left;
@@ -401,7 +466,7 @@ form {
         font-size: 28px;
       }
       textarea {
-        width: 600px;
+        width: 90%;
         height: 400px;
       }
     }
@@ -422,7 +487,7 @@ form {
       }
     }
 
-    #recent_acitivities {
+    #recent_activities {
       list-style: none;
       background-color: #fff;
       padding: 0px;
@@ -457,6 +522,11 @@ form {
       a {
         color: #000;
         text-decoration: none;
+      }
+
+      .channel-link {
+        display: block;
+        margin-left: 100px;
       }
 
       .name {
@@ -746,20 +816,37 @@ form {
 
       textarea {
         border: none;
-        width: 688px;
-        height: 400px;
+        height: 180px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+
+        @media #{$small-screen} {
+          height: 400px;
+        }
       }
+
+      .textcomplete-wrapper {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+      }
+
       .markItUp {
-        width: 688px;
         border: none;
-        padding-left: 8px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+
 
         .markItUpContainer {
           border: none;
         }
       }
       textarea.markItUpEditor {
-        width: 628px;
       }
       .autocompleter {
         background-color: #fff;
@@ -793,6 +880,18 @@ form {
           margin-right: -2px;
           cursor: pointer;
         }
+
+        .top-link {
+          display: inline-block;
+          float: left;
+          color: #ae2424;
+          padding: 0px 16px;
+          line-height: 46px;
+
+          span {
+            font-size: 28px;
+          }
+        }
       }
     }
 
@@ -804,131 +903,6 @@ form {
 
   }
 
-  #sidebar {
-    position: relative;
-
-    h1#title {
-      height: 48px;
-      line-height: 48px;
-      font-size: 32px;
-      border: 3px solid #ccc;
-      cursor: pointer;
-      background: #fff;
-      text-align: center;
-      position: relative;
-      border-radius: 8px;
-
-      .count {
-        position: absolute;
-        z-index: 105;
-        right: 5px;
-        top: 0px;
-        font-size: 14px;
-        height: 32px;
-        line-height: 32px;
-        margin-top: 8px;
-        padding: 0px 12px;
-        background-color: #d43;
-        border-radius: 16px;
-
-        a {
-          display: block;
-          text-decoration: none;
-          font-weight: bold;
-          color: #fff;
-        }
-      }
-    }
-    h1#title.active {
-      color: #fff;
-      background: #444;
-    }
-    .title-toolbar {
-    }
-
-    .title-toolbar.active {
-      display: block;
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      margin-right: -23px;
-      background: #fff;
-      background: #444;
-      border: 3px solid #ccc;
-      border-left: none;
-      border-right: none;
-      height: 48px;
-      width: 38px;
-      z-index: 102;
-    }
-
-    .channels {
-      margin-bottom: 2em;
-      margin-top: 2em;
-      background-color: #fff;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
-      background-color: #fff;
-      list-style: none;
-
-      li {
-        height: 48px;
-        line-height: 32px;
-        background-color: #444;
-        border-bottom: 1px solid #e2e2e2;
-        overflow: hidden;
-        position: relative;
-
-        .channel {
-          padding: 8px 0px;
-        }
-
-        a {
-          position: absolute;
-          display: block;
-          padding: 8px;
-          top: 0; left: 0; right: 0; bottom: 0;
-          color: #fff;
-          z-index: 2;
-          width: 110px;
-          overflow: hidden;
-        }
-
-        .post-count {
-          float: right;
-        }
-      }
-
-      li:first-child {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-      }
-    }
-
-  }
-
-  #sidebar.grid_0 {
-    .toolbar {
-      width: 960px;
-    }
-    .title-toolbar.active {
-      display: none;
-    }
-  }
-
-  #content.grid_12 {
-    .toolbar {
-      width: 922px;
-      top: 80px;
-      margin-left: -10px;
-      border-top: none;
-    }
-    .toolbar.active {
-      display: block;
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
-    }
-  }
   .toolbar {
     display: none;
     position: absolute;
@@ -1001,237 +975,6 @@ form {
     padding-right: 4px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-  }
-
-
-}
-
-body.mobile {
-  width: 320px;
-  min-width: 320px;
-
-  .header {
-    width: 320px;
-    height: 106px;
-    position: relative;
-
-    h1#title {
-      font-size: 18px;
-      line-height: 22px
-    }
-
-    .toolbar {
-      position: absolute;
-      width: 320px;
-      top: 28px;
-
-      .buttons {
-        float: none;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        margin: 0px;
-        a {
-          padding: 0px 8px 4px;
-        }
-
-        .count a {
-          padding: 0px;
-        }
-      }
-      .actions {
-        position: absolute;
-        top: -10px;
-        right: 0px;
-      }
-      .button {
-        margin: 0px;
-        padding: 0px 8px 4px;
-      }
-
-      .search {
-        float: none;
-        position: absolute;
-        padding: 4px;
-        top: 28px;
-
-        input {
-          font-size: 16px;
-          background-size: 16px;
-          height: 16px;
-          width: 270px;
-        }
-      }
-
-    }
-
-  }
-
-}
-
-#container.mobile {
-  padding-top: 8px;
-  margin: 0px;
-  padding: 2px;
-  width: 316px;
-
-  .container_12 {
-    margin: 0px;
-    width: 316px;
-  }
-  .grid_9, .grid_3, .grid_12 {
-    width: 316px;
-    margin: 0px;
-  }
-
-  #login_container {
-    margin: 0px auto;
-    width: 316px;
-
-    form {
-      padding-bottom: 66px;
-    }
-
-    p {
-      float: none;
-    }
-
-    .password {
-      margin-left: 16px;
-    }
-
-    .actions {
-      top: 186px;
-    }
-  }
-
-  #sidebar {
-    width: 316px;
-    padding-bottom: 1em;
-
-    h1#title.active {
-      border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
-    .content {
-      display: none;
-    }
-    .title-toolbar.active {
-      display: none;
-    }
-  }
-
-  .toolbar {
-    top: 52px;
-    width: 278px;
-    border-top: none;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-
-    .search {
-      margin-top: 1em;
-    }
-  }
-  #content.grid_12 {
-    .toolbar {
-      width: 278px;
-      top: 50px;
-      margin-left: 0px;
-      border-top: none;
-    }
-  }
-  #content {
-    width: 316px;
-
-    h2 {
-      margin-bottom: 0.5em;
-      font-size: 20px;
-    }
-    .bottom-link {
-      right: 2px;
-      top: 60px;
-      padding: 8px;
-      font-size: 12px;
-      line-height: 12px;
-      img {
-        max-width: 18px;
-      }
-    }
-
-    #recent_acitivities {
-      li {
-        position: relative;
-        font-size: 14px;
-        line-height: 21px;
-      }
-      .name {
-        float: none;
-        width: 132px;
-        padding: 0px;
-      }
-      .user-mini {
-        height: 63px;
-        line-height: 21px;
-        text-align: left;
-        img {
-          display: block;
-          float: none;
-        }
-
-      }
-      .channel-link {
-        position: absolute;
-        top: 0px;
-        left: 82px;
-      }
-      .date {
-        margin-top: -1.5em;
-      }
-      .user-color {
-        height: 63px;
-      }
-    }
-
-    .post {
-      .name {
-        line-height: 22px;
-      }
-      .fave {
-        border: none;
-      }
-      .date {
-        border-radius: none;
-        background: none;
-        border: none;
-        padding-top: 0px;
-        line-height: 22px;
-        font-size: 0.75em;
-        top: 22px;
-        left: 50px;
-        height: 22px;
-
-        .date-text {
-          width: auto;
-          text-align: right;
-        }
-      }
-
-      .actions {
-        a {
-          color: #000;
-        }
-        a:hover {
-          color: #000;
-        }
-      }
-    }
-    .comment-box {
-      textarea {
-        height: 200px;
-        width: 300px;
-        font-size: 1.1em;
-      }
-    }
   }
 }
 

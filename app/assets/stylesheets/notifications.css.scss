@@ -2,6 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$small-screen: "only screen and (min-width : 800px)";
+
 .mobile {
   .notifications {
     position: relative;
@@ -17,28 +19,6 @@
       .message-list {
         height: auto;
         overflow-y: auto;
-      }
-    }
-
-    .messages.active {
-      background: #fff;
-      display: block;
-      position: absolute;
-      left: 0px;
-      z-index: 2;
-      margin-left: 0px;
-
-      .back {
-        color: #fff;
-        background: #666;
-        border: 0px;
-        border-radius: 4px;
-        font-size: 16px;
-        position: absolute;
-        z-index: 2;
-        padding: 4px 12px;
-        left: 0px;
-        top: 0px;
       }
     }
 
@@ -58,6 +38,21 @@
   img.avatar {
     max-width: 42px;
     max-height: 42px;
+  }
+
+  &.show {
+    .users {
+      display: none;
+    }
+    .messages {
+      display: block;
+    }
+
+    @media #{$small-screen} {
+      .users {
+        display: block;
+      }
+    }
   }
 
   .user {
@@ -98,16 +93,30 @@
   .users {
     -webkit-mask-image: -webkit-gradient(linear, left 95%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
     display: block;
-    width: 220px;
-    float: left;
     // border-right: 1px solid #000;
-    overflow-y: scroll;
     overflow-x: hidden;
-    height: 500px;
     padding-bottom: 30px;
+    width: 100%;
+
+    @media #{$small-screen} {
+      width: 220px;
+      float: left;
+      overflow-y: scroll;
+      height: 500px;
+    }
+
+    &.hide {
+      display: none;
+
+      @media #{$small-screen} {
+        display: block;
+      }
+    }
 
     &::-webkit-scrollbar {
-      display: none;
+      @media #{$small-screen} {
+        display: none;
+      }
     }
 
     .user {
@@ -149,18 +158,41 @@
   }
 
   .messages {
-    margin-left: 220px;
     padding: 0px 0px 0px 12px;
-    position: relative;
+    display: none;
+
+    @media #{$small-screen} {
+      position: relative;
+      margin-left: 220px;
+      display: block;
+
+      .back {
+        display: none;
+      }
+    }
+
+    .back {
+      color: #fff;
+      background: #666;
+      border: 0px;
+      border-radius: 4px;
+      font-size: 16px;
+      z-index: 2;
+      padding: 4px 12px;
+    }
 
     .message-list {
       -webkit-mask-image: -webkit-gradient(linear, left 25, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
       padding-top: 20px;
       display: none;
-      height: 500px;
+
       padding-right: 8px;
-      overflow-y: scroll;
       overflow-x: hidden;
+
+      @media #{$small-screen} {
+        height: 500px;
+        overflow-y: scroll;
+      }
 
       &::-webkit-scrollbar {
         display: none;
@@ -325,6 +357,7 @@
         right: 108px;
         left: 0px;
         top: 0px;
+        width: 190px;
         border: 1px solid #000;
         background-color: #fff;
         border-radius: 4px;

@@ -27,7 +27,6 @@ Fu2::Application.routes.draw do
     collection do
       get :search
       get :channel_names
-      get :desktop
       get :live
       get :all
     end

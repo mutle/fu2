@@ -10,5 +10,6 @@
   =hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax"
   =f.text_area :body, :class => 'comment_box'
   .actions
+    =link_to octicon("arrow-up"), "", :class => "top-link"
     %span.upload_info
     =f.submit "#{action} #{type}", :accesskey => "s"

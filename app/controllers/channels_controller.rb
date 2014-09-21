@@ -92,11 +92,6 @@ class ChannelsController < ApplicationController
     end
   end
 
-  def desktop
-    cookies['desktop'] = cookies['desktop'] == "true" ? "false" : "true"
-    redirect_to request.referer
-  end
-
   private
   def posts(respond=true)
     @channel = Channel.find(params[:id], :include => :posts)

@@ -1,31 +1,28 @@
 <div class="profile">
 
-  <div class="container_12 user-info">
+  <div class="user-info">
     <%= render :partial => "profile", :locals => {:user => @user} %>
   </div>
 
-  <div class="container_12">
-    <div class="box grid_5 prefix_2">
-      <h3>Recent Posts</h3>
-      <% if @user.posts.count > 0 %>
-        <ul>
-          <% @user_posts.each do |post| %>
-            <% next unless post and post.channel %>
-            <%= render :partial => "post", :object => post %>
-          <% end %>
-        </ul>
-      <% end %>
-    </div>
-
-    <div class="box grid_5">
-      <h3>Faves</h3>
+  <div class="box">
+    <h3>Recent Posts</h3>
+    <% if @user.posts.count > 0 %>
       <ul>
-        <% @user_faves.each do |fave| %>
-          <% next unless fave.post %>
-          <%= render :partial => "post", :object => fave.post %>
+        <% @user_posts.each do |post| %>
+          <% next unless post and post.channel %>
+          <%= render :partial => "post", :object => post %>
         <% end %>
       </ul>
-    </div>
+    <% end %>
   </div>
 
+  <div class="box">
+    <h3>Faves</h3>
+    <ul>
+      <% @user_faves.each do |fave| %>
+        <% next unless fave.post %>
+        <%= render :partial => "post", :object => fave.post %>
+      <% end %>
+    </ul>
+  </div>
 </div>
