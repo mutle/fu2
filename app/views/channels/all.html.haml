@@ -1,9 +1,9 @@
 %h2 All Channels
 %ul.select_letters
-  %li= link_to "#", all_channels_path(:letter => "#") 
+  %li= link_to "#", all_channels_path(:letter => "#")
   -('a'..'z').each do |c|
-    %li= link_to c.upcase, all_channels_path(:letter => c) 
-%ul#recent_acitivities
+    %li= link_to c.upcase, all_channels_path(:letter => c)
+%ul#recent_activities
   -@channels.each do |channel|
     %li.visited
       %p

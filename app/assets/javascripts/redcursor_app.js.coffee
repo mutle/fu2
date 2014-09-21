@@ -123,7 +123,7 @@ $ ->
       $(data).insertBefore('.comment-box-form')
 
   refreshChannels = () ->
-    last_id = $('#recent_acitivities .channel').first().attr("data-last-id")
+    last_id = $('#recent_activities .channel').first().attr("data-last-id")
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
@@ -132,7 +132,7 @@ $ ->
   if $('.comment_box').length
     setInterval refreshPosts, 15 * 1000
 
-  if $('#recent_acitivities.refresh').length
+  if $('#recent_activities.refresh').length
     setInterval refreshChannels, 15 * 1000
 
   $(".bottom-link").click ->
