@@ -54,19 +54,23 @@ $ ->
 
   send_button.attr("disabled", true)
 
+  desktop = () -> window.matchMedia("screen and (min-width: 800px)").matches
+
   resize = () ->
-    return if mobile = $('body').hasClass('mobile')
-    input_height = 0
-    if $(".input-text").hasClass("active")
-      input_height = parseInt($(".notifications .input-text").css("height")) - parseInt($(".notifications .input").css("height"))
-    response_height = parseInt($(".notifications .response").css("height")) + 44 + input_height
-    console.log response_height
-    height = $(window).height() - $(".notifications").get(0).offsetTop - response_height - 30
-    $(".notifications .users").css("height", "#{height}px")
-    messages.css("height", "#{height}px")
-    $(".notifications .empty").css("height", "#{height}px")
-    $(".notifications .welcome").css("height", "#{height}px")
-    scrollMessages()
+    if desktop()
+      input_height = 0
+      if $(".input-text").hasClass("active")
+        input_height = parseInt($(".notifications .input-text").css("height")) - parseInt($(".notifications .input").css("height"))
+      response_height = parseInt($(".notifications .response").css("height")) + 44 + input_height
+      h = $(window).height() - $(".notifications").get(0).offsetTop - response_height - 30
+      height = "#{h}px"
+
+    $(".notifications .users").css("height", height)
+    messages.css("height", height)
+    $(".notifications .empty").css("height", height)
+    $(".notifications .welcome").css("height", height)
+    if desktop()
+      scrollMessages()
   $(window).resize -> resize()
 
   scrollMessages = () ->
@@ -92,7 +96,7 @@ $ ->
     true
 
   $(".back").click () ->
-    $(".messages").removeClass("active")
+    $(".notifications").removeClass("show")
     window.location.hash = ""
 
   updateUsers = () ->
@@ -193,7 +197,7 @@ $ ->
     show_user_id = id
     $(".messages .empty").hide()
     $(".messages .welcome").hide()
-    $(".messages").addClass("active")
+    $(".notifications").addClass("show")
     notifications = user_notifications[id]
     messages.empty()
     if notifications?

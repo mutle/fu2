@@ -1,16 +1,15 @@
-<% grid_size ||= 10; avatar_grid_size ||= 2; avatar_size ||= 140 %>
-<div class="box grid_<%= avatar_grid_size %>">
+<% avatar_size ||= 140; grid_size ||= 12 %>
+<div class="avatar-box">
   <%= image_tag avatar_url(user, avatar_size), :class => "avatar" %>
 </div>
 
-<% if grid_size > 3 then grid_size -= 3; third_box = true; end %>
-<div class="box grid_<%= grid_size %>">
+<div class="box">
   <h2><%= link_to format_title(user.display_name), user_path(user) %></h2>
   <p><%= link_to octicon('mail', true), notifications_path(:anchor => user.id), :class => "user-link" %></p>
 </div>
 
-<% if third_box %>
-  <div class="box grid_3 right stats">
+<% if grid_size > 3 %>
+  <div class="box right stats">
     <p><span class="label">Posts:</span> <%= @user.posts.count %></p>
     <p><span class="label">Channels created:</span> <%= @user_channel_count %></p>
     <p><span class="label">Faves given:</span> <%= @user.faves.count %></p>

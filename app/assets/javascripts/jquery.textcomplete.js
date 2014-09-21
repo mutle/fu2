@@ -117,7 +117,8 @@
     };
     css = {
       wrapper: {
-        position: 'relative'
+        position: 'relative',
+        display: 'block'
       },
       list: {
         position: 'absolute',

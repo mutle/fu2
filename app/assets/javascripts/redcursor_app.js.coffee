@@ -124,7 +124,7 @@ $ ->
       callback() if callback?
 
   refreshChannels = () ->
-    last_id = $('#recent_acitivities .channel').first().attr("data-last-id")
+    last_id = $('#recent_activities .channel').first().attr("data-last-id")
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
@@ -138,20 +138,17 @@ $ ->
     $('.comment-box-form textarea').keydown (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()
-    $(document).scroll (e) ->
-      docViewTop = $(window).scrollTop()
-      docViewBottom = docViewTop + $(window).height()
-      elemTop = $('.comment_box').offset().top;
-      elemBottom = elemTop + $('.comment_box').height()
-      if (elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop)
-        $(".bottom-link .arrow-up").show()
-        $(".bottom-link .arrow-down").hide()
-      else
-        $(".bottom-link .arrow-up").hide()
-        $(".bottom-link .arrow-down").show()
 
-  if $('#recent_acitivities.refresh').length
+  if $('#recent_activities.refresh').length
     setInterval refreshChannels, 15 * 1000
+
+  $(".bottom-link").click ->
+    window.scrollTo 0,document.body.scrollHeight
+    return false
+
+  $(".top-link").click ->
+    window.scrollTo 0,0
+    return false
 
   $(".edit-channel-link").click ->
     $(".channel-header").hide()
