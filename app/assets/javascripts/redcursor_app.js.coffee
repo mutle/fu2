@@ -73,7 +73,7 @@ $ ->
             title:result.title,
             url: "/channels/#{result.id}"
           results.push item
-        autocompleter.showResults results
+        autocompleter.showResults results, term
 
   $(document).on 'click', ".fave", ->
     self = $(this)
