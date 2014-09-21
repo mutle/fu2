@@ -114,7 +114,8 @@ form {
     }
 
     @media #{$large-screen} {
-      margin: 0px 20%;
+      max-width: 960px;
+      margin: 0px auto;
     }
   }
 
@@ -330,8 +331,8 @@ form {
   }
 
   @media #{$large-screen} {
-    margin-left: 20%;
-    margin-right: 20%;
+    max-width: 960px;
+    margin: 0px auto;
   }
 
   #content {
