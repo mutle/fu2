@@ -1,6 +1,7 @@
 *.pid
 *.log
 .DS_Store
+.idea
 config/database.yml
 config/deploy.rb
 config/mongrel_cluster.yml
