@@ -29,6 +29,8 @@ $ ->
     $('.comment_box').textcomplete completerStrategies
     if syntax == "html"
       $('.comment_box').markItUp(mySettings)
+    else
+      new MarkdownEditor $('.comment_box')
 
   insertText = (text) ->
     if syntax && syntax == "html"

@@ -1,0 +1,36 @@
+.markdown {
+
+  .editor-toolbar {
+    height: 36px;
+    border-bottom: 1px solid #ddd;
+
+    a {
+      display: block;
+      float: left;
+      border: 1px solid #000;
+      margin: 3px 8px;
+      width: 32px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+
+      &:first-child {
+        margin-left: 4px;
+      }
+    }
+
+    .divider {
+      display: block;
+      float: left;
+      height: 30px;
+      margin: 3px;
+      border-left: 2px solid #000;
+    }
+
+  }
+}
+
+.cm-s-redcursor {
+  margin: 4px;
+  font-size: 16px;
+}
