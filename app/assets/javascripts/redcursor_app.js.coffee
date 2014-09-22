@@ -131,21 +131,30 @@ $ ->
         $("#content").empty().append $(data)
 
   previewPost = (contents) ->
-    $('<div class="post preview"><div class="name">Posting...</div><div class="body">'+contents+'</div></div>').insertBefore('.comment-box-form')
+    $('<div class="post preview"><div class="name"></div></div>').insertBefore('.comment-box-form')
 
   removePreviewPost = ->
     $('.post.preview').remove();
 
   if $('.comment-box-form').length
     setInterval refreshPosts, 15 * 1000
-    $('.comment-box-form form').ajaxForm
-      beforeSubmit : ->
-        previewPost($('#post_body').val())
-        $('.comment-box-form textarea').val ''
-      success : ->
-        $(document).one 'fu2.refreshPosts', ->
+    $('.comment-box-form form').submit ->
+      previewPost($('#post_body').val())
+      text = $('.comment-box-form textarea').val()
+      $('.comment-box-form textarea').val ''
+      $.ajax
+        type: "POST"
+        url: $(this).attr("action")
+        data: {"post[body]": text}
+        success: (data) ->
+          $("#content").append(data.rendered)
           removePreviewPost()
-        refreshPosts()
+          refreshPosts()
+        error: () ->
+          removePreviewPost()
+          $('.comment-box-form textarea').val text
+          $(".upload_info").html("Error sending post. Please try again.")
+      false
     $('.comment-box-form textarea').keydown (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()
