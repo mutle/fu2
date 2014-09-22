@@ -150,9 +150,9 @@ class Channel < ActiveRecord::Base
     posts.where("id > :last_id", :last_id => last_read_id(current_user)).count
   end
 
-  def has_posts?(current_user)
+  def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || i < last_post.id
+    i == 0 || i < (post || last_post).id
   end
 
   def visit(current_user, post_id=nil)
