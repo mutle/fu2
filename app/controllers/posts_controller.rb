@@ -20,11 +20,9 @@ class PostsController < ApplicationController
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
 
-    data = @post.as_json.merge(:rendered => render_to_string(:partial => "/channels/post", :object => @post))
-
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
-      f.json { render :json => data }
+      f.json { render :json => @post.as_json.merge(:rendered => render_to_string(:partial => "/channels/post", :object => @post)) }
     end
   end
 
