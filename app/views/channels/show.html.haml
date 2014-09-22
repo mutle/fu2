@@ -4,7 +4,6 @@
     -if post.can_read?(current_user)
       =render :partial => "post", :object => post
       -@last_post_id = post.id
-  %hr/
 -else
   %p
     You can't read the content of this channel

@@ -115,13 +115,13 @@ $ ->
       self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  refreshPosts = (callback) ->
-    last_id = $('.post').last().attr("data-post-id")
+  refreshPosts = () ->
+    last_id = $('.post:not(.preview)').last().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
     url = "#{ourl}/posts?last_id=#{last_id}"
     $.get url, (data) ->
       $(data).insertBefore('.comment-box-form')
-      callback() if callback?
+      $(document).trigger 'fu2.refreshPosts'
 
   refreshChannels = () ->
     last_id = $('#recent_activities .channel').first().attr("data-last-id")
@@ -130,11 +130,31 @@ $ ->
       if data.length
         $("#content").empty().append $(data)
 
+  previewPost = (contents) ->
+    $('<div class="post preview"><div class="name"></div></div>').insertBefore('.comment-box-form')
+
+  removePreviewPost = ->
+    $('.post.preview').remove();
+
   if $('.comment-box-form').length
     setInterval refreshPosts, 15 * 1000
-    $('.comment-box-form form').ajaxForm ->
-      refreshPosts ->
-        $('.comment-box-form textarea').val ''
+    $('.comment-box-form form').submit ->
+      previewPost($('#post_body').val())
+      text = $('.comment-box-form textarea').val()
+      $('.comment-box-form textarea').val ''
+      $.ajax
+        type: "POST"
+        url: $(this).attr("action")
+        data: {"post[body]": text}
+        success: (data) ->
+          $("#content").append(data.rendered)
+          removePreviewPost()
+          refreshPosts()
+        error: () ->
+          removePreviewPost()
+          $('.comment-box-form textarea').val text
+          $(".upload_info").html("Error sending post. Please try again.")
+      false
     $('.comment-box-form textarea').keydown (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()

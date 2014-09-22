@@ -596,7 +596,19 @@ form {
     }
 
     .post {
+
       position: relative;
+
+      &.preview {
+        opacity: .5;
+        .name {
+          background: image-url("spinner-32x32.gif") no-repeat #444 center;
+          background-size: 22px 22px;
+          padding-left: 40px;
+          border-radius: 8px;
+          text-align: center;
+        }
+      }
 
       .user-color {
         position: absolute;
