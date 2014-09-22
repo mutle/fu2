@@ -1,6 +1,6 @@
 -if @channel.can_read?(current_user)
   =render :partial => "header"
-  -@channel.posts.each do |post|
+  -@posts.each do |post|
     -if post.can_read?(current_user)
       =render :partial => "post", :object => post
       -@last_post_id = post.id

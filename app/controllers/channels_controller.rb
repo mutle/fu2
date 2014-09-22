@@ -12,6 +12,7 @@ class ChannelsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
+    @recent_posts = Channel.recent_posts(@recent_channels)
     if respond
       respond_with @recent_channels
     end
@@ -94,12 +95,13 @@ class ChannelsController < ApplicationController
 
   private
   def posts(respond=true)
-    @channel = Channel.find(params[:id], :include => :posts)
+    @channel = Channel.find(params[:id])
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
+    @posts = @channel.posts.includes(:user, :faves).load
     if respond
-      respond_with @channel.posts.all(:include => :user)
+      respond_with @posts
     end
   end
 
