@@ -52,7 +52,7 @@ class Channel < ActiveRecord::Base
 
 
   def self.recent_channels(_user, page, per_page = 50)
-    self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "last_post DESC", :page => page, :per_page => per_page
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
   end
 
   def self.all_channels(_user, page)
@@ -80,6 +80,15 @@ class Channel < ActiveRecord::Base
         query { string q }
       end
     end.results
+  end
+
+  def self.recent_posts(channels)
+    ids = channels.map(&:id)
+    recent = Post.select("channel_id, MAX(id) as id").where("channel_id IN (?)", ids).group("channel_id").load
+    posts = Post.select("id, channel_id, user_id, created_at").where("channel_id IN (?)", ids).includes(:user).to_a
+    out = {}
+    recent.each { |p| out[p.channel_id] = posts.find { |p1| p1.id == p.id } }
+    out
   end
 
   def body=(body)
@@ -126,11 +135,15 @@ class Channel < ActiveRecord::Base
   end
 
   def last_read_id(current_user)
-    $redis.zscore("last-post:#{current_user.id}", id) || 0
+    ($redis.zscore("last-post:#{current_user.id}", id) || 0).to_i
+  end
+
+  def last_post
+    @last_post ||= posts.reorder("id DESC").first
   end
 
   def last_post_id
-    posts.last.try(:id)
+    last_post.try(:id)
   end
 
   def num_unread(current_user)
@@ -139,7 +152,7 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user)
     i = last_read_id(current_user)
-    i == 0 || i < posts.last.id
+    i == 0 || i < last_post.id
   end
 
   def visit(current_user, post_id=nil)

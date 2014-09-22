@@ -12,6 +12,7 @@ class ChannelsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
+    @recent_posts = Channel.recent_posts(@recent_channels)
     if respond
       respond_with @recent_channels
     end
