@@ -27,10 +27,10 @@ module ChannelsHelper
     user.avatar_image_url(size)
   end
 
-  def channel_anchor(channel, current_user)
+  def channel_anchor(channel, current_user, last_post)
     id = channel.next_post(current_user)
     if id > 0
-      if id == channel.last_post_id
+      if id == last_post.id
         "comments"
       else
         "post_#{id}"

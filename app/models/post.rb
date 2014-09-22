@@ -79,8 +79,12 @@ class Post < ActiveRecord::Base
      faves.where(:user_id => user.id)
   end
 
-  def faved_by?(user)
-    faves_for(user).count > 0
+  def faved_by?(user, faves=nil)
+    if faves
+      faves.select { |f| f.user_id == user.id }.any?
+    else
+      faves_for(user).count > 0
+    end
   end
 
   def fave(user)
