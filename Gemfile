@@ -31,8 +31,6 @@ gem 'resqued'
 gem 'faraday'
 
 group :test do
-  gem "rspec"
   gem "mocha"
-  gem "rspec-rails"
   gem "test-unit"
 end
