@@ -1,0 +1,4 @@
+test:
+  adapter: postgresql
+  database: fu2
+  username: postgres
