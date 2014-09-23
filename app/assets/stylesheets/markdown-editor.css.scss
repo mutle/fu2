@@ -80,6 +80,10 @@
   .cm-quote {
     display: inline-block;
     color: #666;
+
+    &.cm-link {
+      color: #66f;
+    }
   }
 
   .cm-comment {
