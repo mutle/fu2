@@ -24,8 +24,18 @@ class MarkdownEditor
       lineWrapping: true
       theme: "redcursor"
 
+    editor = this
     @toolbar.find("a").click ->
       return true if $(this).hasClass("reference")
+      action = $(this).attr("class")
+      editor["action_#{action}"]?()
       return false
+
+  action_quote: => console.log('quote')
+  action_link: => console.log('link')
+  action_bold: => console.log('bold')
+  action_italic: => console.log('italic')
+  action_underline: => console.log('underline')
+  action_strike: => console.log('strike')
 
 window.MarkdownEditor = MarkdownEditor

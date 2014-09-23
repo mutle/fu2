@@ -51,4 +51,19 @@
 .cm-s-redcursor {
   margin: 4px;
   font-size: 16px;
+  line-height: 1.5em;
+
+  .cm-header {
+    font-size: 1.3em;
+    line-height: 2em;
+  }
+
+  .cm-link {
+    color: blue;
+    text-decoration: none;
+  }
+
+  .cm-tag {
+
+  }
 }
