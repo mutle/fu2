@@ -9,7 +9,6 @@ config/ultrasphinx/*.conf
 config/environments/production_mailer.rb
 public/uploads
 Thumbs.db
-db/schema.rb
 db/development.sqlite3
 vendor/bundler_gems
 config/ultrasphinx/development.base

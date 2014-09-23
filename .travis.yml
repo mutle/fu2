@@ -1,0 +1,8 @@
+addons:
+  postgresql: "9.3"
+services:
+  - elasticsearch
+  - redis-server
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database fu2' -U postgres
