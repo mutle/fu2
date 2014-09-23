@@ -3,6 +3,7 @@
   .editor-toolbar {
     height: 36px;
     border-bottom: 1px solid #ddd;
+    user-select: none;
 
     .bold { font-weight: bold; }
     .italic { font-style: italic; }
@@ -17,6 +18,11 @@
 
       .octicon {
         font-size: 24px;
+      }
+
+      &:hover {
+        background-color: #fff;
+        color: #000;
       }
     }
 
@@ -38,6 +44,11 @@
       }
     }
 
+    a:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
     .divider {
       display: block;
       float: left;
@@ -55,7 +66,6 @@
 
   .cm-header {
     font-size: 1.3em;
-    line-height: 2em;
   }
 
   .cm-link {
@@ -65,5 +75,14 @@
 
   .cm-tag {
 
+  }
+
+  .cm-quote {
+    display: inline-block;
+    color: #666;
+  }
+
+  .cm-comment {
+    color: #666;
   }
 }

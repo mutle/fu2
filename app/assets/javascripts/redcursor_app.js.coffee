@@ -25,12 +25,13 @@ $ ->
   completerStrategies = [mentionStrategy, emojiStrategy]
   mobile = $('body').hasClass('mobile')
   syntax = $('#syntax').val()
+  mdEditor = null
   if syntax
     $('.comment_box').textcomplete completerStrategies
     if syntax == "html"
       $('.comment_box').markItUp(mySettings)
     else
-      new MarkdownEditor $('.comment_box')
+      mdEditor = new MarkdownEditor $('.comment_box')
 
   insertText = (text) ->
     if syntax && syntax == "html"
@@ -144,6 +145,7 @@ $ ->
       previewPost($('#post_body').val())
       text = $('.comment-box-form textarea').val()
       $('.comment-box-form textarea').val ''
+      mdEditor.clear() if mdEditor
       $.ajax
         type: "POST"
         url: $(this).attr("action")
@@ -155,6 +157,7 @@ $ ->
         error: () ->
           removePreviewPost()
           $('.comment-box-form textarea').val text
+          mdEditor.setText text if mdEditor
           $(".upload_info").html("Error sending post. Please try again.")
       false
     $('.comment-box-form textarea').keydown (e) ->
