@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "bundler", "~>1.3.5"
+gem "bundler", "~>1.7.3"
 gem "rails", "~>4.0.0"
 gem "pg", "~>0.15.1"
 gem "haml", "~>4.0.3"
@@ -14,8 +14,8 @@ gem "redis"
 gem "github-markdown"
 gem "gemoji"
 gem "rinku"
-gem "escape_utils"
-gem "html-pipeline", :require => "html/pipeline"
+gem "escape_utils", "~>1.0.1"
+gem "html-pipeline", "~>1.11.0", :require => "html/pipeline"
 gem "tire"
 gem 'newrelic_rpm'
 gem 'statsd-ruby', :require => "statsd"
