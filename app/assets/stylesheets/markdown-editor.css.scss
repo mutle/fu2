@@ -4,18 +4,37 @@
     height: 36px;
     border-bottom: 1px solid #ddd;
 
+    .bold { font-weight: bold; }
+    .italic { font-style: italic; }
+    .underline { text-decoration: underline; }
+    .strike { text-decoration: line-through; }
+
+    .reference {
+      display: inline-block;
+      float: left;
+      line-height: 36px;
+      padding: 0px 12px 0px 4px;
+
+      .octicon {
+        font-size: 24px;
+      }
+    }
+
     a {
       display: block;
       float: left;
-      border: 1px solid #000;
-      margin: 3px 8px;
+      margin: 4px 8px;
       width: 32px;
       height: 28px;
+      font-size: 18px;
       line-height: 28px;
       text-align: center;
+      color: #000;
+      text-decoration: none;
 
-      &:first-child {
-        margin-left: 4px;
+      .octicon {
+        font-size: 20px;
+        line-height: 28px;
       }
     }
 
@@ -23,8 +42,7 @@
       display: block;
       float: left;
       height: 30px;
-      margin: 3px;
-      border-left: 2px solid #000;
+      margin: 3px 6px;
     }
 
   }
