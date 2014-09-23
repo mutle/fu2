@@ -162,6 +162,7 @@ $ ->
       false
     $('.comment-box-form textarea').keydown (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
+        mdEditor.sync() if mdEditor
         $(this).parents('form').submit()
 
   if $('#recent_activities.refresh').length

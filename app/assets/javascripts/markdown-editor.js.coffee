@@ -17,6 +17,7 @@ toolbarTemplate = () ->
 class MarkdownEditor
   constructor: (t) ->
     $t = $(t)
+    @t = $t
     @toolbar = $(toolbarTemplate())
     $t.before @toolbar
     @cm = CodeMirror.fromTextArea $t.get(0),
@@ -42,12 +43,30 @@ class MarkdownEditor
     c[1].ch += pre.length
     @setCursor c
 
+  toggleLine: (type) ->
+    toggles =
+      quote:
+        pattern: /^\s*>\s*/
+        insert: "> "
+    c = @cursor()
+    toggle = toggles[type]
+    return if !toggle
+    for line in [c[0].line..c[1].line]
+      text = @cm.getLine line
+      @cm.replaceRange toggle.insert, new CodeMirror.Pos(line, 0)
+    c[0].ch = 0
+    c[1].ch += toggle.insert.length
+    @setCursor c
+
   cursor: () ->
      [ @cm.getCursor('start'), @cm.getCursor('end') ]
 
   setCursor: (c) ->
     @cm.setSelection c[0], c[1]
     @cm.focus()
+
+  state: () ->
+    # @cm.getState()
 
   clear: () ->
     @setText ""
@@ -56,9 +75,12 @@ class MarkdownEditor
     @cm.setValue text
     @cm.clearHistory()
 
-  action_quote: => console.log('quote')
-  action_link: => console.log('link')
-  action_image: => console.log('image')
+  sync: () ->
+    @t.val @cm.getValue()
+
+  action_quote: => @toggleLine('quote')
+  action_link: => @wrapSelectedText("[", "](http://)")
+  action_image: => @wrapSelectedText("![](", ")")
   action_bold: => @wrapSelectedText("**")
   action_italic: => @wrapSelectedText("*")
   action_strike: => @wrapSelectedText("~~")
