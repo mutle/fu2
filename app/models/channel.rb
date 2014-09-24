@@ -162,6 +162,7 @@ class Channel < ActiveRecord::Base
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
     $redis.zadd "last-post:#{current_user.id}", post_id, id
+    Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
     i
   end
 
