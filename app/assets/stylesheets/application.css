@@ -8,6 +8,8 @@
  *= require jquery.textcomplete
  *= require markitup
  *= require markitup-html
+ *= require codemirror
+ *= require markdown-editor
  *= require redcursor_app
  *= require notifications
  *= require profile

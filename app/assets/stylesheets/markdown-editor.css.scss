@@ -1,0 +1,92 @@
+.markdown {
+
+  .editor-toolbar {
+    height: 36px;
+    border-bottom: 1px solid #ddd;
+    user-select: none;
+
+    .bold { font-weight: bold; }
+    .italic { font-style: italic; }
+    .underline { text-decoration: underline; }
+    .strike { text-decoration: line-through; }
+
+    .reference {
+      display: inline-block;
+      float: left;
+      line-height: 36px;
+      padding: 0px 12px 0px 4px;
+
+      .octicon {
+        font-size: 24px;
+      }
+
+      &:hover {
+        background-color: #fff;
+        color: #000;
+      }
+    }
+
+    a {
+      display: block;
+      float: left;
+      margin: 4px 8px;
+      width: 32px;
+      height: 28px;
+      font-size: 18px;
+      line-height: 28px;
+      text-align: center;
+      color: #000;
+      text-decoration: none;
+
+      .octicon {
+        font-size: 20px;
+        line-height: 28px;
+      }
+    }
+
+    a:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .divider {
+      display: block;
+      float: left;
+      height: 30px;
+      margin: 3px 6px;
+    }
+
+  }
+}
+
+.cm-s-redcursor {
+  margin: 4px;
+  font-size: 16px;
+  line-height: 1.5em;
+
+  .cm-header {
+    font-size: 1.3em;
+  }
+
+  .cm-link {
+    color: blue;
+    text-decoration: none;
+  }
+
+  .cm-tag {
+
+  }
+
+  .cm-quote {
+    display: inline-block;
+    color: #666;
+
+    &.cm-link {
+      color: #66f;
+    }
+  }
+
+  .cm-comment {
+    color: #666;
+  }
+}

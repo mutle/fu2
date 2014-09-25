@@ -10,8 +10,11 @@
 //= require jquery.markitup
 //= require jquery.textcomplete
 //= require markitup-html
+//= require codemirror
+//= require codemirror-markdown
 //= require jquery.filedrop
 //= require autocompleter
 //= require emoji
+//= require markdown-editor
 //= require redcursor_app
 //= require notifications
