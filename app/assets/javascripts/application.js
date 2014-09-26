@@ -9,6 +9,7 @@
 //= require jquery_ujs
 //= require jquery.markitup
 //= require jquery.textcomplete
+//= require d3
 //= require markitup-html
 //= require jquery.filedrop
 //= require autocompleter

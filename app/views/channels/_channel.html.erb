@@ -1,32 +1,49 @@
 <% last_post = @recent_posts[channel.id] %>
-<% posts = @recently_active[:posts][channel.id] %>
+<% unread_posts = @recently_active[:unread_posts][channel.id] %>
+<% other_posts = @recently_active[:other_posts][channel.id] %>
 <% users = @recently_active[:users][channel.id] %>
+<% has_posts = @recently_active[:has_posts][channel.id] %>
+<% activity_hours = @recently_active[:activity_hours][channel.id] %>
 
 <div class="activity-date" data-channel=id="<%= channel.id %>">
   <%= last_post.created_at.try(:strftime, '%Y/%m/%d %H:%M') %>
 </div>
 
-<div class="activity" data-channel=id="<%= channel.id %>">
+<div class="activity" data-channel=id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
   <div class="users">
     <% users.each do |user| %>
       <%= image_tag avatar_url(user), class: "avatar", title: user.login %>
     <% end %>
   </div>
+  <div class="activity-graph"></div>
 
   <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
 
   <div class="posts">
-    <% posts.reverse.each do |p| %>
-      <div class="activity-post">
-        <%= image_tag avatar_url(p.user), class: "avatar", title: p.user.login %>
-        <div class="body">
-          <%= format_body p %>
-        </div>
-      </div>
+    <% unread_start = 0 %>
+    <% if unread_posts.size > 3 %>
+      <% unread_start = unread_posts.size - 3 %>
+      <% unread_start = 0 if unread_start < 0 %>
+      <%= link_to "Show #{unread_start} more unread posts", "#", class: "show" %>
+    <% else %>
+      <% other_posts.reverse.each do |p| %>
+        <%= render partial: "activity_post", object: p %>
+      <% end %>
+    <% end %>
+
+    <% unread_posts.reverse.each_with_index do |p, i| %>
+      <%= render partial: "activity_post", object: p, locals: {unread: true, start: unread_start, i: i} %>
     <% end %>
 
     <div class="comment-small">
-      <textarea></textarea>
+      <%= form_for :post, url: channel_posts_path(channel) do |f| %>
+        <%= f.text_area :body, class: "comment_box" %>
+        <div class="actions">
+          <%= link_to "Edit", channel_path(channel, :anchor => "comments") %>
+          <%= f.submit "Send" %>
+        </div>
+      <% end %>
+
     </div>
   </div>
 </div>

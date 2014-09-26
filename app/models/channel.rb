@@ -83,13 +83,15 @@ class Channel < ActiveRecord::Base
   end
 
   def self.recently_active_interval
-    2.days.ago
+    3.days.ago
   end
 
-  def self.recently_active
+  def self.recently_active(current_user)
     p = Post.where("created_at > :t", t: recently_active_interval).includes(:user).order("created_at DESC")
     posts = {}
     users = {}
+    has_posts = {}
+    hours = {}
     p.each do |post|
       (posts[post.channel_id] ||= []) << post
       (users[post.channel_id] ||= []) << post.user
@@ -97,14 +99,37 @@ class Channel < ActiveRecord::Base
     users.each do |cid,u|
       users[cid] = u.uniq(&:id)
     end
+    unread_posts = {}
+    other_posts = {}
+    num_hours = 72
     posts.each do |cid,p|
-      p.slice!(3, p.size-3)
+      last_id = ($redis.zscore("last-post:#{current_user.id}", cid) || 0).to_i
+      has_posts[cid] = last_id == 0 || last_id < p.first.id
+      unread = []
+      read = []
+      activity = Array.new(num_hours, 0)
+      t = Time.now
+      p.each do |post|
+        hour = (t - post.created_at) / 3600
+        activity[hour] += 1 if hour < num_hours
+        if last_id < post.id
+          unread << post
+        else
+          read << post
+        end
+      end
+      hours[cid] = activity.reverse
+      unread_posts[cid] = unread
+      other_posts[cid] = read.slice(0, 2)
     end
     channels = where("id IN(:ids)", ids: posts.keys).order("last_post DESC").limit(10)
     {
       channels: channels,
+      has_posts: has_posts,
       users: users,
-      posts: posts
+      unread_posts: unread_posts,
+      other_posts: other_posts,
+      activity_hours: hours
     }
   end
 
