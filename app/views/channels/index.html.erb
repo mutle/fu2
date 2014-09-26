@@ -1,0 +1,25 @@
+<ul id="recent_activities">
+  <% @recent_channels.each do |channel| %>
+    <% last_post = @recent_posts[channel.id] %>
+    <% has_posts = channel.has_posts?(current_user, last_post) %>
+    <li class="list-date">
+      <%= last_post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S') %>
+    </li>
+    <li class="channel">
+      <div class="name">
+        <% if last_post %>
+          <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
+          <%= render :partial => "shared/user", :object => last_post.user %>
+        <% else %>
+          &nbsp;
+        <% end %>
+      </div>
+      <% if (mentions = channel.num_mentions(current_user)) > 0 %>
+        <div class="post-count mentions"><%= mentions %></div>
+      <% end %>
+      <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
+    </li>
+  <% end %>
+</ul>
+
+<%= will_paginate @recent_channels, :params => {:controller => "channels", :action => "index"} %>

@@ -2,7 +2,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
 #container {
   #content {
-    
+
     .channel-header, .channel-header-edit {
       margin-bottom: 2em;
     }
@@ -35,32 +35,30 @@ $small-screen: "only screen and (min-width : 800px)";
       list-style: none;
       background-color: #fff;
       padding: 0px;
-      border: 2px solid #e2e2e2;
       border-radius: 8px;
       margin-top: 1em;
 
-      li {
-        padding: 8px 16px;
+      .list-date {
+        text-align: center;
+      }
+
+      .channel {
+        padding: 0px 12px 0px 0px;
         line-height: 42px;
-        border-bottom: 2px solid #fff;
         position: relative;
-        background-color: #e2e2e2;
+        background-color: #f2f2f2;
+        margin-bottom: 4px;
       }
-      li.visited {
-        background-color: #fff;
-        border-bottom: 2px solid #e2e2e2;
+      .channel.visited {
+        background-color: #c2c2c2;
       }
-      li:first-child {
+      .channel:first-child {
         .user-color {
-          border-top-left-radius: 8px;
         }
       }
-      li:last-child {
+      .channel:last-child {
         border-bottom: none;
         margin-bottom: 0px;
-        .user-color {
-          border-bottom-left-radius: 8px;
-        }
       }
 
       a {
@@ -70,12 +68,13 @@ $small-screen: "only screen and (min-width : 800px)";
 
       .channel-link {
         display: block;
-        margin-left: 100px;
+        margin-left: 192px;
       }
 
       .name {
         float: left;
         width: 26%;
+        max-width: 180px;
         padding-right: 10px;
         line-height: 21px;
         text-align: left;
@@ -91,7 +90,7 @@ $small-screen: "only screen and (min-width : 800px)";
         position: absolute;
         top: 0px;
         left: 0px;
-        height: 42px;
+        bottom: 0px;
         padding-bottom: 16px;
         width: 12px;
       }
@@ -105,8 +104,8 @@ $small-screen: "only screen and (min-width : 800px)";
     }
 
     .pagination {
+      margin-top: 2em;
       padding: 8px 16px;
-      border: 2px solid #e2e2e2;
       background-color: #fff;
       border-radius: 8px;
       font-size: 18px;
@@ -114,6 +113,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
       a, .gap {
         margin: 0px 4px;
+        text-decoration: none;
       }
       .previous_page {
         float: left;
