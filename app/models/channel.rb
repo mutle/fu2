@@ -101,7 +101,7 @@ class Channel < ActiveRecord::Base
     end
     unread_posts = {}
     other_posts = {}
-    num_hours = 72
+    num_hours = 12
     posts.each do |cid,p|
       last_id = ($redis.zscore("last-post:#{current_user.id}", cid) || 0).to_i
       has_posts[cid] = last_id == 0 || last_id < p.first.id

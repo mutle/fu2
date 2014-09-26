@@ -10,11 +10,16 @@
 </div>
 
 <div class="activity" data-channel=id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
+  <button class="mark-read">
+    <%= octicon "chevron-up" %>
+  </button>
+
   <div class="users">
     <% users.each do |user| %>
       <%= image_tag avatar_url(user), class: "avatar", title: user.login %>
     <% end %>
   </div>
+
   <div class="activity-graph"></div>
 
   <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>

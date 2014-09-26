@@ -490,6 +490,31 @@ $small-screen: "only screen and (min-width : 800px)";
           background-color: #ccc;
         }
 
+        .mark-read {
+          float: right;
+          display: inline-block;
+          height: 32px;
+          font-size: 22px;
+          line-height: 32px;
+          border: 1px #fefefe;
+          background-color: #a3a3a3;
+          margin: 0px;
+          padding: 0px 12px;
+          margin-left: 8px;
+
+          &.all-read {
+            background-color: #f2f2f2;
+            .octicon {
+              color: #666;
+            }
+          }
+
+          .octicon {
+            font-size: 22px;
+            line-height: 32px;
+          }
+        }
+
         .users {
           float: right;
 
