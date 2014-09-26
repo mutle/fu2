@@ -82,6 +82,32 @@ class Channel < ActiveRecord::Base
     end.results
   end
 
+  def self.recently_active_interval
+    2.days.ago
+  end
+
+  def self.recently_active
+    p = Post.where("created_at > :t", t: recently_active_interval).includes(:user).order("created_at DESC")
+    posts = {}
+    users = {}
+    p.each do |post|
+      (posts[post.channel_id] ||= []) << post
+      (users[post.channel_id] ||= []) << post.user
+    end
+    users.each do |cid,u|
+      users[cid] = u.uniq(&:id)
+    end
+    posts.each do |cid,p|
+      p.slice!(3, p.size-3)
+    end
+    channels = where("id IN(:ids)", ids: posts.keys).order("last_post DESC").limit(10)
+    {
+      channels: channels,
+      users: users,
+      posts: posts
+    }
+  end
+
   def self.recent_posts(channels)
     ids = channels.map(&:id)
     recent = Post.select("channel_id, MAX(id) as id").where("channel_id IN (?)", ids).group("channel_id").load

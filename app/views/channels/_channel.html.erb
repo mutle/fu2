@@ -1,0 +1,32 @@
+<% last_post = @recent_posts[channel.id] %>
+<% posts = @recently_active[:posts][channel.id] %>
+<% users = @recently_active[:users][channel.id] %>
+
+<div class="activity-date" data-channel=id="<%= channel.id %>">
+  <%= last_post.created_at.try(:strftime, '%Y/%m/%d %H:%M') %>
+</div>
+
+<div class="activity" data-channel=id="<%= channel.id %>">
+  <div class="users">
+    <% users.each do |user| %>
+      <%= image_tag avatar_url(user), class: "avatar", title: user.login %>
+    <% end %>
+  </div>
+
+  <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
+
+  <div class="posts">
+    <% posts.reverse.each do |p| %>
+      <div class="activity-post">
+        <%= image_tag avatar_url(p.user), class: "avatar", title: p.user.login %>
+        <div class="body">
+          <%= format_body p %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="comment-small">
+      <textarea></textarea>
+    </div>
+  </div>
+</div>

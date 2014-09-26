@@ -10,6 +10,7 @@ class ChannelsController < ApplicationController
   def index(respond=true)
     @column_width = 12
     @page = (params[:page] || 1).to_i
+    @recently_active = Channel.recently_active
     @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
     @recent_posts = Channel.recent_posts(@recent_channels)

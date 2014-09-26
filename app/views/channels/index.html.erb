@@ -1,3 +1,9 @@
+<div class="active-channels">
+  <% @recently_active[:channels].each do |channel| %>
+    <%= render channel %>
+  <% end %>
+</div>
+
 <ul id="recent_activities">
   <% @recent_channels.each do |channel| %>
     <% last_post = @recent_posts[channel.id] %>

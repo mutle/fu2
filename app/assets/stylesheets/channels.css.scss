@@ -3,6 +3,53 @@ $small-screen: "only screen and (min-width : 800px)";
 #container {
   #content {
 
+    .body {
+      [title] {
+        border-bottom: 1px dotted #BBB;
+      }
+
+      blockquote {
+        border-left: 3px solid black;
+        margin: 1em 3px 1em 3px;
+        padding: 8px;
+      }
+
+      blockquote p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+
+      blockquote p:last-child {
+        margin-bottom: 0px;
+      }
+      blockquote br {
+        margin-bottom: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      p:last-child {
+        margin-bottom: 0px;
+      }
+      ul, ol {
+        padding-left: 1em;
+        margin-bottom: 1em;
+      }
+      dt {
+        padding-left: 1em;
+        margin-bottom: 0.3em;
+      }
+      dd {
+        padding-left: 4em;
+        margin-bottom: 0em;
+      }
+
+
+      img {
+        max-width: 656px;
+      }
+    }
+
     .channel-header, .channel-header-edit {
       margin-bottom: 2em;
     }
@@ -256,57 +303,15 @@ $small-screen: "only screen and (min-width : 800px)";
             border: 1px solid #e2e2e2;
             border-left: none;
           }
-          a:last--child {
+          a:last-child {
             border-left: 1px solid #e2e2e2;
           }
         }
-      }
 
-      .body {
-        [title] {
-          border-bottom: 1px dotted #BBB;
-        }
-
-        padding-top: 1em;
-        margin-top: 1.5em;
-        margin-left: 8px;
-
-        blockquote {
-          border-left: 3px solid black;
-          margin: 1em 3px 1em 3px;
-          padding: 8px;
-        }
-
-        blockquote p {
-          margin-top: 0.5em;
-          margin-bottom: 0.5em;
-        }
-
-        blockquote p:last-child {
-          margin-bottom: 0px;
-        }
-        blockquote br {
-          margin-bottom: 1em;
-        }
-        p {
-          margin-bottom: 1em;
-        }
-        ul, ol {
-          padding-left: 1em;
-          margin-bottom: 1em;
-        }
-        dt {
-          padding-left: 1em;
-          margin-bottom: 0.3em;
-        }
-        dd {
-          padding-left: 4em;
-          margin-bottom: 0em;
-        }
-
-
-        img {
-          max-width: 656px;
+        .body {
+          padding-top: 1em;
+          margin-top: 1.5em;
+          margin-left: 8px;
         }
       }
 
@@ -454,6 +459,73 @@ $small-screen: "only screen and (min-width : 800px)";
     .select_letters {
       li {
         display: inline;
+      }
+    }
+
+    .active-channels {
+      .activity {
+        border: 1px solid #f2f2f2;
+        margin-bottom: 1em;
+
+        .channel-link {
+          display: block;
+          color: #000;
+          font-size: 18px;
+          line-height: 32px;
+          text-decoration: none;
+          padding: 0px 12px;
+          background-color: #ccc;
+        }
+
+        .users {
+          float: right;
+
+          .avatar {
+            max-width: 32px;
+            max-height: 32px;
+          }
+        }
+
+        .posts {
+
+          .activity-post {
+            border-top: 1px solid #f2f2f2;
+
+            .avatar {
+              float: right;
+              max-width: 32px;
+              max-height: 32px;
+            }
+
+            .body {
+              padding: 12px;
+
+              img {
+                max-height: 300px;
+
+                &.full {
+                  max-height: none;
+                }
+              }
+            }
+          }
+
+          .comment-small {
+            padding: 12px;
+            textarea {
+              display: block;
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      .activity-date {
+        text-align: center;
+        margin: 1em 0px;
       }
     }
   }
