@@ -14,8 +14,18 @@ class ChannelsController < ApplicationController
     @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
     @recent_posts = Channel.recent_posts(@recent_channels)
+    @action = 'channels'
     if respond
       respond_with @recent_channels
+    end
+  end
+
+  def activity(respond=true)
+    @recently_active = Channel.recently_active(current_user)
+    @recent_posts = Channel.recent_posts(@recently_active[:channels])
+    @action = 'activity'
+    if respond
+      respond_with @recently_active
     end
   end
 
@@ -92,6 +102,12 @@ class ChannelsController < ApplicationController
       format.html
       format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
+  end
+
+  def visit
+    @channel = Channel.find(params[:id])
+    @last_read_id = @channel.visit(current_user)
+    respond_with @last_read_id
   end
 
   private

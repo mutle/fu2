@@ -2,10 +2,12 @@ $ ->
   num_hours = 12
   $(".active-channels").on "click", ".body img", ->
     $(this).toggleClass("full")
+    false
 
 
   $(".active-channels").on "click", ".show", ->
     $(this).parents(".posts").find(".activity-post").removeClass("hide")
+    false
 
   $(".active-channels .activity").each (i,a) ->
     graph = d3.select(a)
@@ -38,7 +40,14 @@ $ ->
     "
 
   $(".active-channels").on 'click', '.mark-read', ->
-    $(this).addClass("all-read").parents(".activity").find(".posts").hide()
+    if $(this).hasClass("all-read")
+      $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")
+    else
+      $(this).addClass("all-read").parents(".activity").find(".posts").addClass("hide")
+      channelId = parseInt $(this).parents(".activity").data("channel-id")
+      $.ajax
+        type: "POST"
+        url: "/channels/#{channelId}/visit"
 
   if $('.comment-small').length
     $('.comment-small').on 'submit', 'form', ->

@@ -5,11 +5,11 @@
 <% has_posts = @recently_active[:has_posts][channel.id] %>
 <% activity_hours = @recently_active[:activity_hours][channel.id] %>
 
-<div class="activity-date" data-channel=id="<%= channel.id %>">
+<div class="activity-date" data-channel-id="<%= channel.id %>">
   <%= last_post.created_at.try(:strftime, '%Y/%m/%d %H:%M') %>
 </div>
 
-<div class="activity" data-channel=id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
+<div class="activity" data-channel-id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
   <button class="mark-read">
     <%= octicon "chevron-up" %>
   </button>

@@ -525,6 +525,9 @@ $small-screen: "only screen and (min-width : 800px)";
         }
 
         .posts {
+          &.hide {
+            display: none;
+          }
 
           .show {
             text-align: center;
@@ -589,6 +592,75 @@ $small-screen: "only screen and (min-width : 800px)";
       .activity-date {
         text-align: center;
         margin: 1em 0px;
+      }
+    }
+
+    .channel-tabs {
+      list-style: none;
+      border: 1px solid #e2e2e2;
+      height: 32px;
+
+      li {
+        display: block;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 33.3%;
+        float: left;
+        line-height: 32px;
+        text-align: center;
+        border-left: 1px solid #fff;
+        background-color: #e2e2e2;
+
+        &.active {
+          background-color: #fff;
+          border-left: 1px solid #e2e2e2;
+        }
+
+        &:first-child {
+          border: none;
+        }
+
+        a {
+          color: #000;
+          display: block;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .search-form {
+      text-align: center;
+
+      input {
+        display: inline;
+        font-size: 18px;
+
+        &.search-field {
+          width: 320px;
+        }
+      }
+
+      .inputs {
+        width: 480px;
+        margin: 100px auto 1em auto;
+      }
+    }
+
+    .search-info {
+      margin-bottom: 2em;
+    }
+
+    .search-results {
+      .result {
+        margin-bottom: 1em;
+      }
+      .search-channel {
+
+      }
+
+      .search-post {
+
       }
     }
   }

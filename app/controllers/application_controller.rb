@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
 
   def highlight_results(text, query)
-    query.split(" ").inject(text) { |s,q| s = highlight(s, q) }
+    query.split(" ").inject(text) { |s,q| s = highlight(s, "<strong>#{q}</strong>") }
   end
   helper_method :highlight_results
 

@@ -1,0 +1,39 @@
+<%= render partial: "channel_tabs" %>
+
+
+<%= form_tag search_channels_path, :method => :get, :class => "search-form" do %>
+  <div class="inputs">
+    <%= text_field_tag "search", params[:search], :class => "search-field" %>
+    <%= submit_tag "Search" %>
+  </div>
+<% end %>
+
+<div class="search-info"><%= @search.total_entries %> results</div>
+
+<% if @correction %>
+  <%= "Did you mean #{@correction}?" %>
+<% end %>
+<div class="search-results">
+  <% if !@search.any? && !params[:search].blank? %>
+    <em>No results found.</em>
+  <% end %>
+  <% @search.each do |result| %>
+      <% if result.instance_of? Channel %>
+        <div class="result search-channel">
+          <% channel = result %>
+          <%= link_to channel.title, channel_path(channel) %>
+        </div>
+      <% elsif result.instance_of? Post %>
+        <div class="result search-post">
+          <% post = result %>
+          <% post_link = channel_path(post.channel, :anchor => "post_#{post.id}") %>
+          <%= link_to post.channel.title, post_link %> by <%= user_name(post.channel.user) %>
+          <br/>
+          <%= highlight_results(post.body, @query) %>
+        </div>
+      <% end %>
+    </p>
+  <% end %>
+</div>
+
+<%= will_paginate(@search) %>
