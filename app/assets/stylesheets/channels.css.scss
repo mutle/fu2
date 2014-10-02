@@ -31,8 +31,12 @@ $small-screen: "only screen and (min-width : 800px)";
       p:last-child {
         margin-bottom: 0px;
       }
-      ul, ol {
+      ul {
         padding-left: 1em;
+        margin-bottom: 1em;
+      }
+      ol {
+        padding-left: 1.5em;
         margin-bottom: 1em;
       }
       dt {
@@ -87,6 +91,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
       .list-date {
         text-align: center;
+        margin: 1em 0px 0.5em;
       }
 
       .channel {
@@ -120,7 +125,6 @@ $small-screen: "only screen and (min-width : 800px)";
 
       .name {
         float: left;
-        width: 26%;
         max-width: 180px;
         padding-right: 10px;
         line-height: 21px;
@@ -536,7 +540,7 @@ $small-screen: "only screen and (min-width : 800px)";
           }
 
           .activity-post {
-            border-top: 1px solid #f2f2f2;
+            border-bottom: 1px solid #d6d6d6;
             background-color: #f6f6f6;
             color: #666;
 
@@ -578,6 +582,7 @@ $small-screen: "only screen and (min-width : 800px)";
               width: 100%;
               height: 42px;
               border: 1px solid #e2e2e2;
+              border-top: none;
             }
 
             .actions {
@@ -645,6 +650,12 @@ $small-screen: "only screen and (min-width : 800px)";
         width: 480px;
         margin: 100px auto 1em auto;
       }
+
+      &.results {
+        .inputs {
+          margin-top: 1em;
+        }
+      }
     }
 
     .search-info {
@@ -654,6 +665,12 @@ $small-screen: "only screen and (min-width : 800px)";
     .search-results {
       .result {
         margin-bottom: 1em;
+        border-bottom: 1px solid #e2e2e2;
+        padding-bottom: 1em;
+
+        a {
+          font-size: 16px;
+        }
       }
       .search-channel {
 

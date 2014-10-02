@@ -93,10 +93,14 @@ class ChannelsController < ApplicationController
     if @query =~ /^title:(.*)$/
       @query = $1
       @search = Channel.search_channels(@query, page)
-    else
+      @results = true
+    elsif !@query.blank?
       @search = Channel.search_channels_and_posts(@query, page)
-      # @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
+      @results = true
+    else
+      @results = false
     end
+    @action = 'search'
 
     respond_to do |format|
       format.html
@@ -107,7 +111,7 @@ class ChannelsController < ApplicationController
   def visit
     @channel = Channel.find(params[:id])
     @last_read_id = @channel.visit(current_user)
-    respond_with @last_read_id
+    render json: {last_read: @last_read_id}
   end
 
   private

@@ -1,7 +1,11 @@
 module ChannelsHelper
 
-  def format_body(post)
-    result = post.markdown? ? RenderPipeline.markdown(post.body) : RenderPipeline.simple(post.body)
+  def format_body(post, highlight=nil)
+    body = post.body
+    if highlight
+      body = highlight.split(" ").inject(body) { |s,q| s = highlight(s, q) }
+    end
+    result = post.markdown? ? RenderPipeline.markdown(body) : RenderPipeline.simple(body)
     return result.html_safe
   end
 

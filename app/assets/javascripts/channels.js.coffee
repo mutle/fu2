@@ -43,10 +43,11 @@ $ ->
     if $(this).hasClass("all-read")
       $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")
     else
-      $(this).addClass("all-read").parents(".activity").find(".posts").addClass("hide")
+      $(this).addClass("all-read").parents(".activity").find(".posts").addClass("hide").find(".activity-post").removeClass("highlight")
       channelId = parseInt $(this).parents(".activity").data("channel-id")
       $.ajax
         type: "POST"
+        dataType: "json"
         url: "/channels/#{channelId}/visit"
 
   if $('.comment-small').length

@@ -1,13 +1,20 @@
 <%= render partial: "channel_tabs" %>
 
+<% last_ts = "" %>
 <ul id="recent_activities">
   <% @recent_channels.each do |channel| %>
     <% last_post = @recent_posts[channel.id] %>
     <% has_posts = channel.has_posts?(current_user, last_post) %>
-    <li class="list-date">
-      <%= last_post.created_at.try(:strftime, '%Y/%m/%d %H:%M:%S') %>
-    </li>
-    <li class="channel">
+    <% if last_post %>
+      <% minutes = ((last_post.created_at.min / 5.0).ceil * 5) %>
+      <% ts = "#{last_post.created_at.strftime('%Y/%m/%d %H:')}#{"0" if minutes < 10}#{minutes}"  %>
+      <% if ts != last_ts %>
+        <li class="list-date">
+          <%= last_ts = ts %>
+        </li>
+      <% end %>
+    <% end %>
+    <li class="channel<%= " visited" if has_posts %>">
       <div class="name">
         <% if last_post %>
           <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
