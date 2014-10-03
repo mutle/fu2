@@ -42,11 +42,6 @@ $ ->
           results.push item
         autocompleter.showResults results, term
 
-  $(document).on 'click', ".post-date-link", ->
-    self = $(this)
-    self.parents(".date-content").find(".post-options").toggle()
-    return false
-
   refreshPosts = () ->
     last_id = $('.post:not(.preview)').last().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')

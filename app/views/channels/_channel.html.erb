@@ -9,7 +9,7 @@
   <%= last_post.created_at.try(:strftime, Fu2.time_format) %>
 </div>
 
-<div class="activity" data-channel-id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
+<div class="activity activity-graph-data" data-channel-id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
   <button class="mark-read">
     <%= octicon "chevron-up" %>
   </button>

@@ -9,7 +9,7 @@ $ ->
     $(this).parents(".posts").find(".activity-post").removeClass("hide")
     false
 
-  $(".active-channels .activity").each (i,a) ->
+  $(".activity-graph-data").each (i,a) ->
     graph = d3.select(a)
     data = $.map $(a).data("sparklines").split(","), (e) -> parseInt(e)
     svg = graph.select(".activity-graph").append("svg:svg").attr("width", "100%").attr("height", "100%")
@@ -165,6 +165,6 @@ $ ->
           textarea.val text
           $(".upload_info").html("Error sending post. Please try again.")
       false
-    $('.comment-box-form textarea').keydown (e) ->
+    $('.comment-box').keydown (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()

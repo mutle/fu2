@@ -54,6 +54,20 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .activity-graph {
+      float: left;
+      width: 60px;
+      height: 32px;
+      margin-right: 8px;
+
+      path {
+        stroke: #000;
+        stroke-width: 1;
+        fill: none;
+        shape-rendering: geometricPrecision;
+      }
+    }
+
     .channel-header {
       background-color: #000;
       color: #fff;
@@ -67,6 +81,12 @@ $small-screen: "only screen and (min-width : 800px)";
 
       a {
         color: #fff;
+      }
+
+      .activity-graph {
+        path {
+          stroke: #fff;
+        }
       }
     }
     .no-channel-text {
@@ -343,7 +363,7 @@ $small-screen: "only screen and (min-width : 800px)";
           float: right;
 
           .octicon {
-            font-size: 22px;
+            font-size: 20px;
           }
 
           .faves .octicon {
@@ -357,12 +377,16 @@ $small-screen: "only screen and (min-width : 800px)";
 
         a {
           color: #fff;
+          text-decoration: none;
         }
 
         .date {
           display: inline-block;
-          padding-right: 6px;
-          margin-left: 16px;
+          a {
+            display: block;
+            padding-right: 12px;
+            padding-left: 16px;
+          }
         }
 
         .user-mini {
@@ -417,19 +441,6 @@ $small-screen: "only screen and (min-width : 800px)";
       .activity {
         border: 1px solid #f2f2f2;
         margin-bottom: 1em;
-
-        .activity-graph {
-          float: left;
-          width: 60px;
-          height: 32px;
-          margin-right: 8px;
-
-          path {
-    				stroke: #000;
-    				stroke-width: 1;
-    				fill: none;
-    			}
-        }
 
         .channel-link {
           display: block;

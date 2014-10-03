@@ -1,7 +1,8 @@
-<div class="channel-header">
+<div class="channel-header activity-graph-data" data-sparklines="<%= activity_hours(@posts).join(",") %>">
   <div class="channel-actions">
     <%= link_to "Edit Channel", "#", :class => "edit-channel-link" %>
   </div>
+  <div class="activity-graph"></div>
   <h2><%= format_title(@channel) %></h2>
 </div>
 
