@@ -89,8 +89,19 @@ $ ->
   if $('#recent_activities.refresh').length
     setInterval refreshChannels, 15 * 1000
 
+  $(document).on 'scroll', ->
+    $(".bottom-link").css("top", "#{document.body.scrollTop + 6}px")
+    $(".bottom-link").toggleClass("top", document.body.scrollTop < 32)
+    if document.body.scrollTop < document.body.scrollHeight - document.body.clientHeight
+      $(".bottom-link .octicon").removeClass("octicon-arrow-up").addClass("octicon-arrow-down")
+    else
+      $(".bottom-link .octicon").removeClass("octicon-arrow-down").addClass("octicon-arrow-up")
+
   $(".bottom-link").click ->
-    window.scrollTo 0,document.body.scrollHeight
+    if $(this).find(".octicon").hasClass("octicon-arrow-up")
+      window.scrollTo 0,0
+    else
+      window.scrollTo 0,document.body.scrollHeight
     return false
 
   $(".top-link").click ->

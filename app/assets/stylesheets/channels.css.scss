@@ -115,6 +115,7 @@ $small-screen: "only screen and (min-width : 800px)";
       a {
         display: block;
         line-height: 32px;
+        margin-right: 32px;
       }
     }
     .channel-header-edit, .channel-comment-box {
@@ -384,7 +385,7 @@ $small-screen: "only screen and (min-width : 800px)";
           display: inline-block;
           a {
             display: block;
-            padding-right: 12px;
+            padding-right: 30px;
             padding-left: 16px;
           }
         }
@@ -412,6 +413,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
       .post-options {
         float: right;
+        padding-right: 12px;
 
         .octicon {
           font-size: 18px;

@@ -24,6 +24,7 @@ form {
 
 .header {
   background-color: #ae2424;
+  z-index: 5;
 
   .content {
     @media #{$small-screen} {
@@ -51,8 +52,26 @@ form {
   }
 
   .bottom-link {
-    display: inline;
+    display: inline-block;
     float: none;
+    z-index: 10;
+
+    .octicon {
+      color: #fff;
+    }
+
+    &.floating {
+      position: absolute;
+      top: 6px;
+      -webkit-overflow-scrolling:touch;
+      .octicon {
+        color: #ae2424;
+      }
+
+      &.top .octicon {
+        display: none;
+      }
+    }
   }
 
   .button {
