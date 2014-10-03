@@ -44,4 +44,9 @@ module ChannelsHelper
     end
   end
 
+  TS_ROUND_PRECISION = 10.0 * 60
+  def rounded_timestamp(t)
+    Time.at((t.to_i / TS_ROUND_PRECISION).ceil * TS_ROUND_PRECISION.to_i).strftime(Fu2.time_format)
+  end
+
 end

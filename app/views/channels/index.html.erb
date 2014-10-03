@@ -1,13 +1,12 @@
 <%= render partial: "channel_tabs" %>
 
 <% last_ts = "" %>
-<ul id="recent_activities">
+<ul id="recent_activities" class="<%= 'refresh' if @page == 1 %>">
   <% @recent_channels.each do |channel| %>
     <% last_post = @recent_posts[channel.id] %>
     <% has_posts = channel.has_posts?(current_user, last_post) %>
     <% if last_post %>
-      <% minutes = ((last_post.created_at.min / 5.0).ceil * 5) %>
-      <% ts = "#{last_post.created_at.strftime('%Y/%m/%d %H:')}#{"0" if minutes < 10}#{minutes}"  %>
+      <% ts = rounded_timestamp last_post.created_at  %>
       <% if ts != last_ts %>
         <li class="list-date">
           <%= last_ts = ts %>
