@@ -16,7 +16,7 @@ module ApplicationHelper
       hour = (t - post.created_at) / 3600
       activity[hour] += 1 if hour < num_hours
     end
-    activity
+    activity.reverse
   end
 
 end

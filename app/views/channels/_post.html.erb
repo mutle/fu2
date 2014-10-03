@@ -11,7 +11,7 @@
       </span>
 
       <span class="date">
-        <%= link_to post.created_at.try(:strftime, Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
+        <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
       </span>
     </div>
 
