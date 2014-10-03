@@ -1,0 +1,15 @@
+<% title ||= false %>
+<div class="channel-header-edit">
+  <% if title %>
+    <div class="title">
+      <%= f.text_field :title, :class => "channel-title" %>
+    </div>
+  <% end %>
+  <%= f.text_area :body, :class => 'comment_box' %>
+  <div class="actions">
+    <%= link_to octicon("arrow-up"), "", :class => "top-link" %>
+    <span class="upload_info">
+      <%= f.submit "Send", :accesskey => "s" %>
+    </span>
+  </div>
+</div>

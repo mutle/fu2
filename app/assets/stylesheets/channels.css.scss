@@ -54,31 +54,96 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
-    .channel-header, .channel-header-edit {
-      margin-bottom: 2em;
-    }
     .channel-header {
+      background-color: #000;
+      color: #fff;
+      padding: 2px 6px;
+
+      h2 {
+        font-size: 26px;
+        line-height: 32px;
+        margin: 0px;
+      }
+
+      a {
+        color: #fff;
+      }
+    }
+    .no-channel-text {
+      margin-bottom: 1em;
+    }
+    .channel-text {
+      margin: 1em 0px;
+      border-top: 1px solid #a6a6a6;
+      border-bottom: 1px solid #a6a6a6;
+
+      .body {
+        padding: 12px;
+      }
+
       .description {
-        float: left;
-        margin: 10px;
+        font-style: italic;
+        border-bottom: 1px solid #000;
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+        padding: 0px 12px 8px 12px;
       }
     }
     .channel-actions {
-      text-align: right;
-      margin-bottom: 10px;
-      margin-top: 10px;
-      margin-right: 10px;
+      float: right;
+
+      a {
+        display: block;
+        line-height: 32px;
+      }
     }
     .channel-header-edit {
+      margin-bottom: 1em;
+      background-color: #f6f6f6;
+
       .title {
-        margin-bottom: 0.5em;
+        background-color: #000;
       }
       input.channel-title {
-        font-size: 28px;
+        font-size: 26px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        width: 100%;
+        margin: 0px;
       }
       textarea {
-        width: 90%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
         height: 400px;
+      }
+    }
+
+    .actions {
+      text-align: right;
+      padding: 12px 6px;
+      font-size: 16px;
+
+      input {
+        font-size: 16px;
+        background-color: #fff;
+        border: 1px solid #bbb;
+        padding: 6px 12px;
+        border-radius: 3px;
+        margin-left: 6px;
+        cursor: pointer;
+      }
+
+      a {
+        color: #000;
+        background-color: #fafafa;
+        text-decoration: none;
+        border: 1px solid #bbb;
+        padding: 6px 12px;
+        border-radius: 3px;
+        margin-left: 6px;
       }
     }
 
@@ -175,11 +240,6 @@ $small-screen: "only screen and (min-width : 800px)";
     }
 
     .post, .comment-box {
-      margin-bottom: 1em;
-      background-color: #fff;
-      padding: 16px;
-      border: 2px solid #e2e2e2;
-      border-radius: 8px;
 
       .autocomplete-image {
         max-width: 22px;
@@ -188,199 +248,63 @@ $small-screen: "only screen and (min-width : 800px)";
     }
 
     .post {
+      border-bottom: 1px solid #d6d6d6;
+      background-color: #f6f6f6;
+      margin-bottom: 1em;
 
-      position: relative;
-
-      &.preview {
-        opacity: .5;
-        .name {
-          background: image-url("spinner-32x32.gif") no-repeat #444 center;
-          background-size: 22px 22px;
-          padding-left: 40px;
-          border-radius: 8px;
-          text-align: center;
-        }
-      }
-
-      .user-color {
-        position: absolute;
-        top: 40px;
-        left: 0px;
-        bottom: 0px;
-        width: 12px;
-        border-bottom-left-radius: 8px;
-      }
-
-      .date, .name {
-        position: absolute;
-        height: 26px;
-        line-height: 26px;
-        padding-top: 8px;
-        padding-right: 16px;
-        background-color: #444;
+      .post-header {
+        background-color: #000;
         color: #fff;
-        padding-bottom: 8px;
-        padding-left: 8px;
-        border-bottom: 1px solid #e2e2e2;
+        line-height: 32px;
+        height: 32px;
+
+        .post-actions {
+          float: right;
+
+          .octicon {
+            font-size: 22px;
+          }
+        }
+
         a {
           color: #fff;
-          text-decoration: none;
         }
-      }
 
-      .name {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        z-index: 2;
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        height: 42px;
-        line-height: 42px;
-
-        img.avatar {
-          position: absolute;
-          border-top-left-radius: 8px;
-          left: 0px;
-        }
         .user-mini {
+          font-size: 14px;
+          line-height: 32px;
           display: block;
-          padding-left: 34px;
-        }
-        .user-mini span {
-          padding-left: 8px;
-        }
-      }
+          float: none;
+          color: #fff;
 
-      .date {
-        border-top-right-radius: 8px;
-        z-index: 10;
-        right: 0px;
-        top: 0px;
-        border-left: 1px solid #e2e2e2;
-
-        .date-content {
-          position: relative;
-        }
-
-        .fave {
-          float: left;
-          padding-right: 10px;
-          border-right: 1px solid #e2e2e2;
-          margin-top: -8px;
-          padding-bottom: 8px;
-          .fave-text {
-            padding-top: 8px;
-          }
-
-          img {
-            margin-top: -3px;
-          }
-        }
-        .count {
-          display: inline;
-          padding-left: 10px;
-        }
-
-        .date-text {
-          width: 220px;
-          text-align: right;
-        }
-        .date-text a {
-          padding-left: 10px;
-        }
-        .post-options {
-          position: absolute;
-          z-index: 30;
-          left: -452px;
-          right: -16px;
-          top: 34px;
-          margin: 0px;
-
-          a {
-            display: block;
-            background-color: #444;
-            float: right;
-            padding: 5px 24px;
-            border: 1px solid #e2e2e2;
-            border-left: none;
-          }
-          a:last-child {
-            border-left: 1px solid #e2e2e2;
+          .avatar {
+            padding-right: 12px;
+            max-width: 32px;
+            max-height: 32px;
           }
         }
       }
 
       .body {
-        padding-top: 1em;
-        margin-top: 1.5em;
-        margin-left: 8px;
+        padding: 12px;
+        margin-bottom: 0.5em;
       }
 
-      .actions {
-        z-index: 15;
-        margin: 1em -16px -16px -16px;
-        height: 32px;
-        padding-left: 12px;
-        line-height: 32px;
-        background-color: #e2e2e2;
-        border: 1px solid #ccc;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
+      .post-options {
+        float: right;
 
         a {
-          display: block;
-          border-right: 1px solid #fff;
-          float: left;
-          padding: 0px 16px;
+          color: #000;
           text-decoration: none;
         }
-
-        a:hover {
-          color: #000;
-        }
       }
     }
 
-    .post.unread {
-      .date, .name {
-        background-color: #888;
-      }
-    }
-    .post.mention {
-      .date, .name {
-        background-color: #744 !important;
-      }
-    }
     .comment-box {
-      position: relative;
-      padding: 0px;
-      padding-top: 36px;
-
-      h3 {
-        color: #fff;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        right: 0px;
-        height: 36px;
-        line-height: 36px;
-        background-color: #444;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        padding-left: 8px;
-      }
-
-      .title {
-        padding-top: 1em;
-        border-bottom: 2px solid #e2e2e2;
-        padding-left: 8px;
-      }
+      background-color: #f6f6f6;
 
       textarea {
-        border: none;
+        border: 1px solid #999;
         height: 180px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
@@ -412,51 +336,6 @@ $small-screen: "only screen and (min-width : 800px)";
         }
       }
       textarea.markItUpEditor {
-      }
-      .autocompleter {
-        background-color: #fff;
-        border: 1px solid #e2e2e2;
-        position: absolute;
-        list-style: none;
-        max-height: 200px;
-        overflow-y: scroll;
-
-        img {
-          max-width: 16px;
-        }
-      }
-
-      .actions {
-        border: none;
-        height: 46px;
-        line-height: 46px;
-        text-align: right;
-        border-top: 2px solid #e2e2e2;
-        margin-bottom: -4px;
-
-        input {
-          font-size: 14px;
-          color: #000;
-          background-color: #e2e2e2;
-          border: 2px solid #ccc;
-          padding: 10px;
-          border-radius: 0px;
-          border-bottom-right-radius: 8px;
-          margin-right: -2px;
-          cursor: pointer;
-        }
-
-        .top-link {
-          display: inline-block;
-          float: left;
-          color: #ae2424;
-          padding: 0px 16px;
-          line-height: 46px;
-
-          span {
-            font-size: 28px;
-          }
-        }
       }
     }
 

@@ -1,0 +1,24 @@
+<% unread = @last_read_id && post.id > @last_read_id %>
+<% mention = post.mentions?(current_user) %>
+<a name="post_<%= post.id %>"></a>
+<div class="post<%= ' unread' if unread %><%= ' mention' if mention %>" data-post-id="<%= post.id %>">
+  <div class="post-header">
+    <div class="post-actions">
+      <span class="faves">
+        <% faves = post.faves.to_a %>
+        <%= octicon "bookmark" %>
+        <%= faves.size %>
+      </span>
+    </div>
+
+    <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
+  </div>
+  <div class="body" data-raw-body="<%= u(post.body) %>">
+    <div class="post-options">
+      <%= link_to octicon("mail-reply") %>
+      <%= link_to octicon("flame") %>
+    </div>
+
+    <%= format_body post %>
+  </div>
+</div>

@@ -172,9 +172,13 @@ $ ->
 
   $(".edit-channel-link").click ->
     $(".channel-header").hide()
+    $(".channel-text").hide()
+    $(".no-channel-text").hide()
     $(".channel-header-edit").show()
     return false
   $(".cancel-edit-channel-link").click ->
     $(".channel-header").show()
+    $(".channel-text").show()
+    $(".no-channel-text").show()
     $(".channel-header-edit").hide()
     return false

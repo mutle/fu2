@@ -59,7 +59,7 @@ class ChannelsController < ApplicationController
   end
 
   def new
-    @channel = Channel.new
+    @channel = Channel.new(:title => "Title")
   end
 
   def create
