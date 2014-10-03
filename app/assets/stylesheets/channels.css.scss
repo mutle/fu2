@@ -98,11 +98,11 @@ $small-screen: "only screen and (min-width : 800px)";
         padding: 0px 12px 0px 0px;
         line-height: 42px;
         position: relative;
-        background-color: #f2f2f2;
+        background-color: #c2c2c2;
         margin-bottom: 4px;
       }
-      .channel.visited {
-        background-color: #c2c2c2;
+      .channel.unread {
+        background-color: #f2f2f2;
       }
       .channel:first-child {
         .user-color {

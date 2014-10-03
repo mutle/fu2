@@ -14,7 +14,7 @@
         </li>
       <% end %>
     <% end %>
-    <li class="channel<%= " visited" if has_posts %>">
+    <li class="channel<%= " unread" if has_posts %>">
       <div class="name">
         <% if last_post %>
           <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
