@@ -4,10 +4,14 @@
 <div class="post<%= ' unread' if unread %><%= ' mention' if mention %>" data-post-id="<%= post.id %>">
   <div class="post-header">
     <div class="post-actions">
-      <span class="faves">
-        <% faves = post.faves.to_a %>
-        <%= octicon "bookmark" %>
-        <%= faves.size %>
+      <% faves = post.faves.to_a %>
+      <span class="faves<%= ' active' if post.faved_by?(current_user, faves) %>">
+        <%= octicon "star" %>
+        <span class="count"><%= faves.size %></span>
+      </span>
+
+      <span class="date">
+        <%= post.created_at.try(:strftime, Fu2.time_format) %>
       </span>
     </div>
 
@@ -15,6 +19,7 @@
   </div>
   <div class="body" data-raw-body="<%= u(post.body) %>">
     <div class="post-options">
+      <%= link_to octicon("pencil") %>
       <%= link_to octicon("mail-reply") %>
       <%= link_to octicon("flame") %>
     </div>

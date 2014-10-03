@@ -155,8 +155,21 @@ $small-screen: "only screen and (min-width : 800px)";
       margin-top: 1em;
 
       .list-date {
+        color: #666;
         text-align: center;
         margin: 1em 0px 0.5em;
+      }
+
+      @media #{$small-screen} {
+        .list-date {
+          float: right;
+          width: 150px;
+          text-align: right;
+        }
+
+        .channel {
+          margin-right: 172px;
+        }
       }
 
       .channel {
@@ -264,10 +277,24 @@ $small-screen: "only screen and (min-width : 800px)";
           .octicon {
             font-size: 22px;
           }
+
+          .faves .octicon {
+            cursor: pointer;
+          }
+
+          .faves.active .octicon {
+            color: #ff0;
+          }
         }
 
         a {
           color: #fff;
+        }
+
+        .date {
+          display: inline-block;
+          padding-right: 4px;
+          margin-left: 12px;
         }
 
         .user-mini {
@@ -293,9 +320,19 @@ $small-screen: "only screen and (min-width : 800px)";
       .post-options {
         float: right;
 
+        .octicon {
+          font-size: 18px;
+        }
+
         a {
           color: #000;
           text-decoration: none;
+          padding: 6px;
+          border-left: 1px solid #000;
+
+          &:first-child {
+            border-left: none;
+          }
         }
       }
     }

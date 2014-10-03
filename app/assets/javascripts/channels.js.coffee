@@ -39,6 +39,13 @@ $ ->
 </div>
     "
 
+  $(document).on 'click', ".post-header .faves .octicon", ->
+    self = $(this)
+    post = self.parents(".post").attr("data-post-id")
+    $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
+      self.parents(".faves").toggleClass("active", msg.status).find(".count").text("#{msg.count}")
+    return false
+
   $(".active-channels").on 'click', '.mark-read', ->
     if $(this).hasClass("all-read")
       $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")

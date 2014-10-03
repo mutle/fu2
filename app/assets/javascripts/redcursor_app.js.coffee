@@ -75,18 +75,6 @@ $ ->
           results.push item
         autocompleter.showResults results, term
 
-  $(document).on 'click', ".fave", ->
-    self = $(this)
-    post = self.find(".favorite").attr("data-post-id")
-    $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
-      self.find(".count").text("#{msg.count}")
-      self.find('img').hide()
-      if msg.status == true
-        self.find(".on").show()
-      else
-        self.find(".off").show()
-    return false
-
   $(document).on 'click', ".post-date-link", ->
     self = $(this)
     self.parents(".date-content").find(".post-options").toggle()
