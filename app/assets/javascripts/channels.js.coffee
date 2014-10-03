@@ -82,7 +82,7 @@ $ ->
 
     startUpload = () ->
       xhr = new XMLHttpRequest()
-      xhr.open 'POST', form.attr('action'), true
+      xhr.open 'POST', $(form).attr('action'), true
       token = $('meta[name="_csrf"]').attr('content')
       xhr.setRequestHeader('X_CSRF_TOKEN', token)
 
@@ -112,6 +112,27 @@ $ ->
 
     file.trigger("click")
     false
+
+  $(document).on 'click', ".post-reply", ->
+    self = $(this)
+    post = self.parents(".post").find(".body")
+    text = decodeURIComponent(post.attr("data-raw-body"))
+    if syntax && syntax == "html"
+      text = "<blockquote>#{text}</blockquote>"
+    else
+      text = text.replace(/</g, '&amp;lt;').replace(/>/g, '&amp;gt;').replace(/(^|\n)/g, "\n> ").replace(/^\n/, '')
+    $(".comment-box textarea").focus()
+    insertText("#{text}\n\n")
+    $(".comment-box textarea").focus()
+    return false
+
+  $(document).on 'click', ".post-unread", ->
+    self = $(this)
+    post = self.attr("data-prev-post-id")
+    ourl = document.location.href.replace(/#.*$/, '')
+    url = "#{ourl}/posts/#{post}/unread"
+    $.ajax(url:url, dataType: "json", type: "post")
+    return false
 
   $(".active-channels").on 'click', '.mark-read', ->
     if $(this).hasClass("all-read")

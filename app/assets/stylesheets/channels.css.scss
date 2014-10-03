@@ -232,11 +232,11 @@ $small-screen: "only screen and (min-width : 800px)";
         padding: 0px 12px 0px 0px;
         line-height: 42px;
         position: relative;
-        background-color: #c2c2c2;
+        background-color: #f2f2f2;
         margin-bottom: 4px;
       }
       .channel.unread {
-        background-color: #f2f2f2;
+        background-color: #c2c2c2;
       }
       .channel:first-child {
         .user-color {
@@ -361,8 +361,8 @@ $small-screen: "only screen and (min-width : 800px)";
 
         .date {
           display: inline-block;
-          padding-right: 4px;
-          margin-left: 12px;
+          padding-right: 6px;
+          margin-left: 16px;
         }
 
         .user-mini {
@@ -383,6 +383,7 @@ $small-screen: "only screen and (min-width : 800px)";
       .body {
         padding: 12px;
         margin-bottom: 0.5em;
+        min-height: 1em;
       }
 
       .post-options {
@@ -396,7 +397,8 @@ $small-screen: "only screen and (min-width : 800px)";
           color: #000;
           text-decoration: none;
           padding: 6px;
-          border-left: 1px solid #000;
+          border-left: 1px solid #999;
+          border-bottom: none;
 
           &:first-child {
             border-left: none;
@@ -506,6 +508,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
             .body {
               padding: 12px;
+              min-height: 1em;
 
               img {
                 max-height: 300px;

@@ -1,4 +1,1 @@
-%h2 Editing comment
-=form_for :post, :url => channel_post_path(@channel, @post), :html => {:method => :put} do |f|
-  =render :partial => "channels/form", :locals => {:f => f, :action => "Edit"}
-.clear
+=render :partial => "channels/form", :locals => {:form => [:post, :url => channel_post_path(@channel, @post), :html => {:method => :put}], :action => "Edit"}

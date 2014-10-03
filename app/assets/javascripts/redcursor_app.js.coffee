@@ -47,29 +47,6 @@ $ ->
     self.parents(".date-content").find(".post-options").toggle()
     return false
 
-  $(document).on 'click', ".post-reply", ->
-    self = $(this)
-    post = self.parents(".post").find(".body")
-    text = decodeURIComponent(post.attr("data-raw-body"))
-    if syntax && syntax == "html"
-      text = "<blockquote>#{text}</blockquote>"
-    else
-      text = text.replace(/</g, '&amp;lt;').replace(/>/g, '&amp;gt;').replace(/(^|\n)/g, "\n> ").replace(/^\n/, '')
-    console.log text
-    $(".comment-box textarea").focus()
-    insertText("#{text}\n\n")
-    self.parents(".date-content").find(".post-options").toggle()
-    return false
-
-  $(document).on 'click', ".post-unread", ->
-    self = $(this)
-    post = self.attr("data-prev-post-id")
-    ourl = document.location.href.replace(/#.*$/, '')
-    url = "#{ourl}/posts/#{post}/unread"
-    $.ajax(url:url, dataType: "json", type: "post").done (msg) ->
-      self.parents(".date-content").find(".post-options").toggle()
-    return false
-
   refreshPosts = () ->
     last_id = $('.post:not(.preview)').last().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
