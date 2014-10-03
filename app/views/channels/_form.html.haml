@@ -8,7 +8,7 @@
       %label{:for => "channel_title"} Title:
       =f.text_field :title
   =hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax"
-  =f.text_area :body, :class => 'comment_box'
+  =f.text_area :body, :class => 'comment-box'
   .actions
     =link_to octicon("arrow-up"), "", :class => "top-link"
     %span.upload_info

@@ -1,15 +1,25 @@
 <% title ||= false %>
-<div class="channel-header-edit">
-  <% if title %>
-    <div class="title">
-      <%= f.text_field :title, class: "channel-title" %>
+<div class="channel-<%= title ? "header-edit" : "comment-box" %>">
+  <%= form_for *form do |f| %>
+    <% if title %>
+      <div class="title">
+        <%= f.text_field :title, class: "channel-title" %>
+      </div>
+    <% end %>
+    <%= hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax" %>
+    <%= f.text_area :body, :class => 'comment-box' %>
+
+    <div class="actions">
+      <%= f.submit "Send", :accesskey => "s" %>
     </div>
   <% end %>
-  <%= f.text_area :body, :class => 'comment_box' %>
-  <div class="actions">
-    <%= link_to octicon("arrow-up"), "", :class => "top-link" %>
-    <span class="upload_info">
-      <%= f.submit "Send", :accesskey => "s" %>
-    </span>
+
+  <div class="actions left">
+    <%= form_for :image, url: images_path, class: "uploader" do |fi| %>
+      <button class="upload-image"><%= octicon "device-camera" %></button>
+      <%= fi.file_field :image_file %>
+    <% end %>
+
+    <span class="info"></span>
   </div>
 </div>

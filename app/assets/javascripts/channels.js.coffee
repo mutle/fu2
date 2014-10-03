@@ -46,6 +46,73 @@ $ ->
       self.parents(".faves").toggleClass("active", msg.status).find(".count").text("#{msg.count}")
     return false
 
+  syntax = $('#syntax').val()
+  insertText = (text) ->
+    if syntax && syntax == "html"
+      $.markItUp
+        target: $('.comment-box')
+        placeHolder: text
+    else
+      $('.comment-box').append text
+  insertImage = (url) ->
+    if syntax && syntax == "html"
+      $.markItUp
+        target: $('.comment-box')
+        placeHolder: "<img src=\"#{url}\" />"
+    else
+      t = $('.comment-box').val()
+      t += "\n\n" if t != ''
+      t += "![](#{url})"
+      $('.comment-box').val(t)
+
+  $(document).on 'click', ".upload-image", ->
+    form = $(this).parents("form")
+    file = form.find("input[type=file]")
+    info = form.find(".info")
+    filename = ""
+
+    uploadComplete = (xhr) ->
+      console.log xhr.responseText
+      info.html("Finished uploading \"#{filename}\"")
+      insertImage(JSON.parse(xhr.responseText).url)
+    uploadError = (d) ->
+      info.html("Error #{d}")
+    uploadProgress = (progress) ->
+      info.html("Uploading \"#{filename}\" (#{progress}%)")
+
+    startUpload = () ->
+      xhr = new XMLHttpRequest()
+      xhr.open 'POST', form.attr('action'), true
+      token = $('meta[name="_csrf"]').attr('content')
+      xhr.setRequestHeader('X_CSRF_TOKEN', token)
+
+      xhr.onreadystatechange = (e) =>
+        if xhr.readyState == 4
+          if xhr.status == 201
+            uploadComplete(xhr)
+          else if xhr.status == 202
+            uploadComplete(xhr)
+          else
+            uploadError(xhr.responseText)
+      xhr.onerror = (e) =>
+        uploadError "error"
+
+      if xhr.upload?
+        xhr.upload.onprogress = (e) =>
+          percentage = Math.round((e.loaded / e.total) * 100)
+          uploadProgress(percentage)
+
+      form = new FormData(form[0])
+      xhr.send form
+
+    file.on 'change', (e) ->
+      f = $(this).val().split("\\")
+      filename = f[f.length - 1]
+      startUpload()
+
+    file.trigger("click")
+    false
+
   $(".active-channels").on 'click', '.mark-read', ->
     if $(this).hasClass("all-read")
       $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")

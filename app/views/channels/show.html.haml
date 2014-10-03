@@ -10,6 +10,5 @@
 -if @channel.can_write?(current_user)
   .comment-box-form
     %a{:name => "comments"}
-    =form_for :post, :url => channel_posts_path(@channel) do |f|
-      =render :partial => "form", :locals => {:f => f}
+    =render :partial => "form", :locals => {:form => [:post, :url => channel_posts_path(@channel)]}
   .clear

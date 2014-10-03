@@ -42,7 +42,7 @@
 
     <div class="comment-small">
       <%= form_for :post, url: channel_posts_path(channel) do |f| %>
-        <%= f.text_area :body, class: "comment_box" %>
+        <%= f.text_area :body, class: "comment-box" %>
         <div class="actions">
           <%= link_to "Edit", channel_path(channel, :anchor => "comments") %>
           <%= f.submit "Send" %>

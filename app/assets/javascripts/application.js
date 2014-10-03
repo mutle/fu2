@@ -11,7 +11,6 @@
 //= require jquery.textcomplete
 //= require d3
 //= require markitup-html
-//= require jquery.filedrop
 //= require autocompleter
 //= require emoji
 //= require redcursor_app

@@ -26,42 +26,9 @@ $ ->
   mobile = $('body').hasClass('mobile')
   syntax = $('#syntax').val()
   if syntax
-    $('.comment_box').textcomplete completerStrategies
+    $('.comment-box').textcomplete completerStrategies
     if syntax == "html"
-      $('.comment_box').markItUp(mySettings)
-
-  insertText = (text) ->
-    if syntax && syntax == "html"
-      $.markItUp
-        target: $('.comment_box')
-        placeHolder: text
-    else
-      $('.comment_box').append text
-  insertImage = (url) ->
-    if syntax && syntax == "html"
-      $.markItUp
-        target: $('.comment_box')
-        placeHolder: "<img src=\"#{url}\" />"
-    else
-      t = $('.comment_box').val()
-      t += "\n\n" if t != ''
-      t += "![](#{url})"
-      $('.comment_box').val(t)
-  $('.comment_box').filedrop
-    url: '/images.json'
-    paramname: 'image[image_file]'
-    allowedfiletypes: ['image/jpeg','image/png','image/gif']
-    headers:
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    maxfiles: 1
-    maxfilesize: 2
-    uploadStarted: (i, file, len) ->
-      $(".upload_info").html('Uploading "'+file.name+'"')
-    uploadFinished: (i, file, response, time) ->
-      $(".upload_info").html('Finished uploading "'+file.name+'"')
-      insertImage(response.url)
-    progressUpdated: (i, file, progress) ->
-      $(".upload_info").html('Uploading "'+file.name+'" ('+progress+"%)")
+      $('.comment-box').markItUp(mySettings)
 
   if $('input#search').length
     autocompleter 'input#search', (term, autocompleter) ->
@@ -119,10 +86,10 @@ $ ->
         $("#content").empty().append $(data)
 
   previewPost = (contents) ->
-    $('<div class="post preview"><div class="name"></div></div>').insertBefore('.comment-box-form')
+    $('<div class="post-preview"><span class="octicon octicon-hourglass"></span></div>').insertBefore('.comment-box-form')
 
   removePreviewPost = ->
-    $('.post.preview').remove();
+    $('.post-preview').remove();
 
   if $('.comment-box-form').length
     setInterval refreshPosts, 15 * 1000
