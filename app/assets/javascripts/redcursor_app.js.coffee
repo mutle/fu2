@@ -104,6 +104,8 @@ $ ->
       window.scrollTo 0,document.body.scrollHeight
     return false
 
+  $(".bottom-link").addClass("top")
+
   $(".top-link").click ->
     window.scrollTo 0,0
     return false
