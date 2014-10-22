@@ -15,7 +15,7 @@
   <% end %>
 
   <div class="actions left">
-    <%= form_for :image, url: images_path, class: "uploader" do |fi| %>
+    <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
       <button class="upload-image"><%= octicon "device-camera" %></button>
       <%= fi.file_field :image_file %>
     <% end %>
