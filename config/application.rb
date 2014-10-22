@@ -51,4 +51,8 @@ module Fu2
     }
 
   end
+
+  def self.time_format
+    "%Y/%m/%d %H:%M"
+  end
 end

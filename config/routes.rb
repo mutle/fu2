@@ -27,8 +27,12 @@ Fu2::Application.routes.draw do
     collection do
       get :search
       get :channel_names
+      get :activity
       get :live
       get :all
+    end
+    member do
+      post :visit
     end
     resources :posts do
       member do

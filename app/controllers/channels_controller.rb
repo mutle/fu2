@@ -10,11 +10,22 @@ class ChannelsController < ApplicationController
   def index(respond=true)
     @column_width = 12
     @page = (params[:page] || 1).to_i
+    @recently_active = Channel.recently_active(current_user)
     @recent_channels = Channel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
     @recent_posts = Channel.recent_posts(@recent_channels)
+    @action = 'channels'
     if respond
       respond_with @recent_channels
+    end
+  end
+
+  def activity(respond=true)
+    @recently_active = Channel.recently_active(current_user)
+    @recent_posts = Channel.recent_posts(@recently_active[:channels])
+    @action = 'activity'
+    if respond
+      respond_with @recently_active
     end
   end
 
@@ -82,15 +93,25 @@ class ChannelsController < ApplicationController
     if @query =~ /^title:(.*)$/
       @query = $1
       @search = Channel.search_channels(@query, page)
-    else
+      @results = true
+    elsif !@query.blank?
       @search = Channel.search_channels_and_posts(@query, page)
-      # @search = ThinkingSphinx.search(@query, :classes => [Channel, Post], :per_page => 25, :page => (params[:page] || 1).to_i, :star => true)
+      @results = true
+    else
+      @results = false
     end
+    @action = 'search'
 
     respond_to do |format|
       format.html
       format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
+  end
+
+  def visit
+    @channel = Channel.find(params[:id])
+    @last_read_id = @channel.visit(current_user)
+    render json: {last_read: @last_read_id}
   end
 
   private

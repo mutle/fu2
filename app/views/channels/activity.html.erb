@@ -1,0 +1,7 @@
+<%= render partial: "channel_tabs" %>
+
+<div class="active-channels">
+  <% @recently_active[:channels].each do |channel| %>
+    <%= render channel %>
+  <% end %>
+</div>

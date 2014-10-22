@@ -1,0 +1,6 @@
+<ul class="channel-tabs">
+  <% active = ' class="active"'.html_safe %>
+  <li<%= active if @action == 'activity' %>><%= link_to "Activity", activity_channels_path %></li>
+  <li<%= active if @action == 'channels' %>><%= link_to "Channels", root_path %></li>
+  <li<%= active if @action == 'search' %>><%= link_to "Search", search_channels_path %></li>
+</ul>

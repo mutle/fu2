@@ -1,3 +1,1 @@
-=form_for :channel, :url => channels_path do |f|
-  %p
-  =render :partial => "form", :locals => {:f => f, :type => "Channel", :title => true}
+=render :partial => "form", :locals => {:form => [:channel, :url => channels_path], :title => true}

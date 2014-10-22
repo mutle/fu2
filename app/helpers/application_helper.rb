@@ -8,4 +8,15 @@ module ApplicationHelper
     content_tag :span, "", :class => "#{'mega-' if mega}octicon octicon-#{name}"
   end
 
+  def activity_hours(posts)
+    num_hours = 12
+    t = Time.now
+    activity = Array.new(num_hours, 0)
+    posts.each do |post|
+      hour = (t - post.created_at) / 3600
+      activity[hour] += 1 if hour < num_hours
+    end
+    activity.reverse
+  end
+
 end

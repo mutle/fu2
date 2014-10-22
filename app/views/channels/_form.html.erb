@@ -1,0 +1,25 @@
+<% title ||= false %>
+<div class="channel-<%= title ? "header-edit" : "comment-box" %>">
+  <%= form_for *form do |f| %>
+    <% if title %>
+      <div class="title">
+        <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
+      </div>
+    <% end %>
+    <%= hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax" %>
+    <%= f.text_area :body, :class => 'comment-box' %>
+
+    <div class="actions">
+      <%= f.submit "Send", :accesskey => "s" %>
+    </div>
+  <% end %>
+
+  <div class="actions left">
+    <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
+      <button class="upload-image"><%= octicon "device-camera" %></button>
+      <%= fi.file_field :image_file %>
+    <% end %>
+
+    <span class="info"></span>
+  </div>
+</div>

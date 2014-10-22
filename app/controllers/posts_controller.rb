@@ -19,6 +19,7 @@ class PostsController < ApplicationController
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
+    @channel.visit current_user, @post.id
 
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }

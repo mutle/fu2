@@ -1,0 +1,649 @@
+$small-screen: "only screen and (min-width : 800px)";
+
+#container {
+  #content {
+
+    .body {
+      [title] {
+        border-bottom: 1px dotted #BBB;
+      }
+
+      blockquote {
+        border-left: 3px solid black;
+        margin: 1em 3px 1em 3px;
+        padding: 8px;
+      }
+
+      blockquote p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+
+      blockquote p:last-child {
+        margin-bottom: 0px;
+      }
+      blockquote br {
+        margin-bottom: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      p:last-child {
+        margin-bottom: 0px;
+      }
+      ul {
+        padding-left: 1em;
+        margin-bottom: 1em;
+      }
+      ol {
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+      }
+      dt {
+        padding-left: 1em;
+        margin-bottom: 0.3em;
+      }
+      dd {
+        padding-left: 4em;
+        margin-bottom: 0em;
+      }
+
+
+      img {
+        max-width: 656px;
+      }
+    }
+
+    .activity-graph {
+      float: left;
+      width: 60px;
+      height: 32px;
+      margin-right: 8px;
+
+      path {
+        stroke: #000;
+        stroke-width: 1;
+        fill: none;
+        shape-rendering: geometricPrecision;
+      }
+    }
+
+    .channel-header {
+      background-color: #000;
+      color: #fff;
+      padding: 2px 6px;
+
+      h2 {
+        font-size: 26px;
+        line-height: 32px;
+        margin: 0px;
+      }
+
+      a {
+        color: #fff;
+      }
+
+      .activity-graph {
+        path {
+          stroke: #fff;
+        }
+      }
+    }
+    .no-channel-text {
+      margin-bottom: 1em;
+    }
+    .channel-text {
+      margin: 1em 0px;
+      border-top: 1px solid #a6a6a6;
+      border-bottom: 1px solid #a6a6a6;
+
+      .body {
+        padding: 12px;
+      }
+
+      .description {
+        font-style: italic;
+        border-bottom: 1px solid #000;
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+        padding: 0px 12px 8px 12px;
+      }
+    }
+    .channel-actions {
+      float: right;
+
+      a {
+        display: block;
+        line-height: 32px;
+        margin-right: 32px;
+      }
+    }
+    .channel-header-edit, .channel-comment-box {
+      margin-bottom: 1em;
+      position: relative;
+      background-color: #f6f6f6;
+
+      .title {
+        background-color: #000;
+      }
+      input.channel-title {
+        font-size: 26px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        width: 100%;
+        margin: 0px;
+      }
+
+      textarea {
+        border: 1px solid #999;
+        height: 180px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+        font-size: 14px;
+
+        @media #{$small-screen} {
+          height: 400px;
+        }
+      }
+
+      .textcomplete-wrapper {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+      }
+
+      .markItUp {
+        border: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+
+
+        .markItUpContainer {
+          border: none;
+        }
+      }
+      textarea.markItUpEditor {
+      }
+    }
+
+    .actions {
+      text-align: right;
+      padding: 12px 6px;
+      font-size: 16px;
+
+      &.left {
+        font-size: 16px;
+        text-align: left;
+        position: absolute;
+        height: 18px;
+        left: 0px;
+        bottom: 18px;
+        margin: 0px;
+
+        form {
+          display: inline-block;
+        }
+
+        button {
+          margin-left: 0px;
+        }
+
+        .info {
+          padding-left: 12px;
+        }
+      }
+
+      input[type=file] {
+        display: none;
+      }
+
+      input[type=submit], button {
+        font-size: 16px;
+        background-color: #fff;
+        border: 1px solid #bbb;
+        padding: 6px 12px;
+        border-radius: 3px;
+        margin-left: 6px;
+        cursor: pointer;
+      }
+
+      a {
+        color: #000;
+        background-color: #fafafa;
+        text-decoration: none;
+        border: 1px solid #bbb;
+        padding: 6px 12px;
+        border-radius: 3px;
+        margin-left: 6px;
+      }
+    }
+
+    #recent_activities {
+      list-style: none;
+      background-color: #fff;
+      padding: 0px;
+      border-radius: 8px;
+      margin-top: 1em;
+
+      .list-date {
+        color: #666;
+        text-align: center;
+        margin: 1em 0px 0.5em;
+      }
+
+      @media #{$small-screen} {
+        .list-date {
+          float: right;
+          width: 150px;
+          text-align: right;
+        }
+
+        .channel {
+          margin-right: 172px;
+        }
+      }
+
+      .channel {
+        padding: 0px 12px 0px 0px;
+        line-height: 42px;
+        position: relative;
+        background-color: #f2f2f2;
+        margin-bottom: 4px;
+      }
+      .channel.unread {
+        background-color: #c2c2c2;
+      }
+      .channel:first-child {
+        .user-color {
+        }
+      }
+      .channel:last-child {
+        border-bottom: none;
+        margin-bottom: 0px;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      .channel-link {
+        display: block;
+        margin-left: 192px;
+      }
+
+      .name {
+        float: left;
+        max-width: 180px;
+        padding-right: 10px;
+        line-height: 21px;
+        text-align: left;
+      }
+      .user-mini {
+        padding-left: 8px;
+
+        .user-name {
+          padding-left: 10px;
+        }
+      }
+      .user-color {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        padding-bottom: 16px;
+        width: 12px;
+      }
+      .date {
+        float: right;
+        padding-left: 10px;
+      }
+      .post-count {
+        float: left;
+      }
+    }
+
+    .pagination {
+      margin-top: 2em;
+      padding: 8px 16px;
+      background-color: #fff;
+      border-radius: 8px;
+      font-size: 18px;
+      text-align: center;
+
+      a, .gap {
+        margin: 0px 4px;
+        text-decoration: none;
+      }
+      .previous_page {
+        float: left;
+      }
+      .next_page {
+        float: right;
+      }
+    }
+
+    .post, .comment-box {
+
+      .autocomplete-image {
+        max-width: 22px;
+        max-height: 22px;
+      }
+    }
+
+    .post-preview {
+      border-bottom: 1px solid #d6d6d6;
+      background-color: #f6f6f6;
+      margin-bottom: 1em;
+      text-align: center;
+
+      .octicon {
+        font-size: 28px;
+        padding: 4px;
+      }
+    }
+
+    .post {
+      border-bottom: 1px solid #d6d6d6;
+      background-color: #f6f6f6;
+      margin-bottom: 1em;
+
+      &.unread {
+        background-color: #c2c2c2;
+      }
+
+      .post-header {
+        background-color: #000;
+        color: #fff;
+        line-height: 32px;
+        height: 32px;
+
+        .post-actions {
+          float: right;
+
+          .octicon {
+            font-size: 20px;
+          }
+
+          .faves .octicon {
+            cursor: pointer;
+          }
+
+          .faves.active .octicon {
+            color: #ff0;
+          }
+        }
+
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+
+        .date {
+          display: inline-block;
+          a {
+            display: block;
+            padding-right: 30px;
+            padding-left: 16px;
+          }
+        }
+
+        .user-mini {
+          font-size: 14px;
+          line-height: 32px;
+          display: block;
+          float: none;
+          color: #fff;
+
+          .avatar {
+            padding-right: 12px;
+            max-width: 32px;
+            max-height: 32px;
+          }
+        }
+      }
+
+      .body {
+        padding: 12px;
+        margin-bottom: 0.5em;
+        min-height: 1em;
+      }
+
+      .post-options {
+        float: right;
+        padding-right: 12px;
+
+        .octicon {
+          font-size: 18px;
+        }
+
+        a {
+          color: #000;
+          text-decoration: none;
+          padding: 6px;
+          border-left: 1px solid #999;
+          border-bottom: none;
+
+          &:first-child {
+            border-left: none;
+          }
+        }
+      }
+    }
+
+    .select_letters {
+      li {
+        display: inline;
+      }
+    }
+
+    .active-channels {
+      .activity {
+        border: 1px solid #f2f2f2;
+        margin-bottom: 1em;
+
+        .channel-link {
+          display: block;
+          color: #000;
+          font-size: 18px;
+          line-height: 32px;
+          text-decoration: none;
+          padding: 0px 12px;
+          background-color: #ccc;
+        }
+
+        .mark-read {
+          float: right;
+          display: inline-block;
+          height: 32px;
+          font-size: 22px;
+          line-height: 32px;
+          border: 1px #fefefe;
+          background-color: #a3a3a3;
+          margin: 0px;
+          padding: 0px 12px;
+          margin-left: 8px;
+
+          &.all-read {
+            background-color: #f2f2f2;
+            .octicon {
+              color: #666;
+            }
+          }
+
+          .octicon {
+            font-size: 22px;
+            line-height: 32px;
+          }
+        }
+
+        .users {
+          float: right;
+
+          .avatar {
+            max-width: 32px;
+            max-height: 32px;
+          }
+        }
+
+        .posts {
+          &.hide {
+            display: none;
+          }
+
+          .show {
+            text-align: center;
+            display: block;
+            line-height: 24px;
+          }
+
+          .activity-post {
+            border-bottom: 1px solid #d6d6d6;
+            background-color: #f6f6f6;
+            color: #666;
+
+            &.hide {
+              display: none;
+            }
+
+            &.highlight {
+              color: #000;
+              background-color: #fff;
+            }
+
+            .avatar {
+              float: right;
+              max-width: 32px;
+              max-height: 32px;
+            }
+
+            .body {
+              padding: 12px;
+              min-height: 1em;
+
+              img {
+                max-height: 300px;
+
+                &.full {
+                  max-height: none;
+                }
+              }
+            }
+          }
+
+          .comment-small {
+            textarea {
+              display: block;
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+              margin-right: 110px;
+              width: 100%;
+              height: 42px;
+              border: 1px solid #e2e2e2;
+              border-top: none;
+            }
+
+            .actions {
+              padding: 2px 0px;
+              margin: 0px;
+              text-align: right;
+            }
+          }
+        }
+      }
+
+      .activity-date {
+        text-align: center;
+        margin: 1em 0px;
+      }
+    }
+
+    .channel-tabs {
+      list-style: none;
+      border: 1px solid #e2e2e2;
+      height: 32px;
+
+      li {
+        display: block;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 33.3%;
+        float: left;
+        line-height: 32px;
+        text-align: center;
+        border-left: 1px solid #fff;
+        background-color: #e2e2e2;
+
+        &.active {
+          background-color: #fff;
+          border-left: 1px solid #e2e2e2;
+        }
+
+        &:first-child {
+          border: none;
+        }
+
+        a {
+          color: #000;
+          display: block;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .search-form {
+      text-align: center;
+
+      input {
+        display: inline;
+        font-size: 18px;
+
+        &.search-field {
+          width: 320px;
+        }
+      }
+
+      .inputs {
+        width: 480px;
+        margin: 100px auto 1em auto;
+      }
+
+      &.results {
+        .inputs {
+          margin-top: 1em;
+        }
+      }
+    }
+
+    .search-info {
+      margin-bottom: 2em;
+    }
+
+    .search-results {
+      .result {
+        margin-bottom: 1em;
+        border-bottom: 1px solid #e2e2e2;
+        padding-bottom: 1em;
+
+        a {
+          font-size: 16px;
+        }
+      }
+      .search-channel {
+
+      }
+
+      .search-post {
+
+      }
+    }
+  }
+}
