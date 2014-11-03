@@ -119,7 +119,7 @@ class Post < ActiveRecord::Base
   end
 
   def html_body
-    result = markdown? ? RenderPipeline.markdown(body) : RenderPipeline.simple(body)
+    result = markdown? ? RenderPipeline.markdown(body, id) : RenderPipeline.simple(body, id)
     result.html_safe
   end
 
