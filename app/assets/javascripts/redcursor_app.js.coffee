@@ -44,10 +44,20 @@ $ ->
 
   refreshPosts = () ->
     last_id = $('.post:not(.preview)').last().attr("data-post-id")
+    last_update = $(".channel-header").attr("data-last-update")
     ourl = document.location.href.replace(/#.*$/, '')
-    url = "#{ourl}/posts?last_id=#{last_id}"
+    url = "#{ourl}/posts?last_id=#{last_id}&last_update=#{last_update}"
     $.get url, (data) ->
-      $(data).insertBefore('.comment-box-form')
+      d = $(data)
+      console.log d.find(".updated .post")
+      d.find(".updated").remove()
+      console.log d
+      d.insertBefore('.comment-box-form')
+      $(".updated .post").each (i, post) ->
+        $($(".post-#{$(post).attr("data-post-id")}").get(0)).replaceWith(post)
+      last_updated = $(".updated").attr("data-last-update")
+      $(".channel-header").attr("data-last-update", last_updated)
+      $(".updated").remove()
       $(document).trigger 'fu2.refreshPosts'
 
   refreshChannels = () ->

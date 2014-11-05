@@ -31,10 +31,10 @@ module RenderPipeline
     EMBEDS = {
       twitter: {
         pattern: %r{https?://(m\.|mobile\.)?twitter\.com/[^/]+/statuse?s?/(\d+)},
-        callback: proc do |content, id|
+        callback: proc do |content, id, post_id|
           tweet = $redis.get "Tweets:#{id}"
           if !tweet
-            Resque.enqueue(FetchTweetJob, id)
+            Resque.enqueue(FetchTweetJob, id, post_id)
             content
           else
             content.gsub(EMBEDS[:twitter][:pattern], tweet)
@@ -55,7 +55,7 @@ module RenderPipeline
         content = node.to_html
         EMBEDS.each do |k,embed|
           if content =~ embed[:pattern]
-            html = embed[:callback].call(content, $2)
+            html = embed[:callback].call(content, $2, context[:post_id])
             next if html == content
             node.replace(html)
           end
@@ -100,13 +100,13 @@ module RenderPipeline
   ], PIPELINE_CONTEXT
 
   class << self
-    def markdown(text)
-      result = MARKDOWN_PIPELINE.call(text)
+    def markdown(text, post_id=nil)
+      result = MARKDOWN_PIPELINE.call(text, post_id: post_id)
       result[:output].to_s
     end
 
-    def simple(text)
-      result = SIMPLE_PIPELINE.call(text)
+    def simple(text, post_id=nil)
+      result = SIMPLE_PIPELINE.call(text, post_id: post_id)
       result[:output].to_s
     end
 

@@ -121,6 +121,7 @@ class ChannelsController < ApplicationController
     @last_post_id = 0
     @post = Post.new
     @posts = @channel.posts.includes(:user, :faves).load
+    @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at)).map(&:utc).max.to_i
     if respond
       respond_with @posts
     end
