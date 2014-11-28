@@ -56,7 +56,7 @@ class Channel < ActiveRecord::Base
   end
 
   def self.all_channels(_user, page)
-    self.paginate :conditions => ["(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id], :order => "LOWER(title)", :page => page, :per_page => 100
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100)
   end
 
   def self.search_channels(title, page)
