@@ -11,7 +11,7 @@ end
 
 Fubot.command /deploy ?([^ ]*)/ do
   DEPLOY_USERS = ["mutle"]
-  DEPLOY_SCRIPT = proc { |branch| "/bin/bash -c \". /data/fu2/shared/env && cd /data/fu2/current && git fetch origin && git reset --hard origin/#{branch} && cp config/database.yml{.bak,} && bundle install >/dev/null && bundle exec rake assets:precompile && kill -HUP \`cat /data/fu2/shared/unicorn.pid\` && kill -HUP \`cat /data/fu2/shared/resqued.pid\`\"" }
+  DEPLOY_SCRIPT = proc { |branch| "/bin/bash -c \"/data/fu2/current/bin/deploy #{branch}\"" }
 
   def help
     ["deploy [branch]", "Deploys the redcursor app"]
