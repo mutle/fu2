@@ -11,7 +11,7 @@ end
 
 Fubot.command /deploy ?([^ ]*)/ do
   DEPLOY_USERS = ["mutle"]
-  DEPLOY_SCRIPT = proc { |branch| "/bin/bash -c \"/data/fu2/current/bin/deploy #{branch}\"" }
+  DEPLOY_SCRIPT = proc { |branch| "/bin/bash -c \"/data/fu2/current/bin/deploy #{branch} 2>&1\"" }
 
   def help
     ["deploy [branch]", "Deploys the redcursor app"]
