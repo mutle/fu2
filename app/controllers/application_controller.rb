@@ -1,5 +1,19 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_site_path
+
+  def set_site_path
+    @site = request.env['_site']
+    Thread.current[:site_id] = @site ? @site.id : nil
+  end
+
+  def default_url_options
+    if @site
+      {site_path: @site.path || ""}
+    else
+      {}
+    end
+  end
 
   def login_required
     logged_in? || redirect_to(new_session_path)
@@ -29,14 +43,6 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     (session[:user_id] || params[:api_key]) && !current_user.nil?
-  end
-
-  def notification(type, object)
-    $redis.publish 'fu2_live', {:type => type, :object => object.as_json}.to_json
-  end
-
-  def increment_metric(name)
-    METRICS.increment name
   end
 
   def highlight_results(text, query)

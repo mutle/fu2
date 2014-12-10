@@ -1,4 +1,6 @@
 class Notification < ActiveRecord::Base
+  include SiteScope
+  
   belongs_to :user
   belongs_to :created_by, :class_name => "User"
   belongs_to :channel

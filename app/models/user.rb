@@ -2,7 +2,7 @@ require 'digest/sha1'
 require 'bcrypt'
 
 class User < ActiveRecord::Base
-  # Virtual attribute for the unencrypted password
+
   serialize :block_users
 
   scope :with_login, lambda { |login| where("LOWER(login) = LOWER(:login) and activated_at IS NOT NULL", :login => login) }

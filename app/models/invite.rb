@@ -1,5 +1,4 @@
 class Invite < ActiveRecord::Base
-
   validates_presence_of     :email
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false

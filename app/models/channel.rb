@@ -1,6 +1,7 @@
 class Channel < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include SiteScope
 
   scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
 
@@ -21,7 +22,7 @@ class Channel < ActiveRecord::Base
   has_many :channel_users
 
   validates_presence_of :title, :user_id
-  validates_uniqueness_of :title, :on => :create
+  validates_uniqueness_of :title, :on => :create, :conditions => site_scope_proc
 
   before_create :generate_permalink
   after_create :add_first_post
@@ -32,6 +33,7 @@ class Channel < ActiveRecord::Base
 
   mapping do
     indexes :_id, :index => :not_analyzed
+    indexes :site_id
     indexes :title, :analyzer => 'snowball', :boost => 100
     indexes :created_at, :type => 'date', :index => :not_analyzed
     indexes :text, :analyzer => 'snowball', :boost => 10
@@ -45,6 +47,7 @@ class Channel < ActiveRecord::Base
   def to_indexed_json
     {
       :_id => id,
+      :site_id => site_id,
       :title => title,
       :created_at => created_at
     }.to_json

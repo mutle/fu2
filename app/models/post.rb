@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include SiteScope
 
   belongs_to :channel
   belongs_to :user
@@ -22,6 +23,7 @@ class Post < ActiveRecord::Base
 
   mapping do
     indexes :_id, :index => :not_analyzed
+    indexes :site_id
     indexes :body, :analyzer => 'snowball'
     indexes :created_at, :type => 'date', :index => :not_analyzed
   end
@@ -36,6 +38,7 @@ class Post < ActiveRecord::Base
     return {}.to_json if !channel || !channel.default_read?
     {
       :_id => id,
+      :site_id => site_id,
       :body => body,
       :created_at => created_at
     }.to_json
