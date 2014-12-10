@@ -28,3 +28,9 @@
   <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
   <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
 </nav>
+
+<div class="site-selection-menu">
+  <% Site.all.each do |s| %>
+    <%= link_to s.name, root_path(site_url(s)) %>
+  <% end %>
+</div>

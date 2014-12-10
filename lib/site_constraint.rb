@@ -3,9 +3,10 @@ class SiteConstraint
   end
 
   def matches?(request)
-    path = request.params[:site_path]
-    path ||= ""
-    site = Site.path(path).first
+    path = request.params[:site_path] || ""
+    domain = request.host || ""
+    p domain
+    site = Site.path(path).domain(domain).first
     if site
       request.env['_site'] = site
       return true

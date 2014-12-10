@@ -259,6 +259,29 @@ form {
       border-radius-bottom-right: 4px;
     }
   }
+
+  .site-selection-menu {
+    background: #fff;
+    position: absolute;
+    top: 43px;
+    width: 300px;
+    height: auto;
+    z-index: 10;
+    color: #000;
+    font-size: 16px;
+    border: 1px solid #ae2424;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    a {
+      color: #000;
+      display: block;
+      float: none;
+    }
+  }
 }
 
 #container {

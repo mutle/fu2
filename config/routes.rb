@@ -4,22 +4,22 @@ require 'site_constraint'
 Fu2::Application.routes.draw do
   mount ResqueWeb::Engine => "/resque"
 
-  resource :session, :controller => :session do
-    collection do
-      post :authenticate
-    end
-  end
-
-  resources :users do
-    member do
-      put :block
-      get :activate
-      get :password
-    end
-  end
-
   scope '(:site_path)' do
     constraints SiteConstraint.new do
+      resource :session, :controller => :session do
+        collection do
+          post :authenticate
+        end
+      end
+
+      resources :users do
+        member do
+          put :block
+          get :activate
+          get :password
+        end
+      end
+
       resources :invites do
         member do
           put :approve

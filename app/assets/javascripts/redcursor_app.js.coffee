@@ -120,6 +120,8 @@ $ ->
     window.scrollTo 0,0
     return false
 
+  $(".site-selection").click -> $(".site-selection-menu").toggleClass("active")
+
   $(".edit-channel-link").click ->
     $(".channel-header").hide()
     $(".channel-text").hide()
