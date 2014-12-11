@@ -201,6 +201,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def multi_site?
+    id == 1
+  end
+
   protected
     # before filter
     def encrypt_password

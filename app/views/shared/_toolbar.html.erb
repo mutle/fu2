@@ -29,8 +29,10 @@
   <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
 </nav>
 
-<div class="site-selection-menu">
-  <% Site.all.each do |s| %>
-    <%= link_to s.name, root_path(site_url(s)) %>
-  <% end %>
-</div>
+<% if @current_user.multi_site? %>
+  <div class="site-selection-menu">
+    <% Site.all.each do |s| %>
+      <%= link_to s.name, root_path(site_url(s)) %>
+    <% end %>
+  </div>
+<% end %>
