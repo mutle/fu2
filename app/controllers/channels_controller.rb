@@ -10,8 +10,8 @@ class ChannelsController < ApplicationController
   def index(respond=true)
     @column_width = 12
     @page = (params[:page] || 1).to_i
-    @recently_active = Channel.recently_active(current_user)
-    @recent_channels = Channel.recent_channels(current_user, @page)
+    @recently_active = Channel.recently_active(@site, current_user)
+    @recent_channels = siteChannel.recent_channels(current_user, @page)
     @recent_channels.each { |c| c.current_user = current_user }
     @recent_posts = Channel.recent_posts(@recent_channels)
     @action = 'channels'
@@ -21,7 +21,7 @@ class ChannelsController < ApplicationController
   end
 
   def activity(respond=true)
-    @recently_active = Channel.recently_active(current_user)
+    @recently_active = Channel.recently_active(@site, current_user)
     @recent_posts = Channel.recent_posts(@recently_active[:channels])
     @action = 'activity'
     if respond
@@ -30,7 +30,7 @@ class ChannelsController < ApplicationController
   end
 
   def live
-    if Post.most_recent.first.id > params[:last_id].to_i
+    if sitePost.most_recent.first.id > params[:last_id].to_i
       index(false)
       render :action => "index", :layout => false
     else
@@ -51,15 +51,15 @@ class ChannelsController < ApplicationController
     @column_width = 12
     @letter = params[:letter]
     if @letter.blank?
-      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
+      @channels = siteChannel.all_channels(current_user, (params[:page] || 1).to_i)
     else
-      @channels = Channel.with_letter(@letter)
+      @channels = siteChannel.with_letter(@letter)
     end
     render "all"
   end
 
   def new
-    @channel = Channel.new
+    @channel = siteChannel.new
   end
 
   def create
@@ -72,7 +72,7 @@ class ChannelsController < ApplicationController
   end
 
   def update
-    @channel = Channel.find params[:id]
+    @channel = siteChannel.find params[:id]
     channel = params[:channel]
     @channel.text = channel[:text]
     @channel.title = channel[:title]
@@ -103,14 +103,14 @@ class ChannelsController < ApplicationController
   end
 
   def visit
-    @channel = Channel.find(params[:id])
+    @channel = siteChannel.find(params[:id])
     @last_read_id = @channel.visit(current_user)
     render json: {last_read: @last_read_id}
   end
 
   private
   def posts(respond=true)
-    @channel = Channel.find(params[:id])
+    @channel = siteChannel.find(params[:id])
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new

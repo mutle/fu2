@@ -18,6 +18,7 @@ class PostsController < ApplicationController
 
   def create
     @post = @channel.posts.create(:site_id => @site.id, :body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)
+    p @site.id
     @channel.visit current_user, @post.id
 
     respond_with @post do |f|
@@ -49,7 +50,7 @@ class PostsController < ApplicationController
   end
 
   def fave
-    @post = Post.find(params[:id].to_i)
+    @post = sitePost.find(params[:id].to_i)
     if @post.faved_by? @current_user
       @post.unfave @current_user
       notification :post_unfave, @post
@@ -76,7 +77,7 @@ class PostsController < ApplicationController
   end
 
   def load_channel
-    @channel = Channel.find(params[:channel_id].to_i)
+    @channel = Channel.site_scope(@site.id).find(params[:channel_id].to_i)
   end
 
   def default_layout

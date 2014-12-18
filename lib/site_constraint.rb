@@ -21,16 +21,8 @@ module SiteScope
       proc { where(site_id: site_id) }
     end
 
-    def site_scope
+    def site_scope(site_id)
       where(site_id: site_id)
-    end
-
-    def site_id
-      Thread.current[:site_id]
-    end
-
-    def default_scope
-      site_scope
     end
   end
 

@@ -22,7 +22,7 @@ class Channel < ActiveRecord::Base
   has_many :channel_users
 
   validates_presence_of :title, :user_id
-  validates_uniqueness_of :title, :on => :create, :conditions => site_scope_proc
+  validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
 
   before_create :generate_permalink
   after_create :add_first_post
@@ -89,8 +89,8 @@ class Channel < ActiveRecord::Base
     3.days.ago
   end
 
-  def self.recently_active(current_user)
-    p = Post.where("created_at > :t", t: recently_active_interval).includes(:user).order("created_at DESC")
+  def self.recently_active(site, current_user)
+    p = Post.site_scope(site.id).where("created_at > :t", t: recently_active_interval).includes(:user).order("created_at DESC")
     posts = {}
     users = {}
     has_posts = {}
@@ -125,7 +125,7 @@ class Channel < ActiveRecord::Base
       unread_posts[cid] = unread
       other_posts[cid] = read.slice(0, 2)
     end
-    channels = where("id IN(:ids)", ids: posts.keys).order("last_post DESC").limit(10)
+    channels = site_scope(site.id).where("id IN(:ids)", ids: posts.keys).order("last_post DESC").limit(10)
     {
       channels: channels,
       has_posts: has_posts,

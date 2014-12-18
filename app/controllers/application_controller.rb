@@ -4,15 +4,25 @@ class ApplicationController < ActionController::Base
 
   def set_site_path
     @site = request.env['_site']
-    Thread.current[:site_id] = @site ? @site.id : nil
-    default_url_options[:site_path] = @site.path
-    default_url_options[:host] = @site.domain
+    @site_id = @site ? @site.id : nil
+    if @site
+      default_url_options[:site_path] = @site.path
+      default_url_options[:host] = @site.domain
+    end
   end
 
   def site_url(site)
     {site_path: site.path, host: site.domain}
   end
   helper_method :site_url
+
+  def siteChannel
+    Channel.site_scope(@site_id)
+  end
+
+  def sitePost
+    Post.site_scope(@site_id)
+  end
 
   def login_required
     logged_in? || redirect_to(new_session_path)
