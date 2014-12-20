@@ -35,3 +35,9 @@
     </div>
   <% end %>
 </div>
+
+<% if (diff = @post_count - @posts.size) > 0 %>
+  <div class="post-loader" data-channel-id="<% @channel.id %>">
+    <%= link_to "#{octicon "chevron-up"} Show #{diff} older posts".html_safe %>
+  </div>
+<% end %>

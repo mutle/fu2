@@ -49,9 +49,7 @@ $ ->
     url = "#{ourl}/posts?last_id=#{last_id}&last_update=#{last_update}"
     $.get url, (data) ->
       d = $(data)
-      console.log d.find(".updated .post")
       d.find(".updated").remove()
-      console.log d
       d.insertBefore('.comment-box-form')
       $(".updated .post").each (i, post) ->
         $($(".post-#{$(post).attr("data-post-id")}").get(0)).replaceWith(post)
