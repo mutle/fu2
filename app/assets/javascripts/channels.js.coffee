@@ -151,7 +151,7 @@ $ ->
     last_id = $('.post:not(.preview)').first().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
     $.get "#{ourl}/posts?first_id=#{last_id}", (data) ->
-      $(data).insertBefore $('.post')
+      $(data).insertAfter loader
       loader.hide()
     return false
 
