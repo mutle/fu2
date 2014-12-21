@@ -224,6 +224,21 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .post-loader {
+      text-align: center;
+      margin-bottom: 1em;
+
+      .space {
+        display: inline-block;
+        width: 32px;
+      }
+
+      a {
+        color: #444;
+        text-decoration: none;
+      }
+    }
+
     #recent_activities {
       list-style: none;
       background-color: #fff;

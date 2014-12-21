@@ -17,7 +17,7 @@ class Channel < ActiveRecord::Base
   /ix
 
   belongs_to :user
-  has_many :posts, lambda { order("created_at") }
+  has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
 
   validates_presence_of :title, :user_id

@@ -120,7 +120,8 @@ class ChannelsController < ApplicationController
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
-    @posts = @channel.posts.includes(:user, :faves).load
+    @post_count = @channel.posts.count
+    @posts = @channel.posts.includes(:user, :faves).limit(12).load.reverse
     @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at)).map(&:utc).max.to_i
     if respond
       respond_with @posts

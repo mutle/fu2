@@ -145,6 +145,16 @@ $ ->
         dataType: "json"
         url: "/channels/#{channelId}/visit"
 
+  $(document).on 'click', ".post-loader a", ->
+    loader = $(this).parent(".post-loader")
+    loader.data("channel-id")
+    last_id = $('.post:not(.preview)').first().attr("data-post-id")
+    ourl = document.location.href.replace(/#.*$/, '')
+    $.get "#{ourl}/posts?first_id=#{last_id}", (data) ->
+      $(data).insertAfter loader
+      loader.hide()
+    return false
+
   if $('.comment-small').length
     $('.comment-small').on 'submit', 'form', ->
       textarea = $(this).find('textarea')

@@ -8,8 +8,12 @@ class PostsController < ApplicationController
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
-    @posts = Post.since(@channel, params[:last_id])
-    @updated_posts = Post.updated_since(@channel, last_update) if last_update
+    if params[:first_id]
+      @posts = Post.before(@channel, params[:first_id])
+    else
+      @posts = Post.since(@channel, params[:last_id])
+    end
+    @updated_posts = last_update ? Post.updated_since(@channel, last_update) : []
     @last_read_id = @channel.last_read_id(current_user)
     @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at) + @updated_posts.map(&:updated_at)).map(&:utc).max.to_i
     @last_post_id = 0
