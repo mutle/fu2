@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 gem "bundler", "~>1.7.3"
-gem "rails", "~>4.1.8"
+gem "rails", "~>4.2.0"
 gem "pg", "~>0.17.1"
 gem "haml", "~>4.0.3"
-gem "jquery-rails", ">=3.1.2"
+gem "jquery-rails", "~>4.0.2"
 gem 'json'
 gem "will_paginate"
 gem "rails_autolink"
