@@ -145,15 +145,27 @@ $ ->
         dataType: "json"
         url: "/channels/#{channelId}/visit"
 
-  $(document).on 'click', ".post-loader a", ->
-    loader = $(this).parent(".post-loader")
+  loadMorePosts = (include_id=0, cb=null) ->
+    loader = $(".post-loader")
     loader.data("channel-id")
     last_id = $('.post:not(.preview)').first().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
     $.get "#{ourl}/posts?first_id=#{last_id}", (data) ->
       $(data).insertAfter loader
       loader.hide()
+      cb?()
+
+  $(document).on 'click', ".post-loader a", ->
+    loadMorePosts()
     return false
+
+  if window.location.hash != ""
+    post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
+    console.log post_id
+    if $(".post-#{post_id}").length < 1
+      loadMorePosts post_id, () ->
+        $("body").scrollTop($(".post-#{post_id}").offset().top)
+        window.location.hash = "post_#{post_id}"
 
   if $('.comment-small').length
     $('.comment-small').on 'submit', 'form', ->
