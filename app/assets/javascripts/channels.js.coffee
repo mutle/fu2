@@ -162,7 +162,7 @@ $ ->
     loadMorePosts()
     return false
 
-  if window.location.hash != ""
+  if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
     post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
     console.log post_id
     if $(".post-#{post_id}").length < 1
