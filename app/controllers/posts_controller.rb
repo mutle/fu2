@@ -7,6 +7,7 @@ class PostsController < ApplicationController
   respond_to :html, :json
 
   def index
+    @channel.last_read_id = params[:last_read_id].to_i if params[:last_read_id]
     last_update = Time.at params[:last_update].to_i if params[:last_update]
     if params[:first_id]
       @posts = Post.before(@channel, params[:first_id])
