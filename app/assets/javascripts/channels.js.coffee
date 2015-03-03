@@ -161,11 +161,13 @@ $ ->
 
   if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
     post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
-    console.log post_id
-    if $(".post-#{post_id}").length < 1
+    if $(".post-#{post_id}").length > 0
+      $(".post-#{post_id}").addClass("highlight") if !$(".post-#{post_id}").hasClass("unread")
+    else
       loadMorePosts post_id, () ->
-        $("body").scrollTop($(".post-#{post_id}").offset().top)
         window.location.hash = "post_#{post_id}"
+        $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
+
 
   if $('.comment-small').length
     $('.comment-small').on 'submit', 'form', ->
