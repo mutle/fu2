@@ -150,10 +150,7 @@ $ ->
     loader.data("channel-id")
     last_id = $('.post:not(.preview)').first().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
-    last_update = $(".channel-header").attr("data-last-update")
-    if $(".post").first().hasClass("unread")
-      last_read_id = "&last_read_id=#{document.location.hash.replace(/#post_/, '')}"
-    $.get "#{ourl}/posts?first_id=#{last_id}#{last_read_id || ""}", (data) ->
+    $.get "#{ourl}/posts?first_id=#{last_id}", (data) ->
       $(data).insertAfter loader
       loader.hide()
       cb?()

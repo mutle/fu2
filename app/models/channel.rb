@@ -185,12 +185,8 @@ class Channel < ActiveRecord::Base
     end
   end
 
-  def last_read_id=(value)
-    @last_read_id = value
-  end
-
   def last_read_id(current_user)
-    @last_read_id || ($redis.zscore("last-post:#{current_user.id}", id) || 0).to_i
+    ($redis.zscore("last-post:#{current_user.id}", id) || 0).to_i
   end
 
   def last_post
