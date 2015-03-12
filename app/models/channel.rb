@@ -229,4 +229,12 @@ class Channel < ActiveRecord::Base
     updated_by && User.find(updated_by)
   end
 
+  def show_posts(current_user, last_read)
+    p = posts.where("id >= :last_read", last_read: last_read).includes(:user, :faves).load.reverse
+    if p.size < 12
+      p = posts.includes(:user, :faves).limit(12).load.reverse
+    end
+    p
+  end
+
 end

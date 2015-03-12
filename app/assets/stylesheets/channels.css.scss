@@ -237,6 +237,10 @@ $small-screen: "only screen and (min-width : 800px)";
         color: #444;
         text-decoration: none;
       }
+
+      a.load-all {
+        margin-left: 24px;
+      }
     }
 
     #recent_activities {
@@ -371,6 +375,10 @@ $small-screen: "only screen and (min-width : 800px)";
 
       &.unread {
         background-color: #c2c2c2;
+      }
+
+      &.highlight {
+        background-color: #f9faeb;
       }
 
       .post-header {
