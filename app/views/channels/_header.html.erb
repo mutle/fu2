@@ -38,6 +38,7 @@
 
 <% if (diff = @post_count - @posts.size) > 0 %>
   <div class="post-loader" data-channel-id="<% @channel.id %>">
-    <%= link_to "#{octicon "chevron-up"} Show #{diff} older posts".html_safe %>
+    <%= link_to "#{octicon "chevron-up"} <span class=\"post-loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
+    <%= link_to "Show All", "#", class: "load-all" %>
   </div>
 <% end %>

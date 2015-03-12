@@ -237,6 +237,10 @@ $small-screen: "only screen and (min-width : 800px)";
         color: #444;
         text-decoration: none;
       }
+
+      a.load-all {
+        margin-left: 24px;
+      }
     }
 
     #recent_activities {

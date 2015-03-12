@@ -145,18 +145,43 @@ $ ->
         dataType: "json"
         url: "/channels/#{channelId}/visit"
 
-  loadMorePosts = (include_id=0, cb=null) ->
+  loadMorePosts = (include_id=0, cb=null, all=false) ->
     loader = $(".post-loader")
     loader.data("channel-id")
     last_id = $('.post:not(.preview)').first().attr("data-post-id")
     ourl = document.location.href.replace(/#.*$/, '')
-    $.get "#{ourl}/posts?first_id=#{last_id}", (data) ->
-      $(data).insertAfter loader
-      loader.hide()
+    limit = ""
+    if include_id == 0 && !all
+      limit = "&limit=12"
+    $.get "#{ourl}/posts?first_id=#{last_id}#{limit}", (data) ->
+      count = $(".post").length
+      d = $(data)
+      d.insertAfter loader
+      count = $(".post").length - count
+      c = loader.find(".post-loader-count")
+      c.text(parseInt(c.text() - count))
+      if parseInt(c.text()) < 1
+        loader.hide()
       cb?()
 
-  $(document).on 'click', ".post-loader a", ->
+  loaderHidden = false
+  $(document).on 'scroll', ->
+    t = $(document).scrollTop()
+    if !loaderHidden && t > 100
+      loaderHidden = true
+
+    if loaderHidden && t == 0
+      loadMorePosts()
+      loaderHidden = false
+
+    return false
+
+  $(document).on 'click', ".post-loader a.load-more", ->
     loadMorePosts()
+    return false
+
+  $(document).on 'click', ".post-loader a.load-all", ->
+    loadMorePosts(0, null, true)
     return false
 
   if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
