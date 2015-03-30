@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LoginTest < ActionController::IntegrationTest
+class LoginTest < ActionDispatch::IntegrationTest
 
   def setup
     User.delete_all

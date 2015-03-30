@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class ChannelsTest < ActionController::IntegrationTest
+class ChannelsTest < ActionDispatch::IntegrationTest
 
-  def setup
+  setup do
     @u = create_user "testuser", "testpw"
   end
 

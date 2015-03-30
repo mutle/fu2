@@ -1,8 +1,6 @@
 require 'test_helper'
 
-class PostsTest < ActionController::IntegrationTest
-  fixtures :all
-
+class PostsTest < ActionDispatch::IntegrationTest
   # Replace this with your real tests.
   test "the truth" do
     assert true

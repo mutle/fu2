@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'mocha/mini_test'
 
 class ActiveSupport::TestCase
   setup do
@@ -8,7 +9,7 @@ class ActiveSupport::TestCase
   end
 end
 
-class ActionController::IntegrationTest
+class ActionDispatch::IntegrationTest
   def create_user(login, password, activate=true)
     u = User.create(:login => login, :password => password, :password_confirmation => password, :email => "user-#{Random.rand(1000)}@example.com")
     if activate
