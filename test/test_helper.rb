@@ -8,8 +8,8 @@ class ActiveSupport::TestCase
     User.stubs(:fubot).returns(User.new)
   end
 
-  def create_user(login="testuser", password="testpassword", activate=true)
-    u = User.create(:login => login, :password => password, :password_confirmation => password, :email => "user-#{Random.rand(1000)}@example.com")
+  def create_user(login=nil, password="testpassword", activate=true)
+    u = User.create(:login => login || "testuser#{Time.now.to_f.to_s.gsub(/\./, '')}", :password => password, :password_confirmation => password, :email => "user-#{Random.rand(1000)}@example.com")
     if activate
       u.activated_at = Time.now
       u.save
