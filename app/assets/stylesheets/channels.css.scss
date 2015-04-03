@@ -460,6 +460,32 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .event {
+      margin: 1em 0px;
+      text-align: center;
+      color: #888;
+
+      .user {
+        img {
+          max-width: 16px;
+          max-height: 16px;
+        }
+
+        a {
+          text-decoration: none;
+          color: #888;
+        }
+
+        margin-right: 12px;
+      }
+
+      .message {
+        em {
+          color: #555;
+        }
+      }
+    }
+
     .select_letters {
       li {
         display: inline;

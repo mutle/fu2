@@ -19,6 +19,7 @@ class Channel < ActiveRecord::Base
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
+  has_many :events
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create
@@ -234,12 +235,20 @@ class Channel < ActiveRecord::Base
     if p.size < 12
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
-    p
+    e = events.from_post(p.first)
+    result = p + e
+    result.sort_by(&:created_at)
   end
 
   def merge(other)
     Post.where(channel_id: other.id).update_all(channel_id: id)
     other.destroy
+  end
+
+  def rename(name, current_user)
+    old_title = self.title
+    self.title = name
+    events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
   end
 
 end
