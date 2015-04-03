@@ -14,7 +14,7 @@ class ActiveSupport::TestCase
       u.activated_at = Time.now
       u.save
     end
-    @user = u
+    @user ||= u
     u
   end
 

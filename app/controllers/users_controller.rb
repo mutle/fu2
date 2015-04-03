@@ -29,9 +29,9 @@ class UsersController < ApplicationController
       User.first(:conditions => ["LOWER(login) = LOWER(?)", params[:id]]) || raise(ActiveRecord::RecordNotFound)
     end
     @column_width = 12
-    @user_posts = @user.posts.where("channels.default_read = ? AND channels.default_write = ?", true, true).limit(10).order("posts.created_at DESC").includes(:channel)
+    @user_posts = @user.posts.where("channels.default_read = ? AND channels.default_write = ?", true, true).limit(10).order("posts.created_at DESC").includes(:channel).references(:channel)
     @user_faves = @user.faves.includes(:post => :channel).order("faves.created_at DESC").limit(10)
-    @user_faves_received = Fave.includes(:post).where("posts.user_id = ?", @user.id).count
+    @user_faves_received = Fave.includes(:post).where("posts.user_id = ?", @user.id).references(:post).count
     @user_channel_count = Channel.where("user_id = ?", @user.id).count
     respond_with @user
   end
