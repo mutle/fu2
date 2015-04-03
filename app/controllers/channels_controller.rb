@@ -105,6 +105,12 @@ class ChannelsController < ApplicationController
     render json: {last_read: @last_read_id}
   end
 
+  def merge
+  end
+
+  def do_merge
+  end
+
   private
   def posts(respond=true)
     @channel = Channel.find(params[:id])

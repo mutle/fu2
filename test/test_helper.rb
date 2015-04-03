@@ -20,7 +20,7 @@ class ActiveSupport::TestCase
 
   def create_channel(title=nil)
     c = Channel.create(title: title || "test c #{Time.now.to_f}", user: @user)
-    @channel = c
+    @channel ||= c
     c
   end
 

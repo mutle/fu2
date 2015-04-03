@@ -237,4 +237,9 @@ class Channel < ActiveRecord::Base
     p
   end
 
+  def merge(other)
+    Post.where(channel_id: other.id).update_all(channel_id: id)
+    other.destroy
+  end
+
 end
