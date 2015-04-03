@@ -9,7 +9,13 @@ class ActiveSupport::TestCase
   end
 
   def create_user(login=nil, password="testpassword", activate=true)
-    u = User.create(:login => login || "testuser#{Time.now.to_f.to_s.gsub(/\./, '')}", :password => password, :password_confirmation => password, :email => "user-#{Random.rand(1000)}@example.com")
+    u = User.create({
+      login: login || "testuser#{Time.now.to_f.to_s.gsub(/\./, '')}",
+      password: password,
+      password_confirmation: password,
+      email: "user-#{Random.rand(1000)}@example.com",
+      markdown: true
+    })
     if activate
       u.activated_at = Time.now
       u.save
@@ -20,19 +26,19 @@ class ActiveSupport::TestCase
 
   def create_channel(title=nil)
     c = Channel.create(title: title || "test c #{Time.now.to_f}", user: @user)
-    @channel = c
+    @channel ||= c
     c
   end
 
   def create_post(body="post")
     @channel ||= create_channel
-    @channel.posts.create(:user => @user, :body => body)
+    @channel.posts.create(user: @user, body: body, markdown: true)
   end
 end
 
 class ActionDispatch::IntegrationTest
   def login(login, password)
-    post("/session", :login => login, :password => password)
+    post("/session", login: login, password: password)
   end
 
   def login_user

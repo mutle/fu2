@@ -1,5 +1,3 @@
-<%= render partial: "channel_tabs" %>
-
 <% last_ts = "" %>
 <ul id="recent_activities" class="<%= 'refresh' if @page == 1 %>">
   <% @recent_channels.each do |channel| %>

@@ -20,15 +20,6 @@ class ChannelsController < ApplicationController
     end
   end
 
-  def activity(respond=true)
-    @recently_active = Channel.recently_active(current_user)
-    @recent_posts = Channel.recent_posts(@recently_active[:channels])
-    @action = 'activity'
-    if respond
-      respond_with @recently_active
-    end
-  end
-
   def live
     if Post.most_recent.first.id > params[:last_id].to_i
       index(false)
@@ -81,7 +72,7 @@ class ChannelsController < ApplicationController
     @channel = Channel.find params[:id]
     channel = params[:channel]
     @channel.text = channel[:text]
-    @channel.title = channel[:title]
+    @channel.rename(channel[:title], @current_user)
     @channel.updated_by = current_user.id
     @channel.save
     redirect_to channel_path(@channel)
@@ -112,6 +103,12 @@ class ChannelsController < ApplicationController
     @channel = Channel.find(params[:id])
     @last_read_id = @channel.visit(current_user)
     render json: {last_read: @last_read_id}
+  end
+
+  def merge
+  end
+
+  def do_merge
   end
 
   private

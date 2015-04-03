@@ -24,4 +24,22 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     assert_select "li a", :text => "Foo Channel"
   end
 
+  test "show channel" do
+    c = create_channel("Foo Channel")
+    create_post("**bold**\n")
+    get "/channels/#{c.id}"
+    assert_select "h2", :text => "Foo Channel"
+    assert_select ".post .body strong", :text => "bold"
+  end
+
+  test "show channel events" do
+    c = create_channel("Foo Channel")
+    c.rename("Bar Channel", @user)
+    c.save
+    create_post("post\n")
+    get "/channels/#{c.id}"
+    assert_select "h2", :text => "Bar Channel"
+    assert_select ".event.rename"
+  end
+
 end
