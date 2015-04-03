@@ -20,15 +20,6 @@ class ChannelsController < ApplicationController
     end
   end
 
-  def activity(respond=true)
-    @recently_active = Channel.recently_active(current_user)
-    @recent_posts = Channel.recent_posts(@recently_active[:channels])
-    @action = 'activity'
-    if respond
-      respond_with @recently_active
-    end
-  end
-
   def live
     if Post.most_recent.first.id > params[:last_id].to_i
       index(false)
