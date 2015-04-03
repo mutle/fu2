@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LoginTest < ActionController::IntegrationTest
+class LoginTest < ActionDispatch::IntegrationTest
 
   def setup
     User.delete_all
@@ -11,34 +11,34 @@ class LoginTest < ActionController::IntegrationTest
     assert_select(".notice", :text => "Login or Password incorrect!" )
   end
 
-  test "login required" do
+  test "redirect to login page when unauthorized" do
     get '/'
     assert_redirected_to("/session/new")
   end
 
-  test "login page" do
+  test "get login page" do
     get '/session/new'
     assert_response :success
   end
 
-  test "login with invalid user name" do
+  test "login fails with invalid user name" do
     login("testuser", "testpw")
     assert_password_incorrect
   end
 
-  test "login with incorrect password" do
+  test "login fails with incorrect password" do
     create_user "testuser", "nottestpw"
     login("testuser", "testpw")
     assert_password_incorrect
   end
 
-  test "login with inactive account" do
+  test "login fails with inactive account" do
     create_user "testuser", "testpw", false
     login("testuser", "testpw")
     assert_password_incorrect
   end
 
-  test "successful login" do
+  test "successful login redirects to root" do
     create_user "testuser", "testpw"
     login("testuser", "testpw")
     assert_redirected_to("/")
