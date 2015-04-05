@@ -370,11 +370,13 @@ $small-screen: "only screen and (min-width : 800px)";
 
     .post {
       border-bottom: 1px solid #d6d6d6;
-      background-color: #f6f6f6;
+      background-color: #fafafa;
       margin-bottom: 1em;
 
       &.unread {
-        background-color: #c2c2c2;
+        .post-header {
+          background-color: #444;
+        }
       }
 
       &.highlight {
@@ -434,7 +436,7 @@ $small-screen: "only screen and (min-width : 800px)";
 
       .body {
         padding: 12px;
-        margin-bottom: 0.5em;
+        padding-bottom: 20px;
         min-height: 1em;
       }
 

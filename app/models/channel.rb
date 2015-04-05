@@ -247,6 +247,7 @@ class Channel < ActiveRecord::Base
 
   def rename(name, current_user)
     old_title = self.title
+    return if old_title == name
     self.title = name
     events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
   end
