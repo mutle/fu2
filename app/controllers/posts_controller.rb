@@ -10,8 +10,10 @@ class PostsController < ApplicationController
     last_update = Time.at params[:last_update].to_i if params[:last_update]
     if params[:first_id]
       @posts = Post.before(@channel, params[:first_id])
-    else
+    elsif params[:last_id]
       @posts = Post.since(@channel, params[:last_id])
+    else
+      @posts = @channel.posts
     end
     if params[:limit]
       @posts = @posts.order("id desc").limit(params[:limit].to_i).reverse
@@ -35,7 +37,10 @@ class PostsController < ApplicationController
 
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
-      f.json { render :json => @post.as_json.merge(:rendered => render_to_string(:partial => "/channels/post", :object => @post)) }
+      f.json do
+        @rendered = render_to_string(:partial => "/channels/post", :object => @post)
+        respond_with @post
+      end
     end
   end
 

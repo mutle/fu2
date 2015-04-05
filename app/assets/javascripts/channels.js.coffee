@@ -205,11 +205,9 @@ $ ->
         url: $(this).attr("action")
         data: {"post[body]": text}
         success: (data) ->
-          console.log data
-          u = $.grep window.Users, (i) -> console.log i ; i.id == data.user_id
-          console.log u
-          $(postTemplate(data.html_body, u[0])).insertBefore textarea.parents(".comment-small")
-          # refreshPosts()
+          post = data['post']
+          u = $.grep window.Users, (i) -> i.id == post.user_id
+          $(postTemplate(post.html_body, u[0])).insertBefore textarea.parents(".comment-small")
         error: () ->
           textarea.val text
           $(".upload_info").html("Error sending post. Please try again.")

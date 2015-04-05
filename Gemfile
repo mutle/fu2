@@ -30,6 +30,7 @@ gem 'resque-web', require: 'resque_web'
 gem 'resqued'
 gem 'faraday'
 gem 'responders', '~>2.0.0'
+gem "jbuilder"
 
 group :test do
   gem "mocha"
