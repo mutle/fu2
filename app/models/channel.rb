@@ -19,6 +19,7 @@ class Channel < ActiveRecord::Base
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
+  has_many :events
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create
@@ -174,14 +175,14 @@ class Channel < ActiveRecord::Base
     {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
   end
 
-  def next_post(current_user_id)
-    i = last_read_id(current_user_id)
+  def next_post(current_user)
+    i = last_read_id(current_user)
     return 0 if i == 0
-    p = posts.where("id > :last_id", :last_id => i).first
+    p = posts.where("id > :last_id", :last_id => i).reorder("id").first
     if p
       p.id
     else
-      i
+      i+1
     end
   end
 
@@ -234,7 +235,21 @@ class Channel < ActiveRecord::Base
     if p.size < 12
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
-    p
+    e = events.from_post(p.first)
+    result = p + e
+    result.sort_by(&:created_at)
+  end
+
+  def merge(other)
+    Post.where(channel_id: other.id).update_all(channel_id: id)
+    other.destroy
+  end
+
+  def rename(name, current_user)
+    old_title = self.title
+    return if old_title == name
+    self.title = name
+    events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
   end
 
 end

@@ -33,6 +33,8 @@ Fu2::Application.routes.draw do
     end
     member do
       post :visit
+      get :merge
+      post :do_merge
     end
     resources :posts do
       member do

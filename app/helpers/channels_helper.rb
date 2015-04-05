@@ -27,6 +27,10 @@ module ChannelsHelper
     RenderPipeline.title(channel.is_a?(String) ? channel : channel.title).gsub(/<\/?div>/,'').html_safe
   end
 
+  def format_event(event)
+    RenderPipeline.markdown(event.event_message).gsub(/<\/?p>/,'').html_safe
+  end
+
   def avatar_url(user, size=42)
     user.avatar_image_url(size)
   end
@@ -34,7 +38,7 @@ module ChannelsHelper
   def channel_anchor(channel, current_user, last_post)
     id = channel.next_post(current_user)
     if id > 0
-      if id == last_post.id
+      if id > last_post.id
         "comments"
       else
         "post_#{id}"
