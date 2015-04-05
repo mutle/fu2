@@ -24,6 +24,24 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     assert_select "li a", :text => "Foo Channel"
   end
 
+  test "list links to first new post in channel" do
+    c = create_channel("Foo Channel")
+    p1 = create_post("P1")
+    p2 = create_post("P2")
+    p3 = create_post("P3")
+    c.visit(@user, p1.id)
+    get '/'
+    assert_select "li a[href='/channels/#{c.id}#post_#{p2.id}']", :text => "Foo Channel"
+
+    c.visit(@user, p2.id)
+    get '/'
+    assert_select "li a[href='/channels/#{c.id}#post_#{p3.id}']", :text => "Foo Channel"
+
+    c.visit(@user, p3.id)
+    get '/'
+    assert_select "li a[href='/channels/#{c.id}#comments']", :text => "Foo Channel"
+  end
+
   test "show channel" do
     c = create_channel("Foo Channel")
     create_post("**bold**\n")
