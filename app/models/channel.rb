@@ -175,14 +175,14 @@ class Channel < ActiveRecord::Base
     {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
   end
 
-  def next_post(current_user_id)
-    i = last_read_id(current_user_id)
+  def next_post(current_user)
+    i = last_read_id(current_user)
     return 0 if i == 0
-    p = posts.where("id > :last_id", :last_id => i).first
+    p = posts.where("id > :last_id", :last_id => i).reorder("id").first
     if p
       p.id
     else
-      i
+      i+1
     end
   end
 

@@ -24,8 +24,8 @@ class ActiveSupport::TestCase
     u
   end
 
-  def create_channel(title=nil)
-    c = Channel.create(title: title || "test c #{Time.now.to_f}", user: @user)
+  def create_channel(title=nil, body=nil)
+    c = Channel.create(title: title || "test c #{Time.now.to_f}", body: body, user: @user)
     @channel ||= c
     c
   end
