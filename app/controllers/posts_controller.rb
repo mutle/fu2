@@ -38,8 +38,7 @@ class PostsController < ApplicationController
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
       f.json do
-        @rendered = render_to_string(:partial => "/channels/post", :object => @post)
-        respond_with @post
+        render "create"
       end
     end
   end
