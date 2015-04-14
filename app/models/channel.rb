@@ -235,8 +235,12 @@ class Channel < ActiveRecord::Base
     if p.size < 12
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
-    e = events.from_post(p.first)
-    result = p + e
+    if p.first
+      e = events.from_post(p.first)
+      result = p + e
+    else
+      result = p
+    end
     result.sort_by(&:created_at)
   end
 
