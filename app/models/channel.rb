@@ -204,7 +204,7 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || i < (post || last_post).id
+    i == 0 || (post || last_post).nil? || i < (post || last_post).id
   end
 
   def visit(current_user, post_id=nil)
