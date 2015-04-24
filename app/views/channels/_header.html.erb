@@ -14,7 +14,7 @@
 
     <div class="description">
       Updated at <%= @channel.updated_at.try(:strftime, '%Y/%m/%d %H:%M:%S') %>
-      <% if u = @channel.updated_by_user %>
+      <% if u = @view.updated_by_user %>
         by <%= format_title u.display_name %>
       <% end %>
     </div>

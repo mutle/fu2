@@ -1,8 +1,6 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
 
-  layout :default_layout
-
   before_filter :login_required
 
   respond_to :html, :json
@@ -41,12 +39,12 @@ class ChannelsController < ApplicationController
 
   def all
     @column_width = 12
-    @letter = params[:letter]
-    if @letter.blank?
-      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
-    else
-      @channels = Channel.with_letter(@letter)
-    end
+    @view = Views::AllChannels.new({
+      current_user: current_user,
+      page: (params[:page] || 1).to_i,
+      letter: params[:letter]
+    })
+    @view.finalize
     render "all"
   end
 

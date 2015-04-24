@@ -31,11 +31,11 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     p3 = create_post("P3")
     c.visit(@user, p1.id)
     get '/'
-    assert_select "li a[href='/channels/#{c.id}#post_#{p2.id}']", :text => "Foo Channel"
+    assert_select "li a[href='/channels/#{c.id}#read_#{p1.id}']", :text => "Foo Channel"
 
     c.visit(@user, p2.id)
     get '/'
-    assert_select "li a[href='/channels/#{c.id}#post_#{p3.id}']", :text => "Foo Channel"
+    assert_select "li a[href='/channels/#{c.id}#read_#{p2.id}']", :text => "Foo Channel"
 
     c.visit(@user, p3.id)
     get '/'

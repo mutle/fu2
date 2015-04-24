@@ -14,7 +14,6 @@
         <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
       </span>
     </div>
-
     <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
   </div>
   <div class="body" data-raw-body="<%= u(post.body) %>">
@@ -30,3 +29,4 @@
     <%= format_body post %>
   </div>
 </div>
+<a name="read_<%= post.id %>"></a>

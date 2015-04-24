@@ -57,7 +57,7 @@ class Channel < ActiveRecord::Base
   end
 
   def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)
@@ -236,7 +236,7 @@ class Channel < ActiveRecord::Base
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
     if p.first
-      e = events.from_post(p.first)
+      e = events.includes(:user).from_post(p.first)
       result = p + e
     else
       result = p
