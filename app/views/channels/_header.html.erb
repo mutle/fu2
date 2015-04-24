@@ -1,4 +1,4 @@
-<div class="channel-header activity-graph-data" data-last-update="<%= @last_update %>" data-sparklines="<%= activity_hours(@posts).join(",") %>" >
+<div class="channel-header activity-graph-data" data-last-update="<%= @view.last_update %>" data-sparklines="<%= activity_hours(@view.posts).join(",") %>" >
   <div class="channel-actions">
     <%= link_to "Edit Channel", "#", :class => "edit-channel-link" %>
   </div>
@@ -36,7 +36,7 @@
   <% end %>
 </div>
 
-<% if (diff = @post_count - @posts.size) > 0 %>
+<% if (diff = @view.post_count - @view.posts.size) > 0 %>
   <div class="post-loader" data-channel-id="<% @channel.id %>">
     <%= link_to "#{octicon "chevron-up"} <span class=\"post-loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
     <%= link_to "Show All", "#", class: "load-all" %>

@@ -1,7 +1,7 @@
 <% last_ts = "" %>
 <ul id="recent_activities" class="<%= 'refresh' if @page == 1 %>">
-  <% @recent_channels.each do |channel| %>
-    <% last_post = @recent_posts[channel.id] %>
+  <% @view.recent_channels.each do |channel| %>
+    <% last_post = @view.recent_posts[channel.id] %>
     <% has_posts = channel.has_posts?(current_user, last_post) %>
     <% if last_post %>
       <% ts = rounded_timestamp last_post.created_at  %>
@@ -28,4 +28,4 @@
   <% end %>
 </ul>
 
-<%= will_paginate @recent_channels, :params => {:controller => "channels", :action => "index"} %>
+<%= will_paginate @view.recent_channels, :params => {:controller => "channels", :action => "index"} %>
