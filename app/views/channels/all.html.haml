@@ -4,16 +4,10 @@
   -('a'..'z').each do |c|
     %li= link_to c.upcase, all_channels_path(:letter => c)
 %ul#recent_activities
-  -@channels.each do |channel|
+  -@view.channels.each do |channel|
     %li.visited
       %p
         .date
-          -if channel.posts.count > 0
-            -last_post = channel.posts.last
-            =link_to last_post.created_at.strftime('%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
-            / =time_ago_in_words(channel.posts.last.created_at)
-            / ago
-          -else
-            No Posts yet.
+          =link_to channel.updated_at.strftime('%Y/%m/%d %H:%M:%S'), channel_path(channel, :anchor => "comments")
         =link_to h(channel.title), channel_path(channel)
-=will_paginate @channels
+=will_paginate @view.channels

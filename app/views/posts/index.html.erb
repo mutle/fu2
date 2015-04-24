@@ -1,12 +1,12 @@
 <% if @channel.can_read?(current_user) %>
-  <% if @updated_posts.any? %>
-    <div class="updated" data-last-update="<%= @last_update %>">
-      <% @updated_posts.each do |post| %>
+  <% if @view.updated_posts.any? %>
+    <div class="updated" data-last-update="<%= @view.last_update %>">
+      <% @view.updated_posts.each do |post| %>
         <%= render :partial => "channels/post", :object => post if post.can_read?(current_user) %>
       <% end %>
     </div>
   <% end %>
-  <% @posts.each do |post| %>
+  <% @view.posts.each do |post| %>
     <%= render :partial => "channels/post", :object => post if post.can_read?(current_user) %>
     <% @last_post_id = post.id %>
   <% end %>
