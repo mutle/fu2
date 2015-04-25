@@ -37,7 +37,7 @@ module ChannelsHelper
 
   def channel_anchor(channel, current_user, last_post)
     id = channel.last_read_id(current_user)
-    if id >= last_post.id
+    if last_post && id >= last_post.id
       "comments"
     elsif id > 0
       "read_#{id}"
