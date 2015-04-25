@@ -79,7 +79,7 @@ class PostsController < ApplicationController
   end
 
   def faved
-    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
+    @faves = Fave.most_popular.to_a.uniq { |i| i.post_id }
   end
 
   private
