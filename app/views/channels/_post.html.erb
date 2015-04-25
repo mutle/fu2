@@ -4,7 +4,7 @@
 <div class="post<%= ' unread' if unread %><%= ' mention' if mention %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="post-header">
     <div class="post-actions">
-      <% faves = post.faves.to_a %>
+      <% faves = post.faves.includes(:user).to_a %>
       <span class="faves<%= ' active' if post.faved_by?(current_user, faves) %>" title="Faved by:<%= "\n" + faves.map { |f| f.user.login }.join("\n") %>">
         <%= octicon "star" %>
         <span class="count"><%= faves.size %></span>
