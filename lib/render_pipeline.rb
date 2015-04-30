@@ -50,7 +50,7 @@ module RenderPipeline
     }
 
     def call
-      doc.search('text()').each do |node|
+      doc.search('.//text()').each do |node|
         next unless node.respond_to?(:to_html)
         content = node.to_html
         EMBEDS.each do |k,embed|

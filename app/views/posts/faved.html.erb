@@ -1,4 +1,5 @@
 <% @faves.each do |f| %>
   <% next unless f.post %>
+  <% @channel = f.post.channel %>
   <%= render :partial => "channels/post", :object => f.post if f.post.can_read?(current_user) %>
 <% end %>

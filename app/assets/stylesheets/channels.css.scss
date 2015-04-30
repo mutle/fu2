@@ -4,6 +4,9 @@ $small-screen: "only screen and (min-width : 800px)";
   #content {
 
     .body {
+      
+      line-height: 1.3em;
+      
       [title] {
         border-bottom: 1px dotted #BBB;
       }

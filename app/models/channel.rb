@@ -57,7 +57,7 @@ class Channel < ActiveRecord::Base
   end
 
   def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)
@@ -204,7 +204,7 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || i < (post || last_post).id
+    i == 0 || (post || last_post).nil? || i < (post || last_post).id
   end
 
   def visit(current_user, post_id=nil)
@@ -235,8 +235,12 @@ class Channel < ActiveRecord::Base
     if p.size < 12
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
-    e = events.from_post(p.first)
-    result = p + e
+    if p.first
+      e = events.includes(:user).from_post(p.first)
+      result = p + e
+    else
+      result = p
+    end
     result.sort_by(&:created_at)
   end
 

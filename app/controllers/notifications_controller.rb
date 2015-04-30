@@ -1,13 +1,17 @@
 class NotificationsController < ApplicationController
+
+  before_filter :login_required
+
   respond_to :html, :json
 
   def index
     if params[:format].to_s == "json"
-      @notifications = Notification.for_user(current_user)
-      if (last_id = params[:last_id].to_i) > 0
-        @notifications = @notifications.since(last_id)
-      end
-      respond_with @notifications
+      @view = Views::NotificationList.new({
+        current_user: current_user,
+        last_id: params[:last_id].to_i
+      })
+      @view.finalize
+      respond_with @view.notifications
     else
       @column_width = 12
     end

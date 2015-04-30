@@ -4,7 +4,7 @@
 <div class="post<%= ' unread' if unread %><%= ' mention' if mention %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="post-header">
     <div class="post-actions">
-      <% faves = post.faves.to_a %>
+      <% faves = post.faves.includes(:user).to_a %>
       <span class="faves<%= ' active' if post.faved_by?(current_user, faves) %>" title="Faved by:<%= "\n" + faves.map { |f| f.user.login }.join("\n") %>">
         <%= octicon "star" %>
         <span class="count"><%= faves.size %></span>
@@ -14,7 +14,6 @@
         <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
       </span>
     </div>
-
     <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
   </div>
   <div class="body" data-raw-body="<%= u(post.body) %>">
@@ -30,3 +29,4 @@
     <%= format_body post %>
   </div>
 </div>
+<a name="read_<%= post.id %>"></a>

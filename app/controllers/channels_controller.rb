@@ -1,8 +1,6 @@
 class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
 
-  layout :default_layout
-
   before_filter :login_required
 
   respond_to :html, :json
@@ -10,13 +8,14 @@ class ChannelsController < ApplicationController
   def index(respond=true)
     @column_width = 12
     @page = (params[:page] || 1).to_i
-    @recently_active = Channel.recently_active(current_user)
-    @recent_channels = Channel.recent_channels(current_user, @page)
-    @recent_channels.each { |c| c.current_user = current_user }
-    @recent_posts = Channel.recent_posts(@recent_channels)
+    @view = Views::ChannelList.new({
+      current_user: current_user,
+      page: @page
+    })
     @action = 'channels'
+    @view.finalize
     if respond
-      respond_with @recent_channels
+      respond_with @view.recent_channels
     end
   end
 
@@ -40,12 +39,12 @@ class ChannelsController < ApplicationController
 
   def all
     @column_width = 12
-    @letter = params[:letter]
-    if @letter.blank?
-      @channels = Channel.all_channels(current_user, (params[:page] || 1).to_i)
-    else
-      @channels = Channel.with_letter(@letter)
-    end
+    @view = Views::AllChannels.new({
+      current_user: current_user,
+      page: (params[:page] || 1).to_i,
+      letter: params[:letter]
+    })
+    @view.finalize
     render "all"
   end
 
@@ -117,11 +116,14 @@ class ChannelsController < ApplicationController
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
-    @post_count = @channel.posts.count
-    @posts = @channel.show_posts(current_user, @last_read_id)
-    @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at)).map(&:utc).max.to_i
+    @view = Views::ChannelPosts.new({
+      current_user: current_user,
+      channel: @channel,
+      last_read_id: @last_read_id
+    })
+    @view.finalize
     if respond
-      respond_with @posts
+      respond_with @view.posts
     end
   end
 

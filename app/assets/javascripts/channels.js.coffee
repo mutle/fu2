@@ -164,34 +164,35 @@ $ ->
         loader.hide()
       cb?()
 
-  loaderHidden = false
-  $(document).on 'scroll', ->
-    t = $(document).scrollTop()
-    if !loaderHidden && t > 100
-      loaderHidden = true
+  if $(".comment-box").length > 0
+    loaderHidden = false
+    $(document).on 'scroll', ->
+      t = $(document).scrollTop()
+      if !loaderHidden && t > 100
+        loaderHidden = true
 
-    if loaderHidden && t == 0
+      if loaderHidden && t == 0
+        loadMorePosts()
+        loaderHidden = false
+
+      return false
+
+    $(document).on 'click', ".post-loader a.load-more", ->
       loadMorePosts()
-      loaderHidden = false
+      return false
 
-    return false
+    $(document).on 'click', ".post-loader a.load-all", ->
+      loadMorePosts(0, null, true)
+      return false
 
-  $(document).on 'click', ".post-loader a.load-more", ->
-    loadMorePosts()
-    return false
-
-  $(document).on 'click', ".post-loader a.load-all", ->
-    loadMorePosts(0, null, true)
-    return false
-
-  if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
-    post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
-    if $(".post-#{post_id}").length > 0
-      $(".post-#{post_id}").addClass("highlight") if !$(".post-#{post_id}").hasClass("unread")
-    else
-      loadMorePosts post_id, () ->
-        window.location.hash = "post_#{post_id}"
-        $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
+    if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
+      post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
+      if $(".post-#{post_id}").length > 0
+        $(".post-#{post_id}").addClass("highlight") if !$(".post-#{post_id}").hasClass("unread")
+      else
+        loadMorePosts post_id, () ->
+          window.location.hash = "post_#{post_id}"
+          $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
 
 
   if $('.comment-small').length

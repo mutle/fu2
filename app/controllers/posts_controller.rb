@@ -8,21 +8,20 @@ class PostsController < ApplicationController
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
-    if params[:first_id]
-      @posts = Post.before(@channel, params[:first_id])
-    else
-      @posts = Post.since(@channel, params[:last_id])
-    end
-    if params[:limit]
-      @posts = @posts.order("id desc").limit(params[:limit].to_i).reverse
-    else
-      @posts = @posts.order("id")
-    end
-    @updated_posts = last_update ? Post.updated_since(@channel, last_update) : []
     @last_read_id = @channel.last_read_id(current_user)
-    @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at) + @updated_posts.map(&:updated_at)).map(&:utc).max.to_i
+
+    @view = Views::ChannelPosts.new({
+      current_user: current_user,
+      channel: @channel,
+      last_read_id: @last_read_id,
+      first_id: params[:first_id],
+      last_id: params[:last_id],
+      limit: params[:limit],
+      last_update: last_update
+    })
     @last_post_id = 0
-    respond_with @posts
+    @view.finalize
+    respond_with @view.posts
   end
 
   def create
@@ -80,7 +79,7 @@ class PostsController < ApplicationController
   end
 
   def faved
-    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
+    @faves = Fave.most_popular.to_a.uniq { |i| i.post_id }
   end
 
   private
