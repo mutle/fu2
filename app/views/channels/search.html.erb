@@ -5,8 +5,8 @@
   </div>
 <% end %>
 
-<% if @results %>
-  <div class="search-info"><%= @search.total_entries %> results</div>
+<% if @view.results %>
+  <div class="search-info"><%= @view.results["total"] %> results</div>
 
   <% if @correction %>
     <%= "Did you mean #{@correction}?" %>

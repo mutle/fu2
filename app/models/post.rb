@@ -1,7 +1,4 @@
 class Post < ActiveRecord::Base
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
-
   belongs_to :channel
   belongs_to :user
   has_many :faves
@@ -19,13 +16,13 @@ class Post < ActiveRecord::Base
   # before_create :set_markdown
   # before_update :set_markdown
 
-  index_name "posts-#{Rails.env}"
-
-  mapping do
-    indexes :_id, :index => :not_analyzed
-    indexes :body, :analyzer => 'snowball'
-    indexes :created_at, :type => 'date', :index => :not_analyzed
-  end
+  # index_name "posts-#{Rails.env}"
+  #
+  # mapping do
+  #   indexes :_id, :index => :not_analyzed
+  #   indexes :body, :analyzer => 'snowball'
+  #   indexes :created_at, :type => 'date', :index => :not_analyzed
+  # end
 
   # define_index do
   #   indexes body
@@ -33,13 +30,36 @@ class Post < ActiveRecord::Base
   #   where sanitize_sql(['default_read', true])
   # end
 
+  class << self
+    def indexed_type
+      "post"
+    end
+
+    def index_definition
+      {
+        settings: {},
+        mappings: {
+          indexed_type => {
+            properties: {
+              body: { type: 'string', analyze: 'standard' },
+              created_at: { type: 'date', index: 'not_analyzed' },
+              user: { type: 'string', analyze: 'standard' }
+            }
+          }
+        }
+      }
+    end
+  end
+
   def to_indexed_json
-    return {}.to_json if !channel || !channel.default_read?
+    return {} if !channel || !channel.default_read?
     {
       :_id => id,
+      :_type => self.class.indexed_type,
       :body => body,
-      :created_at => created_at
-    }.to_json
+      :created_at => created_at,
+      :user => user.login
+    }
   end
 
   def update_channel_last_post

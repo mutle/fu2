@@ -1,7 +1,4 @@
 class Channel < ActiveRecord::Base
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
-
   scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
 
   MentionPattern = /
@@ -29,26 +26,51 @@ class Channel < ActiveRecord::Base
 
   attr_accessor :current_user, :markdown
 
-  index_name "channels-#{Rails.env}"
-
-  mapping do
-    indexes :_id, :index => :not_analyzed
-    indexes :title, :analyzer => 'snowball', :boost => 100
-    indexes :created_at, :type => 'date', :index => :not_analyzed
-    indexes :text, :analyzer => 'snowball', :boost => 10
-  end
+  # index_name "channels-#{Rails.env}"
+  #
+  # mapping do
+  #   indexes :_id, :index => :not_analyzed
+  #   indexes :title, :analyzer => 'snowball', :boost => 100
+  #   indexes :created_at, :type => 'date', :index => :not_analyzed
+  #   indexes :text, :analyzer => 'snowball', :boost => 10
+  # end
 
   # define_index do
   #   indexes title
   #   set_property :field_weights => {:title => 100}
   # end
 
+  class << self
+    def indexed_type
+      "channel"
+    end
+
+    def index_definition
+      {
+        settings: {},
+        mappings: {
+          indexed_type => {
+            properties: {
+              title: { type: 'string', analyze: 'standard' },
+              created_at: { type: 'date', index: 'not_analyzed' },
+              text: { type: 'string', analyze: 'standard' },
+              updated_by: { type: 'string', analyze: 'standard' }
+            }
+          }
+        }
+      }
+    end
+  end
+
   def to_indexed_json
     {
       :_id => id,
+      :_type => self.class.indexed_type,
       :title => title,
-      :created_at => created_at
-    }.to_json
+      :created_at => created_at,
+      :text => text,
+      :updated_by => (updated_by_user.login rescue "")
+    }
   end
 
 
@@ -61,26 +83,26 @@ class Channel < ActiveRecord::Base
   end
 
   def self.search_channels(title, page)
-    search :per_page => 25, :page => page, :load => true do
-      query do
-        boolean do
-          title.split(' ').each do |t|
-            must { string "*#{t}*" }
-          end
-        end
-      end
-    end
+    # search :per_page => 25, :page => page, :load => true do
+    #   query do
+    #     boolean do
+    #       title.split(' ').each do |t|
+    #         must { string "*#{t}*" }
+    #       end
+    #     end
+    #   end
+    # end
   end
 
   def self.search_channels_and_posts(searchquery, page)
-    Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
-      per_page = 25
-      size per_page
-      from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
-      searchquery.split(' ').each do |q|
-        query { string q }
-      end
-    end.results
+    # Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
+    #   per_page = 25
+    #   size per_page
+    #   from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
+    #   searchquery.split(' ').each do |q|
+    #     query { string q }
+    #   end
+    # end.results
   end
 
   def self.recently_active_interval

@@ -80,21 +80,15 @@ class ChannelsController < ApplicationController
   def search
     @query = params[:search].to_s
     page = (params[:page] || 1).to_i
-    if @query =~ /^title:(.*)$/
-      @query = $1
-      @search = Channel.search_channels(@query, page)
-      @results = true
-    elsif !@query.blank?
-      @search = Channel.search_channels_and_posts(@query, page)
-      @results = true
-    else
-      @results = false
-    end
+    @view = Views::Search.new({
+      query: @query,
+      page: page
+    })
     @action = 'search'
 
     respond_to do |format|
       format.html
-      format.json { render :json => @search.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
+      # format.json { render :json => @view.results.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
     end
   end
 
