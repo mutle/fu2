@@ -77,21 +77,6 @@ class ChannelsController < ApplicationController
     redirect_to channel_path(@channel)
   end
 
-  def search
-    @query = params[:search].to_s
-    page = (params[:page] || 1).to_i
-    @view = Views::Search.new({
-      query: @query,
-      page: page
-    })
-    @action = 'search'
-
-    respond_to do |format|
-      format.html
-      # format.json { render :json => @view.results.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
-    end
-  end
-
   def visit
     @channel = Channel.find(params[:id])
     @last_read_id = @channel.visit(current_user)

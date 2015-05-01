@@ -4,9 +4,9 @@ $small-screen: "only screen and (min-width : 800px)";
   #content {
 
     .body {
-      
+
       line-height: 1.3em;
-      
+
       [title] {
         border-bottom: 1px dotted #BBB;
       }
@@ -246,49 +246,22 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
-    #recent_activities {
+    .last-post-date {
+      color: #666;
+      text-align: center;
+      margin: 1em 0px 0.5em;
+      float: right;
+      width: 150px;
+      text-align: right;
+    }
+
+    .channel {
+      padding: 0px 12px 0px 0px;
+      line-height: 42px;
+      position: relative;
+      background-color: #f2f2f2;
+      margin-bottom: 4px;
       list-style: none;
-      background-color: #fff;
-      padding: 0px;
-      border-radius: 8px;
-      margin-top: 1em;
-
-      .list-date {
-        color: #666;
-        text-align: center;
-        margin: 1em 0px 0.5em;
-      }
-
-      @media #{$small-screen} {
-        .list-date {
-          float: right;
-          width: 150px;
-          text-align: right;
-        }
-
-        .channel {
-          margin-right: 172px;
-        }
-      }
-
-      .channel {
-        padding: 0px 12px 0px 0px;
-        line-height: 42px;
-        position: relative;
-        background-color: #f2f2f2;
-        margin-bottom: 4px;
-      }
-      .channel.unread {
-        background-color: #c2c2c2;
-      }
-      .channel:first-child {
-        .user-color {
-        }
-      }
-      .channel:last-child {
-        border-bottom: none;
-        margin-bottom: 0px;
-      }
 
       a {
         color: #000;
@@ -322,12 +295,54 @@ $small-screen: "only screen and (min-width : 800px)";
         padding-bottom: 16px;
         width: 12px;
       }
+
+      .post-count {
+        float: left;
+      }
+    }
+    .channel.unread {
+      background-color: #c2c2c2;
+    }
+    .channel:first-child {
+      .user-color {
+      }
+    }
+    .channel:last-child {
+      border-bottom: none;
+      margin-bottom: 0px;
+    }
+
+    @media #{$small-screen} {
+      .channel {
+        margin-right: 172px;
+      }
+    }
+
+    #recent_activities {
+      list-style: none;
+      background-color: #fff;
+      padding: 0px;
+      border-radius: 8px;
+      margin-top: 1em;
+
+      .list-date {
+        color: #666;
+        text-align: center;
+        margin: 1em 0px 0.5em;
+      }
+
+      @media #{$small-screen} {
+        .list-date {
+          float: right;
+          width: 150px;
+          text-align: right;
+        }
+      }
+
+
       .date {
         float: right;
         padding-left: 10px;
-      }
-      .post-count {
-        float: left;
       }
     }
 

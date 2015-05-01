@@ -1,17 +1,18 @@
 <% unread = @last_read_id && post.id > @last_read_id %>
 <% mention = post.mentions?(current_user) %>
+<% channel = @channel || post.channel %>
 <a name="post_<%= post.id %>"></a>
 <div class="post<%= ' unread' if unread %><%= ' mention' if mention %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="post-header">
     <div class="post-actions">
-      <% faves = post.faves.includes(:user).to_a %>
+      <% faves ||= post.faves.includes(:user).to_a %>
       <span class="faves<%= ' active' if post.faved_by?(current_user, faves) %>" title="Faved by:<%= "\n" + faves.map { |f| f.user.login }.join("\n") %>">
         <%= octicon "star" %>
         <span class="count"><%= faves.size %></span>
       </span>
 
       <span class="date">
-        <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
+        <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
       </span>
     </div>
     <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
@@ -19,8 +20,8 @@
   <div class="body" data-raw-body="<%= u(post.body) %>">
     <div class="post-options">
       <% if post.user_id == current_user.id %>
-        <%= link_to octicon("flame"), channel_post_path(@channel, post), method: :delete, "data-confirm" => "Are you sure?", title: "Remove" %>
-        <%= link_to octicon("pencil"), edit_channel_post_path(@channel, post), title: "Edit" %>
+        <%= link_to octicon("flame"), channel_post_path(channel, post), method: :delete, "data-confirm" => "Are you sure?", title: "Remove" %>
+        <%= link_to octicon("pencil"), edit_channel_post_path(channel, post), title: "Edit" %>
       <% end %>
       <%= link_to octicon("eye"), "#", class: "post-unread", "data-prev-post-id" => @last_post_id, title: "Mark unread" %>
       <%= link_to octicon("mail-reply"), "#", class: "post-reply", title: "Reply" %>

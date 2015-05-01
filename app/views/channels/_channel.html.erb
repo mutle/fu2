@@ -1,54 +1,22 @@
-<% last_post = @recent_posts[channel.id] %>
-<% unread_posts = @recently_active[:unread_posts][channel.id] %>
-<% other_posts = @recently_active[:other_posts][channel.id] %>
-<% users = @recently_active[:users][channel.id] %>
-<% has_posts = @recently_active[:has_posts][channel.id] %>
-<% activity_hours = @recently_active[:activity_hours][channel.id] %>
-
-<div class="activity-date" data-channel-id="<%= channel.id %>">
-  <%= last_post.created_at.try(:strftime, Fu2.time_format) %>
-</div>
-
-<div class="activity activity-graph-data" data-channel-id="<%= channel.id %>" data-sparklines="<%= activity_hours.join(",") %>">
-  <button class="mark-read">
-    <%= octicon "chevron-up" %>
-  </button>
-
-  <div class="users">
-    <% users.each do |user| %>
-      <%= image_tag avatar_url(user), class: "avatar", title: user.login %>
-    <% end %>
+<% has_posts ||= false %>
+<% last_post ||= channel.last_post %>
+<% show_last_date ||= false %>
+<% if show_last_date && last_post %>
+  <div class="last-post-date">
+    <%= rounded_timestamp last_post.created_at %>
   </div>
-
-  <div class="activity-graph"></div>
-
-  <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
-
-  <div class="posts">
-    <% unread_start = 0 %>
-    <% if unread_posts.size > 3 %>
-      <% unread_start = unread_posts.size - 3 %>
-      <% unread_start = 0 if unread_start < 0 %>
-      <%= link_to "Show #{unread_start} more unread posts", "#", class: "show" %>
+<% end %>
+<li class="channel<%= " unread" if has_posts %>" data-last-id="<%= last_post.id rescue 0 %>">
+  <div class="name">
+    <% if last_post %>
+      <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
+      <%= render :partial => "shared/user", :object => last_post.user %>
     <% else %>
-      <% other_posts.reverse.each do |p| %>
-        <%= render partial: "activity_post", object: p %>
-      <% end %>
+      &nbsp;
     <% end %>
-
-    <% unread_posts.reverse.each_with_index do |p, i| %>
-      <%= render partial: "activity_post", object: p, locals: {unread: true, start: unread_start, i: i} %>
-    <% end %>
-
-    <div class="comment-small">
-      <%= form_for :post, url: channel_posts_path(channel) do |f| %>
-        <%= f.text_area :body, class: "comment-box" %>
-        <div class="actions">
-          <%= link_to "Edit", channel_path(channel, :anchor => "comments") %>
-          <%= f.submit "Send" %>
-        </div>
-      <% end %>
-
-    </div>
   </div>
-</div>
+  <% if (mentions = channel.num_mentions(current_user)) > 0 %>
+    <div class="post-count mentions"><%= mentions %></div>
+  <% end %>
+  <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
+</li>

@@ -5,37 +5,31 @@
   </div>
 <% end %>
 
-<% if @view.results %>
-  <div class="search-info"><%= @view.results["total"] %> results</div>
-
-  <% if @correction %>
-    <%= "Did you mean #{@correction}?" %>
+<div class="advanced-search">
+  <% Search::QUERIES.each do |qc| %>
+    <% q = qc.new %>
+    <h3><%= q.index.capitalize %></h3>
+    <ul>
+      <% q.searchable.each do |attrib| %>
+        <li><%= attrib %></li>
+      <% end %>
   <% end %>
-  <div class="search-results">
-    <% if !@search.any? && !params[:search].blank? %>
-      <em>No results found.</em>
-    <% end %>
-    <% @search.each do |result| %>
-        <% if result.instance_of? Channel %>
-          <div class="result search-channel">
-            <% channel = result %>
-            <%= link_to format_title(channel.title), channel_path(channel) %>
-          </div>
-        <% elsif result.instance_of? Post %>
-          <div class="result search-post">
-            <% post = result %>
-            <% post_link = channel_path(post.channel, :anchor => "post_#{post.id}") %>
-            <%= link_to format_title(post.channel.title), post_link %> by <%= user_name(post.user) %>
-            at <%= post.created_at.strftime(Fu2.time_format) %>
-            <br/>
-            <div class="body">
-              <%= format_body post, @query %>
-            </div>
-          </div>
-        <% end %>
-      </p>
-    <% end %>
-  </div>
+</div>
 
-  <%= will_paginate(@search) %>
+<% if @view.results %>
+
+  <ul>
+    <% @view.results[:objects].each do |o| %>
+
+      <% if o.instance_of?(Post) %>
+        <li><%= o.body %></li>
+      <% elsif o.instance_of?(Channel) %>
+        <li><%= o.title %></li>
+      <% end %>
+
+    <% end %>
+  </ul>
+
+  <%= @view.results[:result_count] %> out of <%= @view.results[:total_count] %> items matched
+
 <% end %>

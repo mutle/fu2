@@ -9,12 +9,10 @@ class Search
       "post"
     end
 
-    def search_query
-      {
-        match: {
-          body: @query.first
-        }
-      }
+    def default
+      [
+        :body
+      ]
     end
 
     def searchable
@@ -28,7 +26,7 @@ class Search
     def fetch_objects(query)
       return [] if !query || !query['hits'] || !query['hits']['hits']
       ids = query['hits']['hits'].map { |h| h['_id'] }
-      order_by_ids ids, Post.with_ids(ids).load
+      order_by_ids ids, Post.with_ids(ids).includes(:user, :channel, :faves => [:user]).load
     end
   end
 end

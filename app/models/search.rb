@@ -76,6 +76,8 @@ class Search
     @query = parse_query query
     @options = options
     @results = nil
+    @per_page = options.fetch(:per_page, 25)
+    @options[:per_page] = @per_page
   end
 
   def parse_query(query)
@@ -102,13 +104,21 @@ class Search
     return @results if @results
     @results = {
       total_count: 0,
+      result_count: 0,
+      offset: 0,
       objects: []
     }
+    n = 0
+    enough_results = false
     QUERIES.each do |query|
-      r = query.new(@query).results
-      p r
+      r = query.new(@query, @options).results
       @results[:total_count] += r[:total_count]
-      @results[:objects] += r[:objects]
+      @results[:result_count] += r[:result_count]
+      @results[:objects] += r[:objects] if !enough_results
+      n += r[:objects].size
+      if n >= @per_page
+        enough_results = true
+      end
     end
     @results
   end

@@ -4,7 +4,7 @@ module Views
     attrs :query, :page
 
     fetches :results, proc {
-      Search.query(query, page: page).results
+      ::Search.query(query, page: page).results
     }
 
   end

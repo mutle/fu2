@@ -9,12 +9,11 @@ class Search
       "channel"
     end
 
-    def search_query
-      {
-        match: {
-          title: @query.first
-        }
-      }
+    def default
+      [
+        :title,
+        :text
+      ]
     end
 
     def searchable
