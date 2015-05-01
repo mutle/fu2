@@ -8,6 +8,7 @@ class Post < ActiveRecord::Base
   scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id) }
   scope :updated_since, proc { |c, d| includes(:user).where("channel_id = :channel_id AND updated_at > :d", :channel_id => c.id, :d => (d + 1)).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
+  scope :with_ids, proc { |ids| where(id: ids) }
 
   after_create :update_channel_last_post
   after_create :scan_for_mentions
@@ -15,6 +16,9 @@ class Post < ActiveRecord::Base
 
   # before_create :set_markdown
   # before_update :set_markdown
+
+  after_create :update_index
+  after_update :update_index
 
   # index_name "posts-#{Rails.env}"
   #
@@ -142,6 +146,10 @@ class Post < ActiveRecord::Base
   def html_body
     result = markdown? ? RenderPipeline.markdown(body, id) : RenderPipeline.simple(body, id)
     result.html_safe
+  end
+
+  def update_index
+    Search.update("posts", id)
   end
 
 end

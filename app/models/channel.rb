@@ -1,5 +1,6 @@
 class Channel < ActiveRecord::Base
   scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+  scope :with_ids, proc { |ids| where(id: ids) }
 
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
@@ -23,6 +24,9 @@ class Channel < ActiveRecord::Base
 
   before_create :generate_permalink
   after_create :add_first_post
+
+  after_create :update_index
+  after_update :update_index
 
   attr_accessor :current_user, :markdown
 
@@ -276,6 +280,10 @@ class Channel < ActiveRecord::Base
     return if old_title == name
     self.title = name
     events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
+  end
+
+  def update_index
+    Search.update("channels", id)
   end
 
 end

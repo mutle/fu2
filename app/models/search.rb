@@ -15,8 +15,7 @@ class Search
     end
 
     def update_index
-      build_index "channels", Channel
-      build_index "posts", Post
+      setup_index
 
       count = Channel.count
       Channel.all.each_with_index { |c,i| index_doc("channels", c, i, count) }
@@ -25,7 +24,8 @@ class Search
     end
 
     def build_index(name, klass)
-      index(name).create(klass.index_definition)
+      i = index(name)
+      i.create(klass.index_definition) if !i.exists?
     end
 
     def index_name(name)
@@ -39,12 +39,21 @@ class Search
       end
     end
 
+    def setup_index
+      build_index "channels", Channel
+      build_index "posts", Post
+    end
+
     def index_doc(name, obj, n, count)
       data = obj.to_indexed_json
       return if data.keys.size < 1
       d = docs(name)
-      puts "#{name}: #{n}/#{count}"
+      Rails.logger.info "#{index_name name}: #{n+1}/#{count}"
       d.index(data)
+    end
+
+    def update(name, id)
+      Resque.enqueue(IndexJob, name, id)
     end
 
   end
