@@ -19,6 +19,7 @@ class Post < ActiveRecord::Base
 
   after_create :update_index
   after_update :update_index
+  before_destroy :remove_index
 
   # index_name "posts-#{Rails.env}"
   #
@@ -150,6 +151,10 @@ class Post < ActiveRecord::Base
 
   def update_index
     Search.update("posts", id)
+  end
+
+  def remove_index
+    Search.remove("posts", id)
   end
 
 end

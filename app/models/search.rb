@@ -48,12 +48,22 @@ class Search
       data = obj.to_indexed_json
       return if data.keys.size < 1
       d = docs(name)
-      Rails.logger.info "#{index_name name}: #{n+1}/#{count}"
+      Rails.logger.info "+#{index_name name}: #{data[:id]} (#{n+1}/#{count})"
       d.index(data)
     end
 
+    def remove_doc(name, id, type, n, count)
+      d = docs(name)
+      Rails.logger.info "-#{index_name name}: #{id} (#{n+1}/#{count})"
+      d.delete(id: id, type: type)
+    end
+
     def update(name, id)
-      Resque.enqueue(IndexJob, name, id)
+      Resque.enqueue(IndexJob, :update, name, id)
+    end
+
+    def remove(name, id)
+      Resque.enqueue(IndexJob, :remove, name, id)
     end
 
   end

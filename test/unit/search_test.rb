@@ -35,6 +35,20 @@ class SearchTest < ActiveSupport::TestCase
     p = create_post
     wait_for_es
     assert_equal 1, $elastomer.get('/channels-test/_search').body["hits"]["total"]
+    assert_equal 2, $elastomer.get('/posts-test/_search').body["hits"]["total"]
+  end
+
+  test "remove from index after destroy" do
+    Search.setup_index
+    u = create_user
+    p = create_post
+    c = p.channel
+    wait_for_es
+    c.posts.each { |post| post.destroy }
+    c.destroy
+    wait_for_es
+    assert_equal 0, $elastomer.get('/channels-test/_search').body["hits"]["total"]
+    assert_equal 0, $elastomer.get('/posts-test/_search').body["hits"]["total"]
   end
 
 end

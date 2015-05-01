@@ -27,6 +27,7 @@ class Channel < ActiveRecord::Base
 
   after_create :update_index
   after_update :update_index
+  before_destroy :remove_index
 
   attr_accessor :current_user, :markdown
 
@@ -284,6 +285,10 @@ class Channel < ActiveRecord::Base
 
   def update_index
     Search.update("channels", id)
+  end
+
+  def remove_index
+    Search.remove("channels", id)
   end
 
 end
