@@ -15,6 +15,23 @@ class SearchTest < ActiveSupport::TestCase
     sleep 1
   end
 
+  test "query" do
+    q = Search.query("a:b foo \"bar baz\"").query
+    assert_equal 3, q.size
+  end
+
+  test "search query" do
+    Search.setup_index
+    u = create_user
+    p = create_post
+    wait_for_es
+    q = Search.query("test").results
+    p q
+    assert_equal 3, q[:total_count]
+    assert_equal 1, q[:objects].size
+    assert_not_nil q[:objects].first
+  end
+
   test "update index" do
     u = create_user
     p = create_post
@@ -22,12 +39,6 @@ class SearchTest < ActiveSupport::TestCase
     update_index
     assert_equal 1, $elastomer.get('/channels-test/_search').body["hits"]["total"]
   end
-
-  # test "query" do
-  #   q = Search.query("a:b foo \"bar baz\"").query
-  #   p q
-  #   assert_equal 3, q.size
-  # end
 
   test "indexes after create" do
     Search.setup_index

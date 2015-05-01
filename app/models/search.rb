@@ -70,9 +70,12 @@ class Search
 
   attr_accessor :query
 
+  QUERIES = [ChannelsQuery, PostsQuery]
+
   def initialize(query, options={})
     @query = parse_query query
     @options = options
+    @results = nil
   end
 
   def parse_query(query)
@@ -80,21 +83,34 @@ class Search
     q = []
     scanner = StringScanner.new(s)
     while !scanner.eos?
-      if scanner.scan /([^\w]+):([^\w]+)/
-        if scanner[0]
-          q << [scanner[0], scanner[1]]
+      if scanner.scan /\"([\w ]+)\"/
+        q << scanner[1]
+      elsif scanner.scan /((\w+):)?(\w+)/
+        if scanner[2]
+          q << [scanner[3], scanner[2]]
         else
-          q << scanner[1]
+          q << scanner[3]
         end
-      elsif scanner.scan /"/
-        q << scanner.scan_until(/^[^\\]"/).to_s
+      else
+        scanner.getch
       end
     end
     q
   end
 
   def results
-    self
+    return @results if @results
+    @results = {
+      total_count: 0,
+      objects: []
+    }
+    QUERIES.each do |query|
+      r = query.new(@query).results
+      p r
+      @results[:total_count] += r[:total_count]
+      @results[:objects] += r[:objects]
+    end
+    @results
   end
 
 
