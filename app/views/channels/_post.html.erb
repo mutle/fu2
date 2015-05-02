@@ -1,6 +1,7 @@
 <% unread = @last_read_id && post.id > @last_read_id %>
 <% mention = post.mentions?(current_user) %>
 <% channel = @channel || post.channel %>
+<% hide_user ||= false %>
 <a name="post_<%= post.id %>"></a>
 <div class="post<%= ' unread' if unread %><%= ' mention' if mention %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="post-header">
@@ -15,7 +16,9 @@
         <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(channel, :anchor => "post_#{post.id}"), class: "post-date-link" %>
       </span>
     </div>
-    <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
+    <% if !hide_user %>
+      <%= render :partial => "shared/user", object: post.user, locals: {size: 32} %>
+    <% end %>
   </div>
   <div class="body" data-raw-body="<%= u(post.body) %>">
     <div class="post-options">

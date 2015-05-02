@@ -1,12 +1,14 @@
 <% has_posts ||= false %>
 <% last_post ||= channel.last_post %>
 <% show_last_date ||= false %>
+<% element ||= "li" %>
+<% anchor ||= nil %>
 <% if show_last_date && last_post %>
   <div class="last-post-date">
     <%= rounded_timestamp last_post.created_at %>
   </div>
 <% end %>
-<li class="channel<%= " unread" if has_posts %>" data-last-id="<%= last_post.id rescue 0 %>">
+<<%= element %> class="channel<%= " unread" if has_posts %>" data-last-id="<%= last_post.id rescue 0 %>">
   <div class="name">
     <% if last_post %>
       <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
@@ -18,5 +20,5 @@
   <% if (mentions = channel.num_mentions(current_user)) > 0 %>
     <div class="post-count mentions"><%= mentions %></div>
   <% end %>
-  <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
-</li>
+  <%= link_to format_title(channel), channel_path(channel, :anchor => anchor || channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
+</<%= element %>>

@@ -16,7 +16,7 @@ class SearchController < ApplicationController
 
     respond_to do |format|
       format.html
-      # format.json { render :json => @view.results.map { |r| {:title => r.title, :display_title => highlight_results(r.title, @query), :id => r.id} } }
+      format.json { render :json => @view.results }
     end
   end
 end

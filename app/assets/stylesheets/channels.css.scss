@@ -667,52 +667,5 @@ $small-screen: "only screen and (min-width : 800px)";
         }
       }
     }
-
-    .search-form {
-      text-align: center;
-
-      input {
-        display: inline;
-        font-size: 18px;
-
-        &.search-field {
-          width: 320px;
-        }
-      }
-
-      .inputs {
-        width: 480px;
-        margin: 100px auto 1em auto;
-      }
-
-      &.results {
-        .inputs {
-          margin-top: 1em;
-        }
-      }
-    }
-
-    .search-info {
-      margin-bottom: 2em;
-    }
-
-    .search-results {
-      .result {
-        margin-bottom: 1em;
-        border-bottom: 1px solid #e2e2e2;
-        padding-bottom: 1em;
-
-        a {
-          font-size: 16px;
-        }
-      }
-      .search-channel {
-
-      }
-
-      .search-post {
-
-      }
-    }
   }
 }
