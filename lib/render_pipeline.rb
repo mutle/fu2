@@ -42,7 +42,7 @@ module RenderPipeline
         end
       },
       youtube: {
-        pattern: %r{https?://(www\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
+        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
         callback: proc do |content, id|
           content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
         end
