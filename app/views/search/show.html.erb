@@ -26,14 +26,36 @@
 <% end %>
 
 <header class="search-header">
-  <span class="result-count"><%= @view.results[:result_count] %> Results</span>
+  <span class="result-count"><%= @view.results[:offset] %>-<%= @view.results[:offset] + @view.results[:objects].size %> of <%= @view.results[:result_count] %> results</span>
+
+  <span class="sort-by">
+    Sort by:
+    <span class="sort-menu search-menu">
+      <div class="search-menu-options">
+        <span class="option selected">created</span>
+        <span class="option">faves</span>
+      </div>
+      <span class="title">created</span> <%= octicon "chevron-down" %></span>
+  </span>
+
+  <span class="filter">
+    Filter:
+    <span class="filter-menu search-menu">
+      <div class="search-menu-options">
+        <span class="option selected">All</span>
+        <span class="option">Channels</span>
+        <span class="option">Posts</span>
+      </div>
+      <span class="title">All</span> <%= octicon "chevron-down" %>
+    </span>
+  </span>
 </header>
 
 <ul id="search-results">
   <% if @view.results %>
 
-    <% @view.results[:objects].each do |o| %>
-
+    <% @view.results[:objects].each_with_index do |o,i| %>
+      <%= @view.results[:scores][i] %>
       <% if o.instance_of?(Post) %>
         <li class="result-post">
           <%= render partial: "channels/channel", object: o.channel, locals: {show_last_date: false, element: "div", last_post: o, anchor: channel_post_anchor(o.channel, o)} %>

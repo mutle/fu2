@@ -8,10 +8,11 @@ class Search
 
     def perform
       i = Search.index(index)
-      p search_query
+      query = search_query
+      Rails.logger.info "Search query #{query}"
       r = i.multi_search do |m|
         m.search({:query => {:match_all => {}}}, :search_type => :count)
-        m.search({:query => search_query, :size => @options[:per_page]}, :type => index_type)
+        m.search({:query => query, :sort => sort, :size => @options[:per_page]}, :type => index_type)
       end
       res = r['responses']
       res.each do |result|
@@ -20,7 +21,8 @@ class Search
       {
         total_count: res[0]['hits']['total'],
         result_count: res[1]['hits']['total'],
-        objects: fetch_objects(res[1])
+        objects: fetch_objects(res[1]),
+        scores: res[1]['hits']['hits'].map { |h| h['_score'] }
       }
     end
 
@@ -37,13 +39,16 @@ class Search
     end
 
     def search_query
-      q = {bool:{must:[]}}
-      p = q[:bool][:must]
+      q = {bool:{should:[]}}
+      p = q[:bool][:should]
       default.each do |a|
         query_for(a).each do |t|
           p << {
             match: {
-              a => t
+              a => {
+                query: t,
+                boost: boost_for(a)
+              }
             }
           }
         end
@@ -52,12 +57,22 @@ class Search
         query_for(a, true).each do |t|
           p << {
             match: {
-              t[1] => t[0]
+              t[1] => {
+                query: t[0],
+                boost: boost_for(t[1])
+              }
             }
           }
         end
       end
       q
+    end
+
+    def sort(s=:created)
+      [
+        { s =>    { order: "desc" }},
+        { _score: { order: "desc" }}
+      ]
     end
 
     def query_for(attribute, optional=false)
@@ -68,6 +83,10 @@ class Search
         q << term
       end
       q
+    end
+
+    def boost_for(attribute)
+      boost[attribute] || 1
     end
 
     def fetch_objects(query)
@@ -82,6 +101,9 @@ class Search
     end
     def default
       []
+    end
+    def boost
+      {}
     end
   end
 end

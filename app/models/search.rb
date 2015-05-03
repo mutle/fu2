@@ -18,9 +18,9 @@ class Search
       setup_index
 
       count = Channel.count
-      Channel.all.each_with_index { |c,i| index_doc("channels", c, i, count) }
+      Channel.includes(:user).find_each(batch_size: 2000).with_index { |c,i| index_doc("channels", c, i, count) }
       count = Post.count
-      Post.all.each_with_index { |p,i| index_doc("posts", p, i, count) }
+      Post.includes(:user, :channel, :faves => [:user]).find_each(batch_size: 2000).with_index { |p,i| index_doc("posts", p, i, count) }
     end
 
     def build_index(name, klass)
@@ -76,6 +76,7 @@ class Search
     @query = parse_query query
     @options = options
     @results = nil
+    @offset = options.fetch(:offset, 0)
     @per_page = options.fetch(:per_page, 25)
     @options[:per_page] = @per_page
   end
@@ -102,23 +103,27 @@ class Search
 
   def results
     return @results if @results
+    offset = @offset
     @results = {
       total_count: 0,
       result_count: 0,
-      offset: 0,
-      objects: []
+      offset: offset,
+      objects: [],
+      scores: []
     }
     n = 0
-    enough_results = false
     QUERIES.each do |query|
-      r = query.new(@query, @options).results
+      r = query.new(@query, @options.merge(offset: offset)).results
       @results[:total_count] += r[:total_count]
       @results[:result_count] += r[:result_count]
-      @results[:objects] += r[:objects] if !enough_results
-      n += r[:objects].size
-      if n >= @per_page
-        enough_results = true
+      offset -= r[:result_count]
+      i = 0
+      while i < r[:objects].size && n + i < @per_page
+        @results[:objects] << r[:objects][i]
+        @results[:scores] << r[:scores][i]
+        i += 1
       end
+      n += i
     end
     @results
   end

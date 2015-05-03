@@ -15,4 +15,13 @@ $ ->
           results.push item
         autocompleter.showResults results, term
 
-  $(".advanced-search").click -> $("#advanced-search").toggleClass("active")
+  $(".advanced-search").click ->
+    $("#advanced-search").toggleClass("active")
+
+  $(".search-menu").click ->
+    visible = $(this).hasClass("active")
+    $(".search-menu").removeClass("active")
+    $(this).toggleClass("active") if !visible
+
+  $(".search-menu .option").click ->
+    $(this).parents(".search-menu").find(".title").text($(this).text())

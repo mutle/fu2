@@ -19,10 +19,15 @@ class Search
     def searchable
       [
         :title,
-        :created_at,
-        :text,
-        :updated_by
+        :created,
+        :text
       ]
+    end
+
+    def boost
+      {
+        title: 5
+      }
     end
 
     def fetch_objects(query)

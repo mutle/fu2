@@ -57,9 +57,8 @@ class Channel < ActiveRecord::Base
           indexed_type => {
             properties: {
               title: { type: 'string', analyze: 'standard' },
-              created_at: { type: 'date', index: 'not_analyzed' },
-              text: { type: 'string', analyze: 'standard' },
-              updated_by: { type: 'string', analyze: 'standard' }
+              created: { type: 'date', index: 'not_analyzed' },
+              text: { type: 'string', analyze: 'standard' }
             }
           }
         }
@@ -72,9 +71,8 @@ class Channel < ActiveRecord::Base
       :_id => id,
       :_type => self.class.indexed_type,
       :title => title,
-      :created_at => created_at,
-      :text => text,
-      :updated_by => (updated_by_user.login rescue "")
+      :created => created_at,
+      :text => text
     }
   end
 

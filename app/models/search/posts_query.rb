@@ -18,8 +18,11 @@ class Search
     def searchable
       [
         :body,
-        :created_at,
-        :user
+        :created,
+        :user,
+        :faves,
+        :faver,
+        :mention
       ]
     end
 

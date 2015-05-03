@@ -47,8 +47,9 @@ class Post < ActiveRecord::Base
           indexed_type => {
             properties: {
               body: { type: 'string', analyze: 'standard' },
-              created_at: { type: 'date', index: 'not_analyzed' },
-              user: { type: 'string', analyze: 'standard' }
+              created: { type: 'date', index: 'not_analyzed' },
+              user: { type: 'string', analyze: 'standard' },
+              faves: { type: 'integer', index: 'not_analyzed' }
             }
           }
         }
@@ -62,8 +63,11 @@ class Post < ActiveRecord::Base
       :_id => id,
       :_type => self.class.indexed_type,
       :body => body,
-      :created_at => created_at,
-      :user => user.login
+      :created => created_at,
+      :user => user.login,
+      :faves => faves.size,
+      :faver => faves.map { |fave| fave.user.login }.join(" "),
+      :mention => mentioned_users.join(" ")
     }
   end
 
@@ -92,6 +96,14 @@ class Post < ActiveRecord::Base
       return true if login.downcase == user.login.downcase
     end
     false
+  end
+
+  def mentioned_users
+    users = []
+    body.scan Channel::MentionPattern do |mention|
+      users << mention[0]
+    end
+    users
   end
 
   def set_markdown
