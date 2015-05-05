@@ -1,10 +1,10 @@
 module Views
   class Search < ApplicationView
 
-    attrs :query, :page
+    attrs :query, :start, :sort
 
     fetches :results, proc {
-      ::Search.query(query, page: page).results
+      ::Search.query(query, offset: start, sort: sort).results
     }
 
   end

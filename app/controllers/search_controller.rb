@@ -6,16 +6,24 @@ class SearchController < ApplicationController
 
   def show
     @query = params[:search].to_s
-    page = (params[:page] || 1).to_i
+    start = (params[:start] || 0).to_i
+    @sort = params[:sort] || "created"
     @view = Views::Search.new({
       query: @query,
-      page: page
+      start: start,
+      sort: @sort
     })
     @view.finalize
     @action = 'search'
 
     respond_to do |format|
-      format.html
+      format.html do
+        if params[:update]
+          render partial: "results", layout: false, locals: {include_counts: true}
+        else
+          render
+        end
+      end
       format.json { render :json => @view.results }
     end
   end

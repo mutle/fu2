@@ -31,20 +31,6 @@ class Channel < ActiveRecord::Base
 
   attr_accessor :current_user, :markdown
 
-  # index_name "channels-#{Rails.env}"
-  #
-  # mapping do
-  #   indexes :_id, :index => :not_analyzed
-  #   indexes :title, :analyzer => 'snowball', :boost => 100
-  #   indexes :created_at, :type => 'date', :index => :not_analyzed
-  #   indexes :text, :analyzer => 'snowball', :boost => 10
-  # end
-
-  # define_index do
-  #   indexes title
-  #   set_property :field_weights => {:title => 100}
-  # end
-
   class << self
     def indexed_type
       "channel"
@@ -58,7 +44,8 @@ class Channel < ActiveRecord::Base
             properties: {
               title: { type: 'string', analyze: 'standard' },
               created: { type: 'date', index: 'not_analyzed' },
-              text: { type: 'string', analyze: 'standard' }
+              text: { type: 'string', analyze: 'standard' },
+              site_id: { type: 'integer', index: 'not_analyzed' }
             }
           }
         }
@@ -72,7 +59,8 @@ class Channel < ActiveRecord::Base
       :_type => self.class.indexed_type,
       :title => title,
       :created => created_at,
-      :text => text
+      :text => text,
+      :site_id => 1
     }
   end
 

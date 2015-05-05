@@ -14,26 +14,9 @@ class Post < ActiveRecord::Base
   after_create :scan_for_mentions
   after_create :process_fubot_message
 
-  # before_create :set_markdown
-  # before_update :set_markdown
-
   after_create :update_index
   after_update :update_index
   before_destroy :remove_index
-
-  # index_name "posts-#{Rails.env}"
-  #
-  # mapping do
-  #   indexes :_id, :index => :not_analyzed
-  #   indexes :body, :analyzer => 'snowball'
-  #   indexes :created_at, :type => 'date', :index => :not_analyzed
-  # end
-
-  # define_index do
-  #   indexes body
-  #   has channel(:default_read)
-  #   where sanitize_sql(['default_read', true])
-  # end
 
   class << self
     def indexed_type
@@ -49,7 +32,8 @@ class Post < ActiveRecord::Base
               body: { type: 'string', analyze: 'standard' },
               created: { type: 'date', index: 'not_analyzed' },
               user: { type: 'string', analyze: 'standard' },
-              faves: { type: 'integer', index: 'not_analyzed' }
+              faves: { type: 'integer', index: 'not_analyzed' },
+              site_id: { type: 'integer', index: 'not_analyzed' }
             }
           }
         }
@@ -64,10 +48,11 @@ class Post < ActiveRecord::Base
       :_type => self.class.indexed_type,
       :body => body,
       :created => created_at,
-      :user => user.login,
+      :user => (user.login rescue ''),
       :faves => faves.size,
       :faver => faves.map { |fave| fave.user.login }.join(" "),
-      :mention => mentioned_users.join(" ")
+      :mention => mentioned_users.join(" "),
+      :site_id => 1
     }
   end
 

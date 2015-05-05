@@ -116,7 +116,6 @@ class Search
       r = query.new(@query, @options.merge(offset: offset)).results
       @results[:total_count] += r[:total_count]
       @results[:result_count] += r[:result_count]
-      offset -= r[:result_count]
       i = 0
       while i < r[:objects].size && n + i < @per_page
         @results[:objects] << r[:objects][i]

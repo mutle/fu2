@@ -78,10 +78,6 @@ class PostsController < ApplicationController
     render :json => {:status => "OK"}
   end
 
-  def faved
-    @faves = Fave.most_popular.to_a.uniq { |i| i.post_id }
-  end
-
   private
   def post_params
     params.require(:post).permit(:body)
