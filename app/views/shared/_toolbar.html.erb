@@ -1,5 +1,5 @@
 <div class="search">
-  <%= form_tag search_channels_path, :method => :get do %>
+  <%= form_tag search_path, :method => :get do %>
     <%= octicon("search") %>
     <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
   <% end %>

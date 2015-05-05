@@ -82,10 +82,14 @@ class Autocompleter
     # @list.css "top", @o.css "top"
     # @list.width(@o.width())
     @list.empty()
-    @list.append $("<li>").html("<a data-is-link-to-full-search href=\"/channels/search?utf8=✓&search=#{search}\">Search for <em>#{search}</em></a>")
-    @list.append $("<li>").html("<a data-title=\"#{r.title}\" href=\"#{r.url}\">#{r.display_title}</a>") for r in results
+    @list.append $("<li>").html("<a data-is-link-to-full-search href=\"/search?utf8=✓&search=#{search}\">Search for <em>#{search}</em></a>")
+    for r in results
+      i = $("<li>").html("<a data-title=\"#{r.title}\" href=\"#{r.url}\"></a>")
+      a = i.find("a")
+      if r.display_title then a.html(r.display_title) else a.text(r.title)
+      @list.append i
     @list.show()
-    this.setHighlight this.list.find("li").eq(1)
+    this.setHighlight this.list.find("li:first")
 
 autocompleter = (object, callback) ->
   new Autocompleter object, callback

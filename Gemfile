@@ -16,7 +16,7 @@ gem "gemoji"
 gem "rinku"
 gem "escape_utils", "~>1.0.1"
 gem "html-pipeline", "~>1.11.0", :require => "html/pipeline"
-gem "tire"
+gem "elastomer-client", "~>0.4.1", :require => "elastomer/client"
 gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'

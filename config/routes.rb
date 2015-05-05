@@ -1,6 +1,8 @@
 require "resque_web"
 
 Fu2::Application.routes.draw do
+  get 'search/show'
+
   mount ResqueWeb::Engine => "/resque"
 
   resources :users do
@@ -22,6 +24,8 @@ Fu2::Application.routes.draw do
       post :authenticate
     end
   end
+
+  resource :search, :controller => :search
 
   resources :channels do
     collection do

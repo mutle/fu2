@@ -26,8 +26,6 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   # attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
 
-  after_create :create_private_channel
-
   has_many :posts
   has_many :channel_visits
   has_many :uploads
@@ -150,10 +148,6 @@ class User < ActiveRecord::Base
     self.remember_token_expires_at = nil
     self.remember_token            = nil
     save # (false)
-  end
-
-  def create_private_channel
-    Channel.create(:title => "#{login}/Mailbox", :user_id => id, :default_read => false, :default_write => true)
   end
 
   def display_color
