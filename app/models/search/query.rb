@@ -47,11 +47,12 @@ class Search
     end
 
     def search_query
-      q = {bool:{should:[]}}
-      p = q[:bool][:should]
+      q = {bool:{should:[], must:[]}}
+      should = q[:bool][:should]
+      must = q[:bool][:must]
       default.each do |a|
         query_for(a).each do |t|
-          p << {
+          should << {
             match: {
               a => {
                 query: wildcard(t),
@@ -63,7 +64,7 @@ class Search
       end
       searchable.each do |a|
         query_for(a, true).each do |t|
-          p << {
+          must << {
             match: {
               t[1] => {
                 query: wildcard(t[0]),
@@ -73,7 +74,7 @@ class Search
           }
         end
       end
-      return nil if p.size < 1
+      return nil if should.size < 1 && must.size < 1
       q
     end
 
