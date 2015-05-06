@@ -88,14 +88,20 @@ class Search
     while !scanner.eos?
       if scanner.scan /\"([\w ]+)\"/
         q << scanner[1]
-      elsif scanner.scan /((\w+):)?(\w+)/
+      elsif scanner.scan /((\w+):)?(\+?\w+) */
         if scanner[2]
           q << [scanner[3], scanner[2]]
         else
           q << scanner[3]
         end
       else
-        scanner.getch
+        if q.last.is_a?(String)
+          q.last << scanner.scan_until(/ |$/) || ''
+        elsif q.last.is_a?(Array)
+          q.last[0] << scanner.scan_until(/ |$/) || ''
+        else
+          Rails.logger.info "query parser discarding #{scanner.getch} (#{query})"
+        end
       end
     end
     q
