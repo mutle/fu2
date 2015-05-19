@@ -8,12 +8,20 @@ class PostsController < ApplicationController
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
-    @posts = Post.since(@channel, params[:last_id])
-    @updated_posts = Post.updated_since(@channel, last_update) if last_update
     @last_read_id = @channel.last_read_id(current_user)
-    @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at) + @updated_posts.map(&:updated_at)).map(&:utc).max.to_i
+
+    @view = Views::ChannelPosts.new({
+      current_user: current_user,
+      channel: @channel,
+      last_read_id: @last_read_id,
+      first_id: params[:first_id],
+      last_id: params[:last_id],
+      limit: params[:limit],
+      last_update: last_update
+    })
     @last_post_id = 0
-    respond_with @posts
+    @view.finalize
+    respond_with @view.posts
   end
 
   def create
@@ -65,10 +73,6 @@ class PostsController < ApplicationController
     @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
     render :json => {:status => "OK"}
-  end
-
-  def faved
-    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
   end
 
   private

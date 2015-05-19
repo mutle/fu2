@@ -16,3 +16,4 @@
 //= require redcursor_app
 //= require notifications
 //= require channels
+//= require search

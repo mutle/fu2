@@ -1,8 +1,15 @@
 require 'test_helper'
 
-class MessageTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+class PostTest < ActiveSupport::TestCase
+
+  test "fave post" do
+    u = create_user
+    p = create_post
+    assert !p.faved_by?(u)
+    p.fave(u)
+    assert p.faved_by?(u)
+    p.unfave(u)
+    assert !p.faved_by?(u)
   end
+
 end

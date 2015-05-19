@@ -11,23 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141204213128) do
+ActiveRecord::Schema.define(version: 20150403202551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "channels", force: true do |t|
-    t.string   "title",                        null: false
-    t.integer  "user_id",                      null: false
-    t.string   "permalink",                    null: false
-    t.boolean  "default_read",  default: true, null: false
-    t.boolean  "default_write", default: true, null: false
+  create_table "channels", force: :cascade do |t|
+    t.string   "title",         limit: 255,                null: false
+    t.integer  "user_id",                                  null: false
+    t.string   "permalink",     limit: 255,                null: false
+    t.boolean  "default_read",              default: true, null: false
+    t.boolean  "default_write",             default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_post"
     t.text     "text"
     t.integer  "updated_by"
-    t.integer  "site_id",       default: 1
+    t.integer  "site_id",                   default: 1
   end
 
   add_index "channels", ["created_at"], name: "index_channels_on_created_at", using: :btree
@@ -35,7 +35,21 @@ ActiveRecord::Schema.define(version: 20141204213128) do
   add_index "channels", ["site_id"], name: "index_channels_on_site_id", using: :btree
   add_index "channels", ["title"], name: "index_channels_on_title", using: :btree
 
-  create_table "faves", force: true do |t|
+  create_table "events", force: :cascade do |t|
+    t.integer  "channel_id"
+    t.integer  "user_id"
+    t.string   "event"
+    t.text     "data"
+    t.text     "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "events", ["channel_id"], name: "index_events_on_channel_id", using: :btree
+  add_index "events", ["event"], name: "index_events_on_event", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
+
+  create_table "faves", force: :cascade do |t|
     t.integer  "user_id",                null: false
     t.integer  "post_id",                null: false
     t.datetime "created_at",             null: false
@@ -45,52 +59,52 @@ ActiveRecord::Schema.define(version: 20141204213128) do
 
   add_index "faves", ["site_id"], name: "index_faves_on_site_id", using: :btree
 
-  create_table "images", force: true do |t|
+  create_table "images", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "post_id"
-    t.string   "image_file"
-    t.string   "filename"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "site_id",    default: 1
+    t.string   "image_file", limit: 255
+    t.string   "filename",   limit: 255
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "site_id",                default: 1
   end
 
   add_index "images", ["site_id"], name: "index_images_on_site_id", using: :btree
 
-  create_table "invite_approvals", force: true do |t|
+  create_table "invite_approvals", force: :cascade do |t|
     t.integer  "invite_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "invites", force: true do |t|
+  create_table "invites", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "name"
-    t.string   "email"
-    t.string   "activation_code"
-    t.boolean  "approved",        default: false, null: false
-    t.boolean  "sent",            default: false, null: false
+    t.string   "name",            limit: 255
+    t.string   "email",           limit: 255
+    t.string   "activation_code", limit: 255
+    t.boolean  "approved",                    default: false, null: false
+    t.boolean  "sent",                        default: false, null: false
     t.text     "approved_users"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "notifications", force: true do |t|
+  create_table "notifications", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "reference_notification_id"
-    t.string   "notification_type"
-    t.string   "created_by_name"
+    t.string   "notification_type",         limit: 255
+    t.string   "created_by_name",           limit: 255
     t.integer  "created_by_id"
     t.integer  "channel_id"
     t.integer  "post_id"
     t.text     "message"
     t.text     "metadata"
-    t.boolean  "read",                      default: false
-    t.boolean  "deleted",                   default: false
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.integer  "site_id",                   default: 1
+    t.boolean  "read",                                  default: false
+    t.boolean  "deleted",                               default: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.integer  "site_id",                               default: 1
   end
 
   add_index "notifications", ["channel_id"], name: "index_notifications_on_channel_id", using: :btree
@@ -103,7 +117,7 @@ ActiveRecord::Schema.define(version: 20141204213128) do
   add_index "notifications", ["site_id"], name: "index_notifications_on_site_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
-  create_table "posts", force: true do |t|
+  create_table "posts", force: :cascade do |t|
     t.integer  "channel_id",                 null: false
     t.integer  "user_id",                    null: false
     t.text     "body",                       null: false
@@ -118,10 +132,10 @@ ActiveRecord::Schema.define(version: 20141204213128) do
   add_index "posts", ["site_id"], name: "index_posts_on_site_id", using: :btree
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
-  create_table "sites", force: true do |t|
-    t.string   "name"
-    t.string   "domain"
-    t.string   "path"
+  create_table "sites", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "domain",     limit: 255
+    t.string   "path",       limit: 255
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -131,29 +145,29 @@ ActiveRecord::Schema.define(version: 20141204213128) do
   add_index "sites", ["path"], name: "index_sites_on_path", using: :btree
   add_index "sites", ["user_id"], name: "index_sites_on_user_id", using: :btree
 
-  create_table "users", force: true do |t|
-    t.string   "login"
-    t.string   "email"
+  create_table "users", force: :cascade do |t|
+    t.string   "login",                     limit: 255
+    t.string   "email",                     limit: 255
     t.string   "crypted_password",          limit: 40
     t.string   "salt",                      limit: 40
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token"
+    t.string   "remember_token",            limit: 255
     t.datetime "remember_token_expires_at"
     t.string   "activation_code",           limit: 40
     t.datetime "activated_at"
-    t.integer  "invite_user_id",                       default: 0
-    t.string   "display_name"
-    t.integer  "account_type",                         default: 0
-    t.string   "color"
-    t.integer  "stylesheet_id",                        default: 0,    null: false
-    t.integer  "number_unread_messages",               default: 0
+    t.integer  "invite_user_id",                        default: 0
+    t.string   "display_name",              limit: 255
+    t.integer  "account_type",                          default: 0
+    t.string   "color",                     limit: 255
+    t.integer  "stylesheet_id",                         default: 0,    null: false
+    t.integer  "number_unread_messages",                default: 0
     t.text     "block_users"
-    t.string   "password_hash"
-    t.string   "api_key",                              default: ""
-    t.boolean  "markdown",                             default: true
+    t.string   "password_hash",             limit: 255
+    t.string   "api_key",                   limit: 255, default: ""
+    t.boolean  "markdown",                              default: true
     t.text     "avatar_url"
-    t.integer  "site_id",                              default: 1
+    t.integer  "site_id",                               default: 1
   end
 
   add_index "users", ["activation_code"], name: "index_users_on_activation_code", using: :btree

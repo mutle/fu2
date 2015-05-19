@@ -25,7 +25,18 @@ class ApplicationController < ActionController::Base
   end
 
   def login_required
-    logged_in? || redirect_to(new_session_path)
+    logged_in? && current_user_view || redirect_to(new_session_path)
+  end
+
+  def current_user_view
+    return false unless current_user
+    @current_user_view ||= begin
+      v = Views::CurrentUserView.new({
+        current_user: current_user
+      })
+      v.finalize
+      v
+    end
   end
 
   def current_user
@@ -78,9 +89,4 @@ class ApplicationController < ActionController::Base
   end
   helper_method :new_features?
 
-  protected
-
-  def default_layout
-    "application"
-  end
 end

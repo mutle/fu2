@@ -2,6 +2,8 @@ require "resque_web"
 require 'site_constraint'
 
 Fu2::Application.routes.draw do
+  get 'search/show'
+
   mount ResqueWeb::Engine => "/resque"
 
   scope '(:site_path)' do
@@ -26,6 +28,8 @@ Fu2::Application.routes.draw do
         end
       end
 
+      resource :search, :controller => :search
+
       resources :channels do
         collection do
           get :search
@@ -36,6 +40,8 @@ Fu2::Application.routes.draw do
         end
         member do
           post :visit
+          get :merge
+          post :do_merge
         end
         resources :posts do
           member do

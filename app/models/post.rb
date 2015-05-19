@@ -1,6 +1,4 @@
 class Post < ActiveRecord::Base
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
   include SiteScope
 
   belongs_to :channel
@@ -8,40 +6,56 @@ class Post < ActiveRecord::Base
   has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
-  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id).order("id") }
+  scope :before, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id < :id", :channel_id => c.id, :id => id) }
+  scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id) }
   scope :updated_since, proc { |c, d| includes(:user).where("channel_id = :channel_id AND updated_at > :d", :channel_id => c.id, :d => (d + 1)).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
+  scope :with_ids, proc { |ids| where(id: ids) }
 
   after_create :update_channel_last_post
   after_create :scan_for_mentions
   after_create :process_fubot_message
 
-  # before_create :set_markdown
-  # before_update :set_markdown
+  after_create :update_index
+  after_update :update_index
+  before_destroy :remove_index
 
-  index_name "posts-#{Rails.env}"
+  class << self
+    def indexed_type
+      "post"
+    end
 
-  mapping do
-    indexes :_id, :index => :not_analyzed
-    indexes :site_id
-    indexes :body, :analyzer => 'snowball'
-    indexes :created_at, :type => 'date', :index => :not_analyzed
+    def index_definition
+      {
+        settings: {},
+        mappings: {
+          indexed_type => {
+            properties: {
+              body: { type: 'string', analyze: 'standard' },
+              created: { type: 'date', index: 'not_analyzed' },
+              user: { type: 'string', analyze: 'standard' },
+              faves: { type: 'integer', index: 'not_analyzed' },
+              site_id: { type: 'integer', index: 'not_analyzed' }
+            }
+          }
+        }
+      }
+    end
   end
 
-  # define_index do
-  #   indexes body
-  #   has channel(:default_read)
-  #   where sanitize_sql(['default_read', true])
-  # end
-
   def to_indexed_json
-    return {}.to_json if !channel || !channel.default_read?
+    return {} if !channel || !channel.default_read?
     {
       :_id => id,
-      :site_id => site_id,
+      :_type => self.class.indexed_type,
       :body => body,
-      :created_at => created_at
-    }.to_json
+      :created => created_at,
+      :user => (user.login rescue ''),
+      :faves => faves.size,
+      :faver => faves.map { |fave| fave.user.login }.join(" "),
+      :mention => mentioned_users.join(" "),
+      :site_id => site_id
+    }
   end
 
   def update_channel_last_post
@@ -69,6 +83,14 @@ class Post < ActiveRecord::Base
       return true if login.downcase == user.login.downcase
     end
     false
+  end
+
+  def mentioned_users
+    users = []
+    body.scan Channel::MentionPattern do |mention|
+      users << mention[0]
+    end
+    users
   end
 
   def set_markdown
@@ -124,6 +146,14 @@ class Post < ActiveRecord::Base
   def html_body
     result = markdown? ? RenderPipeline.markdown(body, id) : RenderPipeline.simple(body, id)
     result.html_safe
+  end
+
+  def update_index
+    Search.update("posts", id)
+  end
+
+  def remove_index
+    Search.remove("posts", id)
   end
 
 end

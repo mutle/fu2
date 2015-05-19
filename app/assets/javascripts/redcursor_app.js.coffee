@@ -30,18 +30,6 @@ $ ->
     if syntax == "html"
       $('.comment-box').markItUp(mySettings)
 
-  if $('input#search').length
-    autocompleter 'input#search', (term, autocompleter) ->
-      $.getJSON "/channels/search", {"search": "title:"+term+""}, (data, status, xhr) ->
-        results = []
-        for result in data
-          item =
-            display_title: result.display_title,
-            title:result.title,
-            url: "/channels/#{result.id}"
-          results.push item
-        autocompleter.showResults results, term
-
   refreshPosts = () ->
     last_id = $('.post:not(.preview)').last().attr("data-post-id")
     last_update = $(".channel-header").attr("data-last-update")
@@ -49,9 +37,7 @@ $ ->
     url = "#{ourl}/posts?last_id=#{last_id}&last_update=#{last_update}"
     $.get url, (data) ->
       d = $(data)
-      console.log d.find(".updated .post")
       d.find(".updated").remove()
-      console.log d
       d.insertBefore('.comment-box-form')
       $(".updated .post").each (i, post) ->
         $($(".post-#{$(post).attr("data-post-id")}").get(0)).replaceWith(post)

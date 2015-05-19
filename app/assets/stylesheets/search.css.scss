@@ -1,0 +1,167 @@
+#content {
+  #advanced-search {
+    text-align: left;
+    display: none;
+
+    border: 1px solid black;
+    padding: 16px;
+
+    h2 {
+      font-size: 14px;
+    }
+
+    h3 {
+      font-size: 15px;
+    }
+
+    &.active {
+      display: block;
+    }
+
+    pre {
+      display: inline-block;
+      font-size: 15px;
+    }
+
+    .info {
+      margin-bottom: 1em;
+    }
+
+    .search-type {
+      float: left;
+      width: 300px;
+
+      ul {
+        margin-top: 1em;
+        list-style: none;
+      }
+
+      .default {
+        font-weight: bold;
+      }
+    }
+
+    .clear {
+      clear: both;
+      margin: 0px;
+    }
+  }
+
+  #search-results {
+    background-color: #fff;
+    padding: 0px;
+    margin-top: 1em;
+    list-style: none;
+
+    li, li.channel {
+      margin-bottom: 2em;
+    }
+
+    .result-post li.channel {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  .search-header {
+    display: block;
+    margin: 1em 0px;
+    font-size: 18px;
+
+    .sort-by, .filter {
+      margin: 0px 12px;
+    }
+
+    .search-menu {
+      display: inline-block;
+      position: relative;
+      padding: 12px;
+      cursor: pointer;
+
+      &.active .search-menu-options {
+        display: block;
+      }
+
+      .search-menu-options {
+        position: absolute;
+        display: none;
+        top: 45px;
+        left: 0px;
+        background-color: #fff;
+        border: 1px solid #aaa;
+        z-index: 2;
+
+        .option {
+          display: block;
+          padding: 6px 12px;
+          border-top: 1px solid #fff;
+
+          &.selected {
+            background-color: #ddd;
+          }
+        }
+      }
+
+      &:hover, &.active {
+        background-color: #ddd;
+      }
+    }
+  }
+
+  .search-info {
+    display: block;
+    text-align: center;
+    margin: 1em;
+
+    a {
+      display: block;
+      margin-bottom: 1em;
+    }
+  }
+
+  .search-form {
+    text-align: right;
+
+    input {
+      display: inline;
+      font-size: 18px;
+
+      &.search-field {
+        width: 320px;
+      }
+    }
+
+    .inputs {
+      width: 320px;
+      margin: 100px auto 3em auto;
+    }
+
+    &.results {
+      .inputs {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  .search-info {
+    margin-bottom: 2em;
+  }
+
+  .search-results {
+    .result {
+      margin-bottom: 1em;
+      border-bottom: 1px solid #e2e2e2;
+      padding-bottom: 1em;
+
+      a {
+        font-size: 16px;
+      }
+    }
+    .search-channel {
+
+    }
+
+    .search-post {
+
+    }
+  }
+}
