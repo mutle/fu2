@@ -16,10 +16,13 @@ class SearchTest < ActiveSupport::TestCase
   end
 
   test "query" do
-    q = Search.query("a:b foo \"bar baz\"").query
-    assert_equal 3, q.size
-    assert_equal ["b", "a"], q[0]
-    assert_equal "bar baz", q[2]
+    q = Search.query("äbc a:b äfoo \"bar baz\" foo:\"bar baz\"").query
+    assert_equal 5, q.size
+    assert_equal "äbc", q[0]
+    assert_equal ["b", "a"], q[1]
+    assert_equal "äfoo", q[2]
+    assert_equal "bar baz", q[3]
+    assert_equal ["bar baz", "foo"], q[4]
   end
 
   # test "search query" do

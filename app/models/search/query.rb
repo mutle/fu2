@@ -52,11 +52,15 @@ class Search
       must = q[:bool][:must]
       default.each do |a|
         query_for(a).each do |t|
-          should << {
+          p [a,t]
+          p = should
+          p = must if t[0] == '+'
+          p << {
             match: {
               a => {
-                query: wildcard(t),
-                boost: boost_for(a)
+                query: t.gsub(/^\+/, ''),
+                boost: boost_for(a),
+                operator: "and"
               }
             }
           }
@@ -67,8 +71,9 @@ class Search
           must << {
             match: {
               t[1] => {
-                query: wildcard(t[0]),
-                boost: boost_for(t[1])
+                query: t[0],
+                boost: boost_for(t[1]),
+                operator: "and"
               }
             }
           }
@@ -87,16 +92,25 @@ class Search
     end
 
     def wildcard(t)
-      "*#{t.split(" ").join("* *")}*"
+      t.is_a?(String) ? t.gsub(/^(\+?)(.*)$/, "\\1*\\2*") : t.join(" ")
     end
 
     def query_for(attribute, optional=false)
       q = []
       @query.each do |term|
-        next if !optional && term.is_a?(Array)
-        next if optional && (!term.is_a?(Array) || term[1] != attribute.to_s)
-        q << term
+        if optional
+          next if !term.is_a?(Array) || term[1] != attribute.to_s
+          q << [wildcard(term[0]), term[1]]
+        else
+          next if term.is_a?(Array)
+          if term.include?(" ")
+            q << term
+          else
+            q << wildcard(term)
+          end
+        end
       end
+      p [@query,q]
       q
     end
 
