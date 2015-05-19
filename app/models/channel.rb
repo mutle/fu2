@@ -67,12 +67,12 @@ class Channel < ActiveRecord::Base
   end
 
 
-  def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
+  def self.recent_channels(site, _user, page, per_page = 50)
+    where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
   end
 
-  def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
+  def self.all_channels(site, _user, page)
+    where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)

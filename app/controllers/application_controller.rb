@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   def login_required
-    logged_in? && current_user_view || redirect_to(new_session_path)
+    logged_in? && current_user_view || redirect_to(new_session_path(site_path: nil))
   end
 
   def current_user_view

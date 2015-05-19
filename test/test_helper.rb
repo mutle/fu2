@@ -6,6 +6,7 @@ require 'mocha/mini_test'
 class ActiveSupport::TestCase
   setup do
     User.stubs(:fubot).returns(User.new)
+    @site ||= Site.create
   end
 
   def create_user(login=nil, password="testpassword", activate=true)
@@ -25,7 +26,7 @@ class ActiveSupport::TestCase
   end
 
   def create_channel(title=nil, body=nil)
-    c = Channel.create(title: title || "test c #{Time.now.to_f}", body: body, user: @user)
+    c = Channel.create(title: title || "test c #{Time.now.to_f}", body: body, user: @user, site_id: @site.id)
     @channel ||= c
     c
   end

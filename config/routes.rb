@@ -6,14 +6,14 @@ Fu2::Application.routes.draw do
 
   mount ResqueWeb::Engine => "/resque"
 
+  resource :session, :controller => :session do
+    collection do
+      post :authenticate
+    end
+  end
+
   scope '(:site_path)' do
     constraints SiteConstraint.new do
-      resource :session, :controller => :session do
-        collection do
-          post :authenticate
-        end
-      end
-
       resources :users do
         member do
           put :block

@@ -26,7 +26,7 @@
   <%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings", :class => "last" %>
 
   <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
-  <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
+  <%= link_to octicon("sign-out"), session_path(site_path: nil), :title => "Logout", :class => "button", :method => :delete %>
 </nav>
 
 <% if current_user.multi_site? %>
