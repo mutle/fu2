@@ -18,5 +18,4 @@
 //= require channels
 //= require search
 //= require react
-//= require react_ujs
 //= require redcursor-app
