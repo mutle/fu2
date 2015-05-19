@@ -1,0 +1,64 @@
+<%= form_tag search_path, :method => :get, :class => "search-form#{' results' if @results}" do %>
+  <div class="inputs">
+    <%= text_field_tag "search", params[:search], :class => "search-field", id: "search-field" %> <br/>
+    <%= link_to "Advanced search", "#", class: "advanced-search" %>
+    <%= submit_tag "Search" %>
+  </div>
+
+  <div id="advanced-search">
+    <h2>Advanced Search</h2>
+    <div class="info">
+      The following attributes can be queried directly using <pre><code>attribute:search</code></pre>
+    </div>
+    <% Search::QUERIES.each do |qc| %>
+      <div class="search-type">
+        <% q = qc.new %>
+        <h3><%= q.index.capitalize %></h3>
+        <ul>
+          <% q.searchable.each do |attrib| %>
+            <li<%= " class=\"default\"".html_safe if q.default.include?(attrib) %>><%= attrib %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+<% end %>
+
+<header class="search-header">
+  <span class="result-count">
+    <%= render partial: "result_count" %>
+  </span>
+
+  <span class="sort-by">
+    Sort by:
+    <span class="sort-menu search-menu">
+      <div class="search-menu-options">
+        <span class="option<%= " selected" if @sort == "created" %>">created</span>
+        <span class="option<%= " selected" if @sort == "faves" %>">faves</span>
+      </div>
+      <span class="title"><%= @sort %></span> <%= octicon "chevron-down" %></span>
+  </span>
+
+  <!--
+  <span class="filter">
+    Filter:
+    <span class="filter-menu search-menu">
+      <div class="search-menu-options">
+        <span class="option selected">All</span>
+        <span class="option">Channels</span>
+        <span class="option">Posts</span>
+      </div>
+      <span class="title">All</span> <%= octicon "chevron-down" %>
+    </span>
+  </span>
+  -->
+</header>
+
+<ul id="search-results">
+  <%= render partial: "results" %>
+</ul>
+
+<footer class="search-info">
+  <%= link_to "More Results", "#", class: "search-more-results" %>
+</footer>

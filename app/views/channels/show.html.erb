@@ -1,6 +1,6 @@
 <% if @channel.can_read?(current_user) %>
   <%= render partial: "header" %>
-  <% @posts.each do |post| %>
+  <% @view.posts.each do |post| %>
     <% if post.is_a?(Event) %>
       <%= render partial: "event", object: post %>
     <% elsif post.can_read?(current_user) %>

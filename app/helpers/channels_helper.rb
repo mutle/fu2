@@ -36,16 +36,18 @@ module ChannelsHelper
   end
 
   def channel_anchor(channel, current_user, last_post)
-    id = channel.next_post(current_user)
-    if id > 0
-      if id > last_post.id
-        "comments"
-      else
-        "post_#{id}"
-      end
+    id = channel.last_read_id(current_user)
+    if last_post && id >= last_post.id
+      "comments"
+    elsif id > 0
+      "read_#{id}"
     else
       ""
     end
+  end
+
+  def channel_post_anchor(channel, post)
+    "post_#{post.id}"
   end
 
   TS_ROUND_PRECISION = 10.0 * 60

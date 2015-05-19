@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 gem "bundler", "~>1.7.3"
-gem "rails", "~>4.2.0"
-gem "pg", "~>0.17.1"
+gem "rails", "~>4.2.1"
+gem "pg", "~>0.18.1"
 gem "haml", "~>4.0.3"
 gem "jquery-rails", "~>4.0.2"
 gem 'json'
@@ -16,15 +16,14 @@ gem "gemoji"
 gem "rinku"
 gem "escape_utils", "~>1.0.1"
 gem "html-pipeline", "~>1.11.0", :require => "html/pipeline"
-gem "tire"
-gem 'newrelic_rpm'
+gem "elastomer-client", "~>0.4.1", :require => "elastomer/client"
 gem 'statsd-ruby', :require => "statsd"
 gem 'carrierwave'
 gem 'net_dav'
 gem 'syslog-logger'
-gem "sass-rails"
+gem "sass-rails", "~>5.0.3"
 gem "coffee-rails"
-gem 'unicorn', '~> 4.8.3'
+gem 'unicorn', '~> 4.9.0'
 gem 'resque'
 gem 'resque-web', require: 'resque_web'
 gem 'resqued'

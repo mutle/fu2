@@ -1,0 +1,2 @@
+<span class="result-start"><%= @view.results[:offset] + 1 %></span>-<span class="result-end"><%= @view.results[:offset] + @view.results[:objects].size %></span>
+of <span class="result-total"><%= number_with_delimiter @view.results[:result_count], delimiter: " " %></span> results

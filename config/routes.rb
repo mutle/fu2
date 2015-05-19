@@ -23,6 +23,8 @@ Fu2::Application.routes.draw do
     end
   end
 
+  resource :search, :controller => :search
+
   resources :channels do
     collection do
       get :search

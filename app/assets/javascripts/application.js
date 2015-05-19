@@ -16,6 +16,7 @@
 //= require redcursor_app
 //= require notifications
 //= require channels
+//= require search
 //= require react
 //= require react_ujs
 //= require redcursor-app
