@@ -6,7 +6,6 @@ class ChannelsController < ApplicationController
   respond_to :html, :json
 
   def index(respond=true)
-    @column_width = 12
     @page = (params[:page] || 1).to_i
     @view = Views::ChannelList.new({
       current_user: current_user,
@@ -22,7 +21,7 @@ class ChannelsController < ApplicationController
   def live
     if Post.most_recent.first.id > params[:last_id].to_i
       index(false)
-      render :action => "index", :layout => false
+      render :partial => "channels", :layout => false
     else
       render :text => ""
     end
@@ -38,7 +37,6 @@ class ChannelsController < ApplicationController
   end
 
   def all
-    @column_width = 12
     @view = Views::AllChannels.new({
       current_user: current_user,
       page: (params[:page] || 1).to_i,

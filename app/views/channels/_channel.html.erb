@@ -8,7 +8,7 @@
     <%= rounded_timestamp last_post.created_at %>
   </div>
 <% end %>
-<<%= element %> class="channel<%= " unread" if has_posts %>" data-last-id="<%= last_post.id rescue 0 %>">
+<<%= element %> class="channel<%= " unread" if has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= last_post.id rescue 0 %>">
   <div class="name">
     <% if last_post %>
       <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>

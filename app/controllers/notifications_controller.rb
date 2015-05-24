@@ -12,8 +12,6 @@ class NotificationsController < ApplicationController
       })
       @view.finalize
       respond_with @view.notifications
-    else
-      @column_width = 12
     end
   end
 
