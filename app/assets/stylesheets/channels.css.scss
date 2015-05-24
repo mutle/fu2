@@ -344,6 +344,10 @@ $small-screen: "only screen and (min-width : 800px)";
         float: right;
         padding-left: 10px;
       }
+
+      .channel-loader {
+        margin-top: 1em;
+      }
     }
 
     .pagination {
