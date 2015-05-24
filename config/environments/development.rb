@@ -26,4 +26,6 @@ Fu2::Application.configure do
   config.assets.debug = true
 
   config.eager_load = false
+
+  config.active_record.raise_in_transactional_callbacks = true
 end

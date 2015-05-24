@@ -64,4 +64,5 @@ Fu2::Application.configure do
 
   config.logger = Logger::Syslog.new("local0", Syslog::LOG_LOCAL5)
 
+  config.active_record.raise_in_transactional_callbacks = true
 end

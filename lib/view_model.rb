@@ -46,23 +46,47 @@ class ViewModel
   end
 
   def finalize
+    t = Time.now.to_f
     dependencies = []
+    threads = []
     self.class.fetch_args.each do |arg|
-      if !send("fetch_#{arg}")
-        dependencies << arg
+      threads << Thread.new do
+        ActiveRecord::Base.connection_pool.with_connection do
+          Rails.logger.info "view model thread #{arg} start"
+          t1 = Time.now.to_f
+          if !send("fetch_#{arg}")
+            dependencies << arg
+          end
+          Rails.logger.info "view model thread #{arg} finished (#{"%.1f" % ((Time.now.to_f - t1) * 1000)}ms)"
+        end
       end
     end
+    threads.each do |t|
+      t.join
+    end
+    threads = []
     while dependencies.size > 0
       d = []
       dependencies.each do |arg|
-        if !send("fetch_#{arg}")
-          d << arg
+        threads << Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            Rails.logger.info "view model thread #{arg} start"
+            t1 = Time.now.to_f
+            if !send("fetch_#{arg}")
+              d << arg
+            end
+            Rails.logger.info "view model thread #{arg} finished (#{"%.1f" % ((Time.now.to_f - t1) * 1000)}ms)"
+          end
         end
       end
+      threads.each do |t|
+        t.join
+      end
+      threads = []
       dependencies = d
     end
 
-    Rails.logger.info "view model finalized"
+    Rails.logger.info "view model finalized (#{"%.1f" % ((Time.now.to_f - t) * 1000)}ms)"
   end
 
 end
