@@ -51,7 +51,7 @@ $ ->
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
-        $("#content").empty().append $(data)
+        $("#content #recent_activities .loader-group:first-child").empty().append $(data)
 
   previewPost = (contents) ->
     $('<div class="post-preview"><span class="octicon octicon-hourglass"></span></div>').insertBefore('.comment-box-form')
