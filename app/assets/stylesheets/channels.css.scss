@@ -71,6 +71,25 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .scroll-loader {
+      text-align: center;
+      margin-bottom: 1em;
+
+      .space {
+        display: inline-block;
+        width: 32px;
+      }
+
+      a {
+        color: #444;
+        text-decoration: none;
+      }
+
+      a.load-all {
+        margin-left: 24px;
+      }
+    }
+
     .channel-header {
       background-color: #000;
       color: #fff;
@@ -224,25 +243,6 @@ $small-screen: "only screen and (min-width : 800px)";
         padding: 6px 12px;
         border-radius: 3px;
         margin-left: 6px;
-      }
-    }
-
-    .post-loader {
-      text-align: center;
-      margin-bottom: 1em;
-
-      .space {
-        display: inline-block;
-        width: 32px;
-      }
-
-      a {
-        color: #444;
-        text-decoration: none;
-      }
-
-      a.load-all {
-        margin-left: 24px;
       }
     }
 

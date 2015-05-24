@@ -12,6 +12,7 @@
 //= require d3
 //= require markitup-html
 //= require autocompleter
+//= require scroll-loader
 //= require emoji
 //= require redcursor_app
 //= require notifications
