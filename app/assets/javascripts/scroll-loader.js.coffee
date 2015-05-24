@@ -16,7 +16,7 @@ class ScrollLoader
           if !@hidden
             @loadMore()
             @hidden = true
-        else if t >= document.body.scrollHeight - document.body.clientHeight - 100
+        else if t <= document.body.scrollHeight - document.body.clientHeight - 100
           @hidden = false
 
 
