@@ -90,6 +90,10 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .loader-group {
+      clear: both;
+    }
+
     .channel-header {
       background-color: #000;
       color: #fff;
@@ -303,15 +307,6 @@ $small-screen: "only screen and (min-width : 800px)";
     .channel.unread {
       background-color: #c2c2c2;
     }
-    .channel:first-child {
-      .user-color {
-      }
-    }
-    .channel:last-child {
-      border-bottom: none;
-      margin-bottom: 0px;
-    }
-
     @media #{$small-screen} {
       .channel {
         margin-right: 172px;
