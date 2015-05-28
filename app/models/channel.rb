@@ -42,9 +42,9 @@ class Channel < ActiveRecord::Base
         mappings: {
           indexed_type => {
             properties: {
-              title: { type: 'string', analyze: 'standard' },
+              title: { type: 'string', analyzer: 'simple' },
               created: { type: 'date', index: 'not_analyzed' },
-              text: { type: 'string', analyze: 'standard' },
+              text: { type: 'string', analyzer: 'standard' },
               site_id: { type: 'integer', index: 'not_analyzed' }
             }
           }

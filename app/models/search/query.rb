@@ -46,40 +46,46 @@ class Search
       ids.map { |i| t[i] }
     end
 
+    def search_query_for(field, query)
+      p [:wild, wildcard, field, query]
+      if wildcard.include?(field.to_sym)
+        {
+          wildcard: {
+            field => query.downcase
+          }
+        }
+      else
+        {
+          match: {
+            field => {
+              query: query,
+              boost: boost_for(field),
+              operator: "and"
+            }
+          }
+        }
+      end
+    end
+
     def search_query
       q = {bool:{should:[], must:[]}}
       should = q[:bool][:should]
       must = q[:bool][:must]
       default.each do |a|
         query_for(a).each do |t|
-          p [a,t]
           p = should
           p = must if t[0] == '+'
-          p << {
-            match: {
-              a => {
-                query: t.gsub(/^\+/, ''),
-                boost: boost_for(a),
-                operator: "and"
-              }
-            }
-          }
+          p << search_query_for(a, t.gsub(/^\+/, ''))
         end
       end
       searchable.each do |a|
         query_for(a, true).each do |t|
-          must << {
-            match: {
-              t[1] => {
-                query: t[0],
-                boost: boost_for(t[1]),
-                operator: "and"
-              }
-            }
-          }
+          must << search_query_for(t[1], t[0])
         end
       end
       return nil if should.size < 1 && must.size < 1
+      q[:bool].delete(:should) if q[:bool][:should].size < 1
+      q[:bool].delete(:must) if q[:bool][:must].size < 1
       q
     end
 
@@ -91,7 +97,7 @@ class Search
       ]
     end
 
-    def wildcard(t)
+    def wildcard_query(t)
       t.is_a?(String) ? t.gsub(/^(\+?)(.*)$/, "\\1*\\2*") : t.join(" ")
     end
 
@@ -100,13 +106,13 @@ class Search
       @query.each do |term|
         if optional
           next if !term.is_a?(Array) || term[1] != attribute.to_s
-          q << [wildcard(term[0]), term[1]]
+          q << [wildcard_query(term[0]), term[1]]
         else
           next if term.is_a?(Array)
           if term.include?(" ")
             q << term
           else
-            q << wildcard(term)
+            q << wildcard_query(term)
           end
         end
       end
@@ -137,6 +143,9 @@ class Search
     end
     def boost
       {}
+    end
+    def wildcard
+      []
     end
   end
 end
