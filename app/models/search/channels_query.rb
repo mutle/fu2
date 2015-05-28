@@ -30,6 +30,12 @@ class Search
       }
     end
 
+    def wildcard
+      [
+        :title
+      ]
+    end
+
     def fetch_objects(query)
       return [] if !query || !query['hits'] || !query['hits']['hits']
       ids = query['hits']['hits'].map { |h| h['_id'] }
