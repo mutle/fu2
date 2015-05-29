@@ -71,6 +71,29 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
+    .scroll-loader {
+      text-align: center;
+      margin-bottom: 1em;
+
+      .space {
+        display: inline-block;
+        width: 32px;
+      }
+
+      a {
+        color: #444;
+        text-decoration: none;
+      }
+
+      a.load-all {
+        margin-left: 24px;
+      }
+    }
+
+    .loader-group {
+      clear: both;
+    }
+
     .channel-header {
       background-color: #000;
       color: #fff;
@@ -227,25 +250,6 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
-    .post-loader {
-      text-align: center;
-      margin-bottom: 1em;
-
-      .space {
-        display: inline-block;
-        width: 32px;
-      }
-
-      a {
-        color: #444;
-        text-decoration: none;
-      }
-
-      a.load-all {
-        margin-left: 24px;
-      }
-    }
-
     .last-post-date {
       color: #666;
       text-align: center;
@@ -303,15 +307,6 @@ $small-screen: "only screen and (min-width : 800px)";
     .channel.unread {
       background-color: #c2c2c2;
     }
-    .channel:first-child {
-      .user-color {
-      }
-    }
-    .channel:last-child {
-      border-bottom: none;
-      margin-bottom: 0px;
-    }
-
     @media #{$small-screen} {
       .channel {
         margin-right: 172px;
@@ -343,6 +338,10 @@ $small-screen: "only screen and (min-width : 800px)";
       .date {
         float: right;
         padding-left: 10px;
+      }
+
+      .channel-loader {
+        margin-top: 1em;
       }
     }
 

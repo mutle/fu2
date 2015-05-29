@@ -1,13 +1,15 @@
 <% if @channel.can_read?(current_user) %>
   <%= render partial: "header" %>
-  <% @view.posts.each do |post| %>
-    <% if post.is_a?(Event) %>
-      <%= render partial: "event", object: post %>
-    <% elsif post.can_read?(current_user) %>
-      <%= render partial: "post", object: post %>
-      <% @last_post_id = post.id %>
+  <div class="loader-group">
+    <% @view.posts.each do |post| %>
+      <% if post.is_a?(Event) %>
+        <%= render partial: "event", object: post %>
+      <% elsif post.can_read?(current_user) %>
+        <%= render partial: "post", object: post %>
+        <% @last_post_id = post.id %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 
 <% else %>
   <p>You can't read the content of this channel</p>

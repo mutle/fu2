@@ -17,10 +17,14 @@ class Search
     def update_index
       setup_index
 
-      count = Channel.count
-      Channel.includes(:user).find_each(batch_size: 2000).with_index { |c,i| index_doc("channels", c, i, count) }
-      count = Post.count
-      Post.includes(:user, :channel, :faves => [:user]).find_each(batch_size: 2000).with_index { |p,i| index_doc("posts", p, i, count) }
+      if ENV["INDEX"].blank? || ENV["INDEX"] == "channels"
+        count = Channel.count
+        Channel.includes(:user).find_each(batch_size: 2000).with_index { |c,i| index_doc("channels", c, i, count) }
+      end
+      if ENV["INDEX"].blank? || ENV["INDEX"] == "posts"
+        count = Post.count
+        Post.includes(:user, :channel, :faves => [:user]).find_each(batch_size: 2000).with_index { |p,i| index_doc("posts", p, i, count) }
+      end
     end
 
     def build_index(name, klass)
@@ -35,13 +39,13 @@ class Search
     def reset_index
       %w(channels posts).each do |name|
         i = index(name)
-        i.delete if i.exists?
+        i.delete if i.exists? && (ENV["INDEX"].blank? || ENV["INDEX"] == name)
       end
     end
 
     def setup_index
-      build_index "channels", Channel
-      build_index "posts", Post
+      build_index "channels", Channel if ENV["INDEX"].blank? || ENV["INDEX"] == "channels"
+      build_index "posts", Post if ENV["INDEX"].blank? || ENV["INDEX"] == "posts"
     end
 
     def index_doc(name, obj, n, count)
