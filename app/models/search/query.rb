@@ -16,7 +16,7 @@ class Search
       end
       s = sort(@options[:sort])
       r = nil
-      benchmark "Search query #{query} on #{index_type} sort #{sort} offset #{@options[:offset]}" do
+      benchmark "Search query #{query} on #{index_type} sort #{s} offset #{@options[:offset]}" do
         r = i.multi_search do |m|
           m.search({:query => {:match_all => {}}}, :search_type => :count)
           m.search({:query => query, :sort => s, :from => @options[:offset], :size => @options[:per_page]}, :type => index_type) if query && s
@@ -90,6 +90,11 @@ class Search
     end
 
     def sort(s='created')
+      if s == "score"
+        return [
+          { _score: { order: "desc" }}
+        ]
+      end
       return nil unless searchable.map(&:to_s).include?(s)
       [
         { s =>    { order: "desc" }},
