@@ -7,7 +7,7 @@ class SearchController < ApplicationController
   def show
     @query = params[:search].to_s
     start = (params[:start] || 0).to_i
-    @sort = params[:sort] || "created"
+    @sort = params[:sort] || "score"
     @view = Views::Search.new({
       query: @query,
       start: start,

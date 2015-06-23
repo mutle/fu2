@@ -34,10 +34,11 @@
     Sort by:
     <span class="sort-menu search-menu">
       <div class="search-menu-options">
-        <span class="option<%= " selected" if @sort == "created" %>">created</span>
-        <span class="option<%= " selected" if @sort == "faves" %>">faves</span>
+        <span class="option<%= " selected" if @view.sort == "score" %>">score</span>
+        <span class="option<%= " selected" if @view.sort == "created" %>">created</span>
+        <span class="option<%= " selected" if @view.sort == "faves" %>">faves</span>
       </div>
-      <span class="title"><%= @sort %></span> <%= octicon "chevron-down" %></span>
+      <span class="title"><%= @view.sort %></span> <%= octicon "chevron-down" %></span>
   </span>
 
   <!--

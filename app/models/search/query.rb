@@ -16,7 +16,7 @@ class Search
       end
       s = sort(@options[:sort])
       r = nil
-      benchmark "Search query #{query} on #{index_type} sort #{sort} offset #{@options[:offset]}" do
+      benchmark "Search query #{query} on #{index_type} sort #{s} offset #{@options[:offset]}" do
         r = i.multi_search do |m|
           m.search({:query => {:match_all => {}}}, :search_type => :count)
           m.search({:query => query, :sort => s, :from => @options[:offset], :size => @options[:per_page]}, :type => index_type) if query && s
@@ -49,21 +49,37 @@ class Search
     def search_query_for(field, query)
       p [:wild, wildcard, field, query]
       if wildcard.include?(field.to_sym)
-        {
-          wildcard: {
-            field => query.downcase
-          }
-        }
-      else
-        {
-          match: {
-            field => {
-              query: query,
-              boost: boost_for(field),
-              operator: "and"
+        [
+          {
+            wildcard: {
+              field => {
+                wildcard: query.downcase,
+                boost: 1
+              }
+            }
+          },
+          {
+            match: {
+              field => {
+                query: query,
+                boost: boost_for(field),
+                operator: "and"
+              }
             }
           }
-        }
+        ]
+      else
+        [
+          {
+            match: {
+              field => {
+                query: query,
+                boost: boost_for(field),
+                operator: "and"
+              }
+            }
+          }
+        ]
       end
     end
 
@@ -75,12 +91,16 @@ class Search
         query_for(a).each do |t|
           p = should
           p = must if t[0] == '+'
-          p << search_query_for(a, t.gsub(/^\+/, ''))
+          search_query_for(a, t.gsub(/^\+/, '')).each do |q|
+            p << q
+          end
         end
       end
       searchable.each do |a|
         query_for(a, true).each do |t|
-          must << search_query_for(t[1], t[0])
+          search_query_for(t[1], t[0]).each do |q|
+            should << q
+          end
         end
       end
       return nil if should.size < 1 && must.size < 1
@@ -90,6 +110,11 @@ class Search
     end
 
     def sort(s='created')
+      if s == "score"
+        return [
+          { _score: { order: "desc" }}
+        ]
+      end
       return nil unless searchable.map(&:to_s).include?(s)
       [
         { s =>    { order: "desc" }},
