@@ -99,7 +99,7 @@ class Search
       searchable.each do |a|
         query_for(a, true).each do |t|
           search_query_for(t[1], t[0]).each do |q|
-            must << q
+            should << q
           end
         end
       end
