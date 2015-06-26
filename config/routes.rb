@@ -66,6 +66,9 @@ Fu2::Application.routes.draw do
     member do
       post :read
     end
+    collection do
+      get :unread
+    end
   end
 
   resources :images

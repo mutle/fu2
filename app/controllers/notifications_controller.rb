@@ -30,4 +30,16 @@ class NotificationsController < ApplicationController
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end
+
+  def unread
+    @view = Views::NotificationList.new({
+      current_user: current_user
+    })
+    @view.finalize
+    result = User.active.map do |u|
+      next if u.id == current_user.id
+      u.as_json.merge(messages: @view.message_counts[u.id], mentions: @view.mention_counts[u.id])
+    end
+    respond_with result
+  end
 end

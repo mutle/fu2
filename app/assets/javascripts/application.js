@@ -15,8 +15,8 @@
 //= require scroll-loader
 //= require emoji
 //= require redcursor_app
-//= require notifications
 //= require channels
 //= require search
 //= require react
 //= require channel-search
+//= require notifications

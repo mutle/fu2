@@ -84,6 +84,10 @@ $small-screen: "only screen and (min-width : 800px)";
       color: #fff;
       float: right;
       display: none;
+
+      &.show {
+        display: block;
+      }
     }
     .indicator.mention {
       background-color: #4d3;
