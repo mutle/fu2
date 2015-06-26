@@ -1,3 +1,9 @@
+$small-phone: "only screen and (max-width : 320px)";
+$large-phone: "only screen and (min-width : 321px)";
+$small-screen: "only screen and (min-width : 800px)";
+$large-screen: "only screen and (min-width: 1200px)";
+
+
 .channel-search-container {
   text-align: center;
   position: relative;
@@ -5,14 +11,25 @@
 }
 .channel-search {
   position: absolute;
-  top: 20px;
-  left: 100px;
-  right: 100px;
+  left: 6px;
+  right: 6px;
   margin: 0px auto;
-  border: 1px solid #000;
+  border: 1px solid #888;
   background-color: #fff;
   text-align: left;
   line-height: 28px;
+
+  @media #{$small-screen} {
+    top: 20px;
+    left: 100px;
+    right: 100px;
+    max-width: 960px;
+    margin: 0px auto;
+
+    .search-field {
+      width: 500px;
+    }
+  }
 
   &.hidden {
     display: none;
@@ -54,7 +71,6 @@
   .search-field {
     font-size: 20px;
     border: none;
-    width: 500px;
-    min-width: 200px;
+    min-width: 220px;
   }
 }
