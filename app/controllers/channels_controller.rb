@@ -2,6 +2,7 @@ class ChannelsController < ApplicationController
   include  ActionView::Helpers::TextHelper
 
   before_filter :login_required
+  before_filter :channel_redirect, only: [:show]
 
   respond_to :html, :json
 
@@ -116,6 +117,13 @@ class ChannelsController < ApplicationController
 
   def channel_params
     params.require(:channel).permit(:title, :text, :body)
+  end
+
+  def channel_redirect
+    r = ChannelRedirect.from_id(params[:id])
+    if r && r.respond_to?(:target_channel_id)
+      redirect_to channel_path(r.target_channel_id)
+    end
   end
 
 end
