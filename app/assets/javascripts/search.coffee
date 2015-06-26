@@ -4,19 +4,6 @@
 
 $ ->
 
-  if $('input#search').length
-    autocompleter 'input#search', (term, autocompleter) ->
-      q = ""
-      q += "title:#{t} " for t in term.split(" ")
-      $.getJSON "/search", {"search": q}, (data, status, xhr) ->
-        results = []
-        for result in data.objects
-          item =
-            title:result.title,
-            url: "/channels/#{result.id}"
-          results.push item
-        autocompleter.showResults results, term
-
   if('input#search-field').length
 
     @offset = 0

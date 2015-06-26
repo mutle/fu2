@@ -18,3 +18,5 @@
 //= require notifications
 //= require channels
 //= require search
+//= require react
+//= require channel-search
