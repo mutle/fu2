@@ -257,8 +257,9 @@ class Channel < ActiveRecord::Base
     result.sort_by(&:created_at)
   end
 
-  def merge(other)
+  def merge(other, current_user)
     Post.where(channel_id: other.id).update_all(channel_id: id)
+    events.create(event: "merge", data: {merged_title: other.title, title: title}, user_id: current_user.id)
     other.destroy
   end
 

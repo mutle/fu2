@@ -82,9 +82,19 @@ class ChannelsController < ApplicationController
   end
 
   def merge
+    @channel = Channel.find params[:id]
+    @view = Views::ChannelMerge.new({
+      current_user: current_user,
+      channel: @channel
+    })
+    @view.finalize
   end
 
   def do_merge
+    @channel = Channel.find params[:id]
+    @other_channel = Channel.find params[:merge_id]
+    @channel.merge(@other_channel, current_user)
+    redirect_to channel_path(@channel)
   end
 
   private

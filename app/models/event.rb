@@ -6,7 +6,8 @@ class Event < ActiveRecord::Base
   serialize :data, JSON
 
   MESSAGE = {
-    "rename" => proc { |e| "title changed from *#{e.data['old_title']}* to *#{e.data['title']}*"}
+    "rename" => proc { |e| "title changed from *#{e.data['old_title']}* to *#{e.data['title']}*"},
+    "merge" => proc { |e| "merged *#{e.data['merged_title']}* into *#{e.data['title']}*"}
   }
 
   def event_message

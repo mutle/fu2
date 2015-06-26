@@ -14,6 +14,10 @@ class Search
       $elastomer.docs index_name(name)
     end
 
+    def more_like_this(name, field, type, id)
+      $elastomer.docs(index_name(name)).more_like_this({from: 0, size: 100}, mlt_fields: field, min_term_freq: 1, type: type, id: id)
+    end
+
     def update_index
       setup_index
 

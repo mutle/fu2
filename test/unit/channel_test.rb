@@ -38,12 +38,13 @@ class ChannelTest < ActiveSupport::TestCase
     c2 = create_channel("foo 2", "baz")
     @channel = c
     create_post("foo")
-    c.merge(c2)
+    c.merge(c2, u)
     assert_raise(ActiveRecord::RecordNotFound) { Channel.find(c2.id) }
     assert_equal 3, c.posts.count
     assert_equal "foo", c.posts.all[0].body
     assert_equal "baz", c.posts.all[1].body
     assert_equal "bar", c.posts.all[2].body
+    assert_equal 1, c.events.where(event: "merge").size
   end
 
   test "next post" do
