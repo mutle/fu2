@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403202551) do
+ActiveRecord::Schema.define(version: 20150626175338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "channel_redirects", force: :cascade do |t|
+    t.integer  "original_channel_id"
+    t.integer  "target_channel_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "channel_redirects", ["original_channel_id"], name: "index_channel_redirects_on_original_channel_id", using: :btree
+  add_index "channel_redirects", ["target_channel_id"], name: "index_channel_redirects_on_target_channel_id", using: :btree
 
   create_table "channels", force: :cascade do |t|
     t.string   "title",         limit: 255,                null: false
