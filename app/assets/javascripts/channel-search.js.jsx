@@ -1,6 +1,6 @@
 var ChannelSearchResult = React.createClass({
   render: function() {
-    var url = this.props.url ? this.props.url : "/channels/"+this.props.id;
+    var url = this.props.url ? this.props.url : "/channels/"+this.props.id+"#comments";
     var selected = "";
     if(this.props.selected) selected = "selected";
     return <li className={selected}><a href={url}>{this.props.title}</a></li>;
@@ -21,6 +21,7 @@ var ChannelSearchResults = React.createClass({
       defaultResult = <ChannelSearchResult url={searchUrl(this.props.query)} selected={selectedDefault} title={searchTitle} />
     var showResult = function(result, index) {
       var selected = index == selection;
+      if(!result.id) console.log(result);
       return <ChannelSearchResult id={result.id} key={result.id} title={result.title} selected={selected} />;
     };
     return <ul className='results'>
@@ -79,8 +80,7 @@ var ChannelSearch = React.createClass({
           document.location.href = searchUrl(this.state.query);
         } else if(c > -1 && this.state.results.length > 0) {
           var channel = this.state.results[c];
-          console.log(channel);
-          document.location.href = "/channels/"+channel.id;
+          document.location.href = "/channels/"+channel.id+"#comments";
         }
         break;
     }
@@ -88,13 +88,19 @@ var ChannelSearch = React.createClass({
   hide: function() {
     this.setState({hidden: true});
   },
+  blur: function() {
+    var c = this;
+    window.setTimeout(function() {
+      c.hide();
+    }, 300);
+  },
   render: function() {
     var classname = "channel-search";
     if(this.state.hidden) classname += " hidden";
     return <div className={classname}>
       <span className='octicon octicon-search' />
       <form onSubmit={this.handleSubmit}>
-        <input className="search-field" onBlur={this.hide} onKeyDown={this.onKeydown} onChange={this.onChange} value={this.state.query} />
+        <input className="search-field" onBlur={this.blur} onKeyDown={this.onKeydown} onChange={this.onChange} value={this.state.query} />
       </form>
 
       <ChannelSearchResults query={this.state.query} results={this.state.results} cursor={this.state.cursor} />
@@ -109,6 +115,6 @@ $(function() {
   $(".show-channel-search").click(function() {
     var hidden = s.state.hidden;
     s.setState({hidden: !hidden});
-    if(hidden) $(search).find(".search-field").focus();
+    if(hidden) $(search).find(".search-field").select().focus();
   });
 })
