@@ -33,14 +33,15 @@ var ChannelSearchResults = React.createClass({
 
 var ChannelSearch = React.createClass({
   getInitialState: function() {
-    return {hidden: true, query: '', cursor: -1, results: []};
+    return {hidden: true, query: '', cursor: -1, results: [], n: -1};
   },
   handleSubmit: function(e) {
     e.preventDefault();
   },
   onChange: function(e) {
     var query = e.target.value;
-    this.setState({query: query});
+    var n = this.state.n + 1;
+    this.setState({query: query, n: n});
     if(query.length < 2) {
       this.setState({results: []});
       return;
@@ -53,6 +54,7 @@ var ChannelSearch = React.createClass({
     }
     var c = this;
     $.getJSON("/search", {"search": q, "per_page": 50}, function(data, status, xhr) {
+      if(c.state.n != n) return;
       c.setState({results: data.objects});
     });
   },
