@@ -56,6 +56,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    connection_pool (2.2.0)
     dynamic_form (1.1.4)
     elastomer-client (0.4.1)
       addressable (~> 2.3)
@@ -135,11 +136,13 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.4.2)
-    react-rails (0.13.0.0)
+    react-rails (1.0.0)
+      coffee-script-source (~> 1.8)
+      connection_pool
       execjs
       rails (>= 3.1)
-      react-source (= 0.13.0)
-    react-source (0.13.0)
+      react-source (~> 0.13)
+    react-source (0.13.3)
     redis (3.2.0)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
@@ -208,7 +211,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   bcrypt-ruby
-  bundler (~> 1.7.3)
+  bundler (~> 1.9.9)
   carrierwave
   coffee-rails
   dynamic_form
@@ -226,7 +229,7 @@ DEPENDENCIES
   pg (~> 0.18.1)
   rails (~> 4.2.1)
   rails_autolink
-  react-rails
+  react-rails (~> 1.0.0)
   redis
   responders (~> 2.0.0)
   resque

@@ -1,8 +1,5 @@
 <div class="search">
-  <%= form_tag search_path, :method => :get do %>
-    <%= octicon("search") %>
-    <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
-  <% end %>
+  <%= link_to octicon("search"), "#", class: "show-channel-search" %>
 
   <%= link_to octicon("arrow-down"), "", :class => "bottom-link floating" %>
   <%= link_to octicon("arrow-down"), "", :class => "bottom-link" %>
@@ -26,5 +23,6 @@
   <%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings", :class => "last" %>
 
   <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
+
   <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
 </nav>

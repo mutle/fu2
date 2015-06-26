@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "bundler", "~>1.7.3"
+gem "bundler", "~>1.9.9"
 gem "rails", "~>4.2.1"
 gem "pg", "~>0.18.1"
 gem "haml", "~>4.0.3"
@@ -30,7 +30,7 @@ gem 'resqued'
 gem 'faraday'
 gem 'responders', '~>2.0.0'
 gem 'active_model_serializers'
-gem 'react-rails'
+gem 'react-rails', '~>1.0.0'
 
 group :test do
   gem "mocha"

@@ -19,4 +19,4 @@
 //= require channels
 //= require search
 //= require react
-//= require redcursor-app
+//= require channel-search
