@@ -29,10 +29,15 @@
     list-style: none;
 
     li {
+      &.selected {
+        background: #ddd;
+      }
 
       a {
         display: block;
         padding: 4px 12px;
+        text-decoration: none;
+        color: #000;
       }
 
       &:hover {
