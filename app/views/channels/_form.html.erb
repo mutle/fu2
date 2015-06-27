@@ -6,10 +6,16 @@
         <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
       </div>
     <% end %>
-    <%= hidden_field_tag "syntax", (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) ? "md" : "html", :id => "syntax" %>
+    <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
+    <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
     <%= f.text_area :body, :class => 'comment-box' %>
-
+    <% if markdown %>
+      <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
+    <% end %>
     <div class="actions">
+      <% if markdown %>
+        <button class="markdown-help"><%= octicon "markdown" %></button>
+      <% end %>
       <%= f.submit "Send", :accesskey => "s" %>
     </div>
   <% end %>
