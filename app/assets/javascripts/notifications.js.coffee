@@ -243,9 +243,9 @@ $ ->
       pause_polling = false
 
   $.getJSON "/users.json", (data) ->
-    users = _.sortBy data.users, (u) ->
+    u = _.sortBy data.users, (u) ->
       u.display_name
-    for user in users
+    for user in u
       continue if user.login.match(/-disabled/)
       users[user.id] = user
       continue if user.id == user_id
