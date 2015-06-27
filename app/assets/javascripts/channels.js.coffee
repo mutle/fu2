@@ -134,6 +134,10 @@ $ ->
     $.ajax(url:url, dataType: "json", type: "post")
     return false
 
+  $(document).on 'click', '.markdown-help', ->
+    $(".markdown-help-show").toggle()
+    return false
+
   $(".active-channels").on 'click', '.mark-read', ->
     if $(this).hasClass("all-read")
       $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")

@@ -161,6 +161,40 @@ $small-screen: "only screen and (min-width : 800px)";
         margin: 0px;
       }
 
+      .markdown-help-show {
+        margin: 8px 4px;
+        background: #fff;
+        padding: 12px;
+        position: relative;
+        text-align: left;
+        display: none;
+
+        img {
+          max-width: 32px;
+          max-height: 32px;
+        }
+
+        .line {
+          .col-source {
+            float: left;
+            width: 45%;
+            line-height: 28px;
+            vertical-align: middle;
+            margin-bottom: 1em;
+          }
+          .col-rendered {
+            margin-left: 55%;
+            right: 0px;
+            width: 45%;
+            line-height: 28px;
+            margin-bottom: 1em;
+          }
+
+          clear: both;
+        }
+
+      }
+
       textarea {
         border: 1px solid #999;
         height: 180px;
