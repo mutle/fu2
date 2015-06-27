@@ -4,10 +4,12 @@ class NotificationsController < ApplicationController
 
   respond_to :html, :json
 
-  def index
+  def show
     if params[:format].to_s == "json"
+      user = User.find(params[:id])
       @view = Views::NotificationList.new({
         current_user: current_user,
+        user: user,
         last_id: params[:last_id].to_i
       })
       @view.finalize
@@ -32,10 +34,11 @@ class NotificationsController < ApplicationController
   end
 
   def unread
-    @view = Views::NotificationList.new({
+    @view = Views::NotificationCounts.new({
       current_user: current_user
     })
     @view.finalize
+    p @view.message_counts
     result = User.active.map do |u|
       next if u.id == current_user.id
       u.as_json.merge(messages: @view.message_counts[u.id], mentions: @view.mention_counts[u.id])

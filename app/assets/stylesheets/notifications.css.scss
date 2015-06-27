@@ -190,6 +190,10 @@ $small-screen: "only screen and (min-width : 800px)";
       padding-top: 20px;
       display: none;
 
+      &.show {
+        display: block;
+      }
+
       padding-right: 8px;
       overflow-x: hidden;
 
