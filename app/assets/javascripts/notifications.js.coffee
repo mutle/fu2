@@ -180,7 +180,7 @@ $ ->
         console.log error.stack
       success: (data) ->
         return if pause_polling
-        addNotifications(data)
+        addNotifications(data.notifications)
         updateUsers()
         if first_run
           if match = window.location.hash.match(/^#([0-9]+)$/)
@@ -243,9 +243,9 @@ $ ->
       pause_polling = false
 
   $.getJSON "/users.json", (data) ->
-    data = _.sortBy data, (u) ->
+    users = _.sortBy data.users, (u) ->
       u.display_name
-    for user in data
+    for user in users
       continue if user.login.match(/-disabled/)
       users[user.id] = user
       continue if user.id == user_id
