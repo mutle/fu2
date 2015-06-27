@@ -47,4 +47,13 @@ class NotificationsController < ApplicationController
     end
     respond_with result
   end
+
+  def counters
+    @view = Views::CurrentUserView.new({
+      current_user: current_user
+    })
+    @view.finalize
+    result = {messages: @view.unread_messages, mentions: @view.unread_mentions}
+    respond_with result
+  end
 end
