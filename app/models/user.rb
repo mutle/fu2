@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   serialize :block_users
 
   scope :with_login, lambda { |login| where("LOWER(login) = LOWER(:login) and activated_at IS NOT NULL", :login => login) }
+  scope :active, proc { where("login NOT LIKE '%-disabled'") }
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
