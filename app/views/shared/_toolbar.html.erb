@@ -9,12 +9,6 @@
   <%= link_to octicon('home'), root_path, :title => "Home" %>
 
   <div class="counters">
-    <% if (n = @current_user_view.unread_messages) > 0 %>
-      <div class="count"><%= link_to n, notifications_path %></div>
-    <% end %>
-    <% if (n = @current_user_view.unread_mentions) > 0 %>
-      <div class="count mentions"><%= link_to n, notifications_path %></div>
-    <% end %>
   </div>
   <%= link_to octicon('mail'), notifications_path, :title => "Notifications" %>
 

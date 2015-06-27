@@ -20,3 +20,4 @@
 //= require react
 //= require channel-search
 //= require notifications
+//= require notification-counter
