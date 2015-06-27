@@ -13,9 +13,7 @@ module Views
         if !notification.read
           counts[notification.created_by_id] += 1
         end
-        p counts
       end
-      p counts
       counts
     }
 

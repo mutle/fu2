@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 $small-screen: "only screen and (min-width : 800px)";
+$large-phone: "only screen and (min-width : 421px)";
 
 .mobile {
   .notifications {
@@ -40,7 +41,7 @@ $small-screen: "only screen and (min-width : 800px)";
     max-height: 42px;
   }
 
-  &.show {
+  .show {
     .users {
       display: none;
     }
@@ -318,7 +319,6 @@ $small-screen: "only screen and (min-width : 800px)";
       color: #aaa;
       text-align: center;
       vertical-align: center;
-      padding-bottom: 12px;
 
       .message {
         padding-top: 120px;
@@ -331,8 +331,6 @@ $small-screen: "only screen and (min-width : 800px)";
     }
 
     .empty {
-      display: none;
-
       .username div {
         display: inline;
       }
@@ -369,17 +367,21 @@ $small-screen: "only screen and (min-width : 800px)";
         border: 1px solid #000;
         background-color: #fff;
         border-radius: 4px;
+        display: block;
+        height: 30px;
       }
 
-      .input {
+      @media #{$large-phone} {
+        .input, .input-text {
+          width: 290px;
+          height: 80px;
+        }
       }
 
-      .input-text {
-        height: 120px;
-        display: none;
-
-        &.active {
-          display: block;
+      @media #{$small-screen} {
+        .input, .input-text {
+          width: 600px;
+          height: 120px;
         }
       }
 
