@@ -94,203 +94,23 @@ $small-screen: "only screen and (min-width : 800px)";
       clear: both;
     }
 
-    .channel-header {
-      background-color: #000;
-      color: #fff;
-      padding: 2px 6px;
+    .markItUp {
+      border: none;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      width: 100%;
 
-      h2 {
-        font-size: 26px;
-        line-height: 32px;
-        margin: 0px;
-      }
 
-      a {
-        color: #fff;
-      }
-
-      .activity-graph {
-        path {
-          stroke: #fff;
-        }
-      }
-    }
-    .no-channel-text {
-      margin-bottom: 1em;
-    }
-    .channel-text {
-      margin: 1em 0px;
-      border-top: 1px solid #a6a6a6;
-      border-bottom: 1px solid #a6a6a6;
-
-      .body {
-        padding: 12px;
-      }
-
-      .description {
-        font-style: italic;
-        border-bottom: 1px solid #000;
-        padding-bottom: 8px;
-        margin-bottom: 4px;
-        padding: 0px 12px 8px 12px;
-      }
-    }
-    .channel-actions {
-      float: right;
-
-      a {
-        display: block;
-        line-height: 32px;
-        margin-right: 32px;
-      }
-    }
-    .channel-header-edit, .channel-comment-box {
-      margin-bottom: 1em;
-      position: relative;
-      background-color: #f6f6f6;
-
-      .title {
-        background-color: #000;
-      }
-      input.channel-title {
-        font-size: 26px;
-        background-color: #000;
-        color: #fff;
+      .markItUpContainer {
         border: none;
-        width: 100%;
-        margin: 0px;
-      }
-
-      .markdown-help-show {
-        margin: 8px 4px;
-        background: #fff;
-        padding: 12px;
-        position: relative;
-        text-align: left;
-        display: none;
-
-        img {
-          max-width: 32px;
-          max-height: 32px;
-        }
-
-        .line {
-          .col-source {
-            float: left;
-            width: 45%;
-            line-height: 28px;
-            vertical-align: middle;
-            margin-bottom: 1em;
-          }
-          .col-rendered {
-            margin-left: 55%;
-            right: 0px;
-            width: 45%;
-            line-height: 28px;
-            margin-bottom: 1em;
-          }
-
-          clear: both;
-        }
-
-      }
-
-      textarea {
-        border: 1px solid #999;
-        height: 180px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-        font-size: 14px;
-
-        @media #{$small-screen} {
-          height: 400px;
-        }
-      }
-
-      .textcomplete-wrapper {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-      }
-
-      .markItUp {
-        border: none;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 100%;
-
-
-        .markItUpContainer {
-          border: none;
-        }
-      }
-      textarea.markItUpEditor {
       }
     }
 
     .actions {
-      text-align: right;
-      padding: 12px 6px;
-      font-size: 16px;
-
-      &.left {
-        font-size: 16px;
-        text-align: left;
-        position: absolute;
-        height: 18px;
-        left: 0px;
-        bottom: 18px;
-        margin: 0px;
-
-        form {
-          display: inline-block;
-        }
-
-        button {
-          margin-left: 0px;
-        }
-
-        .info {
-          padding-left: 12px;
-        }
-      }
-
       input[type=file] {
         display: none;
       }
-
-      input[type=submit], button {
-        font-size: 16px;
-        background-color: #fff;
-        border: 1px solid #bbb;
-        padding: 6px 12px;
-        border-radius: 3px;
-        margin-left: 6px;
-        cursor: pointer;
-      }
-
-      a {
-        color: #000;
-        background-color: #fafafa;
-        text-decoration: none;
-        border: 1px solid #bbb;
-        padding: 6px 12px;
-        border-radius: 3px;
-        margin-left: 6px;
-      }
-    }
-
-    .last-post-date {
-      color: #666;
-      text-align: center;
-      margin: 1em 0px 0.5em;
-      float: right;
-      width: 150px;
-      text-align: right;
     }
 
     .pagination {
@@ -318,85 +138,6 @@ $small-screen: "only screen and (min-width : 800px)";
       .autocomplete-image {
         max-width: 22px;
         max-height: 22px;
-      }
-    }
-
-    .post-preview {
-      border-bottom: 1px solid #d6d6d6;
-      background-color: #f6f6f6;
-      margin-bottom: 1em;
-      text-align: center;
-
-      .octicon {
-        font-size: 28px;
-        padding: 4px;
-      }
-    }
-
-    .post {
-      border-bottom: 1px solid #d6d6d6;
-      background-color: #fafafa;
-      margin-bottom: 1em;
-
-      &.unread {
-        .post-header {
-          background-color: #444;
-        }
-      }
-
-      &.highlight {
-        background-color: #f9faeb;
-      }
-
-      .post-header {
-        background-color: #000;
-        color: #fff;
-        line-height: 32px;
-        height: 32px;
-
-        .post-actions {
-          float: right;
-
-          .octicon {
-            font-size: 20px;
-          }
-
-          .faves .octicon {
-            cursor: pointer;
-          }
-
-          .faves.active .octicon {
-            color: #ff0;
-          }
-        }
-
-        a {
-          color: #fff;
-          text-decoration: none;
-        }
-
-        .date {
-          display: inline-block;
-          a {
-            display: block;
-            padding-right: 30px;
-            padding-left: 16px;
-          }
-        }
-
-        .user-mini {
-          font-size: 14px;
-          line-height: 32px;
-          display: block;
-          float: none;
-          color: #fff;
-
-          .avatar {
-            padding-right: 12px;
-            max-width: 32px;
-            max-height: 32px;
-          }
-        }
       }
 
       .body {

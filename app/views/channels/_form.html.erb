@@ -1,31 +1,29 @@
 <% title ||= false %>
-<div class="channel-<%= title ? "header-edit" : "comment-box" %>">
-  <%= form_for *form do |f| %>
-    <% if title %>
-      <div class="title">
-        <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
-      </div>
-    <% end %>
-    <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
-    <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
-    <%= f.text_area :body, :class => 'comment-box' %>
-    <% if markdown %>
-      <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
-    <% end %>
-    <div class="actions">
-      <% if markdown %>
-        <button class="markdown-help"><%= octicon "markdown" %></button>
-      <% end %>
-      <%= f.submit "Send", :accesskey => "s" %>
+<%= form_for *form do |f| %>
+  <% if title %>
+    <div class="title">
+      <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
     </div>
   <% end %>
-
-  <div class="actions left">
-    <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
-      <button class="upload-image"><%= octicon "device-camera" %></button>
-      <%= fi.file_field :image_file %>
+  <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
+  <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
+  <%= f.text_area :body, :class => 'comment-box' %>
+  <% if markdown %>
+    <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
+  <% end %>
+  <div class="actions">
+    <% if markdown %>
+      <button class="markdown-help"><%= octicon "markdown" %></button>
     <% end %>
-
-    <span class="info"></span>
+    <%= f.submit "Send", :accesskey => "s" %>
   </div>
+<% end %>
+
+<div class="actions left">
+  <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
+    <button class="upload-image"><%= octicon "device-camera" %></button>
+    <%= fi.file_field :image_file %>
+  <% end %>
+
+  <span class="info"></span>
 </div>
