@@ -21,3 +21,4 @@
 //= require channel-search
 //= require notifications
 //= require notification-counter
+//= require channels-react
