@@ -23,9 +23,7 @@ module ChannelsHelper
     return "#{t}h" if t < 24
     t = (t / 24).to_i
     return "#{t}d" if t < 30
-    t = (t / 30).to_i
-    return "#{t}m" if t < 12
-    t = (t / 12).to_i
+    t = (t / 365).to_i
     return "#{t}y"
   end
 

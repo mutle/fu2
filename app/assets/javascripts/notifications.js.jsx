@@ -80,19 +80,24 @@ var Notification = React.createClass({
   timestampText: function() {
     var d = new Date(this.props.timestamp);
     var today = new Date();
-    var minutes = Math.round(d.getMinutes() / 5.0) * 5;
-    if(minutes < 10)
-      minutes = "0"+minutes;
-    var year = d.getFullYear() != this_year ? " "+d.getFullYear() : "";
-    var date = today.getFullYear() == d.getFullYear() && today.getMonth() == d.getMonth() && today.getDate() == d.getDate() ? "" : month_names[d.getMonth()]+" "+d.getDate()+""+year+" - ";
-    return date+""+d.getHours()+":"+minutes;
+    var t = (today - d);
+    t = t / 1000;
+    if(t < 60) return t.toFixed()+"s";
+    t = (t / 60);
+    if(t < 60) return t.toFixed()+"m";
+    t = (t / 60);
+    if(t < 24) return t.toFixed()+"h";
+    t = (t / 24);
+    if(t < 30) return t.toFixed()+"d";
+    t = (t / 365);
+    return t.toFixed()+"y";
   },
   render: function() {
     var className = "" + (this.props.own ? "own" : "");
     var message = {__html: this.props.message};
     var ts = this.timestampText();
     return <div>
-      <timestamp>{ts}</timestamp>
+      <timestamp title={this.props.timestamp}>{ts}</timestamp>
       <message className={className}>
         <from className='user'>
           <img className="avatar" src={this.props.avatarUrl} />
