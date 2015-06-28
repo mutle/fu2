@@ -159,7 +159,7 @@ $ ->
         window.scrollLoader.loadMore post_id, () ->
           window.location.hash = "post_#{post_id}"
           $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
-  else if $("#recent_activities").length > 0
+  else if $(".channel-list").length > 0
     window.scrollLoader = new ScrollLoader($(".channel-loader"), false)
 
 
