@@ -19,9 +19,7 @@
 
     <header class="header">
       <div class="content">
-        <h1 id="title">
-          Red Cursor
-        </h1>
+        <%= image_tag "logo.png", class: "logo" %>
         <%= render :partial => "shared/toolbar" %>
       </div>
     </header>
@@ -31,10 +29,8 @@
     <% end %>
 
     <div id="container">
-
       <section id="content">
         <div class="channel-search-container"></div>
-
         <%= yield %>
       </section>
     </div>

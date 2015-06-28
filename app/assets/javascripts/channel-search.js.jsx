@@ -114,7 +114,7 @@ $(function() {
   var search = $(".channel-search-container").get(0);
   var s = React.render(<ChannelSearch />, search);
 
-  $(".show-channel-search").click(function() {
+  $(".toolbar-channel-search").click(function() {
     var hidden = s.state.hidden;
     s.setState({hidden: !hidden});
     if(hidden) $(search).find(".search-field").select().focus();
