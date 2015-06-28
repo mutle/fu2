@@ -1,14 +1,21 @@
 <% if @channel.can_read?(current_user) %>
-  <%= render partial: "header" %>
-  <div class="loader-group">
-    <% @view.posts.each do |post| %>
-      <% if post.is_a?(Event) %>
-        <%= render partial: "event", object: post %>
-      <% elsif post.can_read?(current_user) %>
-        <%= render partial: "post", object: post %>
-        <% @last_post_id = post.id %>
+  <h1><%= @channel.title %></h1>
+  <div class="text">
+    <div class="body">
+      <%= format_text @channel.text %>
+    </div>
+  </div>
+
+  <div class="channel-posts">
+    <div class="loader-group">
+      <% @view.posts.each do |post| %>
+        <% if post.is_a?(Event) %>
+          <%= render partial: "event", object: post %>
+        <% elsif post.can_read?(current_user) %>
+          <%= render partial: "post", object: post %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 
 <% else %>
@@ -16,8 +23,8 @@
 <% end %>
 
 <% if @channel.can_write?(current_user) %>
-  <div class="comment-box-form">
+  <div class="channel-response">
     <a name="comments"></a>
     <%= render partial: "form", locals: {form: [:post, :url => channel_posts_path(@channel)]} %>
-  <div class="clear"></div>
+  </div>
 <% end %>
