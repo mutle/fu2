@@ -88,7 +88,7 @@ var Notification = React.createClass({
     t = (t / 60);
     if(t < 24) return t.toFixed()+"h";
     t = (t / 24);
-    if(t < 30) return t.toFixed()+"d";
+    if(t < 365) return t.toFixed()+"d";
     t = (t / 365);
     return t.toFixed()+"y";
   },
