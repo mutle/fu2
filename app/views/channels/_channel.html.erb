@@ -9,7 +9,7 @@
     <%= link_to channel.title, channel_path(channel, anchor: (anchor || channel_anchor(channel, current_user, channel.last_post))), class: "channel-name" %>
   </div>
 
-  <div class="timestamp">
+  <div class="timestamp" title="<%= format_date channel.updated_at %>">
     <%= channel.updated_at %>
   </div>
 </li>
