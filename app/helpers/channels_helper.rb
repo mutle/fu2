@@ -14,6 +14,21 @@ module ChannelsHelper
     return result.html_safe
   end
 
+  def format_date(date)
+    t = (Time.now - date).to_i
+    return "#{t}s" if t < 60
+    t = (t / 60).to_i
+    return "#{t}m" if t < 60
+    t = (t / 60).to_i
+    return "#{t}h" if t < 24
+    t = (t / 24).to_i
+    return "#{t}d" if t < 30
+    t = (t / 30).to_i
+    return "#{t}m" if t < 12
+    t = (t / 12).to_i
+    return "#{t}y"
+  end
+
   def user_link(user)
     return "" unless user
     link_to format_title(user.display_name), user_path(user), :style => user.display_color

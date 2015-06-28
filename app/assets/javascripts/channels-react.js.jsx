@@ -3,8 +3,9 @@ var FaveCounter = React.createClass({
     return {faves: []};
   },
   render: function() {
-    if(!this.state.faves || this.state.faves.length == 0) return <span>{'0'}</span>;
-    return <span title={this.state.faves.join(", ")}>{this.state.faves.length}</span>;
+    var icon = <span className="octicon octicon-star" />;
+    if(!this.state.faves || this.state.faves.length == 0) return <span>{icon}{'0'}</span>;
+    return <span title={this.state.faves.join(", ")}>{icon}{this.state.faves.length}</span>;
   }
 });
 

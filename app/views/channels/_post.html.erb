@@ -5,12 +5,16 @@
 
     <%= link_to format_title(post.user.display_name), user_path(post.user), class: "user-name" %>
 
-    <div class="faves right" data-faves="<%= post.faves.includes(:user).map { |f| f.user.login }.to_json %>"></div>
+    <div class="right">
+      <div class="faves" data-faves="<%= post.faves.includes(:user).map { |f| f.user.login }.to_json %>"><%= octicon "star" %> <span class="count"></div>
+      <%= link_to octicon("eye"), "#", class: "post-unread", "data-prev-post-id" => @last_post_id, title: "Mark unread" %>
+      <%= link_to octicon("mail-reply"), "#", class: "post-reply", title: "Reply" %>
 
-    <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp right" %>
+      <%= link_to format_date(post.created_at), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp right", title: post.created_at.strftime(Fu2.time_format) %>
+    </div>
   </div>
 
-  <div class="body">
+  <div class="body" data-raw-body="<%= u(post.body) %>">
     <%= format_body post %>
   </div>
 
