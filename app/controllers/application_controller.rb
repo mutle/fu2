@@ -31,8 +31,8 @@ class ApplicationController < ActionController::Base
     (session[:user_id] || params[:api_key]) && !current_user.nil?
   end
 
-  def notification(type, object)
-    $redis.publish 'fu2_live', {:type => type, :object => object.as_json}.to_json
+  def notification(type, object, user_id=0)
+    $redis.publish 'live', {:type => type, :user_id => user_id, :object => object.as_json}.to_json
   end
 
   def increment_metric(name)
