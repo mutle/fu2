@@ -3,7 +3,7 @@
   <div class="channel-post-header">
     <%= link_to image_tag(avatar_url(post.user, 42), class: "avatar-image"), user_path(post.user), class: "avatar" %>
 
-    <%= link_to format_title(post.user.display_name), user_path(post.user), class: "user-name" %>
+    <span class="user-name"><%= format_title(post.user.display_name) %></span>
 
     <div class="right">
       <div class="faves" data-faves="<%= post.faves.includes(:user).map { |f| f.user.login }.to_json %>"><%= octicon "star" %> <span class="count"></div>
