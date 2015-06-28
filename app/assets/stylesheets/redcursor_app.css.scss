@@ -7,6 +7,17 @@ $large-screen: "only screen and (min-width: 1200px)";
   float: right;
 }
 
+.avatar {
+
+  display: inline-block;
+
+  .avatar-image {
+    max-width: 42px;
+    max-height: 42px;
+  }
+
+}
+
 body {
   font-family: Helvetica, Arial, sans-serif;
   background-color: #fff;

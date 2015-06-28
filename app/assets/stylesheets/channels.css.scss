@@ -133,12 +133,18 @@ $small-screen: "only screen and (min-width : 800px)";
       }
     }
 
-    .channel-post {
+    .channel-title {
+      font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+      font-size: 2.25em;
+      font-weight: 300;
+    }
+
+    .channel-post, .channel-response {
 
       background: #F2F2F2;
       border-bottom: 1px solid #E0E0E0;
 
-      .channel-post-header {
+      .channel-post-header, .channel-response-header {
 
         height: 42px;
         background: #484848;
@@ -150,6 +156,9 @@ $small-screen: "only screen and (min-width : 800px)";
         }
 
       }
+    }
+
+    .channel-post {
 
       &.read .channel-post-header {
         background: #D9D9D9;
@@ -159,6 +168,29 @@ $small-screen: "only screen and (min-width : 800px)";
       .body {
         color: #4D4D4D;
         line-height: 1.4em;
+        padding: 20px;
+      }
+
+    }
+
+    .channel-response {
+
+      .channel-response-title {
+        font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+        font-size: 1.5em;
+        font-weight: 300;
+      }
+
+      .comment-box {
+        padding: 20px;
+        background: transparent;
+        color: #4D4D4D;
+        line-height: 1.4em;
+      }
+
+      .actions {
+        height: 42px;
+        line-height: 42px;
       }
 
     }
