@@ -6,8 +6,25 @@ $large-screen: "only screen and (min-width: 1200px)";
 
 .channel-search-container {
   text-align: center;
-  position: relative;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+}
+.channel-search-background {
+  background: #000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   z-index: 100;
+
+  &.hidden {
+    display: none;
+  }
 }
 .channel-search {
   position: absolute;
@@ -29,10 +46,6 @@ $large-screen: "only screen and (min-width: 1200px)";
     .search-field {
       width: 500px;
     }
-  }
-
-  &.hidden {
-    display: none;
   }
 
   form {
