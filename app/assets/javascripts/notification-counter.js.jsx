@@ -11,7 +11,7 @@ var NotificationCounter = React.createClass({
   },
   render: function() {
     var messageCounter = this.state.messages > 0 ? <div className="count"><a href="/notifications">{this.state.messages}</a></div> : null;
-    var mentionCounter = this.state.mentions > 0 ? <div className="count"><a href="/notifications">{this.state.mentions}</a></div> : null;
+    var mentionCounter = this.state.mentions > 0 ? <div className="count mentions"><a href="/notifications">{this.state.mentions}</a></div> : null;
     return <div>
       {messageCounter}
       {mentionCounter}
