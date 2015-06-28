@@ -56,6 +56,16 @@ form {
       height: 68px;
       line-height: 68px;
 
+      .counters .counters-inner {
+        top: 14px;
+        left: 14px;
+        width: auto;
+
+        .count {
+          float: none;
+        }
+      }
+
       .octicon {
         display: none;
         &.menu-indicator, &.search-icon {
@@ -136,13 +146,15 @@ form {
     position: relative;
     .counters-inner {
       position: absolute;
-      top: 14px;
-      left: 12px;
+      top: 2px;
+      left: 0px;
+      width: 50px;
       z-index: 10;
       padding: 1px 3px;
       font-size: 14px;
 
       .count {
+        float: left;
         font-size: 12px;
         line-height: 14px;
         padding: 3px 6px;
