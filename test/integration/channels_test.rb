@@ -47,7 +47,7 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     create_post("**bold**\n")
     get "/channels/#{c.id}"
     assert_select "h2", :text => "Foo Channel"
-    assert_select ".post .body strong", :text => "bold"
+    assert_select ".channel-post .body strong", :text => "bold"
   end
 
   test "show channel events" do

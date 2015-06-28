@@ -1,10 +1,12 @@
+<% has_posts ||= false %>
+<% anchor ||= nil %>
 <li>
-  <div class="channel" data-channel-id="<%= channel.id %>" data-last-id="<%= last_post.id rescue 0 %>">
+  <div class="channel <%= "read" if !has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= last_post.id rescue 0 %>">
     <%= link_to image_tag(avatar_url(channel.last_post.user, 42), class: "avatar"), user_path(channel.last_post.user), class: "avatar" %>
 
     <%= link_to format_title(channel.last_post.user.display_name), user_path(channel.last_post.user), class: "user-name" %>
 
-    <%= link_to channel.title, channel_path(channel), class: "channel-name" %>
+    <%= link_to channel.title, channel_path(channel, anchor: (anchor || channel_anchor(channel, current_user, channel.last_post))), class: "channel-name" %>
   </div>
 
   <div class="timestamp">
