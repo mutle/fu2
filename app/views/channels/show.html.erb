@@ -1,5 +1,5 @@
 <% if @channel.can_read?(current_user) %>
-  <h2><%= @channel.title %></h2>
+  <h2 class="channel-title"><%= @channel.title %></h2>
   <% if (diff = @view.post_count - @view.posts.size) > 0 %>
     <div class="post-loader scroll-loader" data-loader-url="<%= channel_posts_path(@channel) %>" data-loader-attr="data-post-id" data-loader-items=".channel-post:not(.preview)" data-loader-count="12">
       <%= link_to "#{octicon "chevron-up"} <span class=\"loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
@@ -30,6 +30,7 @@
 <% if @channel.can_write?(current_user) %>
   <div class="channel-response">
     <a name="comments"></a>
+    <h3 class="channel-response-title">Comment</h3>
     <div class="channel-response-header">
       <%= image_tag avatar_url(current_user, 42), class: "avatar-image" %>
       <%= format_title(post.user.display_name) %>
