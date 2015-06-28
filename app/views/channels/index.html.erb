@@ -1,6 +1,14 @@
 <ul class="channel-list">
-  <% @view.recent_channels.each do |channel| %>
-    <% next if !channel.last_post %>
-    <%= render partial: "channel", object: channel %>
+  <div class="loader-group">
+    <% @view.recent_channels.each do |channel| %>
+      <% next if !channel.last_post %>
+      <%= render partial: "channel", object: channel %>
+    <% end %>
+  </div>
+
+  <% if (diff = @view.channel_count - @view.recent_channels.size) > 0 %>
+    <div class="channel-loader scroll-loader" data-loader-url="<%= live_channels_path %>" data-loader-attr="data-channel-id" data-loader-items=".channel"  data-loader-count="50" data-loader-page="<%= @page %>">
+      <%= link_to "#{octicon "chevron-down"} <span class=\"loader-count\">#{diff}</span> older channels".html_safe, "#", class: "load-more" %>
+    </div>
   <% end %>
 </ul>
