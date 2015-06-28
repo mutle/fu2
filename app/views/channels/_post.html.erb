@@ -1,7 +1,7 @@
 <% unread = @last_read_id && post.id > @last_read_id %>
 <div class="channel-post <%= "read" if !unread %>" data-post-id="<%= post.id %>">
   <div class="channel-post-header">
-    <%= link_to image_tag(avatar_url(post.user, 42), class: "avatar"), user_path(post.user), class: "avatar" %>
+    <%= link_to image_tag(avatar_url(post.user, 42), class: "avatar"), user_path(post.user), class: "avatar-image" %>
 
     <%= link_to format_title(post.user.display_name), user_path(post.user), class: "user-name" %>
 
