@@ -139,6 +139,54 @@ $small-screen: "only screen and (min-width : 800px)";
       font-weight: 300;
     }
 
+    .channel-list {
+
+      list-style-type: none;
+
+      a {
+        text-decoration: none;
+      }
+
+      .channel {
+
+        background: #D8D8D8;
+        padding: 7px;
+
+        @media #{$small-screen} {
+          width: 740px;
+        }
+
+        .avatar {
+          margin-right: 10px;
+        }
+
+        .user-name {
+          color: #666666;
+          display: inline-block;
+          width: 130px;
+        }
+
+        .channel-name {
+          color: #333333;
+        }
+
+        &.read {
+          background: #F2F2F2;
+          .user-name { color: #8C8C8C; }
+          .channel-name { color: #595959; }
+        }
+
+      }
+
+      .timestamp {
+        @media #{$small-screen} {
+          width: 200px;
+          float: right;
+        }
+      }
+
+    }
+
     .channel-post, .channel-response {
 
       background: #F2F2F2;
