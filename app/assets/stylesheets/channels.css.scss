@@ -1,4 +1,8 @@
+$small-phone: "only screen and (max-width : 320px)";
+$large-phone: "only screen and (min-width : 321px)";
+$small-phone-landscape: "only screen and (max-width : 480px)";
 $small-screen: "only screen and (min-width : 800px)";
+$large-screen: "only screen and (min-width: 1200px)";
 
 #container {
   #content {
@@ -151,10 +155,8 @@ $small-screen: "only screen and (min-width : 800px)";
 
         background: #D8D8D8;
         padding: 7px;
-
-        @media #{$small-screen} {
-          width: 740px;
-        }
+        margin-bottom: 10px;
+        line-height: 42px;
 
         .avatar {
           margin-right: 10px;
@@ -176,13 +178,48 @@ $small-screen: "only screen and (min-width : 800px)";
           .channel-name { color: #595959; }
         }
 
+        @media #{$large-screen} {
+          width: 860px;
+          float: left;
+        }
+
+        @media #{$small-phone-landscape} {
+
+          padding: 0;
+          line-height: 26px;
+
+          .avatar {
+            margin-right: 4px;
+            .avatar-image {
+              max-width: 26px;
+              max-height: 26px;
+            }
+          }
+
+          .channel-name {
+            display: block;
+            line-height: 64px;
+            padding: 0 4px;
+          }
+
+        }
+
       }
 
       .timestamp {
-        @media #{$small-screen} {
-          width: 200px;
-          float: right;
+
+        color: #8C8C8C;
+
+        @media #{$large-screen} {
+          width: 70px;
+          padding: 7px 0 7px 10px;
+          float: left;
+          line-height: 42px;
         }
+      }
+
+      .channel-loader {
+        clear: both;
       }
 
     }
