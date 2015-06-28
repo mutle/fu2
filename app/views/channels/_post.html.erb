@@ -4,10 +4,10 @@
 
     <%= link_to format_title(post.user.display_name), user_path(post.user), class: "user-name" %>
 
-    <div class="faves" data-faves="<%= post.faves.includes(:user).map { |f| f.user.login }.to_json %>">
+    <div class="faves right" data-faves="<%= post.faves.includes(:user).map { |f| f.user.login }.to_json %>">
     </div>
 
-    <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp" %>
+    <%= link_to post.created_at.strftime(Fu2.time_format), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp right" %>
   </div>
 
   <div class="body">

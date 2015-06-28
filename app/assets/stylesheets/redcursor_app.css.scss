@@ -3,6 +3,10 @@ $large-phone: "only screen and (min-width : 321px)";
 $small-screen: "only screen and (min-width : 800px)";
 $large-screen: "only screen and (min-width: 1200px)";
 
+.right {
+  float: right;
+}
+
 body {
   font-family: Helvetica, Arial, sans-serif;
   background-color: #fff;
