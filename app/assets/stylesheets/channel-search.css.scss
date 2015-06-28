@@ -6,13 +6,26 @@ $large-screen: "only screen and (min-width: 1200px)";
 
 .channel-search-container {
   text-align: center;
-  background: #F2F2F2;
   z-index: 100;
   position: fixed;
   top: 69px;
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
+}
+.channel-search-background {
+  background: #F2F2F2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 100;
+
+  &.hidden {
+    display: none;
+  }
 }
 .channel-search {
   position: absolute;
@@ -48,10 +61,6 @@ $large-screen: "only screen and (min-width: 1200px)";
       line-height: 54px;
       padding-left: 14px;
     }
-  }
-
-  &.hidden {
-    display: none;
   }
 
   form {
