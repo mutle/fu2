@@ -83,7 +83,7 @@ class Notification < ActiveRecord::Base
   end
 
   def default_message
-    if notification_type == "mention"
+    if notification_type == "mention" && channel
       "I mentioned you in [#{channel.title}](/channels/#{channel_id}#post_#{post_id})"
     end
   end
