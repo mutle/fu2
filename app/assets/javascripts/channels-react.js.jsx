@@ -30,7 +30,8 @@ var ImageUploader = React.createClass({
     var u = this;
     var xhr = new XMLHttpRequest();
     xhr.open('POST', this.state.url, true)
-    var token = $('meta[name="_csrf"]').attr('content');
+    var token = $('meta[name="csrf-token"]').attr('content');
+    console.log(token);
     xhr.setRequestHeader('X_CSRF_TOKEN', token);
 
     xhr.onreadystatechange = function(e) {
@@ -53,31 +54,29 @@ var ImageUploader = React.createClass({
       };
 
     var f = new FormData(form[0]);
-    console.log(f);
     xhr.send(f);
   },
   click: function(e) {
     e.preventDefault();
     var form = $(this.getDOMNode()).parents("form");
     var file = form.find("input.file");
+    var u = this;
     file.on('change', function(e) {
       u.selectFile();
-    })
+    });
     file.trigger("click");
   },
   selectFile: function(e) {
-    console.log('select');
     var form = $(this.getDOMNode()).parents("form");
     var file = form.find("input.file");
     var f = file.val().split("\\");
     var filename = f[f.length - 1];
-    console.log(filename);
-    u.startUpload(filename, form);
+    this.startUpload(filename, form);
   },
   render: function() {
     if(this.state.url)
       return <div>
-          <input type='file' className='file' name='image[image_file]' />
+        <input type='file' className='file' name='image[image_file]' />
         <button onClick={this.click} className="response-button upload-image"><span className="octicon octicon-device-camera"></span></button>
         <span className="info">{this.state.message}</span>
       </div>;

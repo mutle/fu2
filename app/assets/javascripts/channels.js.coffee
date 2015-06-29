@@ -65,7 +65,7 @@ $ ->
       t += "![](#{url})"
       $('.comment-box').val(t)
 
-  $(document).on 'click', ".upload-image", ->
+  $(document).on 'click', ".fdsfsdf", ->
     form = $(this).parents("form")
     file = form.find("input[type=file]")
     info = form.find(".info")

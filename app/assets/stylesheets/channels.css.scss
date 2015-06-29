@@ -113,7 +113,10 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .actions {
       input[type=file] {
-        // display: none;
+        display: none;
+      }
+      .info {
+        margin-left: 12px;
       }
       form {
         display: inline;
