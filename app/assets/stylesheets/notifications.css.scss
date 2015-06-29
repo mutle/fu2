@@ -5,36 +5,6 @@
 $small-screen: "only screen and (min-width : 800px)";
 $large-phone: "only screen and (min-width : 421px)";
 
-.mobile {
-  .notifications {
-    position: relative;
-
-    .users {
-      width: 100%;
-    }
-
-    .messages {
-      width: 100%;
-      display: none;
-
-      .message-list {
-        height: auto;
-        overflow-y: auto;
-      }
-    }
-
-    .response {
-      margin-left: 0px;
-      top: 0px;
-
-      .form {
-        margin-left: 0px;
-        position: inherit;
-      }
-    }
-  }
-}
-
 .notifications {
   img.avatar {
     max-width: 42px;
@@ -96,18 +66,14 @@ $large-phone: "only screen and (min-width : 421px)";
   }
 
   .users {
-    -webkit-mask-image: -webkit-gradient(linear, left 95%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
     display: block;
     // border-right: 1px solid #000;
-    overflow-x: hidden;
-    padding-bottom: 30px;
+    padding-bottom: 5px;
     width: 100%;
 
     @media #{$small-screen} {
       width: 220px;
       float: left;
-      overflow-y: scroll;
-      height: 500px;
     }
 
     &.hide {
@@ -128,13 +94,11 @@ $large-phone: "only screen and (min-width : 421px)";
       padding-right: 8px;
       padding-bottom: 4px;
       margin-bottom: 4px;
-      border-bottom: 1px solid #999;
       color: #999;
       cursor: pointer;
 
       &.active {
         color: #000;
-        border-bottom: 1px solid #999;
       }
 
       &.activity {
@@ -142,7 +106,7 @@ $large-phone: "only screen and (min-width : 421px)";
       }
 
       &.selected {
-        background-color: #fafafa;
+        background-color: #EFEFEF;
       }
     }
 
@@ -183,7 +147,7 @@ $large-phone: "only screen and (min-width : 421px)";
       border-radius: 4px;
       font-size: 16px;
       z-index: 2;
-      padding: 4px 12px;
+      padding: 8px 12px;
     }
 
     .message-list {
@@ -196,17 +160,6 @@ $large-phone: "only screen and (min-width : 421px)";
       }
 
       padding-right: 8px;
-      overflow-x: hidden;
-
-      @media #{$small-screen} {
-        height: 500px;
-        overflow-y: scroll;
-      }
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
     }
 
     timestamp {
@@ -323,6 +276,7 @@ $large-phone: "only screen and (min-width : 421px)";
       .message {
         padding-top: 120px;
         line-height: 40px;
+        padding-bottom: 40px;
 
         img {
           margin-right: 24px;
@@ -336,49 +290,47 @@ $large-phone: "only screen and (min-width : 421px)";
       }
     }
 
+    .notifications-container {
+      position: relative;
+    }
+
     .response {
-      border-top: 1px solid #aaa;
-      padding: 22px 0px;
-      line-height: 25px;
       text-align: right;
       font-size: 18px;
-      top: 500px;
-      margin-left: -232px;
-      // left: 0px;
-      // right: 0px;
-      // bottom: 0px;
-      // position: absolute;
       background-color: #fff;
 
       .form {
-        margin-left: 232px;
-        position: relative;
+        background: #EFEFEF;
+        border-top: 1px solid #D9D9D9;
+        padding: 10px;
       }
 
-      .input, .input-text {
-        position: absolute;
+      .input-text {
         font-size: 16px;
         line-height: 25px;
         text-align: left;
-        right: 108px;
-        left: 0px;
-        top: 0px;
         width: 190px;
-        border: 1px solid #000;
+        border: 1px solid #ADADAD;
         background-color: #fff;
-        border-radius: 4px;
-        display: block;
+        border-radius: 3px;
+        display: inline-block;
         height: 30px;
       }
 
       @media #{$large-phone} {
-        .input, .input-text {
+        .form {
+          height: 90px;
+        }
+        .input-text {
           width: 290px;
           height: 80px;
         }
       }
 
       @media #{$small-screen} {
+        .form {
+          height: 130px;
+        }
         .input, .input-text {
           width: 600px;
           height: 120px;
@@ -386,13 +338,12 @@ $large-phone: "only screen and (min-width : 421px)";
       }
 
       .send {
-        font-size: 18px;
-        color: #fff;
-        width: 100px;
-        line-height: 24px;
-        background-color: #381;
-        border: none;
-        border-radius: 16px;
+        border: 1px solid #ADADAD;
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 3px;
+        float: right;
+        margin-left: 20px;
 
         &:disabled {
           background-color: #ddd;

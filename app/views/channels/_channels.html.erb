@@ -1,13 +1,5 @@
 <% @view.recent_channels.each do |channel| %>
   <% last_post = @view.recent_posts[channel.id] %>
   <% has_posts = channel.has_posts?(current_user, last_post) %>
-  <% if last_post %>
-    <% ts = rounded_timestamp last_post.created_at  %>
-    <% if ts != @last_ts %>
-      <li class="list-date">
-        <%= @last_ts = ts %>
-      </li>
-    <% end %>
-  <% end %>
   <%= render partial: "channel", object: channel, locals: {has_posts: has_posts, last_post: last_post} %>
 <% end %>

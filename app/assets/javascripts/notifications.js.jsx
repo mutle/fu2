@@ -23,13 +23,13 @@ var desktop = function() {
 var resize = function() {
   var height = "";
   if(desktop()) {
-    var input_height = parseInt($(".notifications .input-text").css("height")) - 50;
-    var response_height = parseInt($(".notifications .response").css("height")) + 44 + input_height;
-    var h = $(window).height() - $(".notifications").get(0).offsetTop - response_height - 30;
-    height = h + "px";
+    var input_height = parseInt($(".notifications .input-text").css("height"));
+    var response_height = parseInt($(".notifications .response").css("height")) + input_height;
+    var h = $(window).height() - $(".notifications").get(0).offsetTop - 30;
+    height = (h - response_height) + "px";
   }
 
-  $(".notifications .users").css("height", height);
+  $(".notifications .users").css("height", h+"px");
   messages = $(".messages .message-list");
   messages.css("height", height);
   $(".notifications .empty").css("height", height);
@@ -50,7 +50,7 @@ var NotificationUser = React.createClass({
   render: function() {
     var showMessageClass = "indicator message" + (this.props.countMessages > 0 ? " show" : "");
     var showMentionClass = "indicator mention" + (this.props.countMentions > 0 ? " show" : "");
-    var className = "user" + (this.props.active ? " active" : "");
+    var className = "user" + (this.props.active ? " active" : "") + (this.props.selected ? " selected" : "");
     return <li className={className} onClick={this.click}>
       <div className={showMessageClass}>{this.props.countMessages}</div>
       <div className={showMentionClass}>{this.props.countMentions}</div>
@@ -63,14 +63,13 @@ var NotificationUser = React.createClass({
 
 var NotificationUserList = React.createClass({
   render: function() {
+    var selected = this.props.selected;
     var showUser = function(user, index) {
       if(!user || user.id == user_id) return null;
-      return <NotificationUser id={user.id} key={user.id} name={user.login} countMessages={user.messages} countMentions={user.mentions} avatarUrl={user.avatar_url} active={user.active} />
+      return <NotificationUser id={user.id} key={user.id} selected={user.id == selected} name={user.login} countMessages={user.messages} countMentions={user.mentions} avatarUrl={user.avatar_url} active={user.active} />
     };
     return <ul className='users'>
-      <li className="divider divider-top">Conversations</li>
       {this.props.activeUsers.map(showUser)}
-      <li className="divider">No history yet</li>
       {this.props.inactiveUsers.map(showUser)}
     </ul>;
   }
@@ -119,15 +118,17 @@ var NotificationView = React.createClass({
       console.log(displayId);
       return <Notification key={notification.id} message={notification.message} own={own} timestamp={notification.created_at} avatarUrl={notifications.getUser(displayId).avatar_url} />;
     };
+    var response = <NotificationResponse showUser={this.props.selectedUser != 0} />;
     if(!this.props.notifications || !this.props.selectedUser) {
       return <div className="welcome"><div className="message"><img src={notificationsE.data("arrow-left-image")} />{'Select a user to chat with \u2026'}</div><div className="message"><img src={notificationsE.data("arrow-down-image")} />and write your message.</div></div>;
     }
     if(this.props.notifications.length == 0)
-      return <div className="empty"><div className="message"><img src={notificationsE.data("arrow-down-image")} />Write a message to <span className="username">{this.props.selectedUser.login}</span>.</div></div>;
+      return <div><div className="empty"><div className="message"><img src={notificationsE.data("arrow-down-image")} />Write a message to <span className="username">{this.props.selectedUser.login}</span>.</div>{response}</div></div>;
 
     var className = "message-list" + (this.props.notifications.length > 0 ? " show" : "");
     return <div className={className}>
       {this.props.notifications.map(showNotification)}
+      {response}
     </div>;
   }
 });
@@ -234,14 +235,13 @@ var Notifications = React.createClass({
     return null;
   },
   render: function() {
-    var className = "" + (this.state.selectedUser > 0 ? "show" : "");
+    var className = "notifications-container" + (this.state.selectedUser > 0 ? " show" : "");
     return <div className={className}>
-      <NotificationUserList activeUsers={this.state.activeUsers} inactiveUsers={this.state.inactiveUsers} />
+      <NotificationUserList activeUsers={this.state.activeUsers} inactiveUsers={this.state.inactiveUsers} selected={this.state.selectedUser} />
 
       <div className="messages">
-        <button className="back" onClick={this.deselectUser}>Back</button>
+        <button className="back" onClick={this.deselectUser}><span className="octicon octicon-chevron-left"></span> Back</button>
         <NotificationView selectedUser={this.selectedUser()} notifications={this.state.notifications} />
-        <NotificationResponse showUser={this.state.selectedUser != 0} />
       </div>
     </div>;
   }
