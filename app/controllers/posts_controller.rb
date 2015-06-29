@@ -69,7 +69,7 @@ class PostsController < ApplicationController
       @post.fave @current_user
       notification :post_fave, @post
     end
-    render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count}
+    render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count, :faves => @post.faves.map(&:user).map(&:login)}
   end
 
   def unread

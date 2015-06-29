@@ -113,7 +113,10 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .actions {
       input[type=file] {
-        display: none;
+        // display: none;
+      }
+      form {
+        display: inline;
       }
     }
 
@@ -228,6 +231,7 @@ $large-screen: "only screen and (min-width: 1200px)";
 
       background: #F2F2F2;
       border-bottom: 1px solid #E0E0E0;
+      margin-bottom: 15px;
 
       .channel-post-header, .channel-response-header {
 
@@ -244,6 +248,27 @@ $large-screen: "only screen and (min-width: 1200px)";
           display: inline-block;
         }
 
+        .right {
+          margin-right: 8px;
+
+          a {
+            margin-right: 10px;
+            color: #E0E0E0;
+            text-decoration: none;
+          }
+
+          .timestamp {
+            margin-left: 16px;
+          }
+
+        }
+
+        .faves .on .octicon {
+          color: #FF0;
+        }
+        .faves .octicon {
+          margin-right: 6px;
+        }
       }
     }
 
@@ -252,6 +277,10 @@ $large-screen: "only screen and (min-width: 1200px)";
       &.read .channel-post-header {
         background: #D9D9D9;
         color: #595959;
+
+        .right a {
+          color: #474747;
+        }
       }
 
       .body {
@@ -262,16 +291,18 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     }
 
-    .channel-response {
+    .channel-response-title {
+      font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+      font-size: 1.5em;
+      font-weight: 300;
+      margin: 32px 0px 16px 0px;
+    }
 
-      .channel-response-title {
-        font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
-        font-size: 1.5em;
-        font-weight: 300;
-      }
+    .channel-response {
 
       .comment-box {
         padding: 20px;
+        width: 100%;
         background: transparent;
         color: #4D4D4D;
         line-height: 1.4em;
@@ -280,6 +311,19 @@ $large-screen: "only screen and (min-width: 1200px)";
       .actions {
         height: 42px;
         line-height: 42px;
+        text-align: right;
+
+        &.left {
+          text-align: left;
+          float: left;
+        }
+      }
+
+      .response-button {
+        border: 1px solid #ADADAD;
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 3px;
       }
 
     }

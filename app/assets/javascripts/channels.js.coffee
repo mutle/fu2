@@ -89,7 +89,7 @@ $ ->
       xhr.onreadystatechange = (e) =>
         if xhr.readyState == 4
           if xhr.status == 201
-            uploadComplete(xhr)
+            upload
           else if xhr.status == 202
             uploadComplete(xhr)
           else

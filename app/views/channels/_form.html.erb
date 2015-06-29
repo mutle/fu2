@@ -13,17 +13,14 @@
   <% end %>
   <div class="actions">
     <% if markdown %>
-      <button class="markdown-help"><%= octicon "markdown" %></button>
+      <button class="response-button markdown-help"><%= octicon "markdown" %></button>
     <% end %>
-    <%= f.submit "Send", :accesskey => "s" %>
+    <%= f.submit "Send", class: "response-button", accesskey: "s" %>
   </div>
 <% end %>
 
 <div class="actions left">
-  <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
-    <button class="upload-image"><%= octicon "device-camera" %></button>
-    <%= fi.file_field :image_file %>
-  <% end %>
-
-  <span class="info"></span>
+  <form encType='multipart/form-data'>
+    <div class="upload-image" data-uploader-url="<%= images_path(format: :json) %>"></div>
+  </form>
 </div>

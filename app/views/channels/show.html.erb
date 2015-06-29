@@ -27,10 +27,10 @@
   <p>You can't read the content of this channel</p>
 <% end %>
 
+<a name="comments"></a>
 <% if @channel.can_write?(current_user) %>
+  <h3 class="channel-response-title">Comment</h3>
   <div class="channel-response">
-    <a name="comments"></a>
-    <h3 class="channel-response-title">Comment</h3>
     <div class="channel-response-header">
       <%= image_tag avatar_url(current_user, 42), class: "avatar-image" %>
       <%= format_title(current_user.display_name) %>
