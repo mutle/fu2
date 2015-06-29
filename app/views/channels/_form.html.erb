@@ -7,7 +7,9 @@
   <% end %>
   <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
   <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
-  <%= f.text_area :body, :class => 'comment-box' %>
+  <div class="comment-box-container">
+    <%= f.text_area :body, :class => 'comment-box' %>
+  </div>
   <% if markdown %>
     <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
   <% end %>

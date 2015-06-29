@@ -304,11 +304,12 @@ $large-screen: "only screen and (min-width: 1200px)";
     .channel-response {
 
       .comment-box {
-        padding: 20px;
+        box-sizing: border-box;
         width: 100%;
         background: transparent;
         color: #4D4D4D;
         line-height: 1.4em;
+        height: 200px;
       }
 
       .actions {
