@@ -92,10 +92,10 @@ var ImageUploader = React.createClass({
 
 var AutoCompleterResult = React.createClass({
   render: function() {
-    var className = this.props.highlight ? "highlight" : "";
+    var className = "result "+ (this.props.highlight ? "highlight" : "");
     var title = this.props.value.login ? this.props.value.login : this.props.value;
     var image = this.props.imageUrl ? this.props.imageUrl(this.props.value) :  this.props.value.image ? this.props.value.image : null;
-    return <li className={className}><img src={image} />{title}</li>;
+    return <li className={className} onClick={this.props.clickCallback} data-value={title}><img src={image} />{title}</li>;
   }
 });
 
@@ -104,12 +104,13 @@ var AutoCompleter = React.createClass({
     var input = this.props.input;
     var selection = this.props.selection;
     var imageUrl = this.props.imageUrl;
+    var clickCallback = this.props.clickCallback;
     var n = 0;
     var results = this.props.objects.map(function(r, i) {
       var s = r;
       if(r.login) s = r.login;
       var highlight = selection == i;
-      return <AutoCompleterResult key={s} value={r} highlight={highlight} imageUrl={imageUrl} />;
+      return <AutoCompleterResult key={s} value={r} highlight={highlight} imageUrl={imageUrl} clickCallback={clickCallback} />;
     })
     return <ul className="autocompleter">
       {results}
@@ -126,6 +127,7 @@ var CommentBox = React.createClass({
     if(prefix && s.length > 0) s += prefix;
     s += text;
     this.setState({text: s});
+    $(this.getDOMNode()).find(".comment-box").focus();
   },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find(".comment-box").get(0).selectionEnd;
@@ -212,12 +214,24 @@ var CommentBox = React.createClass({
   change: function(e) {
     this.setState({text: e.target.value});
   },
+  autocompleteClick: function(e) {
+    if(this.state.autocomplete) {
+      var text = $(this.getDOMNode()).find(".comment-box");
+      var cursorE = text.get(0).selectionEnd;
+      var s = text.val();
+      var value = $(e.target).parents(".result").data("value");
+      var input = s.slice(0, this.state.autocompletestart) + value + (this.state.autocomplete == "emoji" ? ":" : "") + s.slice(cursorE, s.length);
+      e.target.value = input;
+      this.setState({autocomplete: null, text: input});
+      text.focus();
+    }
+  },
   render: function() {
     var autocompleter = null;
     var imageUrl;
     if(this.state.autocomplete) {
       if(this.state.autocomplete == "emoji") imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
-      autocompleter = <AutoCompleter objects={this.state.autocompleteobjectsfiltered} selection={this.state.autocompleteselection} imageUrl={imageUrl} />;
+      autocompleter = <AutoCompleter objects={this.state.autocompleteobjectsfiltered} selection={this.state.autocompleteselection} imageUrl={imageUrl} clickCallback={this.autocompleteClick} />;
     }
     return <div>
       {autocompleter}
