@@ -51,7 +51,7 @@ class WebsocketServer
                   Rails.logger.info "Websocket Received message: #{data}"
                   if data['type'] == "auth"
                     user = User.with_api_key(data['api_key']).first
-                    if user
+                    if user && user.api_key == data['api_key']
                       Rails.logger.info "Websocket Connected: #{user.login}"
                       connections.push({user_id: user.id, socket: ws})
                       update_count(connections)
