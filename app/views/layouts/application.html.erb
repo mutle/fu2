@@ -13,7 +13,7 @@
       <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
     <% end %>
   </head>
-  <body<%= ' class="mobile"'.html_safe if mobile? %> data-socket-server="ws://localhost:8000" data-api-key="<%= current_user.api_key %>">
+  <body<%= ' class="mobile"'.html_safe if mobile? %> data-socket-server="ws://<%= request.host %>:8000" data-api-key="<%= current_user.api_key %>">
     <a name="top"></a>
 
     <header class="header">
