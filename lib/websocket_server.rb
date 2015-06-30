@@ -1,7 +1,18 @@
 class WebsocketServer
   class << self
+    attr_accessor :connection_count, :connected_users
     def send(conn, msg)
       conn[:socket].send(msg.to_json, type: "text")
+    end
+
+    def update_count(connections)
+      self.connection_count = connections.size
+      users = {}
+      connections.each do |c|
+        users[c[:user_id]] ||= 0
+        users[c[:user_id]] += 1
+      end
+      self.connected_users = users
     end
 
     def run(port)
@@ -43,6 +54,7 @@ class WebsocketServer
                     if user
                       Rails.logger.info "Websocket Connected: #{user.login}"
                       connections.push({user_id: user.id, socket: ws})
+                      update_count(connections)
                     end
                   end
                 rescue => e
@@ -55,6 +67,9 @@ class WebsocketServer
 
             ws.onclose do
               Rails.logger.info "Websocket Client disconnected"
+              connection = connections.find { |c| c[:socket] == ws }
+              connections.delete(connection) if connection
+              update_count(connections)
             end
           end
         end
