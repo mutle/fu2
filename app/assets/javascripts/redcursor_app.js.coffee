@@ -30,7 +30,9 @@ $ ->
     if syntax == "html"
       $('.comment-box').markItUp(mySettings)
 
-  refreshPosts = () ->
+  postRefreshSocket = false
+  refreshPosts = (force) ->
+    return if !force && postRefreshSocket
     last_id = $('.post:not(.preview)').last().attr("data-post-id")
     last_update = $(".channel-header").attr("data-last-update")
     ourl = document.location.href.replace(/#.*$/, '')
@@ -46,7 +48,9 @@ $ ->
       $(".updated").remove()
       $(document).trigger 'fu2.refreshPosts'
 
-  refreshChannels = () ->
+  channelRefreshSocket = false
+  refreshChannels = (force) ->
+    return if !force && channelRefreshSocket
     last_id = $('#recent_activities .channel').first().attr("data-last-id")
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
@@ -60,7 +64,18 @@ $ ->
     $('.post-preview').remove();
 
   if $('.comment-box-form').length
-    setInterval refreshPosts, 15 * 1000
+    channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
+    data = (data, type) ->
+      if data.channel_id == channel_id
+        refreshPosts(true)
+    open = -> postRefreshSocket = true
+    close = ->
+      postRefreshSocket = false
+      c = ->
+        refreshPosts()
+        setTimeout c, 15 * 1000 if !postRefreshSocket
+      setTimeout c, 15 * 1000
+    window.socket.subscribe ["post_create"], data, open, close
     $('.comment-box-form form').submit ->
       previewPost($('#post_body').val())
       text = $('.comment-box-form textarea').val()
@@ -83,7 +98,15 @@ $ ->
         $(this).parents('form').submit()
 
   if $('#recent_activities.refresh').length
-    setInterval refreshChannels, 15 * 1000
+    data = (data, type) -> refreshChannels(true)
+    open = -> channelRefreshSocket = true
+    close = ->
+      channelRefreshSocket = false
+      c = ->
+        refreshChannels()
+        setTimeout c, 15 * 1000 if !channelRefreshSocket
+      setTimeout c, 15 * 1000
+    window.socket.subscribe ["post_create", "channel_create"], data, open, close
 
   $(document).on 'scroll', ->
     $(".bottom-link").css("top", "#{document.body.scrollTop + 6}px")

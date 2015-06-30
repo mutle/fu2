@@ -5,7 +5,7 @@ var NotificationCounter = React.createClass({
   connect: function() {
     var n = this;
     this.socket = false;
-    window.socket.subscribe("counters", function(data) {
+    window.socket.subscribe(["counters"], function(data, type) {
       console.log(data);
       n.setState({messages: data.messages, mentions: data.mentions});
     }, function() {

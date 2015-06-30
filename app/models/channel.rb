@@ -222,7 +222,8 @@ class Channel < ActiveRecord::Base
 
   def visit(current_user, post_id=nil)
     if !post_id
-      $redis.zadd "mentions:#{current_user.id}", 0, id
+      num = $redis.zadd "mentions:#{current_user.id}", 0, id
+      Live.notification_counters(current_user) if num && num.to_i > 0
     end
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i

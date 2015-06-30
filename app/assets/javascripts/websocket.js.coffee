@@ -3,11 +3,13 @@ class Socket
     @subscriptions = {}
     @available = false
   connected: ->
+  message: (msg) ->
+    @connection.send JSON.stringify(msg) if @available
   connect: ->
     @connection = new WebSocket(@url)
     @connection.onopen = () =>
       @available = true
-      @connection.send(JSON.stringify({type: "auth", api_key: @api_key}))
+      @message({type: "auth", api_key: @api_key})
       for type,subscriptions of @subscriptions
         for s in subscriptions
           s.open?()
@@ -16,7 +18,7 @@ class Socket
       data = $.parseJSON($.parseJSON(e.data))
       return if !@subscriptions[data.type]
       for s in @subscriptions[data.type]
-        s.data(data.object)
+        s.data(data.object, data.type)
     @connection.onclose = (e) =>
       @available = false
       @retryconnect()
@@ -26,9 +28,10 @@ class Socket
   retryconnect: () ->
     c = () => @connect()
     window.setTimeout c, 10 * 1000
-  subscribe: (type, callback, opened, closed) ->
-    @subscriptions[type] ?= []
-    @subscriptions[type].push(data: callback, open: opened, close: closed)
+  subscribe: (types, callback, opened, closed) ->
+    for type in types
+      @subscriptions[type] ?= []
+      @subscriptions[type].push(data: callback, open: opened, close: closed)
     true
 
 $ ->
