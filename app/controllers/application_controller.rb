@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   end
 
   def notification(type, object, user_id=0)
-    $redis.publish 'live', {:type => type, :user_id => user_id, :object => object.as_json}.to_json
+    Live.update(type, object, user_id)
   end
 
   def increment_metric(name)
