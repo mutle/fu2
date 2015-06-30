@@ -5,7 +5,7 @@ class WebsocketServer
       conn[:socket].send(msg.to_json, type: "text")
     end
 
-    def update_count(connections)
+    def update_count(connections, redis)
       self.connection_count = connections.size
       users = {}
       connections.each do |c|
@@ -13,6 +13,8 @@ class WebsocketServer
         users[c[:user_id]] += 1
       end
       self.connected_users = users
+      $redis.set "Stats:Websockets:connection-count", connection_count
+      $redis.set "Stats:Websockets:connected-users", connected_users.to_json
     end
 
     def run(port)
@@ -54,7 +56,7 @@ class WebsocketServer
                     if user && user.api_key == data['api_key']
                       Rails.logger.info "Websocket Connected: #{user.login}"
                       connections.push({user_id: user.id, socket: ws})
-                      update_count(connections)
+                      update_count(connections, redis)
                     end
                   end
                 rescue => e
@@ -69,7 +71,7 @@ class WebsocketServer
               Rails.logger.info "Websocket Client disconnected"
               connection = connections.find { |c| c[:socket] == ws }
               connections.delete(connection) if connection
-              update_count(connections)
+              update_count(connections, redis)
             end
           end
         end
