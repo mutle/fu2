@@ -6,10 +6,10 @@ var NotificationCounter = React.createClass({
     var n = this;
     this.socket = false;
     window.socket.subscribe(["counters"], function(data, type) {
-      console.log(data);
       n.setState({messages: data.messages, mentions: data.mentions});
     }, function() {
       n.socket = true;
+      n.refresh(true);
     }, function() {
       n.socket = false;
       window.setTimeout(n.refresh, 12 * 1000);

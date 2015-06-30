@@ -68,7 +68,9 @@ $ ->
     data = (data, type) ->
       if data.channel_id == channel_id
         refreshPosts(true)
-    open = -> postRefreshSocket = true
+    open = ->
+      postRefreshSocket = true
+      refreshPosts(true)
     close = ->
       postRefreshSocket = false
       c = ->
@@ -99,7 +101,9 @@ $ ->
 
   if $('#recent_activities.refresh').length
     data = (data, type) -> refreshChannels(true)
-    open = -> channelRefreshSocket = true
+    open = ->
+      channelRefreshSocket = true
+      refreshChannels(true)
     close = ->
       channelRefreshSocket = false
       c = ->
