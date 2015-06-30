@@ -65,6 +65,7 @@ GEM
       semantic (~> 1.3)
     erubis (2.7.0)
     escape_utils (1.0.1)
+    eventmachine (1.0.7)
     execjs (2.2.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
@@ -203,6 +204,14 @@ GEM
       raindrops (~> 0.7)
     vegas (0.1.11)
       rack (>= 1.0.0)
+    websocket (1.2.2)
+    websocket-eventmachine-base (1.1.0)
+      eventmachine (~> 1.0)
+      websocket (~> 1.0)
+      websocket-native (~> 1.0)
+    websocket-eventmachine-server (1.0.1)
+      websocket-eventmachine-base (~> 1.0)
+    websocket-native (1.0.0)
     will_paginate (3.0.7)
 
 PLATFORMS
@@ -241,4 +250,5 @@ DEPENDENCIES
   syslog-logger
   test-unit
   unicorn (~> 4.9.0)
+  websocket-eventmachine-server
   will_paginate

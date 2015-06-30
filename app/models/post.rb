@@ -70,6 +70,7 @@ class Post < ActiveRecord::Base
         mentioned[u.id] = true
         channel.add_mention(u)
         Notification.mention(user, u, channel, self)
+        Live.notification_counters(u)
       end
     end
     true

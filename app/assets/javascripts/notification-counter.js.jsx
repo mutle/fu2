@@ -2,12 +2,29 @@ var NotificationCounter = React.createClass({
   getInitialState: function() {
     return {messages: 0, mentions: 0};
   },
-  refresh: function() {
+  connect: function() {
     var n = this;
-    $.getJSON("/notifications/counters.json", {}, function(data, status, xhr) {
+    this.socket = false;
+    window.socket.subscribe(["counters"], function(data, type) {
       n.setState({messages: data.messages, mentions: data.mentions});
+    }, function() {
+      n.socket = true;
+      n.refresh(true);
+    }, function() {
+      n.socket = false;
+      window.setTimeout(n.refresh, 12 * 1000);
     });
-    window.setTimeout(this.refresh, 12 * 1000);
+    this.refresh(true);
+  },
+  refresh: function(force) {
+    var n = this;
+    if(force || !this.socket) {
+      $.getJSON("/notifications/counters.json", {}, function(data, status, xhr) {
+        n.setState({messages: data.messages, mentions: data.mentions});
+      });
+      if(!this.socket)
+        window.setTimeout(this.refresh, 12 * 1000);
+    }
   },
   render: function() {
     var messageCounter = this.state.messages > 0 ? <div className="count"><a href="/notifications">{this.state.messages}</a></div> : null;
@@ -23,6 +40,6 @@ $(function() {
   var counters = $(".toolbar .counters");
   if(counters.length > 0) {
     var counter = React.render(<NotificationCounter />, counters.get(0));
-    counter.refresh();
+    counter.connect();
   }
 });

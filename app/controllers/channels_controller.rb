@@ -53,7 +53,7 @@ class ChannelsController < ApplicationController
 
   def create
     @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
-    notification :channel_create, @channel
+    Live.channel_create(@channel)
     increment_metric "posts.all"
     increment_metric "posts.user.#{current_user.id}"
     increment_metric "channels.all"
