@@ -10,11 +10,16 @@ class Socket
     @connection.onerror = (error) =>
       console.log("WebSocket Error #{error}")
     @connection.onmessage = (e) =>
-      data = $.parseJSON(e.data)
-      console.log(data)
+      console.log(e)
+      console.log(e.data)
+      data = $.parseJSON($.parseJSON(e.data))
+      return if !@subscriptions[data.type]
+      for s in @subscriptions[data.type]
+        s(data.object)
   subscribe: (type, callback) ->
     @subscriptions[type] ?= []
     @subscriptions[type].push callback
+    true
 
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
