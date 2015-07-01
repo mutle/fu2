@@ -22,6 +22,7 @@ class NotificationsController < ApplicationController
     @message = {}
     if to
       @message = Notification.message(current_user, to, params[:message])
+      Live.notification_counters(to)
     end
     respond_with @message
   end
@@ -29,6 +30,7 @@ class NotificationsController < ApplicationController
   def read
     from = User.find(params[:id])
     Notification.for_user(current_user).toolbar_notifications.from_user(from).unread.update_all(:read => true)
+    Live.notification_counters(current_user)
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end
@@ -49,11 +51,15 @@ class NotificationsController < ApplicationController
   end
 
   def counters
-    @view = Views::CurrentUserView.new({
-      current_user: current_user
-    })
-    @view.finalize
-    result = {messages: @view.unread_messages, mentions: @view.unread_mentions}
+    result = update_counters(current_user)
     respond_with result
+  end
+
+  private
+
+  def update_counters(user)
+    @view = Views::CurrentUserView.new({current_user: user})
+    @view.finalize
+    return @view.counters
   end
 end

@@ -14,6 +14,7 @@
 //= require autocompleter
 //= require scroll-loader
 //= require emoji
+//= require websocket
 //= require redcursor_app
 //= require channels
 //= require search

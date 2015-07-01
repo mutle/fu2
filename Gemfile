@@ -31,6 +31,7 @@ gem 'faraday'
 gem 'responders', '~>2.0.0'
 gem 'active_model_serializers'
 gem 'react-rails', '~>1.0.0'
+gem 'websocket-eventmachine-server'
 
 group :test do
   gem "mocha"

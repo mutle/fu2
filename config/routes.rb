@@ -74,6 +74,9 @@ Fu2::Application.routes.draw do
 
   resources :images
   resources :stylesheets
+
+  get '/stats/websockets' => "stats#websockets"
+
   get '/' => 'channels#index', :as => :root
 
   get '/react' => 'channels#react'
