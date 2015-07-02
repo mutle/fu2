@@ -12,7 +12,7 @@
     <%= link_to channel.title, channel_path(channel, anchor: (anchor || channel_anchor(channel, current_user, channel.last_post))), class: "channel-name" %>
   </div>
 
-  <% if hide_date %>
+  <% if !hide_date %>
     <div class="timestamp" title="<%= channel.updated_at.strftime(Fu2.time_format) %>">
       <%= format_date channel.updated_at %>
     </div>
