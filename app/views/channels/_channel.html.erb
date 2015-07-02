@@ -1,15 +1,20 @@
 <% has_posts ||= false %>
 <% anchor ||= nil %>
-<li>
-  <div class="channel <%= "read" if !has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= last_post.id rescue 0 %>">
-    <%= link_to image_tag(avatar_url(channel.last_post.user, 42), class: "avatar-image"), user_path(channel.last_post.user), class: "avatar" %>
-
-    <span class="user-name"><%= format_title(channel.last_post.user.display_name) %></span>
+<% hide_date ||= false %>
+<% element ||= "li" %>
+<<%= element %>>
+  <div class="channel <%= "read" if !has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= channel.last_post.id rescue 0 %>">
+    <% if channel.last_post %>
+      <%= link_to image_tag(avatar_url(channel.last_post.user, 42), class: "avatar-image"), user_path(channel.last_post.user), class: "avatar" %>
+      <span class="user-name"><%= format_title(channel.last_post.user.display_name) %></span>
+    <% end %>
 
     <%= link_to channel.title, channel_path(channel, anchor: (anchor || channel_anchor(channel, current_user, channel.last_post))), class: "channel-name" %>
   </div>
 
-  <div class="timestamp" title="<%= channel.updated_at.strftime(Fu2.time_format) %>">
-    <%= format_date channel.updated_at %>
-  </div>
-</li>
+  <% if hide_date %>
+    <div class="timestamp" title="<%= channel.updated_at.strftime(Fu2.time_format) %>">
+      <%= format_date channel.updated_at %>
+    </div>
+  <% end %>
+</<%= element %>>

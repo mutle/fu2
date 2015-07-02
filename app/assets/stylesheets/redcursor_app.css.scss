@@ -98,6 +98,10 @@ form {
       }
     }
 
+    .bottom-link {
+      display: inline-block;
+    }
+
     @media #{$small-screen} {
 
       height: 68px;
@@ -123,6 +127,10 @@ form {
         }
       }
 
+      .bottom-link {
+        display: none;
+      }
+
       .octicon {
         display: none;
         &.menu-indicator, &.search-icon, &.signout-icon {
@@ -138,6 +146,9 @@ form {
         .text {
           display: none;
         }
+      }
+      .toolbar-logout {
+        margin-right: 12px;
       }
 
       .logo {
@@ -399,6 +410,30 @@ form {
 
       &.highlight {
         background: #fff;
+      }
+    }
+  }
+
+  .content-block {
+    background: #F2F2F2;
+    border-bottom: 1px solid #E0E0E0;
+    margin-bottom: 15px;
+
+    p {
+      padding: 10px;
+    }
+
+    h3 {
+      height: 28px;
+      background: #484848;
+      line-height: 28px;
+      color: #E6E6E6;
+      margin-bottom: 1em;
+
+      a {
+        display: block;
+        color: #E6E6E6;
+        text-decoration: none;
       }
     }
   }

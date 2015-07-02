@@ -3,7 +3,7 @@
   <div class="user-info-list">
     <% @users.each do |user| %>
       <div class="user-info">
-        <%= render :partial => "profile", :locals => {:user => user, :avatar_size => 70, :avatar_grid_size => 1, :grid_size => 3} %>
+        <%= render :partial => "profile", :locals => {:user => user, :avatar_size => 70, :stats => false} %>
       </div>
     <% end %>
   </div>

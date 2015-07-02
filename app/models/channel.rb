@@ -207,6 +207,10 @@ class Channel < ActiveRecord::Base
     @last_post ||= posts.reorder("id DESC").first
   end
 
+  def last_post=(post)
+    @last_post = post
+  end
+
   def last_post_id
     last_post.try(:id)
   end

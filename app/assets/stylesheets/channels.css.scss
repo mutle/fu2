@@ -130,6 +130,7 @@ $large-screen: "only screen and (min-width: 1200px)";
       border-radius: 8px;
       font-size: 18px;
       text-align: center;
+      clear: both;
 
       a, .gap {
         margin: 0px 4px;
@@ -191,7 +192,6 @@ $large-screen: "only screen and (min-width: 1200px)";
     }
 
     .channel-list {
-
       list-style-type: none;
 
       a {
