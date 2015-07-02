@@ -57,9 +57,45 @@ form {
     height: 28px;
     line-height: 28px;
     position: relative;
+    text-align: left;
 
     .text {
       display: none;
+    }
+
+    .more-container {
+      display: inline-block;
+      position: relative;
+    }
+
+    .more {
+      position: absolute;
+      top: 9px;
+      text-align: left;
+      color: #484848;
+      z-index: 5;
+      background-color: #f2f2f2;
+      border: 1px solid #eaeaea;
+      display: none;
+      line-height: 24px;
+
+      .octicon {
+        display: inline;
+        padding-right: 6px;
+      }
+
+      .text {
+        display: inline;
+      }
+
+      a {
+        display: block;
+        padding: 4px 12px;
+      }
+
+      &.show {
+        display: inline-block;
+      }
     }
 
     @media #{$small-screen} {
@@ -68,6 +104,14 @@ form {
       line-height: 68px;
       margin-left: 5%;
       margin-right: 5%;
+
+      .more {
+        top: 29px;
+
+        a {
+          display: block;
+        }
+      }
 
       .counters .counters-inner {
         top: 14px;
@@ -81,15 +125,15 @@ form {
 
       .octicon {
         display: none;
-        &.menu-indicator, &.search-icon {
+        &.menu-indicator, &.search-icon, &.signout-icon {
           display: inline;
         }
       }
       .text {
         display: inline;
       }
-      .toolbar-channel-search  {
-        padding-right: 0px;
+      .toolbar-channel-search, .toolbar-logout  {
+        padding: 0px;
 
         .text {
           display: none;
@@ -102,12 +146,11 @@ form {
       }
 
       a {
-        padding-left: 35px;
+        padding-left: 30px;
       }
     }
 
     .toolbar-channel-search {
-      float: right;
       padding-right: 2px;
     }
 
@@ -134,7 +177,7 @@ form {
   }
 
   .menu-indicator {
-    padding-left: 12px;
+    padding-left: 6px;
   }
 
   a {
@@ -145,9 +188,6 @@ form {
     padding-left: 15px;
   }
 
-  .more {
-    display: none;
-  }
 
   .logo {
     width: 20px;
@@ -197,7 +237,6 @@ form {
 }
 
 #container {
-  margin-top: 28px;
   padding-top: 48px;
 
 

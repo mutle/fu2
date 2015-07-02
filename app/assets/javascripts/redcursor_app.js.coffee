@@ -112,6 +112,9 @@ $ ->
       setTimeout c, 15 * 1000
     window.socket.subscribe ["post_create", "channel_create"], data, open, close
 
+  $(document).on 'click', '.toolbar-more-link', ->
+    $(".more").toggleClass("show")
+
   $(document).on 'scroll', ->
     $(".bottom-link").css("top", "#{document.body.scrollTop + 6}px")
     $(".bottom-link").toggleClass("top", document.body.scrollTop < 32)
