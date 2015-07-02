@@ -27,5 +27,7 @@ Fu2::Application.configure do
 
   config.eager_load = false
 
+  config.active_record.raise_in_transactional_callbacks = true
+
   config.react.variant = :development
 end

@@ -78,24 +78,7 @@ $ ->
         setTimeout c, 15 * 1000 if !postRefreshSocket
       setTimeout c, 15 * 1000
     window.socket.subscribe ["post_create"], data, open, close
-    $('.comment-box-form form').submit ->
-      previewPost($('#post_body').val())
-      text = $('.comment-box-form textarea').val()
-      $('.comment-box-form textarea').val ''
-      $.ajax
-        type: "POST"
-        url: $(this).attr("action")
-        data: {"post[body]": text}
-        success: (data) ->
-          $("#content").append(data.rendered)
-          removePreviewPost()
-          refreshPosts()
-        error: () ->
-          removePreviewPost()
-          $('.comment-box-form textarea').val text
-          $(".upload_info").html("Error sending post. Please try again.")
-      false
-    $('.comment-box-form textarea').keydown (e) ->
+    $(document).on 'keydown', '.comment-box-form textarea', (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()
 

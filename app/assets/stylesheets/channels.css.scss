@@ -300,6 +300,11 @@ $large-screen: "only screen and (min-width: 1200px)";
         line-height: 42px;
         color: #E6E6E6;
 
+        a {
+          color: #E0E0E0;
+          text-decoration: none;
+        }
+
         .avatar {
           margin-right: 10px;
         }
@@ -313,8 +318,6 @@ $large-screen: "only screen and (min-width: 1200px)";
 
           a {
             margin-right: 10px;
-            color: #E0E0E0;
-            text-decoration: none;
           }
 
           .timestamp {
@@ -450,7 +453,8 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
     }
 
-    .select_letters {
+    .select-letters {
+      margin: 1em 0px;
       li {
         display: inline;
       }

@@ -1,9 +1,9 @@
 <div class="profile">
-  <h2>All Users (<%= @users.size %> total)</h2>
+  <h3 class="channel-response-title">All Users (<%= @users.size %> total)</h3>
   <div class="user-info-list">
     <% @users.each do |user| %>
       <div class="user-info">
-        <%= render :partial => "profile", :locals => {:user => user, :avatar_size => 70, :stats => false} %>
+        <%= render partial: "profile", locals: {user: user, avatar_size: 26} %>
       </div>
     <% end %>
   </div>

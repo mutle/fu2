@@ -129,6 +129,22 @@ var CommentBox = React.createClass({
     this.setState({text: s});
     $(this.getDOMNode()).find(".comment-box").focus();
   },
+  submit: function(e) {
+    e.preventDefault();
+    var c = this;
+    var data = {};
+    data[this.state.valueName] = this.state.text;
+    $.ajax({type: "POST", dataType: "json", url: $(this.getDOMNode()).parents("form").attr("action"), data: data,
+      success: function(data) {
+        console.log(data)
+        $("#content .channel-posts").append(data.rendered)
+        c.setState({text: ""})
+      }, error: function() {
+        $('.comment-box-form textarea').val(c.state.text)
+        imageUpload.setState({message: "Error sending post. Please try again."})
+      }
+    });
+  },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find(".comment-box").get(0).selectionEnd;
     var cursorS = $(this.getDOMNode()).find(".comment-box").get(0).selectionStart;
@@ -254,6 +270,7 @@ $(function() {
     imageUpload.setState({url: $(image).data("uploader-url")});
   }
 
+  var commentBoxF = $(".channel-response form")
   var commentBoxE = $(".comment-box-container");
   if(commentBoxE.length > 0) {
     var comment = commentBoxE[0];
@@ -262,5 +279,8 @@ $(function() {
     console.log(value);
     commentBox = React.render(<CommentBox />, comment);
     commentBox.setState({valueName: name, text: value});
+    commentBoxF.on("submit", function(e) {
+      commentBox.submit(e);
+    })
   }
 });

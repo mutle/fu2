@@ -37,3 +37,35 @@ $small-screen: "only screen and (min-width : 800px)";
     }
   }
 }
+
+
+.user-settings {
+
+  label {
+    display: block;
+    float: left;
+    margin: 0px;
+    width: 200px;
+  }
+
+  input {
+  }
+
+  .field {
+    margin-left: 210px; 
+  }
+  .note {
+    margin-left: 200px;
+    // display: inline-block;
+  }
+  .field .note {
+    margin-left: 0px;
+  }
+
+  &.content-block p {
+    clear: both;
+    margin: 0px;
+    margin-bottom: 1em;
+    padding: 0px;
+  }
+}

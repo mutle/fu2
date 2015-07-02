@@ -1,7 +1,7 @@
 <div class="profile">
 
   <div class="large">
-    <%= render :partial => "profile", locals: {user: @user} %>
+    <%= render :partial => "profile", locals: {user: @user, avatar_size: 128} %>
   </div>
 
   <h2>Stats</h2>
@@ -12,26 +12,26 @@
     <p><span class="label">Faves received:</span> <%= @user_faves_received %></p>
   </div>
 
-  <div class="">
+  <div>
     <h2>Recent Posts</h2>
     <% if @user.posts.count > 0 %>
       <ul>
         <% @user_posts.each do |post| %>
           <% next if !post || !post.channel %>
           <% @channel = post.channel %>
-          <%= render partial: "channels/post", object: post, locals: {simple: true} %>
+          <%= render partial: "channels/post", object: post, locals: {simple: true, show_channel: true} %>
         <% end %>
       </ul>
     <% end %>
   </div>
 
-  <div class="Recent Faves">
+  <div>
     <h2>Faves</h2>
     <ul>
       <% @user_faves.each do |fave| %>
         <% next unless fave.post %>
         <% @channel = fave.post.channel %>
-        <%= render partial: "channels/post", object: fave.post, locals: {simple: true} %>
+        <%= render partial: "channels/post", object: fave.post, locals: {simple: true, show_channel: true} %>
       <% end %>
     </ul>
   </div>

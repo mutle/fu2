@@ -16,6 +16,13 @@
   <% if markdown %>
     <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
   <% end %>
+
+  <div class="actions left">
+    <form encType='multipart/form-data'>
+      <div class="upload-image" data-uploader-url="<%= images_path(format: :json) %>"></div>
+    </form>
+  </div>
+
   <div class="actions">
     <% if markdown %>
       <button class="response-button markdown-help"><%= octicon "markdown" %></button>
@@ -23,9 +30,3 @@
     <%= f.submit "Send", class: "response-button", accesskey: "s" %>
   </div>
 <% end %>
-
-<div class="actions left">
-  <form encType='multipart/form-data'>
-    <div class="upload-image" data-uploader-url="<%= images_path(format: :json) %>"></div>
-  </form>
-</div>

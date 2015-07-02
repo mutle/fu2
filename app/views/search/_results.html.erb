@@ -8,9 +8,7 @@
     <% if o.instance_of?(Post) %>
       <li class="result-post">
         <% o.channel.last_post = o %>
-        <%= render partial: "channels/channel", object: o.channel, locals: {element: "div", anchor: channel_post_anchor(o.channel, o)} %>
-
-        <%= render partial: "channels/post", object: o, locals: {faves: o.faves, hide_user: true} %>
+        <%= render partial: "channels/post", object: o, locals: {faves: o.faves, hide_user: true, simple: true, show_channel: true} %>
       </li>
     <% elsif o.instance_of?(Channel) %>
       <%= render partial: "channels/channel", object: o, locals: {hide_date: true} %>

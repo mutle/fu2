@@ -1,10 +1,15 @@
 <% faves = post.faves.includes(:user) %>
+<% show_channel ||= false %>
 <% simple ||= false %>
 <div class="channel-post <%= "read" if post.read %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="channel-post-header">
     <%= link_to image_tag(avatar_url(post.user, 42), class: "avatar-image"), user_path(post.user), class: "avatar" %>
 
     <span class="user-name"><%= format_title(post.user.display_name) %></span>
+
+    <% if show_channel %>
+      in <%= link_to @channel.title, channel_path(@channel) %>
+    <% end %>
 
     <div class="right">
       <% if !simple && post.user_id == current_user.id %>
