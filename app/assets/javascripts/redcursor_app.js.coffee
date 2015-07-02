@@ -134,14 +134,12 @@ $ ->
     return false
 
   $(".edit-channel-link").click ->
-    $(".channel-header").hide()
-    $(".channel-text").hide()
-    $(".no-channel-text").hide()
-    $(".channel-header-edit").show()
+    $(".channel-text form").show()
+    $(".channel-text .text-body").hide()
+    $("h2.channel-title").hide()
     return false
   $(".cancel-edit-channel-link").click ->
-    $(".channel-header").show()
-    $(".channel-text").show()
-    $(".no-channel-text").show()
-    $(".channel-header-edit").hide()
+    $(".channel-text form").hide()
+    $(".channel-text .text-body").show()
+    $("h2.channel-title").show()
     return false

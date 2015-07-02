@@ -18,6 +18,8 @@ class Post < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
+  attr_accessor :read
+
   class << self
     def indexed_type
       "post"

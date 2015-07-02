@@ -8,7 +8,8 @@ $large-screen: "only screen and (min-width: 1200px)";
   text-align: center;
   z-index: 100;
   position: fixed;
-  top: 69px;
+  margin-top: 69px;
+  top: 0px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -31,6 +32,7 @@ $large-screen: "only screen and (min-width: 1200px)";
   position: absolute;
   left: 6px;
   right: 6px;
+  bottom: 20px;
   margin: 0px auto;
   background: #fff;
   /*height: 54px;*/
@@ -38,6 +40,7 @@ $large-screen: "only screen and (min-width: 1200px)";
   /*padding-left: 14px;*/
   text-align: left;
   border: 1px solid #ccc;
+  overflow-y: auto;
 
   .search-field:focus {
     outline-width: 0;
@@ -73,6 +76,7 @@ $large-screen: "only screen and (min-width: 1200px)";
     margin-top: 12px;
     border-top: 1px solid #ccc;
     list-style: none;
+    line-height: 34px;
 
     li {
       &.selected {

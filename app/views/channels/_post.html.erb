@@ -1,6 +1,5 @@
-<% unread = @last_read_id && post.id > @last_read_id %>
 <% faves = post.faves.includes(:user) %>
-<div class="channel-post <%= "read" if !unread %> post-<%= post.id %>" data-post-id="<%= post.id %>">
+<div class="channel-post <%= "read" if post.read %> post-<%= post.id %>" data-post-id="<%= post.id %>">
   <div class="channel-post-header">
     <%= link_to image_tag(avatar_url(post.user, 42), class: "avatar-image"), user_path(post.user), class: "avatar" %>
 

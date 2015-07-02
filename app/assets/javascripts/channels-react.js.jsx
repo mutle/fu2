@@ -120,7 +120,7 @@ var AutoCompleter = React.createClass({
 
 var CommentBox = React.createClass({
   getInitialState: function() {
-    return {text: "", autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
+    return {text: "", valueName: "post[body]", autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
   },
   insert: function(text, prefix) {
     var s = this.state.text;
@@ -235,7 +235,7 @@ var CommentBox = React.createClass({
     }
     return <div>
       {autocompleter}
-      <textarea onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name="post[body]" id="post_body" value={this.state.text}></textarea>
+      <textarea onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
     </div>;
   }
 });
@@ -257,6 +257,10 @@ $(function() {
   var commentBoxE = $(".comment-box-container");
   if(commentBoxE.length > 0) {
     var comment = commentBoxE[0];
+    var name = commentBoxE.find("textarea").attr("name");
+    var value = commentBoxE.find("textarea").val();
+    console.log(value);
     commentBox = React.render(<CommentBox />, comment);
+    commentBox.setState({valueName: name, text: value});
   }
 });

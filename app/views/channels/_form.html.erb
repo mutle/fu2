@@ -2,7 +2,10 @@
 <%= form_for *form do |f| %>
   <% if title %>
     <div class="title">
-      <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
+      <%= f.text_field :title, class: "channel-title new-channel-title", placeholder: "Channel title" %>
+      <% if (error = @channel.errors[:title]).any? %>
+        <span class="error">Title <%= error.first %></span>
+      <% end %>
     </div>
   <% end %>
   <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>

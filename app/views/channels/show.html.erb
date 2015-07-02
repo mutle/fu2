@@ -1,17 +1,36 @@
 <% if @channel.can_read?(current_user) %>
-  <h2 class="channel-title"><%= @channel.title %></h2>
+  <h2 class="channel-title">
+    <div class="right"><%= link_to "Edit", "#", :class => "edit-channel-link" %></div>
+    <%= @channel.title %>
+  </h2>
+
+  <div class="channel-text">
+    <%= form_for @channel, url: channel_path(@channel), method: :put do |f| %>
+      <div class="actions">
+        <%= f.submit "Save" %>
+        <%= link_to "Cancel", "#", class: "cancel-edit-channel-link" %>
+      </div>
+      <div class="title">
+        <%= f.text_field :title, class: "channel-title" %>
+      </div>
+
+      <div class="body">
+        <%= f.text_area :text %>
+      </div>
+    <% end %>
+    <% if !@channel.text.blank? %>
+      <div class="body text-body">
+        <%= format_text @channel.text %>
+      </div>
+    <% end %>
+  </div>
+
   <% if (diff = @view.post_count - @view.posts.size) > 0 %>
     <div class="post-loader scroll-loader" data-loader-url="<%= channel_posts_path(@channel) %>" data-loader-attr="data-post-id" data-loader-items=".channel-post:not(.preview)" data-loader-count="12">
       <%= link_to "#{octicon "chevron-up"} <span class=\"loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
       <%= link_to "Show All", "#", class: "load-all" %>
     </div>
   <% end %>
-
-  <div class="channel-text">
-    <div class="body">
-      <%= format_text @channel.text %>
-    </div>
-  </div>
 
   <div class="channel-posts loader-group">
     <% @view.posts.each do |post| %>

@@ -161,7 +161,7 @@ class Channel < ActiveRecord::Base
   end
 
   def body
-    ""
+    @body || ""
   end
 
   def add_first_post

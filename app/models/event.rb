@@ -5,6 +5,8 @@ class Event < ActiveRecord::Base
 
   serialize :data, JSON
 
+  attr_accessor :read
+
   MESSAGE = {
     "rename" => proc { |e| "title changed from *#{e.data['old_title']}* to *#{e.data['title']}*"},
     "merge" => proc { |e| "merged *#{e.data['merged_title']}* into *#{e.data['title']}*"}

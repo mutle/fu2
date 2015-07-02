@@ -23,6 +23,7 @@ module Views
       posts = p || channel.show_posts(current_user, last_read_id)
       posts.each do |p|
         p.channel = channel
+        p.read = !(last_read_id && p.id > last_read_id)
       end
       posts
     }

@@ -145,8 +145,49 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-title {
       font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
-      font-size: 2.25em;
+      font-size: 38px;
       font-weight: 300;
+      line-height: 42px;
+
+      .right {
+        line-height: 42px;
+      }
+    }
+
+    input.channel-title {
+      line-height: 42px;
+      margin-bottom: 0.5em;
+    }
+    .field_with_errors input.channel-title {
+      margin-bottom: 0px;
+    }
+    .new-channel-title {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .channel-title .right, .channel-text .actions {
+      display: inline-block;
+      font-size: 16px;
+      line-height: 42px;
+      a {
+        color: #8C8C8C;
+      }
+    }
+
+    .channel-text .actions {
+      float: right;
+    }
+
+    .channel-text {
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+        background: transparent;
+        color: #4D4D4D;
+        line-height: 1.4em;
+        height: 200px;
+      }
     }
 
     .channel-list {
@@ -228,6 +269,22 @@ $large-screen: "only screen and (min-width: 1200px)";
         clear: both;
       }
 
+    }
+
+    .channel-text {
+      color: #4D4D4D;
+      line-height: 1.4em;
+
+      form {
+        display: none;
+      }
+
+      .body {
+        padding: 20px;
+        background: #F2F2F2;
+        border-bottom: 1px solid #E0E0E0;
+        margin-bottom: 15px;
+      }
     }
 
     .channel-post, .channel-response {

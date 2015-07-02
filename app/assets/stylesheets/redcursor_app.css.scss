@@ -35,6 +35,11 @@ form {
     margin-bottom: 1em;
     border: 1px solid #e2e2e2;
   }
+  .error {
+    color: #B83C4E;
+    display: block;
+    margin: 0.25em 0px 0.5em 0px;
+  }
 }
 
 .header {
@@ -42,6 +47,11 @@ form {
   z-index: 5;
   background-color: #f2f2f2;
   border-bottom: 1px solid #eaeaea;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  text-align: center;
 
   .content {
     height: 28px;
@@ -187,16 +197,19 @@ form {
 }
 
 #container {
-  padding-top: 1em;
+  margin-top: 28px;
+  padding-top: 48px;
+
 
   @media #{$small-screen} {
     margin-left: 5%;
     margin-right: 5%;
+    padding-top: 88px;
   }
 
   @media #{$large-screen} {
     max-width: 960px;
-    margin: 18px auto 0 auto;
+    margin: 0 auto 0 auto;
   }
 
   #content {

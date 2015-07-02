@@ -151,8 +151,6 @@ $large-phone: "only screen and (min-width : 421px)";
     }
 
     .message-list {
-      -webkit-mask-image: -webkit-gradient(linear, left 25, left top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
-      padding-top: 20px;
       display: none;
 
       &.show {
@@ -175,12 +173,16 @@ $large-phone: "only screen and (min-width : 421px)";
       padding: 0px;
       position: relative;
       margin-bottom: 1.5em;
+      background-color: #EFEFEF;
+      color: #3C3C4E;
+      font-size: 16px;
+      line-height: 22px;
 
       from {
         display: block;
         text-align: left;
         position: absolute;
-        width: 160px;
+        width: 42px;
         left: 0px;
         top: 0px;
 
@@ -189,16 +191,14 @@ $large-phone: "only screen and (min-width : 421px)";
       }
 
       .body {
-        margin-left: 160px;
+        margin-left: 42px;
         margin-right: 0px;
+        line-height: 18px;
+        min-height: 42px;
         // padding-left: 8px;
 
         .content {
-          padding: 12px;
-          border-radius: 4px;
-          color: #fff;
-          background-color: #381;
-          font-size: 18px;
+          padding: 10px;
 
           img {
             max-width: 508px;
@@ -211,21 +211,6 @@ $large-phone: "only screen and (min-width : 421px)";
               margin-bottom: 0px;
             }
           }
-
-          &:after {
-            left: 148px;
-          	border: solid transparent;
-          	content: " ";
-          	height: 0;
-          	width: 0;
-          	position: absolute;
-          	pointer-events: none;
-          	border-right: 12px solid #381;
-            border-left: none;
-          	border-width: 12px;
-          	top: 0px;
-          	margin-top: 12px;
-          }
         }
       }
 
@@ -237,31 +222,16 @@ $large-phone: "only screen and (min-width : 421px)";
           right: 0px;
           left: auto;
           width: 42px;
-          margin-left: 12px;
-
-          .avatar {
-          }
-          .name {
-            display: none;
-          }
         }
 
         .body {
-          margin-right: 54px;
+          margin-right: 42px;
           margin-left: 0px;
           padding-left: 0px;
           padding-right: 8px;
 
           .content {
             color: #000;
-            background-color: #f2f2f2;
-
-            &:after {
-              right: 50px;
-              left: auto;
-              border-left: 12px solid #f2f2f2;
-              border-right: none;
-            }
           }
         }
       }

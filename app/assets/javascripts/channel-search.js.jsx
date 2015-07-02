@@ -24,10 +24,12 @@ var ChannelSearchResults = React.createClass({
       if(!result.id) console.log(result);
       return <ChannelSearchResult id={result.id} key={result.id} title={result.title} selected={selected} />;
     };
-    return <ul className='results'>
-      {defaultResult}
-      {this.props.results.map(showResult)}
-    </ul>;
+    return <div className='results-container'>
+      <ul className='results'>
+        {defaultResult}
+        {this.props.results.map(showResult)}
+      </ul>
+    </div>;
   }
 });
 
