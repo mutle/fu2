@@ -279,7 +279,8 @@ $large-phone: "only screen and (min-width : 421px)";
         font-size: 16px;
         line-height: 25px;
         text-align: left;
-        width: 190px;
+        box-sizing: border-box;
+        width: 75%;
         border: 1px solid #ADADAD;
         background-color: #fff;
         border-radius: 3px;
@@ -292,7 +293,6 @@ $large-phone: "only screen and (min-width : 421px)";
           height: 90px;
         }
         .input-text {
-          width: 290px;
           height: 80px;
         }
       }
@@ -302,7 +302,6 @@ $large-phone: "only screen and (min-width : 421px)";
           height: 130px;
         }
         .input, .input-text {
-          width: 600px;
           height: 120px;
         }
       }
@@ -313,7 +312,9 @@ $large-phone: "only screen and (min-width : 421px)";
         padding: 8px 12px;
         border-radius: 3px;
         float: right;
-        margin-left: 20px;
+        box-sizing: border-box;
+        width: 20%;
+        margin-left: 5%;
 
         &:disabled {
           background-color: #ddd;
