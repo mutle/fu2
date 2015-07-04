@@ -203,20 +203,24 @@ $large-screen: "only screen and (min-width: 1200px)";
         background: #D8D8D8;
         padding: 7px;
         margin-bottom: 10px;
-        line-height: 42px;
+        line-height: 26px;
 
         .avatar {
           margin-right: 10px;
+          float: left;
         }
 
         .user-name {
           color: #666666;
           display: inline-block;
           width: 130px;
+          float: left;
         }
 
         .channel-name {
           color: #333333;
+          line-height: 26px;
+          display: block;
         }
 
         &.read {
@@ -225,15 +229,23 @@ $large-screen: "only screen and (min-width: 1200px)";
           .channel-name { color: #595959; }
         }
 
+        @media #{$small-screen} {
+          line-height: 42px;
+
+          .channel-name {
+            margin-left: 200px;
+            line-height: 42px;
+            min-height: 42px;
+          }
+        }
+
         @media #{$large-screen} {
           width: 860px;
           float: left;
         }
 
         @media #{$small-phone-landscape} {
-
           padding: 0;
-          line-height: 26px;
 
           .avatar {
             margin-right: 4px;
@@ -245,7 +257,6 @@ $large-screen: "only screen and (min-width: 1200px)";
 
           .channel-name {
             display: block;
-            line-height: 64px;
             padding: 0 4px;
           }
 
