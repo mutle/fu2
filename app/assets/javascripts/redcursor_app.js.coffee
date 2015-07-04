@@ -24,11 +24,6 @@ $ ->
 
   completerStrategies = [mentionStrategy, emojiStrategy]
   mobile = $('body').hasClass('mobile')
-  syntax = $('#syntax').val()
-  if syntax
-    $('.comment-box').textcomplete completerStrategies
-    if syntax == "html"
-      $('.comment-box').markItUp(mySettings)
 
   postRefreshSocket = false
   refreshPosts = (force) ->
@@ -51,17 +46,11 @@ $ ->
   channelRefreshSocket = false
   refreshChannels = (force) ->
     return if !force && channelRefreshSocket
-    last_id = $('#recent_activities .channel').first().attr("data-last-id")
+    last_id = $('.channel-list .channel').first().attr("data-last-id")
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
         $("#content #recent_activities .loader-group:first-child").empty().append $(data)
-
-  previewPost = (contents) ->
-    $('<div class="post-preview"><span class="octicon octicon-hourglass"></span></div>').insertBefore('.comment-box-form')
-
-  removePreviewPost = ->
-    $('.post-preview').remove();
 
   if $('.comment-box-form').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
@@ -82,11 +71,11 @@ $ ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()
 
-  if $('#recent_activities.refresh').length
+  if $('.channel-list.refresh').length
     data = (data, type) -> refreshChannels(true)
     open = ->
       channelRefreshSocket = true
-      refreshChannels(true)
+      # refreshChannels(true)
     close = ->
       channelRefreshSocket = false
       c = ->

@@ -16,6 +16,13 @@
   <% if markdown %>
     <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
   <% end %>
+  
+  <div class="actions">
+    <% if markdown %>
+      <button class="response-button content-button markdown-help"><%= octicon "markdown" %></button>
+    <% end %>
+    <%= f.submit "Send", class: "response-button content-button", accesskey: "s" %>
+  </div>
 
   <div class="actions left">
     <form encType='multipart/form-data'>
@@ -23,10 +30,4 @@
     </form>
   </div>
 
-  <div class="actions">
-    <% if markdown %>
-      <button class="response-button content-button markdown-help"><%= octicon "markdown" %></button>
-    <% end %>
-    <%= f.submit "Send", class: "response-button content-button", accesskey: "s" %>
-  </div>
 <% end %>

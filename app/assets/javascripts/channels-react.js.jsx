@@ -120,7 +120,9 @@ var AutoCompleter = React.createClass({
 
 var CommentBox = React.createClass({
   getInitialState: function() {
-    return {text: "", valueName: "post[body]", autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
+    var syntax = $('#syntax').val();
+    if(!syntax || syntax.length == 0) syntax = "md"
+    return {text: "", valueName: "post[body]", syntax: syntax, autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
   },
   insert: function(text, prefix) {
     var s = this.state.text;
@@ -131,6 +133,7 @@ var CommentBox = React.createClass({
   },
   submit: function(e) {
     e.preventDefault();
+    console.log('submit')
     var c = this;
     var data = {};
     data[this.state.valueName] = this.state.text;
@@ -242,6 +245,11 @@ var CommentBox = React.createClass({
       text.focus();
     }
   },
+  componentDidMount: function() {
+    console.log(this.state.syntax)
+    if(this.state.syntax == "html")
+      $('.comment-box').markItUp(mySettings)
+  },
   render: function() {
     var autocompleter = null;
     var imageUrl;
@@ -276,7 +284,6 @@ $(function() {
     var comment = commentBoxE[0];
     var name = commentBoxE.find("textarea").attr("name");
     var value = commentBoxE.find("textarea").val();
-    console.log(value);
     commentBox = React.render(<CommentBox />, comment);
     commentBox.setState({valueName: name, text: value});
     commentBoxF.on("submit", function(e) {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150626175338) do
+ActiveRecord::Schema.define(version: 20150704151044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20150626175338) do
     t.boolean  "default_write",             default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_post"
+    t.datetime "last_post_id"
     t.text     "text"
     t.integer  "updated_by"
     t.integer  "site_id",                   default: 1
