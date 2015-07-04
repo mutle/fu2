@@ -107,8 +107,6 @@ $ ->
     $(".more").toggleClass("show")
 
   $(document).on 'scroll', ->
-    $(".bottom-link").css("top", "#{document.body.scrollTop + 6}px")
-    $(".bottom-link").toggleClass("top", document.body.scrollTop < 32)
     if document.body.scrollTop < document.body.scrollHeight - document.body.clientHeight
       $(".bottom-link .octicon").removeClass("octicon-arrow-up").addClass("octicon-arrow-down")
     else
@@ -119,12 +117,6 @@ $ ->
       window.scrollTo 0,0
     else
       window.scrollTo 0,document.body.scrollHeight
-    return false
-
-  $(".bottom-link").addClass("top")
-
-  $(".top-link").click ->
-    window.scrollTo 0,0
     return false
 
   $(".edit-channel-link").click ->
