@@ -13,9 +13,11 @@ $large-screen: "only screen and (min-width: 1200px)";
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
   display: none;
 
   &.show {
+    pointer-events: all;
     display: block;
   }
 }
