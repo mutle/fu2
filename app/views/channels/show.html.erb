@@ -1,7 +1,7 @@
 <% if @channel.can_read?(current_user) %>
   <h2 class="channel-title">
     <div class="right"><%= link_to "Edit", "#", :class => "edit-channel-link" %></div>
-    <span class="title-text"><%= @channel.title %></span>
+    <span class="title-text"><%= format_title(@channel.title) %></span>
   </h2>
 
   <div class="channel-text">
