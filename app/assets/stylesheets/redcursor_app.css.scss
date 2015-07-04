@@ -125,7 +125,9 @@ form {
       }
 
       .bottom-link {
-        display: none;
+        .octicon {
+          display: inline;
+        }
       }
 
       .octicon {
