@@ -133,14 +133,14 @@ var CommentBox = React.createClass({
   },
   submit: function(e) {
     e.preventDefault();
-    console.log('submit')
     var c = this;
     var data = {};
     data[this.state.valueName] = this.state.text;
     $.ajax({type: "POST", dataType: "json", url: $(this.getDOMNode()).parents("form").attr("action"), data: data,
       success: function(data) {
-        console.log(data)
-        $("#content .channel-posts").append(data.rendered)
+        var d = $(data.rendered)
+        window.updateTimestamps(d.find(".update-ts"));
+        $("#content .channel-posts").append(d)
         c.setState({text: ""})
       }, error: function() {
         $('.comment-box-form textarea').val(c.state.text)
@@ -166,7 +166,6 @@ var CommentBox = React.createClass({
           var result = this.state.autocompleteobjectsfiltered[this.state.autocompleteselection];
           if(result) {
             if(result.login) result = result.login;
-            console.log(result);
             var input = e.target.value.slice(0, this.state.autocompletestart) + result + (this.state.autocomplete == "emoji" ? ":" : "") + e.target.value.slice(cursorE, e.target.value.length);
             e.target.value = input;
             this.setState({autocomplete: null, text: input});
@@ -189,7 +188,6 @@ var CommentBox = React.createClass({
           var v = this.state.autocompleteselection + 1;
           if(v >= this.state.autocompleteobjectsfiltered.length) v = this.state.autocompleteobjectsfiltered.length - 1;
           this.setState({autocompleteselection: v});
-          console.log(this.state.autocompleteselection);
         }
         break;
       case ":":
@@ -203,7 +201,6 @@ var CommentBox = React.createClass({
         break;
     }
     if(this.state.autocomplete) {
-      // console.log(this.state.autocompletestart, cursorS, cursorE);
       var key = e.key;
       if(key == "Backspace") {
         cursorE -= 2;
@@ -227,7 +224,6 @@ var CommentBox = React.createClass({
         filtered.push(r);
       }
     });
-    console.log(filtered);
     return filtered;
   },
   change: function(e) {
@@ -246,7 +242,6 @@ var CommentBox = React.createClass({
     }
   },
   componentDidMount: function() {
-    console.log(this.state.syntax)
     if(this.state.syntax == "html")
       $('.comment-box').markItUp(mySettings)
   },
@@ -261,6 +256,22 @@ var CommentBox = React.createClass({
       {autocompleter}
       <textarea onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
     </div>;
+  }
+});
+
+Timestamp = React.createClass({
+  getInitialState: function() {
+    return {timestamp: ""};
+  },
+  shouldComponentUpdate: function() {
+    if(!this.lastts) return true;
+    if(this.lastts != formatTimestamp(this.state.timestamp)) return true;
+    return false;
+  },
+  render: function() {
+    if(this.state.timestamp == "") return null;
+    this.lastts = formatTimestamp(this.state.timestamp)
+    return <span className="ts">{this.lastts}</span>;
   }
 });
 
@@ -290,4 +301,21 @@ $(function() {
       commentBox.submit(e);
     })
   }
+
+  var timestamps = []
+  window.updateTimestamps = function(timestampE) {
+    $.each(timestampE, function(i,e) {
+     var t = parseInt($(e).data("timestamp")) * 1000;
+     var ts = React.render(<Timestamp />, e);
+     ts.setState({timestamp: t});
+     timestamps.push(ts);
+   });
+  }
+  var updateTs = function() {
+    $.each(timestamps, function(i, ts) {
+      ts.setState({});
+    });
+  }
+  window.setInterval(updateTs, 1000);
+  updateTimestamps($(".update-ts"));
 });

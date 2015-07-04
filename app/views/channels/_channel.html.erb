@@ -13,7 +13,7 @@
   </div>
 
   <% if !hide_date %>
-    <div class="timestamp" title="<%= channel.updated_at.strftime(Fu2.time_format) %>">
+    <div class="timestamp update-ts" title="<%= channel.updated_at.strftime(Fu2.time_format) %>" data-timestamp="<%= channel.updated_at.to_i %>">
       <%= format_date channel.updated_at %>
     </div>
   <% end %>

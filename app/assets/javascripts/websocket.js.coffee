@@ -16,6 +16,7 @@ class Socket
     @connection.onerror = (error) =>
     @connection.onmessage = (e) =>
       data = $.parseJSON($.parseJSON(e.data))
+      console.log(data)
       return if !@subscriptions[data.type]
       for s in @subscriptions[data.type]
         s.data(data.object, data.type)

@@ -1,5 +1,5 @@
 <% if @channel.can_read?(current_user) %>
-  <h2 class="channel-title">
+  <h2 class="channel-title" data-last-update="<%= @view.last_update %>">
     <div class="right"><%= link_to "Edit", "#", :class => "edit-channel-link" %></div>
     <span class="title-text"><%= format_title(@channel.title) %></span>
   </h2>

@@ -363,13 +363,20 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-response {
 
-      .comment-box {
+      .markItUpContainer {
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+
+      .comment-box, .comment-box.markItUp {
         box-sizing: border-box;
         width: 100%;
-        background: transparent;
+        background: #F2F2F2;
         color: #4D4D4D;
         line-height: 1.4em;
         height: 200px;
+        padding: 4px;
+        border: none;
       }
 
       .actions {

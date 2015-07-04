@@ -22,7 +22,7 @@
         <%= link_to octicon("mail-reply"), "#", class: "post-reply", title: "Reply" %>
       <% end %>
 
-      <%= link_to format_date(post.created_at), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp", title: post.created_at.strftime(Fu2.time_format) %>
+      <%= link_to format_date(post.created_at), channel_path(@channel, :anchor => "post_#{post.id}"), class: "timestamp update-ts", title: post.created_at.strftime(Fu2.time_format), "data-timestamp" => post.created_at.to_i %>
     </div>
   </div>
 

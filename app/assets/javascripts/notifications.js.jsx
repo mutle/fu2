@@ -77,19 +77,7 @@ var NotificationUserList = React.createClass({
 
 var Notification = React.createClass({
   timestampText: function() {
-    var d = new Date(this.props.timestamp);
-    var today = new Date();
-    var t = (today - d);
-    t = t / 1000;
-    if(t < 60) return t.toFixed()+"s";
-    t = (t / 60);
-    if(t < 60) return t.toFixed()+"m";
-    t = (t / 60);
-    if(t < 24) return t.toFixed()+"h";
-    t = (t / 24);
-    if(t < 365) return t.toFixed()+"d";
-    t = (t / 365);
-    return t.toFixed()+"y";
+    return formatTimestamp(this.props.timestamp);
   },
   render: function() {
     var className = "" + (this.props.own ? "own" : "");

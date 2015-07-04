@@ -1,5 +1,20 @@
 $ ->
 
+  window.formatTimestamp = (timestamp) ->
+    d = new Date(timestamp)
+    today = new Date()
+    t = (today - d)
+    t = t / 1000;
+    if t < 60 then return t.toFixed()+"s";
+    t = (t / 60);
+    if t < 60 then return t.toFixed()+"m";
+    t = (t / 60);
+    if t < 24 then return t.toFixed()+"h";
+    t = (t / 24);
+    if t < 365 then return t.toFixed()+"d";
+    t = (t / 365);
+    return t.toFixed()+"y";
+
   mentionStrategy =
     match: /(^|\s)@(\w*)$/,
     search: (term, callback) ->
@@ -28,18 +43,19 @@ $ ->
   postRefreshSocket = false
   refreshPosts = (force) ->
     return if !force && postRefreshSocket
-    last_id = $('.post:not(.preview)').last().attr("data-post-id")
-    last_update = $(".channel-header").attr("data-last-update")
+    last_id = $('.channel-post:not(.preview)').last().attr("data-post-id")
+    last_update = $(".channel-title").attr("data-last-update")
     ourl = document.location.href.replace(/#.*$/, '')
     url = "#{ourl}/posts?last_id=#{last_id}&last_update=#{last_update}"
     $.get url, (data) ->
       d = $(data)
       d.find(".updated").remove()
-      d.insertBefore('.comment-box-form')
-      $(".updated .post").each (i, post) ->
+      $(".channel-posts").append(d)
+      window.updateTimestamps d.find(".update-ts")
+      $(".updated .channel-post").each (i, post) ->
         $($(".post-#{$(post).attr("data-post-id")}").get(0)).replaceWith(post)
       last_updated = $(".updated").attr("data-last-update")
-      $(".channel-header").attr("data-last-update", last_updated)
+      $(".channel-title").attr("data-last-update", last_updated)
       $(".updated").remove()
       $(document).trigger 'fu2.refreshPosts'
 
@@ -50,11 +66,14 @@ $ ->
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
-        $("#content .channel-list.refresh .loader-group:first-child").empty().append $(data)
+        d = $(data)
+        window.updateTimestamps d.find(".update-ts")
+        $("#content .channel-list.refresh .loader-group:first-child").empty().append d
 
-  if $('.comment-box-form').length
+  if $('.channel-response form').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
     data = (data, type) ->
+      console.log(data.channel_id)
       if data.channel_id == channel_id
         refreshPosts(true)
     open = ->
