@@ -439,6 +439,20 @@ form {
   }
 }
 
+.content-title {
+  font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+  font-size: 1.5em;
+  font-weight: 300;
+  margin: 32px 0px 16px 0px;
+}
+
+.content-button {
+  border: 1px solid #ADADAD;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 3px;
+}
+
 .notice {
   text-align: center;
   margin-top: 0.5em;

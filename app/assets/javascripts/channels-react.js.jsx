@@ -82,7 +82,7 @@ var ImageUploader = React.createClass({
     if(this.state.url)
       return <div>
         <input type='file' className='file' name='image[image_file]' />
-        <button onClick={this.click} className="response-button upload-image"><span className="octicon octicon-device-camera"></span></button>
+        <button onClick={this.click} className="response-button content-button upload-image"><span className="octicon octicon-device-camera"></span></button>
         <span className="info">{this.state.message}</span>
       </div>;
     else
