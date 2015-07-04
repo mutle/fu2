@@ -101,7 +101,7 @@ $ ->
         refreshChannels()
         setTimeout c, 15 * 1000 if !channelRefreshSocket
       setTimeout c, 15 * 1000
-    window.socket.subscribe ["post_create", "channel_create"], data, open, close
+    window.socket.subscribe ["post_create", "channel_create", "post_read"], data, open, close
 
   $(document).on 'click', '.toolbar-more-link', ->
     $(".more").toggleClass("show")

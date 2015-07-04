@@ -8,14 +8,11 @@ $large-screen: "only screen and (min-width: 1200px)";
 }
 
 .avatar {
-
   display: inline-block;
-
-  .avatar-image {
-    max-width: 42px;
-    max-height: 42px;
-  }
-
+}
+.avatar-image {
+  max-width: 42px;
+  max-height: 42px;
 }
 
 body {
