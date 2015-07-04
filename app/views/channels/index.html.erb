@@ -2,7 +2,7 @@
   <div class="loader-group">
     <% @view.recent_channels.each do |channel| %>
       <% next if !channel.last_post %>
-      <%= render partial: "channel", object: channel %>
+      <%= render partial: "channel", object: channel, locals: {has_posts: channel.has_posts?(current_user, channel.last_post)} %>
     <% end %>
   </div>
 
