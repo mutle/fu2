@@ -60,7 +60,7 @@ class Post < ActiveRecord::Base
 
   def update_channel_last_post
     if channel
-      channel.update_attribute(:last_post_id, created_at)
+      channel.update_attribute(:last_post_date, created_at)
     end
     true
   end

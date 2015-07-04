@@ -66,7 +66,7 @@ class Channel < ActiveRecord::Base
 
 
   def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post_id DESC").paginate(:page => page, :per_page => per_page)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post_date DESC").paginate(:page => page, :per_page => per_page)
   end
 
   def self.all_channels(_user, page)
@@ -209,6 +209,10 @@ class Channel < ActiveRecord::Base
 
   def last_post=(post)
     @last_post = post
+  end
+
+  def last_post_id
+    last_post.try(:id)
   end
 
   def num_unread(current_user)
