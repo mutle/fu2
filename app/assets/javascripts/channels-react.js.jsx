@@ -41,7 +41,7 @@ var ImageUploader = React.createClass({
         if(xhr.status == 201 || xhr.status == 202) {
           u.setState({message: "Finished uploading \""+filename+"\"", filename: filename});
           if(commentBox) {
-            commentBox.insert("![]("+JSON.parse(xhr.responseText).url+")", "\n\n");
+            commentBox.insertImage(JSON.parse(xhr.responseText).url, "\n\n");
           }
         } else {
           u.setState({message: xhr.responseText, filename: filename});
@@ -128,12 +128,24 @@ var CommentBox = React.createClass({
     if(!syntax || syntax.length == 0) syntax = "md"
     return {text: "", valueName: "post[body]", syntax: syntax, autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
   },
+  insertImage: function(url, prefix) {
+    if(this.state.syntax == "html") {
+      this.insert("<img src=\""+url+"\" />");
+    } else {
+      this.insert("![]("+url+")");
+    }
+  },
   insert: function(text, prefix) {
     var s = this.state.text;
-    if(prefix && s.length > 0) s += prefix;
-    s += text;
-    this.setState({text: s});
-    $(this.getDOMNode()).find(".comment-box").focus();
+    if(this.state.syntax == "html") {
+      $.markItUp({target: $('.comment-box'), placeHolder: text})
+      this.setState({text: $('.comment-box').val()});
+    } else {
+      if(prefix && s.length > 0) s += prefix;
+      s += text;
+      this.setState({text: s});
+      $(this.getDOMNode()).find(".comment-box").focus();
+    }
   },
   submit: function(e) {
     e.preventDefault();
