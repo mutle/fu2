@@ -50,7 +50,7 @@ $ ->
     url = "/channels/live?last_id=#{last_id}"
     $.get url, (data) ->
       if data.length
-        $("#content #recent_activities .loader-group:first-child").empty().append $(data)
+        $("#content .channel-list.refresh .loader-group:first-child").empty().append $(data)
 
   if $('.comment-box-form').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
