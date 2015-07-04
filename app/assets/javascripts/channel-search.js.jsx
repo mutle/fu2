@@ -98,6 +98,13 @@ var ChannelSearch = React.createClass({
       c.hide();
     }, 300);
   },
+  componentDidUpdate: function() {
+    if(this.state.hidden) {
+      $(this.getDOMNode()).removeClass("show")
+    } else {
+      $(this.getDOMNode()).addClass("show")
+    }
+  },
   render: function() {
     var classname = "channel-search-background";
     if(this.state.hidden) classname += " hidden";
