@@ -322,6 +322,7 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         .faves {
           display: inline-block;
+          color: #373737;
         }
 
         .right {
@@ -335,13 +336,16 @@ $large-screen: "only screen and (min-width: 1200px)";
             margin-left: 16px;
           }
 
-        }
-
-        .faves .on .octicon {
-          color: #FF0;
-        }
-        .faves .octicon {
-          margin-right: 6px;
+          .faves a.on {
+            color: khaki;
+            text-shadow: 0 0 3px khaki;
+          }
+          .faves a.faved {
+            color: #E6E6E6;
+          }
+          .faves .octicon {
+            margin-right: 6px;
+          }
         }
       }
     }
@@ -354,6 +358,11 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         .right a {
           color: #474747;
+
+          &.on {
+            color: darkkhaki;
+            text-shadow: none;
+          }
         }
       }
 
