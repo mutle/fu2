@@ -153,10 +153,6 @@ $large-screen: "only screen and (min-width: 1200px)";
       .right {
         line-height: 42px;
       }
-
-      a div, a p {
-        display: inline-block;
-      }
     }
 
     input.channel-title {
@@ -211,10 +207,6 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         .avatar {
           margin-right: 10px;
-        }
-
-        a div, a p {
-          display: inline-block;
         }
 
         .user-name {

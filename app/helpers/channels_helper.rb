@@ -37,7 +37,7 @@ module ChannelsHelper
   end
 
   def format_title(channel)
-    RenderPipeline.title(channel.is_a?(String) ? channel : channel.title).gsub(/<\/?div>/,'').html_safe
+    RenderPipeline.title(channel.is_a?(String) ? channel : channel.title).gsub(/<\/?(div|p)>/,'').html_safe
   end
 
   def format_event(event)
