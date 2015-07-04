@@ -100,9 +100,9 @@ var ChannelSearch = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.state.hidden) {
-      $(this.getDOMNode()).removeClass("show")
+      $(this.getDOMNode()).parent().removeClass("show")
     } else {
-      $(this.getDOMNode()).addClass("show")
+      $(this.getDOMNode()).parent().addClass("show")
     }
   },
   render: function() {
