@@ -363,6 +363,23 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-response {
 
+      .autocompleter {
+        list-style: none;
+        img {
+          max-width: 24px;
+          max-height: 24px;
+        }
+        li {
+          line-height: 24px;
+
+          &.highlight {
+            background: #fff;
+          }
+        }
+      }
+
+
+
       .markItUpContainer {
         padding-left: 0px;
         padding-right: 0px;

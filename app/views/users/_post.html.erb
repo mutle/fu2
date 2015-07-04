@@ -1,5 +1,0 @@
-<li class="user-post content-block">
-  <div class="date"><%= format_date(post.created_at) %></div>
-  <h3 class="title"><%= link_to post.channel.title, channel_path(post.channel, :anchor => "post_#{post.id}") %></h3>
-  <div class="body excerpt"><%= post.body[0..200] %><%= "&hellip;".html_safe if post.body.size > 200 %></div>
-</li>
