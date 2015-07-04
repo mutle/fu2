@@ -42,6 +42,7 @@ $ ->
 
   postRefreshSocket = false
   refreshPosts = (force) ->
+    return
     return if !force && postRefreshSocket
     last_id = $('.channel-post:not(.preview)').last().attr("data-post-id")
     last_update = $(".channel-title").attr("data-last-update")

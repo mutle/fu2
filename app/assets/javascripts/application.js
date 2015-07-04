@@ -14,6 +14,7 @@
 //= require autocompleter
 //= require scroll-loader
 //= require emoji
+//= require data
 //= require websocket
 //= require redcursor_app
 //= require channels
@@ -23,3 +24,5 @@
 //= require notifications
 //= require notification-counter
 //= require channels-react
+//= require channel-posts
+//= require channel-list

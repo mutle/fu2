@@ -1,28 +1,6 @@
 var imageUpload, commentBox;
 
-var FaveCounter = React.createClass({
-  getInitialState: function() {
-    return {faves: [], state: 0, postId: 0};
-  },
-  click: function(e) {
-    e.preventDefault();
-    if(this.state.postId > 0) {
-      var c = this;
-      $.ajax({url:"/posts/"+this.state.postId+"/fave", dataType: "json", type: "post"}).done(function(msg) {
-        c.setState({state: msg.status ? 1 : 0, faves: msg.faves});
-      });
-    }
-  },
-  render: function() {
-    var icon = <span className="octicon octicon-star" />;
-    var inner = null;
-    if(!this.state.faves || this.state.faves.length == 0) inner = <span>{icon}{'0'}</span>;
-    else inner = <span>{icon}{this.state.faves.length}</span>;
-    var className = "";
-    if(this.state.state == 1) className = "on";
-    return <a href="#" title={(this.state.faves ? this.state.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
-  }
-});
+
 
 var ImageUploader = React.createClass({
   getInitialState: function() {
@@ -262,22 +240,6 @@ var CommentBox = React.createClass({
   }
 });
 
-Timestamp = React.createClass({
-  getInitialState: function() {
-    return {timestamp: ""};
-  },
-  shouldComponentUpdate: function() {
-    if(!this.lastts) return true;
-    if(this.lastts != formatTimestamp(this.state.timestamp)) return true;
-    return false;
-  },
-  render: function() {
-    if(this.state.timestamp == "") return null;
-    this.lastts = formatTimestamp(this.state.timestamp)
-    return <span className="ts">{this.lastts}</span>;
-  }
-});
-
 $(function() {
 
   $(".channel-post .faves").each(function(i, fave) {
@@ -304,21 +266,4 @@ $(function() {
       commentBox.submit(e);
     })
   }
-
-  var timestamps = []
-  window.updateTimestamps = function(timestampE) {
-    $.each(timestampE, function(i,e) {
-     var t = parseInt($(e).data("timestamp")) * 1000;
-     var ts = React.render(<Timestamp />, e);
-     ts.setState({timestamp: t});
-     timestamps.push(ts);
-   });
-  }
-  var updateTs = function() {
-    $.each(timestamps, function(i, ts) {
-      ts.setState({});
-    });
-  }
-  window.setInterval(updateTs, 1000);
-  updateTimestamps($(".update-ts"));
 });
