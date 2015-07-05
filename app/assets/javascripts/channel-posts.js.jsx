@@ -31,6 +31,7 @@ var FaveCounter = React.createClass({
     if(!this.state.faves || this.state.faves.length == 0) inner = <span>{icon}{'0'}</span>;
     else inner = <span>{icon}{this.state.faves.length}</span>;
     var className = "";
+    if(this.state.faves.length > 0) className = "faved";
     if(this.state.state == 1) className = "on";
     return <a href="#" title={(this.state.faves ? this.state.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
   }

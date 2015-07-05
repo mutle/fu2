@@ -50,11 +50,6 @@
 <% if @channel.can_write?(current_user) %>
   <h3 class="channel-response-title">Comment</h3>
   <div class="channel-response">
-    <div class="channel-response-header">
-      <%= image_tag avatar_url(current_user, 42), class: "avatar-image" %>
-      <%= format_title(current_user.display_name) %>
-      <span class="right">Post new comment</span>
-    </div>
-    <%= render partial: "form", locals: {form: [:post, :url => channel_posts_path(@channel)]} %>
+    <%= render partial: "form", locals: {form: [:post, :url => channel_posts_path(@channel), html: {class: "channel-comment"}]} %>
   </div>
 <% end %>

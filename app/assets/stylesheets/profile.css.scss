@@ -8,8 +8,8 @@ $small-screen: "only screen and (min-width : 800px)";
     .avatar {
       margin-right: 4px;
       .avatar-image {
-        max-width: 42px;
-        max-height: 42px;
+        max-width: 32px;
+        max-height: 32px;
       }
     }
   }
@@ -52,7 +52,7 @@ $small-screen: "only screen and (min-width : 800px)";
   }
 
   .field {
-    margin-left: 210px; 
+    margin-left: 210px;
   }
   .note {
     margin-left: 200px;

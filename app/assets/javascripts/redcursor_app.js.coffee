@@ -71,7 +71,7 @@ $ ->
         window.updateTimestamps d.find(".update-ts")
         $("#content .channel-list.refresh .loader-group:first-child").empty().append d
 
-  if $('.channel-response form').length
+  if $('.channel-response form.channel-comment').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
     data = (data, type) ->
       console.log(data.channel_id)
@@ -108,8 +108,6 @@ $ ->
     $(".more").toggleClass("show")
 
   $(document).on 'scroll', ->
-    $(".bottom-link").css("top", "#{document.body.scrollTop + 6}px")
-    $(".bottom-link").toggleClass("top", document.body.scrollTop < 32)
     if document.body.scrollTop < document.body.scrollHeight - document.body.clientHeight
       $(".bottom-link .octicon").removeClass("octicon-arrow-up").addClass("octicon-arrow-down")
     else
@@ -120,12 +118,6 @@ $ ->
       window.scrollTo 0,0
     else
       window.scrollTo 0,document.body.scrollHeight
-    return false
-
-  $(".bottom-link").addClass("top")
-
-  $(".top-link").click ->
-    window.scrollTo 0,0
     return false
 
   $(".edit-channel-link").click ->

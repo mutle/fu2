@@ -1,7 +1,5 @@
 var imageUpload, commentBox;
 
-
-
 var ImageUploader = React.createClass({
   getInitialState: function() {
     return {url: null, message: "", filename: null};
@@ -18,7 +16,7 @@ var ImageUploader = React.createClass({
         if(xhr.status == 201 || xhr.status == 202) {
           u.setState({message: "Finished uploading \""+filename+"\"", filename: filename});
           if(commentBox) {
-            commentBox.insert("![]("+JSON.parse(xhr.responseText).url+")", "\n\n");
+            commentBox.insertImage(JSON.parse(xhr.responseText).url, "\n\n");
           }
         } else {
           u.setState({message: xhr.responseText, filename: filename});
@@ -105,12 +103,24 @@ var CommentBox = React.createClass({
     if(!syntax || syntax.length == 0) syntax = "md"
     return {text: "", valueName: "post[body]", syntax: syntax, autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
   },
+  insertImage: function(url, prefix) {
+    if(this.state.syntax == "html") {
+      this.insert("<img src=\""+url+"\" />");
+    } else {
+      this.insert("![]("+url+")");
+    }
+  },
   insert: function(text, prefix) {
     var s = this.state.text;
-    if(prefix && s.length > 0) s += prefix;
-    s += text;
-    this.setState({text: s});
-    $(this.getDOMNode()).find(".comment-box").focus();
+    if(this.state.syntax == "html") {
+      $.markItUp({target: $('.comment-box'), placeHolder: text})
+      this.setState({text: $('.comment-box').val()});
+    } else {
+      if(prefix && s.length > 0) s += prefix;
+      s += text;
+      this.setState({text: s});
+      $(this.getDOMNode()).find(".comment-box").focus();
+    }
   },
   submit: function(e) {
     e.preventDefault();
@@ -128,6 +138,9 @@ var CommentBox = React.createClass({
         imageUpload.setState({message: "Error sending post. Please try again."})
       }
     });
+  },
+  blur: function(e) {
+    this.setState({autocomplete: null});
   },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find(".comment-box").get(0).selectionEnd;
@@ -235,7 +248,7 @@ var CommentBox = React.createClass({
     }
     return <div>
       {autocompleter}
-      <textarea onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
+      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
     </div>;
   }
 });
@@ -254,16 +267,18 @@ $(function() {
     imageUpload.setState({url: $(image).data("uploader-url")});
   }
 
-  var commentBoxF = $(".channel-response form")
+  var commentBoxF = $(".channel-response form");
   var commentBoxE = $(".comment-box-container");
   if(commentBoxE.length > 0) {
     var comment = commentBoxE[0];
     var name = commentBoxE.find("textarea").attr("name");
     var value = commentBoxE.find("textarea").val();
     commentBox = React.render(<CommentBox />, comment);
+    if(commentBoxF.hasClass("channel-comment")) {
+      commentBoxF.on("submit", function(e) {
+        commentBox.submit(e);
+      })
+    }
     commentBox.setState({valueName: name, text: value});
-    commentBoxF.on("submit", function(e) {
-      commentBox.submit(e);
-    })
   }
 });

@@ -11,8 +11,10 @@ $large-screen: "only screen and (min-width: 1200px)";
   display: inline-block;
 }
 .avatar-image {
-  max-width: 42px;
-  max-height: 42px;
+  max-width: 32px;
+  max-height: 32px;
+  padding: 0px;
+  margin: 0px;
 }
 
 body {
@@ -125,7 +127,9 @@ form {
       }
 
       .bottom-link {
-        display: none;
+        .octicon {
+          display: inline;
+        }
       }
 
       .octicon {

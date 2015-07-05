@@ -7,7 +7,7 @@
 
     <span class="user-name"><%= format_title(post.user.display_name) %></span>
 
-    <% if show_channel %>
+    <% if show_channel && @channel %>
       in <%= link_to format_title(@channel.title), channel_path(@channel) %>
     <% end %>
 

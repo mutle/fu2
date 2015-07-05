@@ -44,7 +44,7 @@ module ChannelsHelper
     RenderPipeline.markdown(event.event_message).gsub(/<\/?p>/,'').html_safe
   end
 
-  def avatar_url(user, size=42)
+  def avatar_url(user, size=32)
     user.avatar_image_url(size)
   end
 
