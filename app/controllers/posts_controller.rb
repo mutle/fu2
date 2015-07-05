@@ -27,11 +27,13 @@ class PostsController < ApplicationController
   def create
     @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: current_user.markdown?)
     Live.post_create @post
-    Live.channel_update @chanel
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     @channel.visit current_user, @post.id
+
+    @channel.reload
+    Live.channel_update @channel
 
     rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
 

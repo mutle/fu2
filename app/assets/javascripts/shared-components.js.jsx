@@ -1,4 +1,12 @@
+var timestamps = [];
+
 var Timestamp = React.createClass({
+  componentDidMount: function() {
+    timestamps.push(this);
+  },
+  componentWillReceiveProps: function() {
+    this.lastts = null;
+  },
   shouldComponentUpdate: function() {
     if(!this.lastts) return true;
     if(this.lastts != formatTimestamp(this.props.timestamp)) return true;
@@ -14,7 +22,6 @@ window.Timestamp = Timestamp;
 
 
 $(function() {
-  var timestamps = []
   window.updateTimestamps = function(timestampE) {
     $.each(timestampE, function(i,e) {
      var t = parseInt($(e).data("timestamp")) * 1000;
@@ -27,6 +34,5 @@ $(function() {
       ts.setState({});
     });
   }
-  // window.setInterval(updateTs, 1000);
-  // updateTimestamps($(".update-ts"));
+  window.setInterval(updateTs, 1000);
 });

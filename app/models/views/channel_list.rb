@@ -8,6 +8,7 @@ module Views
       recent_channels.each do |channel|
         channel.read = channel.has_posts?(current_user, channel.last_post)
       end
+      nil
     }, [:recent_channels]
     fetches :channel_count, proc { Channel.count }
 

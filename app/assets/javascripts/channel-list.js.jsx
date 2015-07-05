@@ -41,10 +41,8 @@ var ChannelList = React.createClass({
     Data.fetch(ChannelListData);
   },
   updated: function(objects) {
-    console.log("channel list updated");
-    objects = objects.sort(function(a,b) { b.display_date - a.display_date });
-    console.log(objects);
-    this.setState({channels: objects});
+    var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
+    this.setState({channels: sorted});
   },
   render: function () {
     var channels = this.state.channels.map(function(channel, i) {
@@ -62,20 +60,4 @@ $(function() {
   if(e.length > 0) {
     var posts = React.render(<ChannelList />, e.get(0))
   }
-
-  var timestamps = []
-  window.updateTimestamps = function(timestampE) {
-    $.each(timestampE, function(i,e) {
-     var t = parseInt($(e).data("timestamp")) * 1000;
-     var ts = React.render(<Timestamp timestamp={t} />, e);
-     timestamps.push(ts);
-   });
-  }
-  var updateTs = function() {
-    $.each(timestamps, function(i, ts) {
-      ts.setState({});
-    });
-  }
-  window.setInterval(updateTs, 1000);
-  updateTimestamps($(".update-ts"));
 });
