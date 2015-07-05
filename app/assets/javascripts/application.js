@@ -15,11 +15,11 @@
 //= require scroll-loader
 //= require emoji
 //= require data
-//= require websocket
 //= require redcursor_app
 //= require channels
 //= require search
 //= require react
+//= require shared-components
 //= require channel-search
 //= require notifications
 //= require notification-counter

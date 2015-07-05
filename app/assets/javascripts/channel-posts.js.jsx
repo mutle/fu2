@@ -1,20 +1,17 @@
-var Timestamp = React.createClass({
-  shouldComponentUpdate: function() {
-    if(!this.lastts) return true;
-    if(this.lastts != formatTimestamp(this.props.timestamp)) return true;
-    return false;
+var ChannelPostsData = {
+  url: "/channels/{id}/posts",
+  result: {
+    posts: ["post"],
+    channel: "channel"
   },
-  render: function() {
-    console.log(this.props.timestamp)
-    if(this.props.timestamp == "") return null;
-    this.lastts = formatTimestamp(this.props.timestamp)
-    return <span className="ts">{this.lastts}</span>;
-  }
-});
+  subscribe: [
+    "post_create"
+  ]
+};
 
 var FaveCounter = React.createClass({
   getInitialState: function() {
-    return {faves: [], state: 0};
+    return {state: 0};
   },
   click: function(e) {
     e.preventDefault();
@@ -28,25 +25,32 @@ var FaveCounter = React.createClass({
   render: function() {
     var icon = <span className="octicon octicon-star" />;
     var inner = null;
-    if(!this.state.faves || this.state.faves.length == 0) inner = <span>{icon}{'0'}</span>;
-    else inner = <span>{icon}{this.state.faves.length}</span>;
+    if(!this.props.faves || this.props.faves.length == 0) inner = <span>{icon}{'0'}</span>;
+    else inner = <span>{icon}{this.props.faves.length}</span>;
     var className = "";
-    if(this.state.faves.length > 0) className = "faved";
+    if(this.props.faves.length > 0) className = "faved";
     if(this.state.state == 1) className = "on";
-    return <a href="#" title={(this.state.faves ? this.state.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
+    return <a href="#" title={(this.props.faves ? this.props.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
   }
 });
 
 var ChannelPostHeader = React.createClass({
   render: function() {
-    console.log(this.props.user)
     var userLink = "/users/"+this.props.user.id;
+    var postDeleteLink = <a className="post-delete" onClick={this.delete}><span className="octicon octicon-trashcan"></span></a>;
+    var postEditLink = <a className="post-edit"><span className="octicon octicon-pencil"></span></a>;
+    var postUnreadLink = <a className="post-unread"><span className="octicon octicon-eye"></span></a>;
+    var postReplyLink = <a className="post-reply"><span className="octicon octicon-mail-reply"></span></a>;
     return <div className="channel-post-header">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
       <span className="user-name">{this.props.user.login}</span>
       <div className="right">
-        <FaveCounter postId={this.props.id}  />
-        <Timestamp timestamp={this.props.createdAt} />
+        {postDeleteLink}
+        {postEditLink}
+        <FaveCounter faves={this.props.post.faves} postId={this.props.id}  />
+        {postUnreadLink}
+        {postReplyLink}
+        <Timestamp timestamp={this.props.post.created_at} />
       </div>
     </div>;
   }
@@ -54,9 +58,11 @@ var ChannelPostHeader = React.createClass({
 
 var ChannelPost = React.createClass({
   render: function() {
-    var body = {__html: this.props.body}
-    return <div className="channel-post">
-      <ChannelPostHeader id={this.props.id} user={this.props.user} createdAt={this.props.createdAt} />
+    var body = {__html: this.props.post.html_body};
+    var className = "channel-post";
+    if(this.props.post.read) className += " read";
+    return <div className={className}>
+      <ChannelPostHeader id={this.props.id} user={this.props.user} post={this.props.post} />
       <div className="body" dangerouslySetInnerHTML={body}></div>
     </div>;
   }
@@ -68,18 +74,18 @@ var ChannelPosts = React.createClass({
   },
   componentDidMount: function() {
     console.log(this.props.channelId);
-    Data.subscribe("channel_posts", this.updated, this, {}, this.props.channelId);
-    Data.fetch("channel_posts", this.props.channelId);
+    Data.subscribe("post", this.updated, this, this.props.channelId);
+    Data.fetch(ChannelPostsData, this.props.channelId);
   },
   updated: function(objects) {
     console.log("channel posts updated")
     console.log(objects)
-    this.setState({posts: objects.map(function(object, i) { return object[2]; })})
+    this.setState({posts: objects})
   },
   render: function () {
     var posts = this.state.posts.map(function(post, i) {
       var user = Data.get("user", post.user_id);
-      return <ChannelPost key={post.id} id={post.id} user={user} body={post.html_body} rawBody={post.body} createdAt={post.created_at} />;
+      return <ChannelPost key={post.id} id={post.id} user={user} post={post} />;
     });
     return <div>
       {posts}

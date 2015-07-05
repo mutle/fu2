@@ -3,9 +3,12 @@ module Views
 
     attrs :current_user, :page
 
-    fetches :recently_active, proc { Channel.recently_active(current_user) }
     fetches :recent_channels, proc { Channel.recent_channels(current_user, page) }
-    fetches :recent_posts, proc { Channel.recent_posts(recent_channels) }, [:recent_channels]
+    fetches :channels_read, proc {
+      recent_channels.each do |channel|
+        channel.read = channel.has_posts?(current_user, channel.last_post)
+      end
+    }, [:recent_channels]
     fetches :channel_count, proc { Channel.count }
 
   end

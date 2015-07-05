@@ -29,7 +29,7 @@ class Channel < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :current_user, :markdown
+  attr_accessor :current_user, :markdown, :read
 
   class << self
     def indexed_type
@@ -147,12 +147,14 @@ class Channel < ActiveRecord::Base
     }
   end
 
-  def self.recent_posts(channels)
+  def self.recent_posts(channels, user)
     ids = channels.map(&:id)
     recent = Post.select("channel_id, MAX(id) as id").where("channel_id IN (?)", ids).group("channel_id").load
     posts = Post.select("id, channel_id, user_id, created_at").where("channel_id IN (?)", ids).includes(:user).to_a
     out = {}
-    recent.each { |p| out[p.channel_id] = posts.find { |p1| p1.id == p.id } }
+    recent.each do |p|
+      out[p.channel_id] = posts.find { |p1| p1.id == p.id }
+    end
     out
   end
 
@@ -185,7 +187,7 @@ class Channel < ActiveRecord::Base
   end
 
   def last_post_user_id
-    Post.first_channel_post(self).first.user_id rescue 0
+    last_post.try(:user_id) || 0
   end
 
   # def as_json(*args)

@@ -86,7 +86,7 @@ $ ->
         refreshPosts()
         setTimeout c, 15 * 1000 if !postRefreshSocket
       setTimeout c, 15 * 1000
-    window.socket.subscribe ["post_create"], data, open, close
+    # window.socket.subscribe ["post_create"], data, open, close
     $(document).on 'keydown', '.comment-box-form textarea', (e) ->
       if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
         $(this).parents('form').submit()
@@ -102,7 +102,7 @@ $ ->
         refreshChannels()
         setTimeout c, 15 * 1000 if !channelRefreshSocket
       setTimeout c, 15 * 1000
-    window.socket.subscribe ["post_create", "channel_create", "post_read"], data, open, close
+    # window.socket.subscribe ["post_create", "channel_create", "post_read"], data, open, close
 
   $(document).on 'click', '.toolbar-more-link', ->
     $(".more").toggleClass("show")
