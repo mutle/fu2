@@ -1,0 +1,4 @@
+<h3 class="channel-response-title">Edit Post</h3>
+<div class="channel-response channel-edit">
+  <%= render :partial => "channels/form", :locals => {:form => [:post, :url => channel_post_path(@channel, @post), :html => {:method => :put}], :action => "Edit"} %>
+</div>

@@ -1,30 +1,24 @@
-<div class="search">
-  <%= form_tag search_channels_path, :method => :get do %>
-    <%= octicon("search") %>
-    <%= text_field_tag "search", "", :autocomplete => "off", :class => "search-field", "data-after" => ".search form" %>
-  <% end %>
+<%= link_to octicon('home')+content_tag(:span, "Home", class: "text"), root_path, title: "Home", class: "toolbar-home" %>
 
-  <%= link_to octicon("arrow-down"), "", :class => "bottom-link floating" %>
-  <%= link_to octicon("arrow-down"), "", :class => "bottom-link" %>
+<div class="counters">
+  <div class="counters-inner"></div>
+  <%= link_to octicon('mail')+content_tag(:span, "Messages", class: "text"), notifications_path, title: "Notifications", class: "toolbar-notifications" %>
 </div>
 
-<nav class="toolbar">
-  <%= link_to octicon('home'), root_path, :title => "Home" %>
+<%= link_to octicon("pencil")+content_tag(:span, "New Channel", class: "text"), new_channel_path, title: "New channel", class: "toolbar-new-channel" %>
 
-  <div class="counters">
-    <% if (n = Notification.for_user(current_user).messages.unread.count) > 0 %>
-      <div class="count"><%= link_to n, notifications_path %></div>
-    <% end %>
-    <% if (n = Notification.for_user(current_user).mentions.unread.count) > 0 %>
-      <div class="count mentions"><%= link_to n, notifications_path %></div>
-    <% end %>
+<div class="more-container">
+  <div class="more">
+    <%= link_to octicon('book')+content_tag(:span, "Channels", class: "text"), channel_path(:all), title: "Channels" %>
+    <%= link_to octicon('organization')+content_tag(:span, "Users", class: "text"), users_path, title: "Users" %>
+    <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), edit_user_path(current_user), title: "Settings", class: "last" %>
   </div>
-  <%= link_to octicon('mail'), notifications_path, :title => "Notifications" %>
+</div>
+<%= link_to content_tag(:span, "More", class: "text")+octicon("triangle-down", false, "menu-indicator"), "#", class: "toolbar-more-link" %>
 
-  <%= link_to octicon('book'), channel_path(:all), :title => "Channels" %>
-  <%= link_to octicon('organization'), users_path, :title => "Users" %>
-  <%= link_to octicon('tools'), edit_user_path(current_user), :title => "Settings", :class => "last" %>
+<div class="right">
+  <%= link_to octicon("sign-out", false, "signout-icon")+content_tag(:span, "Signout", class: "text"), session_path, title: "Logout", class: "toolbar-logout", method: :delete %>
+  <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), "#", title: "Search", class: "toolbar-channel-search" %>
 
-  <%= link_to octicon("pencil"), new_channel_path, :title => "New channel", :class => "button" %>
-  <%= link_to octicon("sign-out"), session_path, :title => "Logout", :class => "button", :method => :delete %>
-</nav>
+  <%= link_to octicon("arrow-down"), "", class: "bottom-link" %>
+</div>

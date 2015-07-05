@@ -13,4 +13,6 @@
  *= require notifications
  *= require profile
  *= require channels
+ *= require search
+ *= require channel-search
 */

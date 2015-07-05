@@ -31,11 +31,11 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     p3 = create_post("P3")
     c.visit(@user, p1.id)
     get '/'
-    assert_select "li a[href='/channels/#{c.id}#post_#{p2.id}']", :text => "Foo Channel"
+    assert_select "li a[href='/channels/#{c.id}#read_#{p1.id}']", :text => "Foo Channel"
 
     c.visit(@user, p2.id)
     get '/'
-    assert_select "li a[href='/channels/#{c.id}#post_#{p3.id}']", :text => "Foo Channel"
+    assert_select "li a[href='/channels/#{c.id}#read_#{p2.id}']", :text => "Foo Channel"
 
     c.visit(@user, p3.id)
     get '/'
@@ -61,8 +61,8 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     c = create_channel("Foo Channel")
     create_post("**bold**\n")
     get "/channels/#{c.id}"
-    assert_select "h2", :text => "Foo Channel"
-    assert_select ".post .body strong", :text => "bold"
+    assert_select "h2 .title-text", :text => "Foo Channel"
+    assert_select ".channel-post .body strong", :text => "bold"
   end
 
   test "show channel events" do
@@ -71,7 +71,7 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     c.save
     create_post("post\n")
     get "/channels/#{c.id}"
-    assert_select "h2", :text => "Bar Channel"
+    assert_select "h2 .title-text", :text => "Bar Channel"
     assert_select ".event.rename"
   end
 

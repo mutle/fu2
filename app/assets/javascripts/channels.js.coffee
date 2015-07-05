@@ -1,13 +1,5 @@
 $ ->
   num_hours = 12
-  $(".active-channels").on "click", ".body img", ->
-    $(this).toggleClass("full")
-    false
-
-
-  $(".active-channels").on "click", ".show", ->
-    $(this).parents(".posts").find(".activity-post").removeClass("hide")
-    false
 
   $(".activity-graph-data").each (i,a) ->
     graph = d3.select(a)
@@ -29,23 +21,6 @@ $ ->
 
     # x = d3.scale.linear().domain([0, 10]).range([0, 50])
 
-  postTemplate = (body, user) ->
-    "
-<div class=\"activity-post highlight\">
-  <img src=\"#{user.avatar_url.replace(/22$/, '32')}\" class=\"avatar\" title=\"#{user.login}\" />
-  <div class=\"body\">
-    #{body}
-  </div>
-</div>
-    "
-
-  $(document).on 'click', ".post-header .faves .octicon", ->
-    self = $(this)
-    post = self.parents(".post").attr("data-post-id")
-    $.ajax(url:"/posts/"+post+"/fave", dataType: "json", type: "post").done (msg) ->
-      self.parents(".faves").toggleClass("active", msg.status).find(".count").text("#{msg.count}")
-    return false
-
   syntax = $('#syntax').val()
   insertText = (text) ->
     if syntax && syntax == "html"
@@ -65,57 +40,9 @@ $ ->
       t += "![](#{url})"
       $('.comment-box').val(t)
 
-  $(document).on 'click', ".upload-image", ->
-    form = $(this).parents("form")
-    file = form.find("input[type=file]")
-    info = form.find(".info")
-    filename = ""
-
-    uploadComplete = (xhr) ->
-      console.log xhr.responseText
-      info.html("Finished uploading \"#{filename}\"")
-      insertImage(JSON.parse(xhr.responseText).url)
-    uploadError = (d) ->
-      info.html("Error #{d}")
-    uploadProgress = (progress) ->
-      info.html("Uploading \"#{filename}\" (#{progress}%)")
-
-    startUpload = () ->
-      xhr = new XMLHttpRequest()
-      xhr.open 'POST', $(form).attr('action'), true
-      token = $('meta[name="_csrf"]').attr('content')
-      xhr.setRequestHeader('X_CSRF_TOKEN', token)
-
-      xhr.onreadystatechange = (e) =>
-        if xhr.readyState == 4
-          if xhr.status == 201
-            uploadComplete(xhr)
-          else if xhr.status == 202
-            uploadComplete(xhr)
-          else
-            uploadError(xhr.responseText)
-      xhr.onerror = (e) =>
-        uploadError "error"
-
-      if xhr.upload?
-        xhr.upload.onprogress = (e) =>
-          percentage = Math.round((e.loaded / e.total) * 100)
-          uploadProgress(percentage)
-
-      form = new FormData(form[0])
-      xhr.send form
-
-    file.on 'change', (e) ->
-      f = $(this).val().split("\\")
-      filename = f[f.length - 1]
-      startUpload()
-
-    file.trigger("click")
-    false
-
   $(document).on 'click', ".post-reply", ->
     self = $(this)
-    post = self.parents(".post").find(".body")
+    post = self.parents(".channel-post").find(".body")
     text = decodeURIComponent(post.attr("data-raw-body"))
     if syntax && syntax == "html"
       text = "<blockquote>#{text}</blockquote>"
@@ -134,84 +61,19 @@ $ ->
     $.ajax(url:url, dataType: "json", type: "post")
     return false
 
-  $(".active-channels").on 'click', '.mark-read', ->
-    if $(this).hasClass("all-read")
-      $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")
-    else
-      $(this).addClass("all-read").parents(".activity").find(".posts").addClass("hide").find(".activity-post").removeClass("highlight")
-      channelId = parseInt $(this).parents(".activity").data("channel-id")
-      $.ajax
-        type: "POST"
-        dataType: "json"
-        url: "/channels/#{channelId}/visit"
-
-  loadMorePosts = (include_id=0, cb=null, all=false) ->
-    loader = $(".post-loader")
-    loader.data("channel-id")
-    last_id = $('.post:not(.preview)').first().attr("data-post-id")
-    ourl = document.location.href.replace(/#.*$/, '')
-    limit = ""
-    if include_id == 0 && !all
-      limit = "&limit=12"
-    $.get "#{ourl}/posts?first_id=#{last_id}#{limit}", (data) ->
-      count = $(".post").length
-      d = $(data)
-      d.insertAfter loader
-      count = $(".post").length - count
-      c = loader.find(".post-loader-count")
-      c.text(parseInt(c.text() - count))
-      if parseInt(c.text()) < 1
-        loader.hide()
-      cb?()
-
-  loaderHidden = false
-  $(document).on 'scroll', ->
-    t = $(document).scrollTop()
-    if !loaderHidden && t > 100
-      loaderHidden = true
-
-    if loaderHidden && t == 0
-      loadMorePosts()
-      loaderHidden = false
-
+  $(document).on 'click', '.markdown-help', ->
+    $(".markdown-help-show").toggle()
     return false
 
-  $(document).on 'click', ".post-loader a.load-more", ->
-    loadMorePosts()
-    return false
-
-  $(document).on 'click', ".post-loader a.load-all", ->
-    loadMorePosts(0, null, true)
-    return false
-
-  if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
-    post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
-    if $(".post-#{post_id}").length > 0
-      $(".post-#{post_id}").addClass("highlight") if !$(".post-#{post_id}").hasClass("unread")
-    else
-      loadMorePosts post_id, () ->
-        window.location.hash = "post_#{post_id}"
-        $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
-
-
-  if $('.comment-small').length
-    $('.comment-small').on 'submit', 'form', ->
-      textarea = $(this).find('textarea')
-      text = textarea.val()
-      textarea.val ''
-      $.ajax
-        type: "POST"
-        dataType: "json"
-        url: $(this).attr("action")
-        data: {"post[body]": text}
-        success: (data) ->
-          post = data['post']
-          u = $.grep window.Users, (i) -> i.id == post.user_id
-          $(postTemplate(post.html_body, u[0])).insertBefore textarea.parents(".comment-small")
-        error: () ->
-          textarea.val text
-          $(".upload_info").html("Error sending post. Please try again.")
-      false
-    $('.comment-box').keydown (e) ->
-      if e.keyCode == 13 && (e.metaKey || e.ctrlKey)
-        $(this).parents('form').submit()
+  if $(".comment-box").length > 0
+    window.scrollLoader = new ScrollLoader($(".post-loader"))
+    if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
+      post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
+      if $(".post-#{post_id}").length > 0
+        $(".post-#{post_id}").addClass("highlight") if !$(".post-#{post_id}").hasClass("unread")
+      else
+        window.scrollLoader.loadMore post_id, () ->
+          window.location.hash = "post_#{post_id}"
+          $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
+  else if $(".channel-list.refresh").length > 0
+    window.scrollLoader = new ScrollLoader($(".channel-loader"), false)

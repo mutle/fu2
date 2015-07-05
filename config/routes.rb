@@ -1,7 +1,7 @@
 require "resque_web"
 
 Fu2::Application.routes.draw do
-  mount ResqueWeb::Engine => "/resque"
+  mount ResqueWeb::Engine => "/resque", as: "resque"
 
   resources :users do
     member do
@@ -22,6 +22,8 @@ Fu2::Application.routes.draw do
       post :authenticate
     end
   end
+
+  resource :search, :controller => :search
 
   resources :channels do
     collection do
@@ -64,9 +66,18 @@ Fu2::Application.routes.draw do
     member do
       post :read
     end
+    collection do
+      get :unread
+      get :counters
+    end
   end
 
   resources :images
   resources :stylesheets
+
+  get '/stats/websockets' => "stats#websockets"
+
   get '/' => 'channels#index', :as => :root
+
+  get '/react' => 'channels#react'
 end

@@ -12,7 +12,14 @@
 //= require d3
 //= require markitup-html
 //= require autocompleter
+//= require scroll-loader
 //= require emoji
+//= require websocket
 //= require redcursor_app
-//= require notifications
 //= require channels
+//= require search
+//= require react
+//= require channel-search
+//= require notifications
+//= require notification-counter
+//= require channels-react

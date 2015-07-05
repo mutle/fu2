@@ -34,7 +34,7 @@ module RenderPipeline
         callback: proc do |content, id, post_id|
           tweet = $redis.get "Tweets:#{id}"
           if !tweet
-            Resque.enqueue(FetchTweetJob, id, post_id)
+            Resque.enqueue(FetchTweetJob, id, post_id, :tweet)
             content
           else
             content.gsub(EMBEDS[:twitter][:pattern], tweet)
@@ -42,15 +42,28 @@ module RenderPipeline
         end
       },
       youtube: {
-        pattern: %r{https?://(www\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
+        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
         callback: proc do |content, id|
           content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
+        end
+      },
+      instagram: {
+        pattern: %r{https?://(instagram\.com|instagr\.am)/p/([A-Za-z0-9]+)/?},
+        callback: proc do |content, id, post_id|
+          p [content, id]
+          image = $redis.get "Instagram:#{id}"
+          if !image
+            Resque.enqueue(FetchTweetJob, id, post_id, :instagram)
+            content
+          else
+            content.gsub(EMBEDS[:instagram][:pattern], image)
+          end
         end
       }
     }
 
     def call
-      doc.search('text()').each do |node|
+      doc.search('.//text()').each do |node|
         next unless node.respond_to?(:to_html)
         content = node.to_html
         EMBEDS.each do |k,embed|
@@ -88,7 +101,7 @@ module RenderPipeline
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
-    Pipeline::PlainTextInputFilter,
+    Pipeline::MarkdownFilter,
     Pipeline::EmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [

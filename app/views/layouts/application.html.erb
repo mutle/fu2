@@ -12,15 +12,14 @@
     <% if mobile? %>
       <meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
     <% end %>
+    <%= favicon_link_tag 'favicon.png', :rel => 'shortcut icon', :type => 'image/png' %>
   </head>
-  <body<%= ' class="mobile"'.html_safe if mobile? %>>
+  <body<%= ' class="mobile"'.html_safe if mobile? %> data-socket-server="ws<%= "s" if Rails.env.production? %>://<%= request.host %>:8000" data-api-key="<%= current_user.api_key %>">
     <a name="top"></a>
 
     <header class="header">
       <div class="content">
-        <h1 id="title">
-          Red Cursor
-        </h1>
+        <%= image_tag "logo.png", class: "logo" %>
         <%= render :partial => "shared/toolbar" %>
       </div>
     </header>
@@ -30,8 +29,8 @@
     <% end %>
 
     <div id="container">
-
       <section id="content">
+        <div class="channel-search-container"></div>
         <%= yield %>
       </section>
     </div>

@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   serialize :block_users
 
   scope :with_login, lambda { |login| where("LOWER(login) = LOWER(:login) and activated_at IS NOT NULL", :login => login) }
+  scope :with_api_key, proc { |key| where(api_key: key) }
+  scope :active, proc { where("login NOT LIKE '%-disabled'") }
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -25,8 +27,6 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   # attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
-
-  after_create :create_private_channel
 
   has_many :posts
   has_many :channel_visits
@@ -152,10 +152,6 @@ class User < ActiveRecord::Base
     save # (false)
   end
 
-  def create_private_channel
-    Channel.create(:title => "#{login}/Mailbox", :user_id => id, :default_read => false, :default_write => true)
-  end
-
   def display_color
     "color: #{color}" unless color.blank?
   end
@@ -196,7 +192,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def avatar_image_url(size=42)
+  def avatar_image_url(size=32)
     if avatar_url.blank?
       gravatar_id = Digest::MD5.hexdigest(email.downcase)
       "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"

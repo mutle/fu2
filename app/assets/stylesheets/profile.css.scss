@@ -2,178 +2,70 @@ $small-screen: "only screen and (min-width : 800px)";
 
 .profile {
 
-  .right {
-    text-align: right;
-  }
-
-  .stats {
-    text-align: right;
-    font-size: 18px;
-    .label {
-      font-weight: bold;
-      display: inline-block;
-      float: left;
-    }
-  }
-
-  .avatar {
-    max-width: 140px;
-    max-height: 140px;
-  }
-
-  .grid_1 .avatar {
-    max-width: 70px;
-    max-height: 70px;
-  }
-
   .user-info {
-    margin-bottom: 2em;
-    clear: both;
+    margin-bottom: 1em;
 
-    .avatar-box {
-      float: left;
-      margin-right: 16px;
+    .avatar {
+      margin-right: 4px;
+      .avatar-image {
+        max-width: 32px;
+        max-height: 32px;
+      }
     }
+  }
 
-    a {
-      color: #000;
-      text-decoration: none;
-    }
+  .large {
+    font-size: 68px;
+    line-height: 128px;
 
-    h2 {
-      font-size: 36px !important;
-
-      a {
-        display: block;
+    .avatar {
+      margin-right: 4px;
+      .avatar-image {
+        max-width: 128px;
+        max-height: 128px;
       }
     }
   }
 
   .user-info-list {
-    .user-info {
-      float: left;
-      margin-right: 32px;
-      min-width: 60%;
-      @media #{$small-screen} {
-        min-width: 25%;
-      }
-      clear: none;
-    }
-
-    .user-link, .avatar-box {
-      img {
-        max-width: 24px;
-        max-height: 24px;
-      }
-    }
-    h2 {
-      font-size: 20px !important;
-    }
-  }
-
-  form {
-
-    p {
-      margin-bottom: 2em;
-
-      &.first-form-element {
-        margin-top: 2em;
-      }
-    }
-
-    p.checkbox {
-      line-height: 24px;
-      label {
-        margin-left: 12px;
-        font-weight: normal;
-        float: none;
-        width: auto;
-      }
-      input {
-        margin: 0px;
-        margin-left: 212px;
-        float: left;
-        display: inline;
-      }
-    }
-
-    .note, a {
-      display: block;
-      margin-left: 212px;
-      font-size: 14px;
-      width: 350px;
-    }
-
-    a {
-      font-size: 16px;
-      color: #000;
-      margin-bottom: 1em;
-    }
-
-    label {
-      font-weight: bold;
-      width: 200px;
-      display: inline-block;
-      float: left;
-      line-height: 24px;
-    }
-
-    input {
-      margin-left: 212px;
-      line-height: 24px;
-      display: block;
-
-      &[type=text] {
-        width: 350px;
+    .avatar {
+      margin-right: 4px;
+      .avatar-image {
+        max-width: 26px;
+        max-height: 26px;
       }
     }
   }
+}
 
-  .box {
-    h3 {
-      background-color: #eee;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 1.5em;
-      font-size: 20px;
-    }
 
-    ul {
-      display: block;
+.user-settings {
 
-      li {
-        display: block;
-      }
-
-      .user-post {
-        padding-bottom: 0.5em;
-        border-bottom: 1px solid #000;
-        margin-bottom: 1.5em;
-        font-size: 13px;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        a {
-          display: block;
-          text-decoration: none;
-          color: #000;
-        }
-
-        .excerpt {
-          margin-bottom: 0.25em;
-          font-size: 16px;
-          overflow: hidden;
-        }
-
-        .date {
-          float: right;
-          color: #999;
-        }
-      }
-    }
-
+  label {
+    display: block;
+    float: left;
+    margin: 0px;
+    width: 200px;
   }
 
+  input {
+  }
+
+  .field {
+    margin-left: 210px;
+  }
+  .note {
+    margin-left: 200px;
+    // display: inline-block;
+  }
+  .field .note {
+    margin-left: 0px;
+  }
+
+  &.content-block p {
+    clear: both;
+    margin: 0px;
+    margin-bottom: 1em;
+    padding: 0px;
+  }
 }

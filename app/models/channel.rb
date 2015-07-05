@@ -1,8 +1,6 @@
 class Channel < ActiveRecord::Base
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
-
   scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+  scope :with_ids, proc { |ids| where(id: ids) }
 
   MentionPattern = /
     (?:^|\W|\n)                   # beginning of string or non-word char
@@ -27,60 +25,75 @@ class Channel < ActiveRecord::Base
   before_create :generate_permalink
   after_create :add_first_post
 
+  after_create :update_index
+  after_update :update_index
+  before_destroy :remove_index
+
   attr_accessor :current_user, :markdown
 
-  index_name "channels-#{Rails.env}"
+  class << self
+    def indexed_type
+      "channel"
+    end
 
-  mapping do
-    indexes :_id, :index => :not_analyzed
-    indexes :title, :analyzer => 'snowball', :boost => 100
-    indexes :created_at, :type => 'date', :index => :not_analyzed
-    indexes :text, :analyzer => 'snowball', :boost => 10
+    def index_definition
+      {
+        settings: {},
+        mappings: {
+          indexed_type => {
+            properties: {
+              title: { type: 'string', analyzer: 'simple' },
+              created: { type: 'date', index: 'not_analyzed' },
+              text: { type: 'string', analyzer: 'standard' },
+              site_id: { type: 'integer', index: 'not_analyzed' }
+            }
+          }
+        }
+      }
+    end
   end
-
-  # define_index do
-  #   indexes title
-  #   set_property :field_weights => {:title => 100}
-  # end
 
   def to_indexed_json
     {
       :_id => id,
+      :_type => self.class.indexed_type,
       :title => title,
-      :created_at => created_at
-    }.to_json
+      :created => created_at,
+      :text => text,
+      :site_id => 1
+    }
   end
 
 
   def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post_date DESC").paginate(:page => page, :per_page => per_page)
   end
 
   def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)
-    search :per_page => 25, :page => page, :load => true do
-      query do
-        boolean do
-          title.split(' ').each do |t|
-            must { string "*#{t}*" }
-          end
-        end
-      end
-    end
+    # search :per_page => 25, :page => page, :load => true do
+    #   query do
+    #     boolean do
+    #       title.split(' ').each do |t|
+    #         must { string "*#{t}*" }
+    #       end
+    #     end
+    #   end
+    # end
   end
 
   def self.search_channels_and_posts(searchquery, page)
-    Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
-      per_page = 25
-      size per_page
-      from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
-      searchquery.split(' ').each do |q|
-        query { string q }
-      end
-    end.results
+    # Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
+    #   per_page = 25
+    #   size per_page
+    #   from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
+    #   searchquery.split(' ').each do |q|
+    #     query { string q }
+    #   end
+    # end.results
   end
 
   def self.recently_active_interval
@@ -148,7 +161,7 @@ class Channel < ActiveRecord::Base
   end
 
   def body
-    ""
+    @body || ""
   end
 
   def add_first_post
@@ -198,6 +211,10 @@ class Channel < ActiveRecord::Base
     @last_post ||= posts.reorder("id DESC").first
   end
 
+  def last_post=(post)
+    @last_post = post
+  end
+
   def last_post_id
     last_post.try(:id)
   end
@@ -208,15 +225,18 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || i < (post || last_post).id
+    i == 0 || (post || last_post).nil? || i < (post || last_post).id
   end
 
   def visit(current_user, post_id=nil)
     if !post_id
+      num = $redis.zscore "mentions:#{current_user.id}", id
       $redis.zadd "mentions:#{current_user.id}", 0, id
+      Live.notification_counters(current_user) if num && num.to_i > 0
     end
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
+    Live.posts_read(self, current_user) if user && i != post_id
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
     i
@@ -239,13 +259,19 @@ class Channel < ActiveRecord::Base
     if p.size < 12
       p = posts.includes(:user, :faves).limit(12).load.reverse
     end
-    e = events.from_post(p.first)
-    result = p + e
+    if p.first
+      e = events.includes(:user).from_post(p.first)
+      result = p + e
+    else
+      result = p
+    end
     result.sort_by(&:created_at)
   end
 
-  def merge(other)
+  def merge(other, current_user)
     Post.where(channel_id: other.id).update_all(channel_id: id)
+    events.create(event: "merge", data: {merged_title: other.title, title: title}, user_id: current_user.id)
+    ChannelRedirect.create(original_channel_id: other.id, target_channel_id: id)
     other.destroy
   end
 
@@ -254,6 +280,14 @@ class Channel < ActiveRecord::Base
     return if old_title == name
     self.title = name
     events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
+  end
+
+  def update_index
+    Search.update("channels", id)
+  end
+
+  def remove_index
+    Search.remove("channels", id)
   end
 
 end

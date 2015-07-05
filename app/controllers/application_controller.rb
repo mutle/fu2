@@ -31,8 +31,8 @@ class ApplicationController < ActionController::Base
     (session[:user_id] || params[:api_key]) && !current_user.nil?
   end
 
-  def notification(type, object)
-    $redis.publish 'fu2_live', {:type => type, :object => object.as_json}.to_json
+  def notification(type, object, user_id=0)
+    Live.update(type, object, user_id)
   end
 
   def increment_metric(name)
@@ -63,9 +63,4 @@ class ApplicationController < ActionController::Base
   end
   helper_method :new_features?
 
-  protected
-
-  def default_layout
-    "application"
-  end
 end

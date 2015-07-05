@@ -8,35 +8,34 @@ class PostsController < ApplicationController
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
-    if params[:first_id]
-      @posts = Post.before(@channel, params[:first_id])
-    elsif params[:last_id]
-      @posts = Post.since(@channel, params[:last_id])
-    else
-      @posts = @channel.posts
-    end
-    if params[:limit]
-      @posts = @posts.order("id desc").limit(params[:limit].to_i).reverse
-    else
-      @posts = @posts.order("id")
-    end
-    @updated_posts = last_update ? Post.updated_since(@channel, last_update) : []
     @last_read_id = @channel.last_read_id(current_user)
-    @last_update = (@posts.map(&:created_at) + @posts.map(&:updated_at) + @updated_posts.map(&:updated_at)).map(&:utc).max.to_i
+
+    @view = Views::ChannelPosts.new({
+      current_user: current_user,
+      channel: @channel,
+      last_read_id: @last_read_id,
+      first_id: params[:first_id],
+      last_id: params[:last_id],
+      limit: params[:limit],
+      last_update: last_update
+    })
     @last_post_id = 0
-    respond_with @posts
+    @view.finalize
+    respond_with @view.posts
   end
 
   def create
-    @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)
-    notification :post_create, @post
+    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: current_user.markdown?)
+    Live.post_create @post
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     @channel.visit current_user, @post.id
 
+    rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
+
     respond_with @post do |f|
-      f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
+      f.html { redirect_to channel_path(@channel, anchor: "post_#{@post.id}") }
       f.json do
         render "create"
       end
@@ -52,14 +51,14 @@ class PostsController < ApplicationController
     @post = @channel.posts.find(params[:id].to_i)
     raise ActiveRecord::RecordNotFound unless @post.user_id == @current_user.id
     @post.update_attributes(post_params)
-    notification :post_update, @post
+    Live.post_update @post
 
-    redirect_to channel_path(@channel, :anchor => "post_#{@post.id}")
+    redirect_to channel_path(@channel, anchor: "post_#{@post.id}")
   end
 
   def destroy
     @post = @channel.posts.find(params[:id].to_i)
-    notification :post_destroy, @post
+    Live.post_destroy @post
     @post.destroy if @post.user_id == current_user.id
 
     redirect_to channel_path(@channel)
@@ -69,22 +68,18 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id].to_i)
     if @post.faved_by? @current_user
       @post.unfave @current_user
-      notification :post_unfave, @post
+      Live.post_unfave @post
     else
       @post.fave @current_user
-      notification :post_fave, @post
+      Live.post_fave @post
     end
-    render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count}
+    render json: {status: @post.faved_by?(@current_user), count: @post.faves.count, faves: @post.faves.map(&:user).map(&:login)}
   end
 
   def unread
     @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
-    render :json => {:status => "OK"}
-  end
-
-  def faved
-    @faves = Fave.most_popular.all.uniq { |i| i.post_id }
+    render json: {status: "OK"}
   end
 
   private

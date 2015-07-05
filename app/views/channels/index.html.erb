@@ -1,31 +1,14 @@
-<% last_ts = "" %>
-<ul id="recent_activities" class="<%= 'refresh' if @page == 1 %>">
-  <% @recent_channels.each do |channel| %>
-    <% last_post = @recent_posts[channel.id] %>
-    <% has_posts = channel.has_posts?(current_user, last_post) %>
-    <% if last_post %>
-      <% ts = rounded_timestamp last_post.created_at  %>
-      <% if ts != last_ts %>
-        <li class="list-date">
-          <%= last_ts = ts %>
-        </li>
-      <% end %>
+<ul class="channel-list refresh">
+  <div class="loader-group">
+    <% @view.recent_channels.each do |channel| %>
+      <% next if !channel.last_post %>
+      <%= render partial: "channel", object: channel, locals: {has_posts: channel.has_posts?(current_user, channel.last_post)} %>
     <% end %>
-    <li class="channel<%= " unread" if has_posts %>" data-last-id="<%= last_post.id rescue 0 %>">
-      <div class="name">
-        <% if last_post %>
-          <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
-          <%= render :partial => "shared/user", :object => last_post.user %>
-        <% else %>
-          &nbsp;
-        <% end %>
-      </div>
-      <% if (mentions = channel.num_mentions(current_user)) > 0 %>
-        <div class="post-count mentions"><%= mentions %></div>
-      <% end %>
-      <%= link_to format_title(channel), channel_path(channel, :anchor => channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
-    </li>
+  </div>
+
+  <% if (diff = @view.channel_count - @view.recent_channels.size) > 0 %>
+    <div class="channel-loader scroll-loader" data-loader-url="<%= live_channels_path %>" data-loader-attr="data-channel-id" data-loader-items=".channel"  data-loader-count="50" data-loader-page="<%= @page %>">
+      <%= link_to "#{octicon "chevron-down"} <span class=\"loader-count\">#{diff}</span> older channels".html_safe, "#", class: "load-more" %>
+    </div>
   <% end %>
 </ul>
-
-<%= will_paginate @recent_channels, :params => {:controller => "channels", :action => "index"} %>

@@ -1,21 +1,55 @@
 <% if @channel.can_read?(current_user) %>
-  <%= render partial: "header" %>
-  <% @posts.each do |post| %>
-    <% if post.is_a?(Event) %>
-      <%= render partial: "event", object: post %>
-    <% elsif post.can_read?(current_user) %>
-      <%= render partial: "post", object: post %>
-      <% @last_post_id = post.id %>
+  <h2 class="channel-title" data-last-update="<%= @view.last_update %>">
+    <div class="right"><%= link_to "Edit", "#", :class => "edit-channel-link" %></div>
+    <span class="title-text"><%= format_title(@channel.title) %></span>
+  </h2>
+
+  <div class="channel-text">
+    <%= form_for @channel, url: channel_path(@channel), method: :put do |f| %>
+      <div class="actions">
+        <%= f.submit "Save" %>
+        <%= link_to "Cancel", "#", class: "cancel-edit-channel-link" %>
+      </div>
+      <div class="title">
+        <%= f.text_field :title, class: "channel-title" %>
+      </div>
+
+      <div class="body">
+        <%= f.text_area :text %>
+      </div>
     <% end %>
+    <% if !@channel.text.blank? %>
+      <div class="body text-body">
+        <%= format_text @channel.text %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if (diff = @view.post_count - @view.posts.size) > 0 %>
+    <div class="post-loader scroll-loader" data-loader-url="<%= channel_posts_path(@channel) %>" data-loader-attr="data-post-id" data-loader-items=".channel-post:not(.preview)" data-loader-count="12">
+      <%= link_to "#{octicon "chevron-up"} <span class=\"loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
+      <%= link_to "Show All", "#", class: "load-all" %>
+    </div>
   <% end %>
+
+  <div class="channel-posts loader-group">
+    <% @view.posts.each do |post| %>
+      <% if post.is_a?(Event) %>
+        <%= render partial: "event", object: post %>
+      <% elsif post.can_read?(current_user) %>
+        <%= render partial: "post", object: post %>
+      <% end %>
+    <% end %>
+  </div>
 
 <% else %>
   <p>You can't read the content of this channel</p>
 <% end %>
 
+<a name="comments"></a>
 <% if @channel.can_write?(current_user) %>
-  <div class="comment-box-form">
-    <a name="comments"></a>
-    <%= render partial: "form", locals: {form: [:post, :url => channel_posts_path(@channel)]} %>
-  <div class="clear"></div>
+  <h3 class="channel-response-title">Comment</h3>
+  <div class="channel-response">
+    <%= render partial: "form", locals: {form: [:post, :url => channel_posts_path(@channel), html: {class: "channel-comment"}]} %>
+  </div>
 <% end %>
