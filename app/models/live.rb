@@ -23,10 +23,6 @@ class Live
       update :post_update, post, "post"
     end
 
-    def posts_read(channel, user)
-      update :posts_read, channel, "channel", user.id
-    end
-
     def post_destroy(post)
       update :post_destroy, post, "post"
     end
@@ -45,6 +41,10 @@ class Live
 
     def channel_update(channel)
       update :channel_update, channel, "channel"
+    end
+
+    def channel_read(channel, user)
+      update :channel_read, channel, "channel", user.id
     end
 
     def notification_counters(user)

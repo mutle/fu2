@@ -86,6 +86,9 @@ class Data
     @store[type]?[id]
   getAll: (type) ->
     @store[type]
+  create: (type, url, props) ->
+  destroy: (type, url) ->
+  update: (type, url, props) ->
 
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))

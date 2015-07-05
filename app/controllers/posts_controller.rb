@@ -19,6 +19,7 @@ class PostsController < ApplicationController
       limit: params[:limit],
       last_update: last_update
     })
+    @channel.visit(current_user)
     @last_post_id = 0
     @view.finalize
     respond_with @view.posts

@@ -111,7 +111,7 @@ class ChannelsController < ApplicationController
   private
   def posts(respond=true)
     @channel = Channel.find(params[:id])
-    @last_read_id = @channel.visit(current_user)
+    # @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
   end

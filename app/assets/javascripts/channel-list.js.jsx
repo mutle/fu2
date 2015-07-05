@@ -6,7 +6,7 @@ var ChannelListData = {
   subscribe: [
     "channel_update",
     "channel_create",
-    "post_read"
+    "channel_read"
   ]
 };
 
@@ -36,7 +36,6 @@ var ChannelList = React.createClass({
     return {channels: []};
   },
   componentDidMount: function() {
-    console.log(this.props.channelId);
     Data.subscribe("channel", this.updated, this);
     Data.fetch(ChannelListData);
   },
