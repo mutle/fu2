@@ -184,9 +184,13 @@ class Channel < ActiveRecord::Base
     default_write
   end
 
-  def as_json(*args)
-    {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
+  def last_post_user_id
+    Post.first_channel_post(self).first.user_id rescue 0
   end
+
+  # def as_json(*args)
+  #   {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
+  # end
 
   def next_post(current_user)
     i = last_read_id(current_user)

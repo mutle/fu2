@@ -124,9 +124,9 @@ class Post < ActiveRecord::Base
     faves_for(user).destroy_all
   end
 
-  def as_json(*args)
-    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?, :html_body => html_body}
-  end
+  # def as_json(*args)
+  #   {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?, :html_body => html_body}
+  # end
 
   def process_fubot_message
     if Rails.env.development?

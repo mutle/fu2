@@ -36,7 +36,9 @@ class PostsController < ApplicationController
 
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, anchor: "post_#{@post.id}") }
-      f.json { render json: @post.as_json.merge(rendered: rendered) }
+      f.json do
+        render "create"
+      end
     end
   end
 

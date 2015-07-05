@@ -42,6 +42,21 @@ class ChannelsTest < ActionDispatch::IntegrationTest
     assert_select "li a[href='/channels/#{c.id}#comments']", :text => "Foo Channel"
   end
 
+  test "list channels json" do
+    c = create_channel("Foo Channel")
+    get '/channels.json'
+    j = json_body
+    jc = j['channels'].first
+    assert_equal c.id, jc['id']
+    assert_equal c.title, jc['title']
+    assert_equal false, jc['read']
+
+    c.visit(@user)
+    get '/channels.json'
+    jc = json_body['channels'].first
+    assert_equal true, jc['read']
+  end
+
   test "show channel" do
     c = create_channel("Foo Channel")
     create_post("**bold**\n")

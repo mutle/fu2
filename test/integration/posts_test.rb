@@ -40,4 +40,26 @@ class PostsTest < ActionDispatch::IntegrationTest
     assert_raise(ActiveRecord::RecordNotFound) { Post.find(p.id) }
   end
 
+  test "show posts json" do
+    c = create_channel("Foo Channel")
+    p = create_post("Post")
+    get "/channels/#{c.id}/posts.json"
+    j = json_body
+    jc = j['channel']
+    assert_equal c.id, jc['id']
+    jp = j['posts'].first
+    assert_equal p.id, jp['id']
+    assert_equal p.body, jp['body']
+  end
+
+  test "create post json" do
+    c = create_channel
+    assert_not_equal "Test", c.last_post.body
+    post "/channels/#{c.id}/posts.json", {post: {body: "Test"}}
+    p json_body
+    jp = json_body['post']
+    assert_equal "Test", jp['body']
+    assert_not_nil jp['rendered']
+  end
+
 end

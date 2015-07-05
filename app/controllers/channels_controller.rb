@@ -63,7 +63,7 @@ class ChannelsController < ApplicationController
 
       respond_with @channel do |f|
         f.html { redirect_to channel_path(@channel) }
-        f.json { render :json => @channel }
+        f.json { respond_with @channel }
       end
     else
 

@@ -46,4 +46,8 @@ class ActionDispatch::IntegrationTest
     login "testuser", "testpw"
     u
   end
+
+  def json_body
+    JSON.parse response.body 
+  end
 end
