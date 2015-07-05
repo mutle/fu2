@@ -7,7 +7,7 @@ var ImageUploader = React.createClass({
   startUpload: function(filename, form) {
     var u = this;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', this.state.url, true)
+    xhr.open('POST', this.state.url, true);
     var token = $('meta[name="csrf-token"]').attr('content');
     xhr.setRequestHeader('X_CSRF_TOKEN', token);
 
@@ -25,12 +25,12 @@ var ImageUploader = React.createClass({
     };
     xhr.onerror = function(e) {
       u.setState({message: "error", filename: filename});
-    }
+    };
 
     if(xhr.upload)
       xhr.upload.onprogress = function(e) {
         var percentage = Math.round((e.loaded / e.total) * 100);
-        u.setState({message: "Uploading \""+filename+"\" ("+percentage+"%)", filename: filename})
+        u.setState({message: "Uploading \""+filename+"\" ("+percentage+"%)", filename: filename});
       };
 
     var f = new FormData(form[0]);

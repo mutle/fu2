@@ -114,15 +114,6 @@ class ChannelsController < ApplicationController
     @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
-    @view = Views::ChannelPosts.new({
-      current_user: current_user,
-      channel: @channel,
-      last_read_id: @last_read_id
-    })
-    @view.finalize
-    if respond
-      respond_with @view.posts
-    end
   end
 
   def channel_params
