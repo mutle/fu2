@@ -206,6 +206,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         line-height: 26px;
 
         .avatar {
+          margin: 0px;
           margin-right: 10px;
           float: left;
         }
@@ -230,12 +231,12 @@ $large-screen: "only screen and (min-width: 1200px)";
         }
 
         @media #{$small-screen} {
-          line-height: 42px;
+          line-height: 32px;
 
           .channel-name {
             margin-left: 200px;
-            line-height: 42px;
-            min-height: 42px;
+            line-height: 32px;
+            min-height: 32px;
           }
         }
 
@@ -248,6 +249,8 @@ $large-screen: "only screen and (min-width: 1200px)";
           padding: 0;
 
           .avatar {
+            padding: 0px;
+            margin: 0px;
             margin-right: 4px;
             .avatar-image {
               max-width: 26px;
@@ -272,7 +275,7 @@ $large-screen: "only screen and (min-width: 1200px)";
           width: 70px;
           padding: 7px 0 7px 10px;
           float: left;
-          line-height: 42px;
+          line-height: 32px;
         }
       }
 
@@ -306,9 +309,9 @@ $large-screen: "only screen and (min-width: 1200px)";
 
       .channel-post-header, .channel-response-header {
 
-        height: 42px;
+        height: 32px;
         background: #484848;
-        line-height: 42px;
+        line-height: 32px;
         color: #E6E6E6;
 
         a {
@@ -373,7 +376,7 @@ $large-screen: "only screen and (min-width: 1200px)";
       .body {
         color: #4D4D4D;
         line-height: 1.4em;
-        padding: 20px;
+        padding: 12px;
       }
 
     }
@@ -421,8 +424,8 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
 
       .actions {
-        height: 42px;
-        line-height: 42px;
+        height: 32px;
+        line-height: 32px;
         text-align: right;
 
         &.left {

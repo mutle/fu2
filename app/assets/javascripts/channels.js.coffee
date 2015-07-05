@@ -42,7 +42,7 @@ $ ->
 
   $(document).on 'click', ".post-reply", ->
     self = $(this)
-    post = self.parents(".post").find(".body")
+    post = self.parents(".channel-post").find(".body")
     text = decodeURIComponent(post.attr("data-raw-body"))
     if syntax && syntax == "html"
       text = "<blockquote>#{text}</blockquote>"
@@ -64,17 +64,6 @@ $ ->
   $(document).on 'click', '.markdown-help', ->
     $(".markdown-help-show").toggle()
     return false
-
-  $(".active-channels").on 'click', '.mark-read', ->
-    if $(this).hasClass("all-read")
-      $(this).removeClass("all-read").parents(".activity").find(".posts").removeClass("hide")
-    else
-      $(this).addClass("all-read").parents(".activity").find(".posts").addClass("hide").find(".activity-post").removeClass("highlight")
-      channelId = parseInt $(this).parents(".activity").data("channel-id")
-      $.ajax
-        type: "POST"
-        dataType: "json"
-        url: "/channels/#{channelId}/visit"
 
   if $(".comment-box").length > 0
     window.scrollLoader = new ScrollLoader($(".post-loader"))
