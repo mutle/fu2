@@ -164,6 +164,9 @@ var CommentBox = React.createClass({
       }
     });
   },
+  blur: function(e) {
+    this.setState({autocomplete: null});
+  },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find(".comment-box").get(0).selectionEnd;
     var cursorS = $(this.getDOMNode()).find(".comment-box").get(0).selectionStart;
@@ -270,7 +273,7 @@ var CommentBox = React.createClass({
     }
     return <div>
       {autocompleter}
-      <textarea onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
+      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
     </div>;
   }
 });
@@ -305,17 +308,19 @@ $(function() {
     imageUpload.setState({url: $(image).data("uploader-url")});
   }
 
-  var commentBoxF = $(".channel-response form")
+  var commentBoxF = $(".channel-response form");
   var commentBoxE = $(".comment-box-container");
   if(commentBoxE.length > 0) {
     var comment = commentBoxE[0];
     var name = commentBoxE.find("textarea").attr("name");
     var value = commentBoxE.find("textarea").val();
     commentBox = React.render(<CommentBox />, comment);
+    if(commentBoxF.hasClass("channel-comment")) {
+      commentBoxF.on("submit", function(e) {
+        commentBox.submit(e);
+      })
+    }
     commentBox.setState({valueName: name, text: value});
-    commentBoxF.on("submit", function(e) {
-      commentBox.submit(e);
-    })
   }
 
   var timestamps = []

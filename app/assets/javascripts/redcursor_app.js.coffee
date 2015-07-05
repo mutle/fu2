@@ -70,7 +70,7 @@ $ ->
         window.updateTimestamps d.find(".update-ts")
         $("#content .channel-list.refresh .loader-group:first-child").empty().append d
 
-  if $('.channel-response form').length
+  if $('.channel-response form.channel-comment').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
     data = (data, type) ->
       console.log(data.channel_id)
