@@ -1,0 +1,21 @@
+<h3 class="content-title">Login to RedCursor</h3>
+<div class="content-block login-box">
+  <% if !flash[:notice].blank? %>
+    <div class="notice"><%= flash[:notice] %></div>
+  <% end %>
+  <%= form_tag session_path, :html => {:class => "normal"} do %>
+    <p class="login">
+      <label for="login">Username</label>
+      <%= text_field_tag 'login' %>
+    </p>
+    <p class="password">
+      <label for="password">Password</label>
+      <%= password_field_tag 'password' %>
+    </p>
+    <div class="actions">
+      <span class="forgot"></span>
+      <input class="content-button" type="submit" value="Login" />
+    </div>
+  <% end %>
+  <div class="clear"></div>
+</div>

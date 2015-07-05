@@ -1,7 +1,9 @@
-<% @last_ts = "" %>
-<ul id="recent_activities" class="<%= 'refresh' if @page == 1 %>">
+<ul class="channel-list refresh">
   <div class="loader-group">
-    <%= render partial: "channels" %>
+    <% @view.recent_channels.each do |channel| %>
+      <% next if !channel.last_post %>
+      <%= render partial: "channel", object: channel, locals: {has_posts: channel.has_posts?(current_user, channel.last_post)} %>
+    <% end %>
   </div>
 
   <% if (diff = @view.channel_count - @view.recent_channels.size) > 0 %>

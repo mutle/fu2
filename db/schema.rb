@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150626175338) do
+ActiveRecord::Schema.define(version: 20150704151044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,17 +27,17 @@ ActiveRecord::Schema.define(version: 20150626175338) do
   add_index "channel_redirects", ["target_channel_id"], name: "index_channel_redirects_on_target_channel_id", using: :btree
 
   create_table "channels", force: :cascade do |t|
-    t.string   "title",         limit: 255,                null: false
-    t.integer  "user_id",                                  null: false
-    t.string   "permalink",     limit: 255,                null: false
-    t.boolean  "default_read",              default: true, null: false
-    t.boolean  "default_write",             default: true, null: false
+    t.string   "title",          limit: 255,                null: false
+    t.integer  "user_id",                                   null: false
+    t.string   "permalink",      limit: 255,                null: false
+    t.boolean  "default_read",               default: true, null: false
+    t.boolean  "default_write",              default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_post"
+    t.datetime "last_post_date"
     t.text     "text"
     t.integer  "updated_by"
-    t.integer  "site_id",                   default: 1
+    t.integer  "site_id",                    default: 1
   end
 
   add_index "channels", ["created_at"], name: "index_channels_on_created_at", using: :btree

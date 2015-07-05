@@ -25,16 +25,18 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = @channel.posts.create(:body => params[:post][:body], :user_id => current_user.id, :markdown => current_user.markdown?)
+    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: current_user.markdown?)
     Live.post_create @post
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     @channel.visit current_user, @post.id
 
+    rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
+
     respond_with @post do |f|
-      f.html { redirect_to channel_path(@channel, :anchor => "post_#{@post.id}") }
-      f.json { render :json => @post.as_json.merge(:rendered => render_to_string(:partial => "/channels/post", :object => @post)) }
+      f.html { redirect_to channel_path(@channel, anchor: "post_#{@post.id}") }
+      f.json { render json: @post.as_json.merge(rendered: rendered) }
     end
   end
 
@@ -49,7 +51,7 @@ class PostsController < ApplicationController
     @post.update_attributes(post_params)
     Live.post_update @post
 
-    redirect_to channel_path(@channel, :anchor => "post_#{@post.id}")
+    redirect_to channel_path(@channel, anchor: "post_#{@post.id}")
   end
 
   def destroy
@@ -69,13 +71,13 @@ class PostsController < ApplicationController
       @post.fave @current_user
       Live.post_fave @post
     end
-    render :json => {:status => @post.faved_by?(@current_user), :count => @post.faves.count}
+    render json: {status: @post.faved_by?(@current_user), count: @post.faves.count, faves: @post.faves.map(&:user).map(&:login)}
   end
 
   def unread
     @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
-    render :json => {:status => "OK"}
+    render json: {status: "OK"}
   end
 
   private

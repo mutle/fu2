@@ -12,6 +12,10 @@ class Live
       update :post_update, post
     end
 
+    def posts_read(channel, user)
+      update :posts_read, channel, user.id
+    end
+
     def post_destroy(post)
       update :post_destroy, post
     end

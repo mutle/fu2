@@ -1,31 +1,33 @@
 <% title ||= false %>
-<div class="channel-<%= title ? "header-edit" : "comment-box" %>">
-  <%= form_for *form do |f| %>
-    <% if title %>
-      <div class="title">
-        <%= f.text_field :title, class: "channel-title", placeholder: "Channel title" %>
-      </div>
-    <% end %>
-    <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
-    <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
-    <%= f.text_area :body, :class => 'comment-box' %>
-    <% if markdown %>
-      <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
-    <% end %>
-    <div class="actions">
-      <% if markdown %>
-        <button class="markdown-help"><%= octicon "markdown" %></button>
+<%= form_for *form do |f| %>
+  <% if title %>
+    <div class="title">
+      <%= f.text_field :title, class: "channel-title new-channel-title", placeholder: "Channel title" %>
+      <% if (error = @channel.errors[:title]).any? %>
+        <span class="error">Title <%= error.first %></span>
       <% end %>
-      <%= f.submit "Send", :accesskey => "s" %>
     </div>
   <% end %>
+  <% markdown = (@post && !@post.new_record? ? @post.markdown? : current_user.markdown?) %>
+  <%= hidden_field_tag "syntax", markdown ? "md" : "html", :id => "syntax" %>
+  <div class="comment-box-container">
+    <%= f.text_area :body, :class => 'comment-box' %>
+  </div>
+  <% if markdown %>
+    <div class="markdown-help-show"><%= render :partial => "shared/markdown_help" %></div>
+  <% end %>
+  
+  <div class="actions">
+    <% if markdown %>
+      <button class="response-button content-button markdown-help"><%= octicon "markdown" %></button>
+    <% end %>
+    <%= f.submit "Send", class: "response-button content-button", accesskey: "s" %>
+  </div>
 
   <div class="actions left">
-    <%= form_for :image, url: images_path(format: :json), class: "uploader" do |fi| %>
-      <button class="upload-image"><%= octicon "device-camera" %></button>
-      <%= fi.file_field :image_file %>
-    <% end %>
-
-    <span class="info"></span>
+    <form encType='multipart/form-data'>
+      <div class="upload-image" data-uploader-url="<%= images_path(format: :json) %>"></div>
+    </form>
   </div>
-</div>
+
+<% end %>

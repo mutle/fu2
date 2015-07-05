@@ -18,6 +18,8 @@ class Post < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
+  attr_accessor :read
+
   class << self
     def indexed_type
       "post"
@@ -57,7 +59,9 @@ class Post < ActiveRecord::Base
   end
 
   def update_channel_last_post
-    channel.update_attribute(:last_post, created_at) if channel
+    if channel
+      channel.update_attribute(:last_post_date, created_at)
+    end
     true
   end
 

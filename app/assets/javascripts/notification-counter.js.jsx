@@ -37,7 +37,7 @@ var NotificationCounter = React.createClass({
 })
 
 $(function() {
-  var counters = $(".toolbar .counters");
+  var counters = $(".header .counters .counters-inner");
   if(counters.length > 0) {
     var counter = React.render(<NotificationCounter />, counters.get(0));
     counter.connect();

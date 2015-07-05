@@ -66,7 +66,7 @@ class Channel < ActiveRecord::Base
 
 
   def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
+    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post_date DESC").paginate(:page => page, :per_page => per_page)
   end
 
   def self.all_channels(_user, page)
@@ -161,7 +161,7 @@ class Channel < ActiveRecord::Base
   end
 
   def body
-    ""
+    @body || ""
   end
 
   def add_first_post
@@ -207,6 +207,10 @@ class Channel < ActiveRecord::Base
     @last_post ||= posts.reorder("id DESC").first
   end
 
+  def last_post=(post)
+    @last_post = post
+  end
+
   def last_post_id
     last_post.try(:id)
   end
@@ -228,6 +232,7 @@ class Channel < ActiveRecord::Base
     end
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
+    Live.posts_read(self, current_user) if user && i != post_id
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
     i

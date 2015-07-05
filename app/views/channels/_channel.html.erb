@@ -1,24 +1,20 @@
 <% has_posts ||= false %>
-<% last_post ||= channel.last_post %>
-<% show_last_date ||= false %>
-<% element ||= "li" %>
 <% anchor ||= nil %>
-<% if show_last_date && last_post %>
-  <div class="last-post-date">
-    <%= rounded_timestamp last_post.created_at %>
-  </div>
-<% end %>
-<<%= element %> class="channel<%= " unread" if has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= last_post.id rescue 0 %>">
-  <div class="name">
-    <% if last_post %>
-      <div class="user-color" style="background-color: <%= last_post.user.color %>"></div>
-      <%= render :partial => "shared/user", :object => last_post.user %>
-    <% else %>
-      &nbsp;
+<% hide_date ||= false %>
+<% element ||= "li" %>
+<<%= element %>>
+  <div class="channel <%= "read" if !has_posts %>" data-channel-id="<%= channel.id %>" data-last-id="<%= channel.last_post.id rescue 0 %>">
+    <% if channel.last_post %>
+      <%= link_to image_tag(avatar_url(channel.last_post.user, 42), class: "avatar-image"), user_path(channel.last_post.user), class: "avatar" %>
+      <span class="user-name"><%= format_title(channel.last_post.user.display_name) %></span>
     <% end %>
+
+    <%= link_to format_title(channel.title), channel_path(channel, anchor: (anchor || channel_anchor(channel, current_user, channel.last_post))), class: "channel-name" %>
   </div>
-  <% if (mentions = channel.num_mentions(current_user)) > 0 %>
-    <div class="post-count mentions"><%= mentions %></div>
+
+  <% if !hide_date %>
+    <div class="timestamp update-ts" title="<%= channel.updated_at.strftime(Fu2.time_format) %>" data-timestamp="<%= channel.updated_at.to_i %>">
+      <%= format_date channel.updated_at %>
+    </div>
   <% end %>
-  <%= link_to format_title(channel), channel_path(channel, :anchor => anchor || channel_anchor(channel, current_user, last_post)), :class => "channel-link" %>
 </<%= element %>>

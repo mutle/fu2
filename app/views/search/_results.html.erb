@@ -7,12 +7,12 @@
   <% @view.results[:objects].each_with_index do |o,i| %>
     <% if o.instance_of?(Post) %>
       <li class="result-post">
-        <%= render partial: "channels/channel", object: o.channel, locals: {show_last_date: false, element: "div", last_post: o, anchor: channel_post_anchor(o.channel, o)} %>
-
-        <%= render partial: "channels/post", object: o, locals: {faves: o.faves, hide_user: true} %>
+        <% o.channel.last_post = o %>
+        <% @channel = o.channel %>
+        <%= render partial: "channels/post", object: o, locals: {faves: o.faves, hide_user: true, simple: true, show_channel: true} %>
       </li>
     <% elsif o.instance_of?(Channel) %>
-      <%= render partial: "channels/channel", object: o, locals: {show_last_date: true} %>
+      <%= render partial: "channels/channel", object: o, locals: {hide_date: true} %>
     <% end %>
   <% end %>
 <% end %>

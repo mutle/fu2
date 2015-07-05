@@ -101,7 +101,7 @@ module RenderPipeline
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
-    Pipeline::PlainTextInputFilter,
+    Pipeline::MarkdownFilter,
     Pipeline::EmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [
