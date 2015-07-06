@@ -20,8 +20,8 @@ var Channel = React.createClass({
     if(this.props.channel.read) className += " read";
     var url = "/channels/"+this.props.channel.id;
     var userLink = "/users/"+this.props.user.id;
-    var userName = {__html: this.props.user.display_name}
-    var channelName = {__html: this.props.channel.title}
+    var userName = {__html: this.props.user.display_name};
+    var channelName = {__html: this.props.channel.title};
     return <li>
       <div className={className}>
         <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
