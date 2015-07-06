@@ -101,32 +101,3 @@ var ChannelPosts = React.createClass({
     </div>;
   }
 });
-
-$(function() {
-  var e = $(".content-inner");
-  var m = document.location.pathname.match(/^\/channels\/([0-9]+)$/)
-  if(m && m[1]) {
-    var channel_id = parseInt(m[1])
-    console.log(channel_id)
-    var posts = React.render(<ChannelPosts channelId={channel_id} />, e.get(0))
-  }
-  // if(e.length > 0) {
-  //   var channel_id = parseInt(document.location.pathname.replace(/channels\/?(\?.*)#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1"))
-  // }
-
-  var timestamps = []
-  window.updateTimestamps = function(timestampE) {
-    $.each(timestampE, function(i,e) {
-     var t = parseInt($(e).data("timestamp")) * 1000;
-     var ts = React.render(<Timestamp timestamp={t} />, e);
-     timestamps.push(ts);
-   });
-  }
-  var updateTs = function() {
-    $.each(timestamps, function(i, ts) {
-      ts.setState({});
-    });
-  }
-  window.setInterval(updateTs, 1000);
-  updateTimestamps($(".update-ts"));
-});

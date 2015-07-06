@@ -27,3 +27,4 @@
 //= require channels-react
 //= require channel-posts
 //= require channel-list
+//= require router

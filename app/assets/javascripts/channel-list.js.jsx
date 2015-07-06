@@ -18,7 +18,7 @@ var Channel = React.createClass({
     var userLink = "/users/"+this.props.user.id;
     var userName = {__html: this.props.user.display_name}
     var channelName = {__html: this.props.channel.title}
-    return <div>
+    return <li>
       <div className={className}>
         <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
         <span className="user-name" dangerouslySetInnerHTML={userName}></span>
@@ -27,7 +27,7 @@ var Channel = React.createClass({
       <div className="timestamp">
         <Timestamp timestamp={this.props.channel.display_date} />
       </div>
-    </div>;
+    </li>;
   }
 });
 
@@ -48,15 +48,8 @@ var ChannelList = React.createClass({
       var user = Data.get("user", channel.last_post_user_id);
       return <Channel key={channel.id} id={channel.id} user={user} channel={channel} />;
     });
-    return <div>
+    return <ul className="channel-list refresh">
       {channels}
-    </div>;
-  }
-});
-
-$(function() {
-  var e = $(".channel-list.refresh");
-  if(e.length > 0) {
-    var posts = React.render(<ChannelList />, e.get(0))
+    </ul>;
   }
 });
