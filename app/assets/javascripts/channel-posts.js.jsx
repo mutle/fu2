@@ -71,31 +71,40 @@ var ChannelPost = React.createClass({
 var ChannelPostsHeader = React.createClass({
   render: function() {
     return <div>
-      <h2 class="channel-title">{this.props.channel.title}</h2>
+      <div className="right"><a className="edit-channel-link" href="#">Edit</a></div>
+      <h2 className="channel-title">{this.props.channel.title}</h2>
     </div>;
   }
 })
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
-    return {posts: []};
+    return {posts: [], channel: {}};
   },
   componentDidMount: function() {
     console.log(this.props.channelId);
-    Data.subscribe("post", this.updated, this, this.props.channelId);
+    Data.subscribe("post", this.updatedPosts, this, this.props.channelId);
+    Data.subscribe("channel", this.updatedChannel, this);
     Data.fetch(ChannelPostsData, this.props.channelId);
   },
-  updated: function(objects) {
+  updatedPosts: function(objects) {
     console.log("channel posts updated")
     console.log(objects)
     this.setState({posts: objects})
   },
+  updatedChannel: function(objects) {
+    console.log("channel updated")
+    console.log(objects)
+    if(objects.length > 0) this.setState({channel: objects[0]})
+  },
   render: function () {
+    if(this.state.posts.length < 1 || !this.state.channel.id) return <LoadingIndicator />;
     var posts = this.state.posts.map(function(post, i) {
       var user = Data.get("user", post.user_id);
       return <ChannelPost key={post.id} id={post.id} user={user} post={post} />;
     });
     return <div>
+      <ChannelPostsHeader channel={this.state.channel} />
       {posts}
       <CommentBox channelId={this.props.channelId} />
     </div>;

@@ -19,8 +19,9 @@
 //= require channels
 //= require search
 //= require react
-//= require shared-components/timestamp
 //= require shared-components/comment-box
+//= require shared-components/loading-indicator
+//= require shared-components/timestamp
 //= require channel-search
 //= require notifications
 //= require notification-counter
