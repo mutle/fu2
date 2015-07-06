@@ -36,6 +36,11 @@ class Socket
     true
 
 class Data
+  url:
+    post:
+      create: (channel_id) -> "/channels/#{channel_id}/posts.json"
+    image:
+      create: -> "/images.json"
   constructor: (@socket) ->
     @callbacks = {}
     @store = {}
@@ -86,9 +91,23 @@ class Data
     @store[type]?[id]
   getAll: (type) ->
     @store[type]
-  create: (type, url, props) ->
-  destroy: (type, url) ->
-  update: (type, url, props) ->
+  create: (type, url_props, props, {error, success}) ->
+    url = @url[type]?["create"]?.apply(this, url_props)
+    if !url
+      console.log "No create URL for #{type}"
+      return
+    data = {}
+    for key,prop of props
+      data["#{type}[#{key}]"] = prop
+    $.ajax
+      type: "POST",
+      dataType: "json",
+      url: url,
+      data: data,
+      error: error,
+      success: success
+  destroy: (type) ->
+  update: (type, props) ->
 
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))

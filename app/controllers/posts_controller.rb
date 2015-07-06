@@ -36,7 +36,7 @@ class PostsController < ApplicationController
     @channel.reload
     Live.channel_update @channel
 
-    rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
+    # rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
 
     respond_with @post do |f|
       f.html { redirect_to channel_path(@channel, anchor: "post_#{@post.id}") }

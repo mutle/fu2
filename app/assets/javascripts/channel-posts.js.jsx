@@ -68,6 +68,14 @@ var ChannelPost = React.createClass({
   }
 });
 
+var ChannelPostsHeader = React.createClass({
+  render: function() {
+    return <div>
+      <h2 class="channel-title">{this.props.channel.title}</h2>
+    </div>;
+  }
+})
+
 var ChannelPosts = React.createClass({
   getInitialState: function() {
     return {posts: []};
@@ -89,16 +97,22 @@ var ChannelPosts = React.createClass({
     });
     return <div>
       {posts}
+      <CommentBox channelId={this.props.channelId} />
     </div>;
   }
 });
 
 $(function() {
-  var e = $(".channel-posts.loader-group");
-  if(e.length > 0) {
-    var channel_id = parseInt(document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1"))
+  var e = $(".content-inner");
+  var m = document.location.pathname.match(/^\/channels\/([0-9]+)$/)
+  if(m && m[1]) {
+    var channel_id = parseInt(m[1])
+    console.log(channel_id)
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e.get(0))
   }
+  // if(e.length > 0) {
+  //   var channel_id = parseInt(document.location.pathname.replace(/channels\/?(\?.*)#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1"))
+  // }
 
   var timestamps = []
   window.updateTimestamps = function(timestampE) {
