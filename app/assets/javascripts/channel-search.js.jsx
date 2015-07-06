@@ -98,25 +98,15 @@ var ChannelSearch = React.createClass({
       c.hide();
     }, 300);
   },
-  componentDidUpdate: function() {
-    if(this.state.hidden) {
-      $(this.getDOMNode()).parent().removeClass("show")
-    } else {
-      $(this.getDOMNode()).parent().addClass("show")
-    }
-  },
   render: function() {
-    var classname = "channel-search-background";
-    if(this.state.hidden) classname += " hidden";
-    return <div className={classname}>
-      <div className="channel-search">
-        <span className='octicon octicon-search' />
-        <form onSubmit={this.handleSubmit}>
-          <input className="search-field" onBlur={this.blur} onKeyDown={this.onKeydown} onChange={this.onChange} value={this.state.query} />
-        </form>
+    if(this.state.hidden) return null;
+    return <div className="channel-search">
+      <span className='octicon octicon-search' />
+      <form onSubmit={this.handleSubmit}>
+        <input className="search-field" onBlur={this.blur} onKeyDown={this.onKeydown} onChange={this.onChange} value={this.state.query} />
+      </form>
 
-        <ChannelSearchResults query={this.state.query} results={this.state.results} cursor={this.state.cursor} />
-      </div>
+      <ChannelSearchResults query={this.state.query} results={this.state.results} cursor={this.state.cursor} />
     </div>;
   }
 });
