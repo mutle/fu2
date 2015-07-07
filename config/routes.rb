@@ -7,7 +7,21 @@ Fu2::Application.routes.draw do
     resources :channels do
       resources :posts
     end
+    resources :posts do
+      member do
+        post :fave
+      end
+    end
 
+    resources :notifications do
+      member do
+        post :read
+      end
+      collection do
+        get :unread
+        get :counters
+      end
+    end
     resources :images
   end
 
@@ -46,39 +60,9 @@ Fu2::Application.routes.draw do
       get :merge
       post :do_merge
     end
-    resources :posts do
-      member do
-        post :unread
-      end
-    end
   end
 
-  resources :posts do
-    member do
-      post :fave
-    end
-    collection do
-      get :faved
-    end
-  end
-
-  resources :messages do
-    collection do
-      get :inbox
-      get :sent
-      delete :destroy_all
-    end
-  end
-
-  resources :notifications do
-    member do
-      post :read
-    end
-    collection do
-      get :unread
-      get :counters
-    end
-  end
+  resources :notifications
 
   resources :images
   resources :stylesheets
@@ -86,6 +70,4 @@ Fu2::Application.routes.draw do
   get '/stats/websockets' => "stats#websockets"
 
   get '/' => 'channels#index', :as => :root
-
-  get '/react' => 'channels#react'
 end

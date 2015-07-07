@@ -72,13 +72,44 @@ var ChannelPost = React.createClass({
 });
 
 var ChannelPostsHeader = React.createClass({
+  getInitialState: function() {
+    return {edit: false};
+  },
+  toggleEdit: function() {
+    this.setState({edit: !this.state.edit});
+  },
   render: function() {
-    return <div>
-      <div className="right"><a className="edit-channel-link" href="#">Edit</a></div>
-      <h2 className="channel-title">{this.props.channel.title}</h2>
-    </div>;
+    var title = {__html: this.props.channel.display_name};
+    if(this.state.edit) {
+      return <div>
+        <h2 className="channel-title">
+          <div className="right">
+            <button>Save</button>
+            <a onClick={this.toggleEdit} className="cancel-edit-channel-link" href="#">Cancel</a>
+          </div>
+          <input className="channel-title" defaultValue={this.props.channel.title} />
+        </h2>
+        <div className="body">
+          <textarea defaultValue={this.props.channel.text} />
+        </div>
+      </div>;
+    } else {
+      var body = {__html: this.props.channel.display_text};
+      if(this.props.channel.text) {
+        var channelText = <div className="channel-text">
+          <div className="body text-body" dangerouslySetInnerHTML={body} />
+        </div>;
+      }
+      return <div>
+        <h2 className="channel-title">
+          <div className="right"><a onClick={this.toggleEdit} className="edit-channel-link" href="#">Edit</a></div>
+          <span className="title-text" dangerouslySetInnerHTML={title} />
+        </h2>
+        {channelText}
+      </div>;
+    }
   }
-})
+});
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {

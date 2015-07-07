@@ -37,10 +37,19 @@ class Socket
 
 class Data
   url:
+    channels:
+      create: -> "/api/channels.json"
+      update: (channel_id) -> "/api/channels/#{channel_id}.json"
     post:
       create: (channel_id) -> "/api/channels/#{channel_id}/posts.json"
+      update: (post_id) -> "/api/posts/#{post_id}.json"
+      fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
     image:
       create: -> "/api/images.json"
+    notification:
+      create: -> "/api/notifications.json"
+      unread: -> "/api/notifications/unread.json"
+      counters: -> "/api/notifications/counters.json"
   constructor: (@socket) ->
     @callbacks = {}
     @store = {}

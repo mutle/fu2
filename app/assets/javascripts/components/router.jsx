@@ -42,15 +42,15 @@ var Router = {
     responder.callback(params, this.content);
     if(responder.url && updateUrl) {
       var url = responder.url(params);
-      console.log(url)
+      console.log(url);
       history.pushState(null, null, url);
     }
   }
-}
+};
 
 $(function() {
   Router.addResponder("channels/show", function(params, e) {
-    var channel_id = parseInt(params.channel_id)
+    var channel_id = parseInt(params.channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
   }, function(params) { return "/channels/"+params.channel_id; });
 
@@ -64,7 +64,6 @@ $(function() {
 
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
-  
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
 
   Router.route();

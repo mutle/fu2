@@ -21,7 +21,7 @@ var NotificationCounter = React.createClass({
   refresh: function(force) {
     var n = this;
     if(force || !this.socket) {
-      $.getJSON("/notifications/counters.json", {}, function(data, status, xhr) {
+      $.getJSON(Data.url.notification.counters(), {}, function(data, status, xhr) {
         n.setState({messages: data.messages, mentions: data.mentions});
       });
       if(!this.socket)
