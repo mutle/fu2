@@ -59,4 +59,8 @@ class ApplicationController < ActionController::Base
   end
   helper_method :new_features?
 
+  def empty_response
+    render text: "", layout: "application"
+  end
+
 end

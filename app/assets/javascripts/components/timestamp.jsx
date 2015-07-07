@@ -1,4 +1,22 @@
+// var React = require('react');
+
 var timestamps = [];
+
+var formatTimestamp = function(timestamp) {
+  var d = new Date(timestamp);
+  var today = new Date();
+  var t = (today - d);
+  t = t / 1000;
+  if(t < 60) return t.toFixed()+"s";
+  t = (t / 60);
+  if(t < 60) return t.toFixed()+"m";
+  t = (t / 60);
+  if(t < 24) return t.toFixed()+"h";
+  t = (t / 24);
+  if(t < 365) return t.toFixed()+"d";
+  t = (t / 365);
+  return t.toFixed()+"y";
+}
 
 var Timestamp = React.createClass({
   componentDidMount: function() {
@@ -18,8 +36,8 @@ var Timestamp = React.createClass({
     return <span className="ts">{this.lastts}</span>;
   }
 });
+// module.exports = Timestamp;
 window.Timestamp = Timestamp;
-
 
 $(function() {
   window.updateTimestamps = function(timestampE) {

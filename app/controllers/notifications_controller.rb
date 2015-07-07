@@ -4,6 +4,10 @@ class NotificationsController < ApplicationController
 
   respond_to :html, :json
 
+  def index
+    empty_response
+  end
+
   def show
     if params[:format].to_s == "json"
       user = User.find(params[:id])

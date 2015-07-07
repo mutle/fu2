@@ -1,5 +1,8 @@
+// var React = require("react");
+// var LoadingIndicator = require("./loading-indicator");
+
 var ChannelListData = {
-  url: "/channels",
+  url: "/api/channels.json",
   result: {
     channels: ["channel"]
   },
@@ -47,7 +50,7 @@ var ChannelList = React.createClass({
     var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
     this.setState({channels: sorted});
   },
-  render: function () {
+  render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;
     var channels = this.state.channels.map(function(channel, i) {
       var user = Data.get("user", channel.last_post_user_id);
@@ -58,3 +61,6 @@ var ChannelList = React.createClass({
     </ul>;
   }
 });
+
+// module.exports = ChannelList;
+window.ChannelList = ChannelList;

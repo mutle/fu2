@@ -38,13 +38,13 @@ class Socket
 class Data
   url:
     post:
-      create: (channel_id) -> "/channels/#{channel_id}/posts.json"
+      create: (channel_id) -> "/api/channels/#{channel_id}/posts.json"
     image:
-      create: -> "/images.json"
+      create: -> "/api/images.json"
   constructor: (@socket) ->
     @callbacks = {}
     @store = {}
-    @socket.connect()
+    @socket.connect() if @socket
   fetch: (info, id=0) ->
     return if !info
     url = info.url.replace(/{id}/, id)

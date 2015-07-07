@@ -1,3 +1,5 @@
+// var React = require('react');
+
 var ChannelSearchResult = React.createClass({
   render: function() {
     var url = this.props.url ? this.props.url : "/channels/"+this.props.id+"#comments";
@@ -121,3 +123,7 @@ $(function() {
     if(hidden) $(search).find(".search-field").select().focus();
   });
 })
+
+
+// module.exports = ChannelSearch;
+window.ChannelSearch = ChannelSearch;

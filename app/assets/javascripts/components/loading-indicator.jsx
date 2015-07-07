@@ -1,7 +1,10 @@
+// var React = require('react');
+
 var LoadingIndicator = React.createClass({
   render: function() {
     return <div className="loading-indicator">Loading...</div>;
   }
 });
 
-window.LoadingIndicator = LoadingIndicator
+// module.exports = LoadingIndicator;
+window.LoadingIndicator = LoadingIndicator;

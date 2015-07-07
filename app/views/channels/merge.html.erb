@@ -1,0 +1,6 @@
+<ul>
+  <% @view.similar.each do |s| %>
+    <% next if !s['channel'] %>
+    <li><%= link_to s['channel'].title, channel_path(s['channel']) %> <%= button_to "Merge", do_merge_channel_path(@channel, merge_id: s['channel'].id), "data-confirm" => "Are you sure you want to merge the channel #{s['channel'].title} into #{@channel.title}?\n\nTHIS CAN NOT BE UNDONE." %></li>
+  <% end %>
+</ul>

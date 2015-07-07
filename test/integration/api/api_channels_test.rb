@@ -1,13 +1,9 @@
 require 'test_helper'
 
-class ChannelsTest < ActionDispatch::IntegrationTest
+class ApiChannelsTest < ActionDispatch::IntegrationTest
 
   setup do
     login_user
-  end
-
-  def json_body
-    JSON.parse response.body
   end
 
   test "list channels json" do

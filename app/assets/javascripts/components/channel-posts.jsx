@@ -1,5 +1,8 @@
+// var React = require('react');
+// var LoadingIndicator = require("./loading-indicator");
+
 var ChannelPostsData = {
-  url: "/channels/{id}/posts",
+  url: "/api/channels/{id}/posts.json",
   result: {
     posts: ["post"],
     channel: "channel"
@@ -110,3 +113,6 @@ var ChannelPosts = React.createClass({
     </div>;
   }
 });
+
+// module.exports = ChannelPosts;
+window.ChannelPosts = ChannelPosts;

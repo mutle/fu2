@@ -1,3 +1,5 @@
+// var React = require("react");
+
 var imageUpload, commentBox;
 
 var ImageUploader = React.createClass({
@@ -274,3 +276,6 @@ var CommentBox = React.createClass({
     </div>;
   }
 });
+
+// module.exports = CommentBox;
+window.CommentBox = CommentBox;

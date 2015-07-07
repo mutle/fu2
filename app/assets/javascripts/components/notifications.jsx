@@ -1,3 +1,5 @@
+// var React = require('react');
+
 var user_id = 0;
 var notifications;
 var notificationsE;
@@ -246,3 +248,7 @@ $(function() {
     resize();
   }
 })
+
+
+// module.exports = Notifications;
+window.Notifications = Notifications;

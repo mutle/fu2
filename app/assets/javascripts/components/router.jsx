@@ -1,3 +1,5 @@
+// var React = require('react');
+
 var Router = {
   responders: {},
   routes: {},
@@ -46,8 +48,6 @@ var Router = {
   }
 }
 
-window.Router = Router
-
 $(function() {
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id)
@@ -58,8 +58,14 @@ $(function() {
     var channels = React.render(<ChannelList />, e);
   });
 
+  Router.addResponder("notifications/index", function(params, e) {
+    var notifications = React.render(<Notifications />, e);
+  })
+
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
+  
+  Router.addRoute("notifications/index", /^\/notifications\/?$/);
 
   Router.route();
 
@@ -68,3 +74,6 @@ $(function() {
     return false;
   });
 });
+
+// module.exports = Router;
+window.Router = Router;

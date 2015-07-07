@@ -4,20 +4,8 @@ class ChannelsController < ApplicationController
   before_filter :login_required
   before_filter :channel_redirect, only: [:show]
 
-  respond_to :html, :json
-
-  def index(respond=true)
-    @page = (params[:page] || 1).to_i
-    @view = Views::ChannelList.new({
-      current_user: current_user,
-      page: @page,
-      per_page: 50
-    })
-    @action = 'channels'
-    @view.finalize
-    if respond
-      respond_with @view.recent_channels
-    end
+  def index
+    empty_response
   end
 
   def live
@@ -33,8 +21,8 @@ class ChannelsController < ApplicationController
     if params[:id] == "all"
       all
     else
-      posts(false)
-      respond_with @channel
+      Channel.find(params[:id])
+      empty_response
     end
   end
 
@@ -50,46 +38,6 @@ class ChannelsController < ApplicationController
 
   def new
     @channel = Channel.new
-  end
-
-  def create
-    @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
-    if @channel.valid?
-      increment_metric "posts.all"
-      increment_metric "posts.user.#{current_user.id}"
-      increment_metric "channels.all"
-      increment_metric "channels.id.#{@channel.id}.posts"
-      increment_metric "channels.user.#{current_user.id}"
-
-      respond_with @channel do |f|
-        f.html { redirect_to channel_path(@channel) }
-        f.json { respond_with @channel }
-      end
-    else
-
-      @post = Post.new(body: channel_params[:body])
-      @channel.body = @post.body
-      respond_with @channel do |f|
-        f.html { render "new" }
-        f.json { render :json => @channel.errors }
-      end
-    end
-  end
-
-  def update
-    @channel = Channel.find params[:id]
-    channel = params[:channel]
-    @channel.text = channel[:text]
-    @channel.rename(channel[:title], @current_user)
-    @channel.updated_by = current_user.id
-    @channel.save
-    redirect_to channel_path(@channel)
-  end
-
-  def visit
-    @channel = Channel.find(params[:id])
-    @last_read_id = @channel.visit(current_user)
-    render json: {last_read: @last_read_id}
   end
 
   def merge
@@ -114,10 +62,6 @@ class ChannelsController < ApplicationController
     # @last_read_id = @channel.visit(current_user)
     @last_post_id = 0
     @post = Post.new
-  end
-
-  def channel_params
-    params.require(:channel).permit(:title, :text, :body)
   end
 
   def channel_redirect

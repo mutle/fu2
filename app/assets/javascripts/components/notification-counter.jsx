@@ -1,3 +1,5 @@
+// var React = require('react');
+
 var NotificationCounter = React.createClass({
   getInitialState: function() {
     return {messages: 0, mentions: 0};
@@ -43,3 +45,6 @@ $(function() {
     counter.connect();
   }
 });
+
+// module.exports = NotificationCounter;
+window.NotificationCounter = NotificationCounter;
