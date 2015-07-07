@@ -14,6 +14,10 @@ class Post < ActiveRecord::Base
   after_create :scan_for_mentions
   after_create :process_fubot_message
 
+  after_create :notify_create
+  after_update :notify_update
+  before_destroy :notify_destroy
+
   after_create :update_index
   after_update :update_index
   before_destroy :remove_index
@@ -118,10 +122,12 @@ class Post < ActiveRecord::Base
 
   def fave(user)
     faves.create :user_id => user.id
+    Live.post_fave self
   end
 
   def unfave(user)
     faves_for(user).destroy_all
+    Live.post_unfave self
   end
 
   # def as_json(*args)
@@ -157,6 +163,18 @@ class Post < ActiveRecord::Base
 
   def remove_index
     Search.remove("posts", id)
+  end
+
+  def notify_create
+    Live.post_create self
+  end
+
+  def notify_update
+    Live.post_update self
+  end
+
+  def notify_destroy
+    Live.post_destroy self
   end
 
 end

@@ -3,6 +3,14 @@ require "resque_web"
 Fu2::Application.routes.draw do
   mount ResqueWeb::Engine => "/resque", as: "resque"
 
+  namespace :api do
+    resources :channels do
+      resources :posts
+    end
+
+    resources :images
+  end
+
   resources :users do
     member do
       put :block

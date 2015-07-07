@@ -39,12 +39,8 @@ class Live
       update :channel_create, channel, "channel"
     end
 
-    def channel_update(channel)
-      update :channel_update, channel, "channel"
-    end
-
-    def channel_read(channel, user)
-      update :channel_read, channel, "channel", user.id
+    def channel_update(channel, user=nil)
+      update :channel_update, channel, "channel", user.try(:id) || 0
     end
 
     def notification_counters(user)

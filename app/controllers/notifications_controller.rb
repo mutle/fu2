@@ -22,15 +22,12 @@ class NotificationsController < ApplicationController
     @message = {}
     if to
       @message = Notification.message(current_user, to, params[:message])
-      Live.notification_counters(to)
     end
     respond_with @message
   end
 
   def read
     from = User.find(params[:id])
-    Notification.for_user(current_user).toolbar_notifications.from_user(from).unread.update_all(:read => true)
-    Live.notification_counters(current_user)
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end

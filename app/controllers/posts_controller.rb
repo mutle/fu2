@@ -17,7 +17,8 @@ class PostsController < ApplicationController
       first_id: params[:first_id],
       last_id: params[:last_id],
       limit: params[:limit],
-      last_update: last_update
+      last_update: last_update,
+      per_page: 12
     })
     @channel.visit(current_user)
     @last_post_id = 0
@@ -27,15 +28,10 @@ class PostsController < ApplicationController
 
   def create
     @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: current_user.markdown?)
-    Live.post_create @post
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     @channel.visit current_user, @post.id
-
-    @channel.reload
-    Live.channel_update @channel
-
     # rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
 
     respond_with @post do |f|
@@ -55,14 +51,12 @@ class PostsController < ApplicationController
     @post = @channel.posts.find(params[:id].to_i)
     raise ActiveRecord::RecordNotFound unless @post.user_id == @current_user.id
     @post.update_attributes(post_params)
-    Live.post_update @post
 
     redirect_to channel_path(@channel, anchor: "post_#{@post.id}")
   end
 
   def destroy
     @post = @channel.posts.find(params[:id].to_i)
-    Live.post_destroy @post
     @post.destroy if @post.user_id == current_user.id
 
     redirect_to channel_path(@channel)
@@ -72,10 +66,8 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id].to_i)
     if @post.faved_by? @current_user
       @post.unfave @current_user
-      Live.post_unfave @post
     else
       @post.fave @current_user
-      Live.post_fave @post
     end
     render json: {status: @post.faved_by?(@current_user), count: @post.faves.count, faves: @post.faves.map(&:user).map(&:login)}
   end

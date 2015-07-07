@@ -25,6 +25,9 @@ class Channel < ActiveRecord::Base
   before_create :generate_permalink
   after_create :add_first_post
 
+  after_create :notify_create
+  after_update :notify_update
+
   after_create :update_index
   after_update :update_index
   before_destroy :remove_index
@@ -227,7 +230,7 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || (post || last_post).nil? || i < (post || last_post).id
+    (i == 0 || (post || last_post).nil? || i < (post || last_post).id) == true
   end
 
   def visit(current_user, post_id=nil)
@@ -240,7 +243,7 @@ class Channel < ActiveRecord::Base
     i = last_read_id(current_user).to_i
     if user && i != post_id
       self.read = true
-      Live.channel_read(self, current_user)
+      Live.channel_update(self, current_user)
     end
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
@@ -259,10 +262,10 @@ class Channel < ActiveRecord::Base
     updated_by && User.find(updated_by)
   end
 
-  def show_posts(current_user, last_read)
+  def show_posts(current_user, last_read, per_page=12)
     p = posts.where("id >= :last_read", last_read: last_read).includes(:user, :faves).load.reverse
-    if p.size < 12
-      p = posts.includes(:user, :faves).limit(12).load.reverse
+    if p.size < per_page
+      p = posts.includes(:user, :faves).limit(per_page).load.reverse
     end
     if p.first
       e = events.includes(:user).from_post(p.first)
@@ -293,6 +296,14 @@ class Channel < ActiveRecord::Base
 
   def remove_index
     Search.remove("channels", id)
+  end
+
+  def notify_create
+    Live.channel_create self
+  end
+
+  def notify_update
+    Live.channel_update self
   end
 
 end

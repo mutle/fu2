@@ -10,7 +10,8 @@ class ChannelsController < ApplicationController
     @page = (params[:page] || 1).to_i
     @view = Views::ChannelList.new({
       current_user: current_user,
-      page: @page
+      page: @page,
+      per_page: 50
     })
     @action = 'channels'
     @view.finalize
@@ -54,7 +55,6 @@ class ChannelsController < ApplicationController
   def create
     @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
     if @channel.valid?
-      Live.channel_create(@channel)
       increment_metric "posts.all"
       increment_metric "posts.user.#{current_user.id}"
       increment_metric "channels.all"
