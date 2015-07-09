@@ -37,7 +37,7 @@ class ChannelsController < ApplicationController
   end
 
   def new
-    @channel = Channel.new
+    empty_response
   end
 
   def merge

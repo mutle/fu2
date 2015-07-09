@@ -251,27 +251,23 @@ var CommentBox = React.createClass({
       autocompleter = <AutoCompleter objects={this.state.autocompleteobjectsfiltered} selection={this.state.autocompleteselection} imageUrl={imageUrl} clickCallback={this.autocompleteClick} />;
     }
     return <div>
-      <a name="comments"></a>
-      <h3 className="channel-response-title">Comment</h3>
-      <div className="channel-response">
-        <form className="comment-box-form" onSubmit={this.submit}>
-          <div className="comment-box-container">
-            {autocompleter}
-            <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
-          </div>
-          <div className="actions">
-            <button className="response-button content-button markdown-help"><span className="octicon octicon-markdown"></span></button>
-            <input className="response-button content-button" accessKey="s" type="submit" />
+      <form className="comment-box-form" onSubmit={this.submit}>
+        <div className="comment-box-container">
+          {autocompleter}
+          <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
+        </div>
+        <div className="actions">
+          <button className="response-button content-button markdown-help"><span className="octicon octicon-markdown"></span></button>
+          <input className="response-button content-button" accessKey="s" type="submit" />
+        </div>
+      </form>
+
+      <div className="actions left">
+        <form encType='multipart/form-data'>
+          <div className="upload-image">
+            <ImageUploader channelId={this.props.channelId} />
           </div>
         </form>
-
-        <div className="actions left">
-          <form encType='multipart/form-data'>
-            <div className="upload-image">
-              <ImageUploader channelId={this.props.channelId} />
-            </div>
-          </form>
-        </div>
       </div>
     </div>;
   }

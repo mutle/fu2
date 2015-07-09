@@ -16,16 +16,21 @@ var formatTimestamp = function(timestamp) {
   if(t < 365) return t.toFixed()+"d";
   t = (t / 365);
   return t.toFixed()+"y";
-}
+};
 
 var Timestamp = React.createClass({
   componentDidMount: function() {
+    this.mounted = true;
     timestamps.push(this);
+  },
+  componentWillUnmount: function() {
+    this.mounted = false;
   },
   componentWillReceiveProps: function() {
     this.lastts = null;
   },
   shouldComponentUpdate: function() {
+    if(!this.mounted) return false;
     if(!this.lastts) return true;
     if(this.lastts != formatTimestamp(this.props.timestamp)) return true;
     return false;
@@ -49,7 +54,7 @@ $(function() {
   }
   var updateTs = function() {
     $.each(timestamps, function(i, ts) {
-      ts.setState({});
+      if(ts.mounted) ts.setState({});
     });
   }
   window.setInterval(updateTs, 1000);

@@ -373,6 +373,13 @@ $large-screen: "only screen and (min-width: 1200px)";
         }
       }
 
+      &.highlight {
+        .body {
+          border: 3px solid #E04433;
+          padding: 10px;
+        }
+      }
+
       .body {
         color: #4D4D4D;
         line-height: 1.4em;
