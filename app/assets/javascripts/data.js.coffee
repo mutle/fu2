@@ -53,12 +53,15 @@ class Data
   constructor: (@socket) ->
     @callbacks = {}
     @store = {}
+    @views = {}
     @socket.connect() if @socket
-  fetch: (info, id=0) ->
+  fetch: (info, id=0, args={}) ->
     return if !info
     url = info.url.replace(/{id}/, id)
-    $.ajax url: url, dataType: "json", type: "get", success: (data) =>
+    $.ajax url: url, dataType: "json", type: "get", data: args, success: (data) =>
       types = []
+      if info.view
+        @updateView(info.view, data.view)
       for rkey, rformat of info.result
         if typeof(rformat) != "string"
           for o in data[rkey]
@@ -83,23 +86,36 @@ class Data
     for type in types
       continue if !@callbacks[type]
       for callback in @callbacks[type]
-        # if id == 0 || id == callback.id
         d = @dataForCallback(callback, type)
         console.log d
-        callback.callback.apply(callback.object, [d])
+        callback.callback.apply(callback.object, [d, @viewInfo(type)])
   dataForCallback: (callback, type) ->
-    @getAll(type).sort (a,b) => a.id - b.id
+    if callback.id
+      console.log callback
+      console.log @getAll(type)
+      [@get(type, callback.id)]
+    else
+      @getAll(type).sort (a,b) => a.id - b.id
   insert: (object) ->
-    # console.log(object)
     type = object.type
     id = object.id
-    @store[type] ?= []
+    @store[type] ?= {}
     @store[type][id] = object
     object
+  updateView: (type, view) ->
+    v = @views[type]
+    if v
+      view.end_id = v.end_id if v.end_id > view.end_id
+      view.start_id = v.start_id if v.start_id < view.start_id
+    @views[type] = view
+  viewInfo: (type) ->
+    @views[type]
   get: (type, id) ->
     @store[type]?[id]
   getAll: (type) ->
-    @store[type]
+    a = []
+    a.push(v) for k,v of @store[type]
+    a
   create: (type, url_props, props, {error, success}) ->
     url = @url[type]?["create"]?.apply(this, url_props)
     if !url
@@ -116,8 +132,9 @@ class Data
       error: error,
       success: success
   destroy: (type) ->
-  update: (type, props) ->
-
+  update: (type, id, props) ->
+    @store[type][id]
+    @notify([type])
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
   window.Data = new Data(window.socket)

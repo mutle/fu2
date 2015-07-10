@@ -1,5 +1,6 @@
 //= require react
 //= require components/loading-indicator
+//= require components/view-loader
 //= require components/timestamp
 //= require components/notification-counter
 //= require components/channel-search

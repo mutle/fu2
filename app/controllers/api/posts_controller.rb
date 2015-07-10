@@ -11,9 +11,8 @@ class Api::PostsController < Api::ApiController
       last_read_id: @last_read_id,
       first_id: params[:first_id],
       last_id: params[:last_id],
-      limit: params[:limit],
-      last_update: last_update,
-      per_page: 12
+      limit: params[:limit] || 12,
+      last_update: last_update
     })
     @channel.visit(current_user)
     @last_post_id = 0
@@ -55,7 +54,7 @@ class Api::PostsController < Api::ApiController
     else
       @post.fave @current_user
     end
-    render json: {status: @post.faved_by?(@current_user), count: @post.faves.count, faves: @post.faves.map(&:user).map(&:login)}
+    render "show"
   end
 
   def unread

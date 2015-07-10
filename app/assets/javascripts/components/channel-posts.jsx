@@ -7,6 +7,7 @@ var ChannelPostsData = {
     posts: ["post"],
     channel: "channel"
   },
+  view: "post",
   subscribe: [
     "post_create"
   ]
@@ -18,10 +19,11 @@ var FaveCounter = React.createClass({
   },
   click: function(e) {
     e.preventDefault();
-    if(this.state.postId > 0) {
+    if(this.props.postId > 0) {
       var c = this;
-      $.ajax({url:"/posts/"+this.props.postId+"/fave", dataType: "json", type: "post"}).done(function(msg) {
-        c.setState({state: msg.status ? 1 : 0, faves: msg.faves});
+      $.ajax({url:"/api/posts/"+this.props.postId+"/fave", dataType: "json", type: "post"}).done(function(data) {
+        console.log(data)
+        Data.update("post", c.props.postId, data.post);
       });
     }
   },
@@ -49,13 +51,18 @@ var ChannelPostHeader = React.createClass({
     var postEditLink = canEdit ? <a className="post-edit" onClick={this.edit}><span className="octicon octicon-pencil"></span></a> : null;
     var postUnreadLink = <a className="post-unread"><span className="octicon octicon-eye"></span></a>;
     var postReplyLink = <a className="post-reply"><span className="octicon octicon-mail-reply"></span></a>;
+    var favers = [];
+    for(var i in this.props.post.faves) {
+      var fave = this.props.post.faves[i];
+      favers.push(Data.get("user", fave.user_id).login);
+    }
     return <div className="channel-post-header">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
       <span className="user-name">{this.props.user.login}</span>
       <div className="right">
         {postDeleteLink}
         {postEditLink}
-        <FaveCounter faves={this.props.post.faves} postId={this.props.id}  />
+        <FaveCounter faves={favers} postId={this.props.id}  />
         {postUnreadLink}
         {postReplyLink}
         <a href={postLink} className="timestamp">
@@ -133,18 +140,17 @@ var ChannelPostsHeader = React.createClass({
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
-    return {posts: [], channel: {}, anchor: ""};
+    return {posts: [], channel: {}, view: {}, anchor: ""};
   },
   componentDidMount: function() {
     if(this.props.channelId > 0) {
       console.log(this.props.channelId);
-      Data.subscribe("post", this.updatedPosts, this, this.props.channelId);
-      Data.subscribe("channel", this.updatedChannel, this);
+      Data.subscribe("post", this.updatedPosts, this);
+      Data.subscribe("channel", this.updatedChannel, this, this.props.channelId);
       Data.fetch(ChannelPostsData, this.props.channelId);
     }
 
-    var c = this;
-    $(document).on("keypress", function(e) {
+    this.keypress = function(e) {
       var key = String.fromCharCode(e.charCode);
       if(e.target.tagName != "BODY") return true
       switch(e.key) {
@@ -155,7 +161,12 @@ var ChannelPosts = React.createClass({
           c.previousAnchor();
           break;
       }
-    });
+    };
+    var c = this;
+    $(document).on("keypress", this.keypress);
+  },
+  componentWillUnmount: function() {
+    $(document).off("keypress", this.keypress);
   },
   selectPost: function(post) {
     var h = "post-"+this.state.posts[0].id;
@@ -183,15 +194,19 @@ var ChannelPosts = React.createClass({
       }
     }
   },
-  updatedPosts: function(objects) {
-    console.log("channel posts updated")
-    console.log(objects)
-    this.setState({posts: objects})
+  updatedPosts: function(objects, view) {
+    console.log("channel posts updated");
+    console.log(objects);
+    console.log(view);
+    this.setState({posts: objects, view: view});
   },
-  updatedChannel: function(objects) {
-    console.log("channel updated")
-    console.log(objects)
-    if(objects.length > 0) this.setState({channel: objects[0]})
+  updatedChannel: function(objects, view) {
+    console.log("channel updated");
+    console.log(objects);
+    if(objects.length > 0) this.setState({channel: objects[0]});
+  },
+  loadMore: function() {
+    Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
   },
   render: function () {
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post-/, ''))
@@ -212,6 +227,7 @@ var ChannelPosts = React.createClass({
     }
     return <div>
       <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} />
+      <ViewLoader callback={this.loadMore} visible={this.state.posts.length} count={this.state.view.count} message={"more posts"} />
       {posts}
       {commentbox}
     </div>;

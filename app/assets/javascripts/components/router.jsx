@@ -4,9 +4,9 @@ var Router = {
   responders: {},
   routes: {},
   content: null,
-  route: function() {
+  route: function(path, updateUrl) {
+    if(!path) return false;
     this.content = $(".content-inner").get(0);
-    var path = document.location.pathname;
 
     for(var name in this.routes) {
       var routes = this.routes[name];
@@ -22,13 +22,14 @@ var Router = {
               params[route.params[i]] = m[i + 1];
               i++;
             }
-            console.log("Route: "+path+" "+name)
-            this.open(name, params);
-            return;
+            console.log("Route: "+path+" "+name);
+            this.open(name, params, updateUrl);
+            return true;
           }
         }
       }
     }
+    return false;
   },
   addResponder: function(name, callback, url) {
     this.responders[name] = {callback: callback, url: url};
@@ -61,7 +62,7 @@ $(function() {
 
   Router.addResponder("channels/list", function(params, e) {
     var channels = React.render(<ChannelList />, e);
-  });
+  }, function(params) { return "/"; });
 
   Router.addResponder("channels/new", function(params, e) {
     var posts = React.render(<ChannelPosts channelId={0} />, e);
@@ -76,11 +77,18 @@ $(function() {
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
 
-  Router.route();
+  Router.route(document.location.pathname);
 
   $(window).bind("popstate", function() {
-    Router.route();
+    Router.route(document.location.pathname);
     return false;
+  });
+
+  $(document).on("click", "a", function(e) {
+    if(Router.route($(this).attr("href"), true)) {
+      return false;
+    }
+    return true;
   });
 });
 

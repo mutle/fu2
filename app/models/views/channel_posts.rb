@@ -28,10 +28,9 @@ module Views
     }
     fetches :updated_posts, proc { last_update ? Post.updated_since(channel, last_update) : [] }
     fetches :last_update, proc { (posts.map(&:created_at) + posts.map(&:updated_at) + updated_posts.map(&:updated_at)).map(&:utc).max.to_i }, [:posts, :updated_posts]
-
     fetches :count, proc { channel.posts.count }
-    fetches :start_index, proc { 0 }
-    fetches :end_index, proc { posts.size }, [:posts]
+    fetches :start_id, proc { posts.map(&:id).min }, [:posts]
+    fetches :end_id, proc { posts.map(&:id).max }, [:posts]
 
   end
 end

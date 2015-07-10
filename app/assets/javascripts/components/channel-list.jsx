@@ -6,6 +6,7 @@ var ChannelListData = {
   result: {
     channels: ["channel"]
   },
+  view: "channel",
   subscribe: [
     "channel_update",
     "channel_create",
@@ -40,15 +41,19 @@ var Channel = React.createClass({
 
 var ChannelList = React.createClass({
   getInitialState: function() {
-    return {channels: []};
+    return {channels: [], view: {}};
   },
   componentDidMount: function() {
     Data.subscribe("channel", this.updated, this);
     Data.fetch(ChannelListData);
   },
-  updated: function(objects) {
+  updated: function(objects, view) {
     var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
-    this.setState({channels: sorted});
+    console.log(view);
+    this.setState({channels: sorted, view: view});
+  },
+  loadMore: function() {
+    Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
   },
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;
@@ -58,6 +63,7 @@ var ChannelList = React.createClass({
     });
     return <ul className="channel-list refresh">
       {channels}
+      <ViewLoader callback={this.loadMore} visible={this.state.channels.length} count={this.state.view.count} message={"more channels"} />
     </ul>;
   }
 });
