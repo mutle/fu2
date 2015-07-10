@@ -79,16 +79,24 @@ class Data
     open = =>
     close = =>
     socket.subscribe info.subscribe, dataCallback, open, close
-  subscribe: (type, callback, object, id=0) ->
+  subscribe: (type, object, id, callbacks) ->
     @callbacks[type] ?= []
-    @callbacks[type].push(callback: callback, object: object, id: id)
+    @callbacks[type].push(callbacks: callbacks, object: object, id: id)
+  unsubscribe: (object) ->
+    for type,c of @callbacks
+      remove = []
+      for callback in c
+        continue if callback.object != object
+        remove.push(callback)
+      for r in remove
+        c = c.splice(c.indexOf(r), 1)
   notify: (types) ->
     for type in types
       continue if !@callbacks[type]
       for callback in @callbacks[type]
         d = @dataForCallback(callback, type)
-        console.log d
-        callback.callback.apply(callback.object, [d, @viewInfo(type)])
+        console.log callback
+        callback.callbacks.callback.apply(callback.object, [d, @viewInfo(type)])
   dataForCallback: (callback, type) ->
     if callback.id
       console.log callback
@@ -105,6 +113,8 @@ class Data
   updateView: (type, view) ->
     v = @views[type]
     if v
+      view.end = v.end if v.end > view.end
+      view.start = v.start if v.start < view.start
       view.end_id = v.end_id if v.end_id > view.end_id
       view.start_id = v.start_id if v.start_id < view.start_id
     @views[type] = view

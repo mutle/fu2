@@ -6,6 +6,9 @@ var Router = {
   content: null,
   route: function(path, updateUrl) {
     if(!path) return false;
+    var urlpath = path;
+    var hash = path.replace(/^.*#/, '');
+    path = path.replace(/#.*$/, '');
     this.content = $(".content-inner").get(0);
 
     for(var name in this.routes) {
@@ -16,14 +19,14 @@ var Router = {
         if(route && route.match) {
           var m = path.match(route.match);
           if(m) {
-            var params = {};
+            var params = {anchor: hash};
             var i = 0;
             while(route.params && i < m.length - 1 && i < route.params.length) {
               params[route.params[i]] = m[i + 1];
               i++;
             }
             console.log("Route: "+path+" "+name);
-            this.open(name, params, updateUrl);
+            this.open(name, params, updateUrl, urlpath);
             return true;
           }
         }
@@ -38,10 +41,12 @@ var Router = {
     if(!this.routes[name]) this.routes[name] = [];
     this.routes[name].push({match: regex, params: params});
   },
-  open: function(name, params, updateUrl) {
+  open: function(name, params, updateUrl, urlpath) {
     var responder = this.responders[name];
     responder.callback(params, this.content);
-    if(responder.url && updateUrl) {
+    if(urlpath) {
+      history.pushState(null, null, urlpath);
+    } else if(responder.url && updateUrl) {
       var url = responder.url(params);
       console.log(url);
       history.pushState(null, null, url);
@@ -53,7 +58,7 @@ $(function() {
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
-    var anchor = params.post_id ? "post-"+params.post_id : document.location.hash;
+    var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
     posts.setState({anchor: anchor});
   }, function(params) {
     var post_id = params.post_id ? "#post-"+params.post_id : "";
@@ -80,14 +85,20 @@ $(function() {
   Router.route(document.location.pathname);
 
   $(window).bind("popstate", function() {
-    Router.route(document.location.pathname);
-    return false;
+    if(Router.route(document.location.pathname, true)) {
+      e.preventDefault();
+      return false;
+    }
+    return true;
   });
 
   $(document).on("click", "a", function(e) {
-    if(Router.route($(this).attr("href"), true)) {
+    console.log(e);
+    if(!e.metaKey && !e.ctrlKey && !e.altKey && Router.route($(this).attr("href"), true)) {
+      e.preventDefault();
       return false;
     }
+    e.preventDefault();
     return true;
   });
 });

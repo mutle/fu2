@@ -15,10 +15,6 @@ var ChannelListData = {
 };
 
 var Channel = React.createClass({
-  click: function(e) {
-    e.preventDefault();
-    Router.open("channels/show", {channel_id: this.props.channel.id}, true);
-  },
   render: function() {
     var className = "channel";
     if(this.props.channel.read) className += " read";
@@ -30,7 +26,7 @@ var Channel = React.createClass({
       <div className={className}>
         <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
         <span className="user-name" dangerouslySetInnerHTML={userName}></span>
-        <a className="channel-name" onClick={this.click} href={url} dangerouslySetInnerHTML={channelName}></a>
+        <a className="channel-name" href={url} dangerouslySetInnerHTML={channelName}></a>
       </div>
       <div className="timestamp">
         <Timestamp timestamp={this.props.channel.display_date} />
@@ -44,8 +40,11 @@ var ChannelList = React.createClass({
     return {channels: [], view: {}};
   },
   componentDidMount: function() {
-    Data.subscribe("channel", this.updated, this);
+    Data.subscribe("channel", this, 0, {callback: this.updated, fetch: this.fetchUpdatedChannels});
     Data.fetch(ChannelListData);
+  },
+  componentWillUnmount: function() {
+    Data.unsubscribe(this);
   },
   updated: function(objects, view) {
     var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
@@ -55,16 +54,21 @@ var ChannelList = React.createClass({
   loadMore: function() {
     Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
   },
+  fetchUpdatedChannels: function() {
+    Data.fetch(ChannelListData, 0, {last})
+  },
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;
     var channels = this.state.channels.map(function(channel, i) {
       var user = Data.get("user", channel.last_post_user_id);
       return <Channel key={channel.id} id={channel.id} user={user} channel={channel} />;
     });
-    return <ul className="channel-list refresh">
+    return <div>
+      <ul className="channel-list refresh">
       {channels}
+      </ul>
       <ViewLoader callback={this.loadMore} visible={this.state.channels.length} count={this.state.view.count} message={"more channels"} />
-    </ul>;
+    </div>;
   }
 });
 

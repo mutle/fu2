@@ -145,8 +145,8 @@ var ChannelPosts = React.createClass({
   componentDidMount: function() {
     if(this.props.channelId > 0) {
       console.log(this.props.channelId);
-      Data.subscribe("post", this.updatedPosts, this);
-      Data.subscribe("channel", this.updatedChannel, this, this.props.channelId);
+      Data.subscribe("post", this, 0, {callback: this.updatedPosts, fetch: this.fetchUpdatedPosts});
+      Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
       Data.fetch(ChannelPostsData, this.props.channelId);
     }
 
@@ -167,6 +167,7 @@ var ChannelPosts = React.createClass({
   },
   componentWillUnmount: function() {
     $(document).off("keypress", this.keypress);
+    Data.unsubscribe(this);
   },
   selectPost: function(post) {
     var h = "post-"+this.state.posts[0].id;
