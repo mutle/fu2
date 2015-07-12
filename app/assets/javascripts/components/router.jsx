@@ -84,7 +84,7 @@ $(function() {
 
   Router.route(document.location.pathname);
 
-  $(window).bind("popstate", function() {
+  $(window).bind("popstate", function(e) {
     if(Router.route(document.location.pathname, true)) {
       e.preventDefault();
       return false;
