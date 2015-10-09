@@ -54,9 +54,15 @@ class Data
     @callbacks = {}
     @store = {}
     @views = {}
+    @fetched = {}
     @socket.connect() if @socket
   fetch: (info, id=0, args={}) ->
     return if !info
+    if info.view
+      cached = @fetched[info.view+":"+id]
+      if cached?
+        @notify(cached)
+        return
     url = info.url.replace(/{id}/, id)
     $.ajax url: url, dataType: "json", type: "get", data: args, success: (data) =>
       types = []
@@ -73,6 +79,7 @@ class Data
           if types.indexOf(t) < 0 then types.push(t)
           @insert(data[rkey])
       @notify(types)
+      @fetched[info.view+":"+id] = types
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])

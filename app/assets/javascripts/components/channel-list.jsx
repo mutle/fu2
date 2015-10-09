@@ -65,7 +65,7 @@ var ChannelList = React.createClass({
     });
     return <div>
       <ul className="channel-list refresh">
-      {channels}
+        {channels}
       </ul>
       <ViewLoader callback={this.loadMore} visible={this.state.channels.length} count={this.state.view.count} message={"more channels"} />
     </div>;
