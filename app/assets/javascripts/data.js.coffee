@@ -59,7 +59,7 @@ class Data
   fetch: (info, id=0, args={}) ->
     return if !info
     if info.view
-      cached = @fetched[info.view+":"+id]
+      cached = @fetched["#{info.view}:#{id}:#{args.page}"]
       if cached?
         @notify(cached)
         return
