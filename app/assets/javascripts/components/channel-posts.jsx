@@ -140,7 +140,7 @@ var ChannelPostsHeader = React.createClass({
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
-    return {posts: [], channel: {}, view: {}, anchor: ""};
+    return {posts: [], channel: {}, view: {}, anchor: "", highlight: -1};
   },
   componentDidMount: function() {
     if(this.props.channelId > 0) {
@@ -150,24 +150,26 @@ var ChannelPosts = React.createClass({
       Data.fetch(ChannelPostsData, this.props.channelId);
     }
 
-    this.keypress = function(e) {
-      var key = String.fromCharCode(e.charCode);
-      if(e.target.tagName != "BODY") return true
-      switch(e.key) {
-        case "j":
-          c.nextAnchor();
-          break;
-        case "k":
-          c.previousAnchor();
-          break;
+    var self = this;
+    this.keydownCallback = $(document).on("keydown", function(e) {
+      var key = String.fromCharCode(e.keyCode);
+      if(key == "J") {
+        if(self.state.highlight+1 < self.state.posts.length)
+          self.setState({highlight: self.state.highlight+1});
+        else
+          self.setState({highlight: 0});
       }
-    };
-    var c = this;
-    $(document).on("keypress", this.keypress);
+      if(key == "K") {
+        if(self.state.highlight > 0)
+          self.setState({highlight: self.state.highlight-1});
+        else
+          self.setState({highlight: self.state.posts.length-1});
+      }
+    });
   },
   componentWillUnmount: function() {
-    $(document).off("keypress", this.keypress);
     Data.unsubscribe(this);
+    $(document).off("keydown", this.keydownCallback);
   },
   selectPost: function(post) {
     var h = "post-"+this.state.posts[0].id;
@@ -176,34 +178,20 @@ var ChannelPosts = React.createClass({
     console.log($(this.getDOMNode()).find(".post-"+post.id).offset().top)
     $(window).scrollTop($(this.getDOMNode()).find(".post-"+post.id).offset().top)
   },
-  nextAnchor: function() {
-    if(this.state.anchor == "") {
-      this.selectPost(this.state.posts[this.state.posts.length - 1]);
-    } else {
-      var anchorPostId = this.state.anchor.replace(/#?post-/, '');
-      var getnext = false
-      for(var i in this.state.posts) {
-        var post = this.state.posts[i];
-        if(post) {
-          if(getnext) {
-            this.selectPost(post);
-            return;
-          } else if(post.id == anchorPostId) {
-            getnext = true;
-          }
+  updatedPosts: function(objects, view) {
+    highlight = this.state.highlight;
+    if(highlight == -1) {
+      for(var p in objects) {
+        var post = objects[p];
+        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post-/, ''))) || !post.read) {
+          highlight = p;
+          break;
         }
       }
     }
-  },
-  updatedPosts: function(objects, view) {
-    console.log("channel posts updated");
-    console.log(objects);
-    console.log(view);
     this.setState({posts: objects, view: view});
   },
   updatedChannel: function(objects, view) {
-    console.log("channel updated");
-    console.log(objects);
     if(objects.length > 0) this.setState({channel: objects[0]});
   },
   loadMore: function() {
@@ -214,9 +202,10 @@ var ChannelPosts = React.createClass({
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
+      var highlight = this.state.highlight;
       var posts = this.state.posts.map(function(post, i) {
         var user = Data.get("user", post.user_id);
-        return <ChannelPost key={post.id} id={post.id} highlight={anchorPostId == post.id} channelId={channelId} user={user} post={post} />
+        return <ChannelPost key={post.id} id={post.id} highlight={i == highlight} channelId={channelId} user={user} post={post} />
       });
       var commentbox = <div>
         <a name="comments"></a>

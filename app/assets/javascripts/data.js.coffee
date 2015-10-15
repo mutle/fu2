@@ -79,7 +79,7 @@ class Data
           if types.indexOf(t) < 0 then types.push(t)
           @insert(data[rkey])
       @notify(types)
-      @fetched[info.view+":"+id] = types
+      @fetched["#{info.view}:#{id}:#{args.page}"] = types
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])

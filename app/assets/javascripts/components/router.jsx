@@ -2,6 +2,7 @@
 
 var Router = {
   responders: {},
+  hotkeys: {},
   routes: {},
   content: null,
   route: function(path, updateUrl) {
@@ -34,8 +35,14 @@ var Router = {
     }
     return false;
   },
-  addResponder: function(name, callback, url) {
+  addResponder: function(name, callback, url, options) {
     this.responders[name] = {callback: callback, url: url};
+    for(var o in options) {
+      var opt = options[o];
+      if(o == "hotkey") {
+        this.hotkeys[opt] = name;
+      }
+    }
   },
   addRoute: function(name, regex, params) {
     if(!this.routes[name]) this.routes[name] = [];
@@ -51,10 +58,20 @@ var Router = {
       console.log(url);
       history.pushState(null, null, url);
     }
+  },
+  keydown: function(e) {
+    var action = this.hotkeys[String.fromCharCode(e.keyCode)];
+    if(action) {
+      this.open(action)
+    }
   }
 };
 
 $(function() {
+  $(document).keydown(function(e) {
+    Router.keydown(e);
+  })
+
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
@@ -67,7 +84,7 @@ $(function() {
 
   Router.addResponder("channels/list", function(params, e) {
     var channels = React.render(<ChannelList />, e);
-  }, function(params) { return "/"; });
+  }, function(params) { return "/"; }, {hotkey: "H"});
 
   Router.addResponder("channels/new", function(params, e) {
     var posts = React.render(<ChannelPosts channelId={0} />, e);

@@ -90,10 +90,6 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
     }
 
-    .loader-group {
-      clear: both;
-    }
-
     .markItUp {
       border: none;
       -webkit-box-sizing: border-box;
@@ -224,6 +220,11 @@ $large-screen: "only screen and (min-width: 1200px)";
           background: #F2F2F2;
           .user-name { color: #8C8C8C; }
           .channel-name { color: #595959; }
+        }
+
+        &.highlight {
+          border-left: 5px solid #dfa099;
+          padding-left: 2px;
         }
 
         @media #{$small-screen} {
@@ -371,8 +372,8 @@ $large-screen: "only screen and (min-width: 1200px)";
 
       &.highlight {
         .body {
-          border: 3px solid #E04433;
-          padding: 10px;
+          border-left: 5px solid #dfa099;
+          padding-left: 7px;
         }
       }
 
