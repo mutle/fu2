@@ -60,9 +60,11 @@ var Router = {
     }
   },
   keydown: function(e) {
+    if(e.target != $("body").get(0)) return;
     var action = this.hotkeys[String.fromCharCode(e.keyCode)];
     if(action) {
-      this.open(action)
+      this.open(action);
+      e.preventDefault();
     }
   }
 };
@@ -88,7 +90,7 @@ $(function() {
 
   Router.addResponder("channels/new", function(params, e) {
     var posts = React.render(<ChannelPosts channelId={0} />, e);
-  });
+  }, null, {hotkey: "N"});
 
   Router.addResponder("notifications/index", function(params, e) {
     var notifications = React.render(<Notifications />, e);

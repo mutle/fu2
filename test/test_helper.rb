@@ -48,6 +48,6 @@ class ActionDispatch::IntegrationTest
   end
 
   def json_body
-    JSON.parse response.body 
+    JSON.parse response.body
   end
 end

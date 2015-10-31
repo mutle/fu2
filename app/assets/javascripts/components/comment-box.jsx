@@ -144,7 +144,7 @@ var CommentBox = React.createClass({
     // });
   },
   blur: function(e) {
-    this.setState({autocomplete: null});
+    this.setState({autocomplete: null, text: $('.comment-box').val()});
   },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find(".comment-box").get(0).selectionEnd;

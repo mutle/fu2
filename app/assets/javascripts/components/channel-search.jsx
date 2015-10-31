@@ -115,7 +115,9 @@ var ChannelSearch = React.createClass({
 
 $(function() {
   var search = $(".channel-search-container").get(0);
-  var s = React.render(<ChannelSearch />, search);
+  if(search != null) {
+    var s = React.render(<ChannelSearch />, search);
+  }
 
   $(".toolbar-channel-search").click(function() {
     var hidden = s.state.hidden;

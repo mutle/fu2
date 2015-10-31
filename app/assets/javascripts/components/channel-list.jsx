@@ -45,6 +45,7 @@ var ChannelList = React.createClass({
     Data.subscribe("channel", this, 0, {callback: this.updated, fetch: this.fetchUpdatedChannels});
     Data.fetch(ChannelListData);
     this.keydownCallback = $(document).on("keydown", function(e) {
+      if(e.target != $("body").get(0)) return;
       var key = String.fromCharCode(e.keyCode);
       if(key == "J") {
         if(self.state.highlight+1 < self.state.channels.length)

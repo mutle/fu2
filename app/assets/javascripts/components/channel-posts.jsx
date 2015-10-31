@@ -101,6 +101,18 @@ var ChannelPostsHeader = React.createClass({
     e.preventDefault();
     this.setState({edit: !this.state.edit});
   },
+  save: function() {
+    if(this.props.channelId == 0) {
+      var data = {body: $(".channel-text .body textarea").val(), title: $(".channel-title input.channel-title").val() };
+      console.log(data);
+      Data.create("channel", [], data, {error: function() {
+        console.log("Failed to create channel...");
+      }, success: function(data) {
+        console.log(data);
+        Router.open("channels/show", {channel_id: data.channel.id}, true, "/channels/"+data.channel.id);
+      }});
+    }
+  },
   render: function() {
     var title = {__html: this.props.channel.display_name};
     if(this.state.edit || this.props.channelId == 0) {
@@ -109,7 +121,7 @@ var ChannelPostsHeader = React.createClass({
       return <div>
         <h2 className="channel-title">
           <div className="right">
-            <button>{title}</button>
+            <button onClick={this.save}>{title}</button>
             {cancelLink}
           </div>
           <input className="channel-title" placeholder="Channel Title" defaultValue={this.props.channel.title} />
@@ -152,18 +164,29 @@ var ChannelPosts = React.createClass({
 
     var self = this;
     this.keydownCallback = $(document).on("keydown", function(e) {
+      if(e.target != $("body").get(0)) return;
       var key = String.fromCharCode(e.keyCode);
       if(key == "J") {
         if(self.state.highlight+1 < self.state.posts.length)
           self.setState({highlight: self.state.highlight+1});
         else
           self.setState({highlight: 0});
+        e.preventDefault();
       }
       if(key == "K") {
         if(self.state.highlight > 0)
           self.setState({highlight: self.state.highlight-1});
         else
           self.setState({highlight: self.state.posts.length-1});
+        e.preventDefault();
+      }
+      if(key == "R") {
+        if(self.state.highlight >= 0) {
+          var post = self.state.posts[self.state.highlight];
+          console.log(post);
+          $(".comment-box-form textarea").val(post.body.replace(/^/, "> ")+"\n\n").select();
+          e.preventDefault();
+        }
       }
     });
   },

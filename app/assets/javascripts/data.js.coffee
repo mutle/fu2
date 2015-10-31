@@ -37,7 +37,7 @@ class Socket
 
 class Data
   url:
-    channels:
+    channel:
       create: -> "/api/channels.json"
       update: (channel_id) -> "/api/channels/#{channel_id}.json"
     post:
