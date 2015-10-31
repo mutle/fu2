@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     @user = begin
       User.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      User.first(:conditions => ["LOWER(login) = LOWER(?)", params[:id]]) || raise(ActiveRecord::RecordNotFound)
+      User.with_login(params[:id]).first || raise(ActiveRecord::RecordNotFound)
     end
     @user_posts = @user.posts.where("channels.default_read = ? AND channels.default_write = ?", true, true).limit(5).order("posts.created_at DESC").includes(:channel).references(:channel)
     @user_faves = @user.faves.includes(:post => :channel).order("faves.created_at DESC").limit(5)

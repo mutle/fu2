@@ -58,8 +58,9 @@ class Data
     @socket.connect() if @socket
   fetch: (info, id=0, args={}) ->
     return if !info
+    console.log(['fertch', info, id, args])
     if info.view
-      cached = @fetched["#{info.view}:#{id}:#{args.page}"]
+      cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
       if cached?
         @notify(cached)
         return
@@ -67,19 +68,21 @@ class Data
     $.ajax url: url, dataType: "json", type: "get", data: args, success: (data) =>
       types = []
       if info.view
-        @updateView(info.view, data.view)
+        view = info.view.replace(/\$ID/, id)
+        @updateView(view, data.view)
       for rkey, rformat of info.result
         if typeof(rformat) != "string"
           for o in data[rkey]
             t = o.type
+            t = rformat[1].replace(/\$ID/, id) if rformat[1]
             if types.indexOf(t) < 0 then types.push(t)
-            @insert(o)
+            @insert(o, t)
         else
           t = data[rkey].type
           if types.indexOf(t) < 0 then types.push(t)
           @insert(data[rkey])
       @notify(types)
-      @fetched["#{info.view}:#{id}:#{args.page}"] = types
+      @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])
@@ -102,17 +105,14 @@ class Data
       continue if !@callbacks[type]
       for callback in @callbacks[type]
         d = @dataForCallback(callback, type)
-        console.log callback
         callback.callbacks.callback.apply(callback.object, [d, @viewInfo(type)])
   dataForCallback: (callback, type) ->
     if callback.id
-      console.log callback
-      console.log @getAll(type)
       [@get(type, callback.id)]
     else
       @getAll(type).sort (a,b) => a.id - b.id
-  insert: (object) ->
-    type = object.type
+  insert: (object, type=null) ->
+    type ?= object.type
     id = object.id
     @store[type] ?= {}
     @store[type][id] = object

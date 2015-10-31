@@ -85,6 +85,10 @@ $large-screen: "only screen and (min-width: 1200px)";
         text-decoration: none;
       }
 
+      .octicon {
+        margin-right: 10px;
+      }
+
       a.load-all {
         margin-left: 24px;
       }
@@ -244,7 +248,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         }
 
         @media #{$large-screen} {
-          width: 860px;
+          width: 810px;
           float: left;
         }
 
@@ -275,9 +279,10 @@ $large-screen: "only screen and (min-width: 1200px)";
         color: #8C8C8C;
 
         @media #{$large-screen} {
-          width: 70px;
+          width: 120px;
           padding: 7px 0 7px 10px;
           float: left;
+          background: #fff;
           line-height: 32px;
         }
       }

@@ -3,6 +3,7 @@ class Api::PostsController < Api::ApiController
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
+    @channel.read = true
     @last_read_id = @channel.last_read_id(current_user)
 
     @view = Views::ChannelPosts.new({

@@ -4,10 +4,10 @@
 var ChannelPostsData = {
   url: "/api/channels/{id}/posts.json",
   result: {
-    posts: ["post"],
+    posts: ["post", "channel-$ID-post"],
     channel: "channel"
   },
-  view: "post",
+  view: "channel-$ID-post",
   subscribe: [
     "post_create",
     "post_fave",
@@ -123,7 +123,7 @@ var ChannelPostsHeader = React.createClass({
         console.log("Failed to create channel...");
       }, success: function(data) {
         console.log(data);
-        Router.open("channels/show", {channel_id: data.channel.id}, true, "/channels/"+data.channel.id);
+        Router.open("channels/show", {channel_id: data.channel.id}, true);
       }});
     }
   },
@@ -169,9 +169,10 @@ var ChannelPosts = React.createClass({
     return {posts: [], channel: {}, view: {}, anchor: "", highlight: -1};
   },
   componentDidMount: function() {
+    console.log(this.props.channelId);
     if(this.props.channelId > 0) {
-      console.log(this.props.channelId);
-      Data.subscribe("post", this, 0, {callback: this.updatedPosts, fetch: this.fetchUpdatedPosts});
+      console.log("fetch");
+      Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
       Data.fetch(ChannelPostsData, this.props.channelId);
     }
@@ -232,8 +233,13 @@ var ChannelPosts = React.createClass({
   updatedChannel: function(objects, view) {
     if(objects.length > 0) this.setState({channel: objects[0]});
   },
-  loadMore: function() {
+  loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
+    e.preventDefault();
+  },
+  loadAll: function(e) {
+    Data.fetch(ChannelPostsData, this.props.channelId, {last_id: 0, limit: this.state.view.count});
+    e.preventDefault();
   },
   render: function () {
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post-/, ''))
@@ -255,7 +261,7 @@ var ChannelPosts = React.createClass({
     }
     return <div>
       <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} />
-      <ViewLoader callback={this.loadMore} visible={this.state.posts.length} count={this.state.view.count} message={"more posts"} />
+      <ViewLoader callback={this.loadMore} callbackAll={this.loadAll} visible={this.state.posts.length} count={this.state.view ? this.state.view.count : 0} octicon={"chevron-up"} message={"older posts"} messageAll={"Show all"} />
       {posts}
       {commentbox}
     </div>;

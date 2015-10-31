@@ -84,11 +84,12 @@ var ChannelList = React.createClass({
     }
     this.setState({channels: sorted, view: view, highlight: highlight});
   },
-  loadMore: function() {
+  loadMore: function(e) {
     Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
+    e.preventDefault();
   },
   fetchUpdatedChannels: function() {
-    Data.fetch(ChannelListData, 0, {last})
+    Data.fetch(ChannelListData, 0, {last});
   },
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;
@@ -102,7 +103,7 @@ var ChannelList = React.createClass({
       <ul className="channel-list refresh">
         {channels}
       </ul>
-      <ViewLoader callback={this.loadMore} visible={this.state.channels.length} count={this.state.view.count} message={"more channels"} />
+      <ViewLoader callback={this.loadMore} visible={this.state.channels.length} octicon="chevron-down" count={this.state.view.count} message={"older channels"} />
     </div>;
   }
 });

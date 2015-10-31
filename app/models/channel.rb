@@ -244,6 +244,8 @@ class Channel < ActiveRecord::Base
     if user && i != post_id
       self.read = true
       Live.channel_update(self, current_user)
+    elsif user && post_id == nil
+      self.read = true
     end
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)

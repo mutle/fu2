@@ -50,6 +50,8 @@ var Router = {
   },
   open: function(name, params, updateUrl, urlpath) {
     var responder = this.responders[name];
+    console.log(React);
+    React.unmountComponentAtNode(this.content);
     responder.callback(params, this.content);
     if(urlpath) {
       history.pushState(null, null, urlpath);
@@ -76,6 +78,7 @@ $(function() {
 
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
+    console.log("open "+channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
     var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
     posts.setState({anchor: anchor});
@@ -109,6 +112,11 @@ $(function() {
       return false;
     }
     return true;
+  });
+
+  $(document).on("click", "a.toolbar-more-link", function(e) {
+    $(".more").toggle();
+    e.preventDefault();
   });
 
   $(document).on("click", "a", function(e) {

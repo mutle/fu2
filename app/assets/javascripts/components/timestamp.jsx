@@ -43,7 +43,7 @@ var Timestamp = React.createClass({
   render: function() {
     if(this.props.timestamp === "") return null;
     this.lastts = formatTimestamp(this.props.timestamp);
-    return <span className="ts">{this.lastts}</span>;
+    return <span className="ts" title={new Date(this.props.timestamp)}>{this.lastts}</span>;
   }
 });
 // module.exports = Timestamp;
