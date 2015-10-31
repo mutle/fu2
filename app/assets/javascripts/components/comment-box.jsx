@@ -90,10 +90,81 @@ var AutoCompleter = React.createClass({
       var highlight = selection == i;
       return <AutoCompleterResult key={s} value={r} highlight={highlight} imageUrl={imageUrl} clickCallback={clickCallback} />;
     })
-    console.log(results);
     return <ul className="autocompleter">
       {results}
     </ul>;
+  }
+});
+
+var EditorShortcuts = React.createClass({
+  buttons: [
+    {
+      name: "quote", icon: "quote", line: true, action: function(selection) {
+        return ["> ", selection];
+      }
+    },
+    {
+      name: "image", icon: "file-media", action: function(selection) {
+        return ["![](", selection, ")"];
+      }
+    },
+    {
+      name: "link", icon: "link-external", action: function(selection) {
+        return ["[", selection, "](", "URL", ")"];
+      }
+    },
+    "div",
+    {
+      name: "bold", title: "B", action: function(selection) {
+        return ["**", selection, "**"];
+      }
+    },
+    {
+      name: "italic", title: "I", action: function(selection) {
+        return ["_", selection, "_"];
+      }
+    },
+    {
+      name: "strike", title: "S", action: function(selection) {
+        return ["~~", selection, "~~"];
+      }
+    },
+    {
+      name: "h2", title: "H", line: true, action: function(selection) {
+        return ["## ", selection];
+      }
+    }
+  ],
+  buttonClick: function(e) {
+    var action = e.target.title;
+    if(action == "") action = $(e.target).parents(".editor-button").attr("title");
+    for(var b in this.buttons) {
+      var button = this.buttons[b];
+      if(button == "div") continue;
+      if(button.name == action) {
+        if(button.line)
+          this.props.editor.lineAction(button.action);
+        else
+          this.props.editor.action(button.action);
+      }
+    }
+    e.preventDefault();
+  },
+  render: function() {
+    var self = this;
+    var b = this.buttons.map(function(button, i) {
+      if(button == "div") return <span className="divider" />;
+      var className = "editor-button button-"+button.name
+      if(button.icon) {
+        var oc = "octicon octicon-"+button.icon;
+        var title = <span className={oc} />;
+      } else
+        var title = button.title;
+      return <span onClick={self.buttonClick} className={className} title={button.name}>{title}</span>;
+    });
+    return <div className="editor-shortcuts">
+      {b}
+    </div>;
   }
 });
 
@@ -121,6 +192,30 @@ var CommentBox = React.createClass({
       this.setState({text: s});
       $(this.getDOMNode()).find(".comment-box").focus();
     }
+  },
+  action: function(a) {
+    var c = $(this.getDOMNode()).find(".comment-box").get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    var selected = c.value.slice(cursorS, cursorE);
+    var out = a(selected);
+    var newtext = c.value.slice(0, cursorS) + out.join("") + c.value.slice(cursorE, c.value.length);
+    this.setState({text: newtext});
+  },
+  lineAction: function(a) {
+    var c = $(this.getDOMNode()).find(".comment-box").get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    var v = c.value;
+    while(cursorS > 0 && v[cursorS-1] != "\n") {
+      cursorS--;
+    }
+    while(cursorE < v.length && v[cursorE+1] != "\n") {
+      cursorE++;
+    }
+    var out = c.value.slice(cursorS, cursorE).split("\n").map(function(s,i) { return a(s).join(""); });
+    var newtext = c.value.slice(0, cursorS) + out.join("\n") + c.value.slice(cursorE, c.value.length);
+    this.setState({text: newtext});
   },
   submit: function(e) {
     e.preventDefault();
@@ -160,7 +255,9 @@ var CommentBox = React.createClass({
         this.setState({autocomplete: null});
         break;
       case "Enter":
-        if(this.state.autocomplete) {
+        if(e.ctrlKey || e.metaKey) {
+          this.submit(e);
+        } else if(this.state.autocomplete) {
           e.preventDefault();
           var result = this.state.autocompleteobjectsfiltered[this.state.autocompleteselection];
           if(result) {
@@ -257,6 +354,7 @@ var CommentBox = React.createClass({
     return <div>
       <form className="comment-box-form" onSubmit={this.submit}>
         <div className="comment-box-container">
+          <EditorShortcuts editor={this} />
           {autocompleter}
           <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
         </div>

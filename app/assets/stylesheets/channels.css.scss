@@ -145,6 +145,7 @@ $large-screen: "only screen and (min-width: 1200px)";
       font-size: 38px;
       font-weight: 300;
       line-height: 42px;
+      margin-top: 1em;
 
       .right {
         line-height: 42px;
@@ -187,6 +188,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         width: 100%;
         background: transparent;
         color: #4D4D4D;
+        font-size: 15px;
         line-height: 1.4em;
         height: 200px;
         border: 1px solid #b5b5b5;
@@ -203,27 +205,32 @@ $large-screen: "only screen and (min-width: 1200px)";
       .channel {
 
         background: #D8D8D8;
-        padding: 7px;
-        margin-bottom: 10px;
+        margin-bottom: 24px;
         line-height: 26px;
+        margin-right: 120px;
+        position: relative;
 
         .avatar {
           margin: 0px;
+          margin-left: 10px;
           margin-right: 10px;
+          line-height: 26px;
           float: left;
         }
 
         .user-name {
           color: #666666;
-          display: inline-block;
+          display: none;
           width: 130px;
           float: left;
+          padding: 7px;
         }
 
         .channel-name {
           color: #333333;
           line-height: 26px;
           display: block;
+          padding: 7px;
         }
 
         &.read {
@@ -239,17 +246,34 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         @media #{$small-screen} {
           line-height: 32px;
+          margin-bottom: 12px;
+
+          .avatar {
+            line-height: 32px;
+          }
+
+          .timestamp {
+            line-height: 32px;
+          }
 
           .channel-name {
             margin-left: 200px;
             line-height: 32px;
             min-height: 32px;
           }
+
+          .user-name {
+            display: inline-block;
+          }
         }
 
         @media #{$large-screen} {
           width: 810px;
           float: left;
+
+          .avatar {
+            margin-top: 4px;
+          }
         }
 
         @media #{$small-phone-landscape} {
@@ -259,9 +283,10 @@ $large-screen: "only screen and (min-width: 1200px)";
             padding: 0px;
             margin: 0px;
             margin-right: 4px;
+            margin-top: -1px;
             .avatar-image {
-              max-width: 26px;
-              max-height: 26px;
+              max-width: 24px;
+              max-height: 24px;
             }
           }
 
@@ -278,13 +303,16 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         color: #8C8C8C;
 
-        @media #{$large-screen} {
+        // @media #{$large-screen} {
+          position: absolute;;
+          padding: 0 0 0 10px;
+          top: 0;
+          bottom: 0;
+          right: -120px;
           width: 120px;
-          padding: 7px 0 7px 10px;
-          float: left;
+          line-height: 26px;
           background: #fff;
-          line-height: 32px;
-        }
+        // }
       }
 
       .channel-loader {
@@ -409,6 +437,36 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-response {
 
+      .editor-shortcuts {
+        padding: 6px 0px;
+        .editor-button {
+          display: inline-block;
+          text-align: center;
+          line-height: 22px;
+          width: 32px;
+          border: 1px solid #b5b5b5;
+          border-radius: 3px;
+          margin-right: 6px;
+          cursor: pointer;
+        }
+
+        .divider {
+          display: inline-block;
+          text-align: center;
+          width: 24px;
+        }
+
+        .button-bold, .button-h2 {
+          font-weight: bold;
+        }
+        .button-italic {
+          font-style: italic;
+        }
+        .button-strike {
+          text-decoration: line-through;
+        }
+      }
+
       .autocompleter {
         list-style: none;
         img {
@@ -435,6 +493,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         box-sizing: border-box;
         width: 100%;
         color: #4D4D4D;
+        font-size: 15px;
         line-height: 1.4em;
         height: 200px;
         padding: 4px;

@@ -4,7 +4,7 @@
 var ChannelPostsData = {
   url: "/api/channels/{id}/posts.json",
   result: {
-    posts: ["post", "channel-$ID-post"],
+    posts: ["post"],
     channel: "channel"
   },
   view: "channel-$ID-post",
@@ -28,7 +28,7 @@ var FaveCounter = React.createClass({
     if(this.props.postId > 0) {
       var c = this;
       $.ajax({url:"/api/posts/"+this.props.postId+"/fave", dataType: "json", type: "post"}).done(function(data) {
-        console.log(data)
+        console.log(data);
         Data.update("post", c.props.postId, data.post);
       });
     }
@@ -94,6 +94,7 @@ var ChannelPost = React.createClass({
   render: function() {
     var body = {__html: this.props.post.html_body};
     var className = "channel-post post-"+this.props.post.id;
+    var name = "post-"+this.props.post.id;
     if(this.props.post.read) className += " read";
     if(this.props.highlight) className += " highlight";
     if(this.state.edit)
@@ -101,6 +102,7 @@ var ChannelPost = React.createClass({
     else
       var content = <div className="body" dangerouslySetInnerHTML={body}></div>;
     return <div className={className}>
+      <a name={name} />
       <ChannelPostHeader id={this.props.id} channelId={this.props.channelId} user={this.props.user} post={this.props.post} channelPost={this} />
       {content}
     </div>;
@@ -179,6 +181,7 @@ var ChannelPosts = React.createClass({
 
     var self = this;
     this.keydownCallback = $(document).on("keydown", function(e) {
+      if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
       if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
@@ -187,6 +190,7 @@ var ChannelPosts = React.createClass({
           self.setState({highlight: self.state.highlight+1});
         else
           self.setState({highlight: 0});
+        self.updateAnchor();
         e.preventDefault();
       }
       if(key == "K") {
@@ -194,6 +198,7 @@ var ChannelPosts = React.createClass({
           self.setState({highlight: self.state.highlight-1});
         else
           self.setState({highlight: self.state.posts.length-1});
+        self.updateAnchor();
         e.preventDefault();
       }
       if(key == "R") {
@@ -211,24 +216,47 @@ var ChannelPosts = React.createClass({
     $(document).off("keydown", this.keydownCallback);
   },
   selectPost: function(post) {
-    var h = "post-"+this.state.posts[0].id;
-    this.setState({anchor: h});
-    document.location.hash = h;
-    console.log($(this.getDOMNode()).find(".post-"+post.id).offset().top)
-    $(window).scrollTop($(this.getDOMNode()).find(".post-"+post.id).offset().top)
+    var h = "#post-"+post.id;
+    if(document.location.hash != h) {
+      history.pushState(null, null, location.pathname+h);
+      if(this.isMounted())
+        this.setState({anchor: h});
+    }
+    // console.log(["scroll", $(this.getDOMNode()).find(".post-"+post.id).offset().top])
+    o = $(this.getDOMNode()).find(".post-"+post.id).offset();
+    if(o) {
+      $(window).scrollTop(o.top - 150);
+      return true;
+    }
+    return false;
+  },
+  updateAnchor: function() {
+    if(this.state.highlight >= 0) {
+      var post = this.state.posts[this.state.highlight];
+      if(post) {
+        return this.selectPost(post);
+        // var h = "#post-"+post.id;
+        // if(h != document.location.hash)
+          // document.location.hash = h;
+      }
+    }
+    return false;
   },
   updatedPosts: function(objects, view) {
     highlight = this.state.highlight;
+    var jump = false;
     if(highlight == -1) {
       for(var p in objects) {
         var post = objects[p];
-        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post-/, ''))) || !post.read) {
-          highlight = p;
+        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post-/, '')))) {
+          console.log(["found", parseInt(p)]);
+          highlight = parseInt(p);
+          jump = true;
           break;
         }
       }
     }
-    this.setState({posts: objects, view: view});
+    this.setState({posts: objects, view: view, highlight: highlight, jump: true});
   },
   updatedChannel: function(objects, view) {
     if(objects.length > 0) this.setState({channel: objects[0]});
@@ -241,8 +269,16 @@ var ChannelPosts = React.createClass({
     Data.fetch(ChannelPostsData, this.props.channelId, {last_id: 0, limit: this.state.view.count});
     e.preventDefault();
   },
+  componentDidUpdate: function() {
+    if(this.isMounted() && this.state.jump) {
+      if(this.updateAnchor())
+        this.setState({jump: false});
+    }
+  },
   render: function () {
+    console.log(["anchor", this.state.anchor, this.state.highlight]);
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post-/, ''))
+    console.log(anchorPostId);
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;

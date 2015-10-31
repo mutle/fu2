@@ -9,6 +9,7 @@ var Router = {
     if(!path) return false;
     var urlpath = path;
     var hash = path.replace(/^.*#/, '');
+    if(hash == path) hash = "";
     path = path.replace(/#.*$/, '');
     this.content = $(".content-inner").get(0);
 
@@ -16,7 +17,7 @@ var Router = {
       var routes = this.routes[name];
       for(var routei in routes) {
         var route = routes[routei];
-        console.log([path, name, route]);
+        console.log([path, name, route, hash]);
         if(route && route.match) {
           var m = path.match(route.match);
           if(m) {
@@ -26,7 +27,7 @@ var Router = {
               params[route.params[i]] = m[i + 1];
               i++;
             }
-            console.log("Route: "+path+" "+name);
+            console.log("Route: "+path+" "+name+"#"+hash);
             this.open(name, params, updateUrl, urlpath);
             return true;
           }
@@ -65,7 +66,7 @@ var Router = {
     if(e.target != $("body").get(0)) return;
     var action = this.hotkeys[String.fromCharCode(e.keyCode)];
     if(action && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-      this.open(action);
+      this.open(action, {}, true);
       e.preventDefault();
     }
   }
@@ -81,6 +82,7 @@ $(function() {
     console.log("open "+channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
     var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
+    console.log(anchor);
     posts.setState({anchor: anchor});
   }, function(params) {
     var post_id = params.post_id ? "#post-"+params.post_id : "";
@@ -104,7 +106,7 @@ $(function() {
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
 
-  Router.route(document.location.pathname);
+  Router.route(document.location.pathname+document.location.hash);
 
   $(window).bind("popstate", function(e) {
     if(Router.route(document.location.pathname, true)) {

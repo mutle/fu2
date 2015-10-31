@@ -58,7 +58,6 @@ class Data
     @socket.connect() if @socket
   fetch: (info, id=0, args={}) ->
     return if !info
-    console.log(['fertch', info, id, args])
     if info.view
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
       if cached?
@@ -74,7 +73,6 @@ class Data
         if typeof(rformat) != "string"
           for o in data[rkey]
             t = o.type
-            t = rformat[1].replace(/\$ID/, id) if rformat[1]
             if types.indexOf(t) < 0 then types.push(t)
             @insert(o, t)
         else
@@ -115,7 +113,8 @@ class Data
     type ?= object.type
     id = object.id
     @store[type] ?= {}
-    @store[type][id] = object
+    if !@store[type][id] || !@store[type][id]['updated_at'] || @store[type][id]['updated_at'] <= object['updated_at']
+      @store[type][id] = object
     object
   updateView: (type, view) ->
     v = @views[type]
@@ -150,6 +149,7 @@ class Data
       success: success
   destroy: (type) ->
   update: (type, id, props) ->
+    @store[type] ?= {}
     @store[type][id]
     @notify([type])
 $ ->

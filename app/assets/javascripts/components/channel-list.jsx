@@ -16,7 +16,7 @@ var ChannelListData = {
 
 var Channel = React.createClass({
   render: function() {
-    var className = "channel";
+    var className = "channel channel-"+this.props.channel.id;
     if(this.props.channel.read) className += " read";
     if(this.props.highlight) className += " highlight";
     var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
@@ -25,12 +25,12 @@ var Channel = React.createClass({
     var channelName = {__html: this.props.channel.title};
     return <li>
       <div className={className}>
+        <div className="timestamp">
+          <Timestamp timestamp={this.props.channel.display_date} />
+        </div>
         <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
         <span className="user-name" dangerouslySetInnerHTML={userName}></span>
         <a className="channel-name" href={url} dangerouslySetInnerHTML={channelName}></a>
-      </div>
-      <div className="timestamp">
-        <Timestamp timestamp={this.props.channel.display_date} />
       </div>
     </li>;
   }
@@ -45,6 +45,7 @@ var ChannelList = React.createClass({
     Data.subscribe("channel", this, 0, {callback: this.updated, fetch: this.fetchUpdatedChannels});
     Data.fetch(ChannelListData);
     this.keydownCallback = $(document).on("keydown", function(e) {
+      if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
       if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
@@ -53,18 +54,36 @@ var ChannelList = React.createClass({
           self.setState({highlight: self.state.highlight+1});
         else
           self.setState({highlight: 0});
+        self.scrollToHighlight();
+        e.preventDefault();
       }
       if(key == "K") {
         if(self.state.highlight > 0)
           self.setState({highlight: self.state.highlight-1});
         else
           self.setState({highlight: self.state.channels.length-1});
+        self.scrollToHighlight();
+        e.preventDefault();
       }
       if((key == "O" || e.keyCode == 13) && self.state.highlight >= 0) {
-        console.log("ipof");
-        Router.open("channels/show",{channel_id: self.state.channels[self.state.highlight].id});
+        Router.open("channels/show",{channel_id: self.state.channels[self.state.highlight].id}, true);
+        e.preventDefault();
       }
     });
+  },
+  scrollToHighlight: function() {
+    if(this.state.highlight >= 0) {
+      var channel = this.state.channels[this.state.highlight];
+      if(channel) {
+        console.log(channel);
+        console.log($(this.getDOMNode()).find(".channel-"+channel.id));
+        o = $(this.getDOMNode()).find(".channel-"+channel.id).offset();
+        console.log(o);
+        if(o) {
+          $(window).scrollTop(o.top - 150);
+        }
+      }
+    }
   },
   componentWillUnmount: function() {
     Data.unsubscribe(this);
