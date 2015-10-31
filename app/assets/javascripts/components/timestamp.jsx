@@ -2,6 +2,7 @@
 
 var timestamps = [];
 
+var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var formatTimestamp = function(timestamp) {
   var d = new Date(timestamp);
   var today = new Date();
@@ -13,9 +14,13 @@ var formatTimestamp = function(timestamp) {
   t = (t / 60);
   if(t < 24) return t.toFixed()+"h";
   t = (t / 24);
-  if(t < 365) return t.toFixed()+"d";
-  t = (t / 365);
-  return t.toFixed()+"y";
+  var date = monthNames[d.getMonth()]+" "+d.getDate();
+  if(d.getFullYear() != today.getFullYear())
+    date += ", "+d.getFullYear();
+  return date;
+  // if(t < 365) return t.toFixed()+"d";
+  // t = (t / 365);
+  // return t.toFixed()+"y";
 };
 
 var Timestamp = React.createClass({

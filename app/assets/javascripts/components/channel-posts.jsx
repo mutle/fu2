@@ -9,9 +9,15 @@ var ChannelPostsData = {
   },
   view: "post",
   subscribe: [
-    "post_create"
+    "post_create",
+    "post_fave",
+    "post_unfave"
   ]
 };
+
+function replyMessage(post) {
+  $(".comment-box-form textarea").val(post.body.replace(/^/, "> ")+"\n\n").select();
+}
 
 var FaveCounter = React.createClass({
   getInitialState: function() {
@@ -43,14 +49,22 @@ var ChannelPostHeader = React.createClass({
   edit: function() {
     this.props.channelPost.setState({edit: true});
   },
+  reply: function(e) {
+    replyMessage(this.props.post);
+    e.preventDefault();
+  },
+  unread: function(e) {
+    console.log("unread");
+    e.preventDefault();
+  },
   render: function() {
     var userLink = "/users/"+this.props.user.id;
     var postLink = "/channels/"+this.props.channelId+"#post-"+this.props.id;
     var canEdit = false;
-    var postDeleteLink = canEdit ? <a className="post-delete" onClick={this.delete}><span className="octicon octicon-trashcan"></span></a> : null;
-    var postEditLink = canEdit ? <a className="post-edit" onClick={this.edit}><span className="octicon octicon-pencil"></span></a> : null;
-    var postUnreadLink = <a className="post-unread"><span className="octicon octicon-eye"></span></a>;
-    var postReplyLink = <a className="post-reply"><span className="octicon octicon-mail-reply"></span></a>;
+    var postDeleteLink = canEdit ? <a href="#" className="post-delete" onClick={this.delete}><span className="octicon octicon-trashcan"></span></a> : null;
+    var postEditLink = canEdit ? <a href="#" className="post-edit" onClick={this.edit}><span className="octicon octicon-pencil"></span></a> : null;
+    var postUnreadLink = <a href="#" className="post-unread" onClick={this.unread}><span className="octicon octicon-eye"></span></a>;
+    var postReplyLink = <a href="#" className="post-reply" onClick={this.reply}><span className="octicon octicon-mail-reply"></span></a>;
     var favers = [];
     for(var i in this.props.post.faves) {
       var fave = this.props.post.faves[i];
@@ -165,6 +179,7 @@ var ChannelPosts = React.createClass({
     var self = this;
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(e.target != $("body").get(0)) return;
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
       if(key == "J") {
         if(self.state.highlight+1 < self.state.posts.length)
@@ -184,7 +199,7 @@ var ChannelPosts = React.createClass({
         if(self.state.highlight >= 0) {
           var post = self.state.posts[self.state.highlight];
           console.log(post);
-          $(".comment-box-form textarea").val(post.body.replace(/^/, "> ")+"\n\n").select();
+          replyMessage(post);
           e.preventDefault();
         }
       }

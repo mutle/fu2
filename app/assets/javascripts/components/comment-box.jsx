@@ -90,6 +90,7 @@ var AutoCompleter = React.createClass({
       var highlight = selection == i;
       return <AutoCompleterResult key={s} value={r} highlight={highlight} imageUrl={imageUrl} clickCallback={clickCallback} />;
     })
+    console.log(results);
     return <ul className="autocompleter">
       {results}
     </ul>;
@@ -243,6 +244,9 @@ var CommentBox = React.createClass({
     if(this.state.syntax == "html")
       $('.comment-box').markItUp(mySettings)
   },
+  toggleMarkdown: function(e) {
+    e.preventDefault();
+  },
   render: function() {
     var autocompleter = null;
     var imageUrl;
@@ -257,8 +261,8 @@ var CommentBox = React.createClass({
           <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
         </div>
         <div className="actions">
-          <button className="response-button content-button markdown-help"><span className="octicon octicon-markdown"></span></button>
-          <input className="response-button content-button" accessKey="s" type="submit" />
+          <button className="response-button content-button markdown-help" onClick={this.toggleMarkdown}><span className="octicon octicon-markdown"></span></button>
+          <input className="response-button content-button" accessKey="s" value="Send" type="submit" />
         </div>
       </form>
 

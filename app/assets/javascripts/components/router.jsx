@@ -62,7 +62,7 @@ var Router = {
   keydown: function(e) {
     if(e.target != $("body").get(0)) return;
     var action = this.hotkeys[String.fromCharCode(e.keyCode)];
-    if(action) {
+    if(action && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
       this.open(action);
       e.preventDefault();
     }
@@ -72,7 +72,7 @@ var Router = {
 $(function() {
   $(document).keydown(function(e) {
     Router.keydown(e);
-  })
+  });
 
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
@@ -113,12 +113,10 @@ $(function() {
 
   $(document).on("click", "a", function(e) {
     console.log(e);
-    if(!e.metaKey && !e.ctrlKey && !e.altKey && Router.route($(this).attr("href"), true)) {
+    if(!e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && e.button == 0 && Router.route($(this).attr("href"), true)) {
       e.preventDefault();
       return false;
     }
-    e.preventDefault();
-    return true;
   });
 });
 

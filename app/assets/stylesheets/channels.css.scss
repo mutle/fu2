@@ -144,12 +144,17 @@ $large-screen: "only screen and (min-width: 1200px)";
 
       .right {
         line-height: 42px;
+        a {
+          margin-left: 12px;
+          margin-right: 10px;
+        }
       }
     }
 
     input.channel-title {
       line-height: 42px;
-      margin-bottom: 0.5em;
+      margin-bottom: 0;
+      border: 1px solid #b5b5b5;
     }
     .field_with_errors input.channel-title {
       margin-bottom: 0px;
@@ -180,6 +185,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         color: #4D4D4D;
         line-height: 1.4em;
         height: 200px;
+        border: 1px solid #b5b5b5;
       }
     }
 
@@ -224,7 +230,7 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         &.highlight {
           border-left: 5px solid #dfa099;
-          padding-left: 2px;
+          margin-left: -5px;
         }
 
         @media #{$small-screen} {
@@ -291,33 +297,37 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
 
       .body {
-        padding: 20px;
-        background: #F2F2F2;
-        border-bottom: 1px solid #E0E0E0;
-        margin-bottom: 15px;
+        margin-bottom: 2em;
       }
     }
 
     .channel-post, .channel-response {
-
-      background: #F2F2F2;
-      border-bottom: 1px solid #E0E0E0;
       margin-bottom: 15px;
+      border-top: 1px solid #e8e8e8;
 
       .channel-post-header, .channel-response-header {
-
+        position: relative;
         height: 32px;
-        background: #484848;
         line-height: 31px;
-        color: #E6E6E6;
+        color: #474747;
+        font-weight: bold;
 
         a {
-          color: #E0E0E0;
+          color: #474747;
           text-decoration: none;
         }
 
         .avatar {
-          margin-right: 10px;
+          position: absolute;
+          width: 42px;
+          top: -2px;
+          left: 0px;
+          background: #fff;
+          padding-right: 10px;
+        }
+
+        .user-name {
+          margin-left: 52px;
         }
 
         .faves {
@@ -341,6 +351,7 @@ $large-screen: "only screen and (min-width: 1200px)";
 
           .timestamp {
             margin-left: 16px;
+            margin-right: 0px;
           }
 
 
@@ -352,11 +363,9 @@ $large-screen: "only screen and (min-width: 1200px)";
     }
 
     .channel-post {
+      margin-bottom: 1em;
 
       &.read .channel-post-header {
-        background: #D9D9D9;
-        color: #595959;
-
         .right a {
           color: #474747;
         }
@@ -373,22 +382,23 @@ $large-screen: "only screen and (min-width: 1200px)";
       &.highlight {
         .body {
           border-left: 5px solid #dfa099;
-          padding-left: 7px;
+          margin-left: -10px;
+          padding-left: 5px;
         }
       }
 
       .body {
         color: #4D4D4D;
+        margin: 1em 0;
         line-height: 1.4em;
-        padding: 12px;
       }
 
     }
 
     .channel-response-title {
       font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
-      font-size: 1.5em;
-      font-weight: 300;
+      font-size: 1em;
+      font-weight: bold;
       margin: 32px 0px 16px 0px;
     }
 
@@ -404,7 +414,7 @@ $large-screen: "only screen and (min-width: 1200px)";
           line-height: 24px;
 
           &.highlight {
-            background: #fff;
+            background: #e8e8e8;
           }
         }
       }
@@ -419,12 +429,12 @@ $large-screen: "only screen and (min-width: 1200px)";
       .comment-box, .comment-box.markItUp {
         box-sizing: border-box;
         width: 100%;
-        background: #F2F2F2;
         color: #4D4D4D;
         line-height: 1.4em;
         height: 200px;
         padding: 4px;
         border: none;
+        border: 1px solid #b5b5b5;
       }
 
       .actions {
@@ -448,7 +458,6 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
 
       .body {
-        padding: 12px;
         padding-bottom: 20px;
         min-height: 1em;
       }

@@ -46,6 +46,7 @@ var ChannelList = React.createClass({
     Data.fetch(ChannelListData);
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(e.target != $("body").get(0)) return;
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
       if(key == "J") {
         if(self.state.highlight+1 < self.state.channels.length)
