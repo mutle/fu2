@@ -16,32 +16,143 @@ var ChannelPostsData = {
 };
 
 function replyMessage(post) {
-  $(".comment-box-form textarea").val(post.body.replace(/^/, "> ")+"\n\n").select();
+  $(".comment-box-form textarea").val(post.body.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n").select();
 }
 
 var FaveCounter = React.createClass({
   getInitialState: function() {
-    return {state: 0};
+    return {state: 0, add: false};
   },
   click: function(e) {
     e.preventDefault();
     if(this.props.postId > 0) {
       var c = this;
-      $.ajax({url:"/api/posts/"+this.props.postId+"/fave", dataType: "json", type: "post"}).done(function(data) {
-        console.log(data);
+      var t = $(e.target);
+      if(t.hasClass("fave-emoji") || t.get(0).className == "") t = t.parents("button");
+      var emoji = t.attr("class").replace(/^emoji-/, '').split(" ")[0];
+      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
         Data.update("post", c.props.postId, data.post);
       });
+    }
+  },
+  addNew: function(e) {
+    e.preventDefault();
+    this.setState({add:true, input: "", selection: 0});
+  },
+  fave: function(emoji) {
+    if(this.props.postId > 0) {
+      var c = this;
+      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
+        Data.update("post", c.props.postId, data.post);
+      });
+    }
+  },
+  autocompleteClick: function(e) {
+    e.preventDefault();
+    var emoji = $(e.target).parents(".result").data("value");
+    this.fave(emoji);
+    this.setState({add:false});
+  },
+  autocompleteMount: function(auto) {
+    $(this.getDOMNode()).find("input").get(0).select();
+  },
+  input: function(e) {
+    var cursorE = $(this.getDOMNode()).find("input").get(0).selectionEnd;
+    var cursorS = $(this.getDOMNode()).find("input").get(0).selectionStart;
+    var key = e.key;
+    if(key == "Escape") {
+      this.setState({add: false});
+      return;
+    }
+    if(key == "Enter") {
+      e.preventDefault();
+      if(this.filteredEmojis) {
+        var emoji = this.filteredEmojis[this.state.selection];
+        if(emoji) {
+          var valid = false;
+          for(var i in window.Emojis) {
+            if(window.Emojis[i] == emoji) {
+              valid = true;
+              break;
+            }
+          }
+        }
+        if(valid) {
+          this.fave(emoji);
+          this.setState({add: false});
+        }
+        return;
+      }
+    }
+    if(key == "ArrowDown") {
+      e.preventDefault();
+      if(this.state.selection < 10)
+        this.setState({selection: this.state.selection + 1});
+    }
+    if(key == "ArrowUp") {
+      e.preventDefault();
+      if(this.state.selection > 0)
+        this.setState({selection: this.state.selection - 1});
+    }
+    if(key == "Backspace") {
+      cursorE -= 2;
+      key = "";
+    }
+    if(key.length <= 1) {
+      var input = e.target.value.slice(0, cursorE+1) + key;
+      this.setState({input: input});
     }
   },
   render: function() {
     var icon = <span className="octicon octicon-star" />;
     var inner = null;
-    if(!this.props.faves || this.props.faves.length == 0) inner = <span>{icon}{'0'}</span>;
-    else inner = <span>{icon}{this.props.faves.length}</span>;
-    var className = "";
-    if(this.props.faves.length > 0) className = "faved";
-    if(this.state.state == 1) className = "on";
-    return <a href="#" title={(this.props.faves ? this.props.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
+    var emojis = {star: []};
+    var emojinames = ["star"]
+    for(var i in this.props.faves) {
+      var f = this.props.faves[i];
+      if(emojinames.indexOf(f[1]) < 0) emojinames.push(f[1]);
+      if(!emojis[f[1]]) emojis[f[1]] = [];
+      emojis[f[1]].push(f[0]);
+    }
+    var user = this.props.user;
+    var self = this;
+    var buttons = emojinames.map(function(emoji, i) {
+      var className = "emoji-"+emoji;
+      if(user && emojis[emoji].indexOf(user) >= 0) className += " on"
+      return <button className={className} onClick={self.click}>
+        <img className="fave-emoji" src={"/images/emoji/"+emoji+".png"} title={emoji+": "+emojis[emoji].join(", ")} />
+        {emojis[emoji].length}
+      </button>;
+    });
+    if(this.state.add) {
+      var imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
+      var filteredEmojis = [];
+      var input = this.state.input;
+      var n = 0;
+      window.Emojis.map(function(r, i) {
+        if(n < 10 && (input.length < 1 || r.indexOf(input) == 0)) {
+          n++;
+          filteredEmojis.push(r);
+        }
+      });
+      this.filteredEmojis = filteredEmojis;
+      var newText = <div class="add-emoji">
+        <AutoCompleter objects={filteredEmojis} imageUrl={imageUrl} selection={this.state.selection} clickCallback={this.autocompleteClick} mountCallback={this.autocompleteMount} />
+        <input onKeyDown={this.input} onKeyPress={this.input} />
+      </div>;
+    }
+    var addNew = <button onClick={this.addNew}><img className="fave-emoji" src="/images/emoji/heavy_plus_sign.png" /></button>;
+    // if(!this.props.faves || this.props.faves.length == 0) inner = <span>{icon}{'0'}</span>;
+    // else inner = <span>{icon}{this.props.faves.length}</span>;
+    // var className = "";
+    // if(this.props.faves.length > 0) className = "faved";
+    // if(this.state.state == 1) className = "on";
+    return <div className="faves">
+      {newText}
+      {addNew}
+      {buttons}
+    </div>;
+    // return <a href="#" title={(this.props.faves ? this.props.faves : []).join(", ")} onClick={this.click} className={className}>{inner}</a>;
   }
 });
 
@@ -68,7 +179,7 @@ var ChannelPostHeader = React.createClass({
     var favers = [];
     for(var i in this.props.post.faves) {
       var fave = this.props.post.faves[i];
-      favers.push(Data.get("user", fave.user_id).login);
+      favers.push([Data.get("user", fave.user_id).login, fave.emoji]);
     }
     return <div className="channel-post-header">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
@@ -76,7 +187,7 @@ var ChannelPostHeader = React.createClass({
       <div className="right">
         {postDeleteLink}
         {postEditLink}
-        <FaveCounter faves={favers} postId={this.props.id}  />
+        <FaveCounter faves={favers} postId={this.props.id} user={this.props.user.login}  />
         {postUnreadLink}
         {postReplyLink}
         <a href={postLink} className="timestamp">
@@ -120,11 +231,9 @@ var ChannelPostsHeader = React.createClass({
   save: function() {
     if(this.props.channelId == 0) {
       var data = {body: $(".channel-text .body textarea").val(), title: $(".channel-title input.channel-title").val() };
-      console.log(data);
       Data.create("channel", [], data, {error: function() {
         console.log("Failed to create channel...");
       }, success: function(data) {
-        console.log(data);
         Router.open("channels/show", {channel_id: data.channel.id}, true);
       }});
     }
@@ -171,9 +280,7 @@ var ChannelPosts = React.createClass({
     return {posts: [], channel: {}, view: {}, anchor: "", highlight: -1};
   },
   componentDidMount: function() {
-    console.log(this.props.channelId);
     if(this.props.channelId > 0) {
-      console.log("fetch");
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
       Data.fetch(ChannelPostsData, this.props.channelId);
@@ -201,10 +308,17 @@ var ChannelPosts = React.createClass({
         self.updateAnchor();
         e.preventDefault();
       }
+      if(key == "M") {
+        self.loadMore();
+        e.preventDefault();
+      }
+      if(key == "A") {
+        self.loadAll();
+        e.preventDefault();
+      }
       if(key == "R") {
         if(self.state.highlight >= 0) {
           var post = self.state.posts[self.state.highlight];
-          console.log(post);
           replyMessage(post);
           e.preventDefault();
         }
@@ -222,7 +336,6 @@ var ChannelPosts = React.createClass({
       if(this.isMounted())
         this.setState({anchor: h});
     }
-    // console.log(["scroll", $(this.getDOMNode()).find(".post-"+post.id).offset().top])
     o = $(this.getDOMNode()).find(".post-"+post.id).offset();
     if(o) {
       $(window).scrollTop(o.top - 150);
@@ -249,7 +362,6 @@ var ChannelPosts = React.createClass({
       for(var p in objects) {
         var post = objects[p];
         if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post-/, '')))) {
-          console.log(["found", parseInt(p)]);
           highlight = parseInt(p);
           jump = true;
           break;
@@ -276,9 +388,7 @@ var ChannelPosts = React.createClass({
     }
   },
   render: function () {
-    console.log(["anchor", this.state.anchor, this.state.highlight]);
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post-/, ''))
-    console.log(anchorPostId);
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;

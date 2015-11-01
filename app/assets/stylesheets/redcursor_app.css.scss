@@ -346,3 +346,20 @@ form {
   margin-top: 0.5em;
   margin-bottom: 0px;
 }
+
+.autocompleter {
+  list-style: none;
+  background: #fff;
+  img {
+    max-width: 24px;
+    max-height: 24px;
+  }
+  li {
+    line-height: 24px;
+    padding: 4px 12px;
+
+    &.highlight {
+      background: #e8e8e8;
+    }
+  }
+}

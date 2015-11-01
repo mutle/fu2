@@ -108,25 +108,25 @@ class Post < ActiveRecord::Base
     channel.can_read?(user)
   end
 
-  def faves_for(user)
-     faves.where(:user_id => user.id)
+  def faves_for(user, emoji="star")
+     faves.where(user_id: user.id, emoji: emoji)
   end
 
-  def faved_by?(user, faves=nil)
+  def faved_by?(user, faves=nil, emoji="star")
     if faves
-      faves.select { |f| f.user_id == user.id }.any?
+      faves.select { |f| f.user_id == user.id && f.emoji == emoji }.any?
     else
-      faves_for(user).count > 0
+      faves_for(user, emoji).count > 0
     end
   end
 
-  def fave(user)
-    faves.create :user_id => user.id
+  def fave(user, emoji="star")
+    faves.create user_id: user.id, emoji: emoji
     Live.post_fave self
   end
 
-  def unfave(user)
-    faves_for(user).destroy_all
+  def unfave(user, emoji="star")
+    faves_for(user, emoji).destroy_all
     Live.post_unfave self
   end
 

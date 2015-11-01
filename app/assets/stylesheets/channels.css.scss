@@ -94,19 +94,6 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
     }
 
-    .markItUp {
-      border: none;
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-      width: 100%;
-
-
-      .markItUpContainer {
-        border: none;
-      }
-    }
-
     .actions {
       input[type=file] {
         display: none;
@@ -365,13 +352,35 @@ $large-screen: "only screen and (min-width: 1200px)";
 
         .faves {
           display: inline-block;
-          a {
+          margin-top: -3px;
+          line-height: 31px;
+          position: relative;
+
+          button {
+            border: 1px solid #e8e8e8;
+            background: #fff;
+            font-size: 12px;
+            padding: 0px 3px 3px 3px;
+            border-radius: 3px;
+            margin: 0px 4px;
 
             &.on {
-              color: khaki;
+              border-color: #b5b5b5;
             }
-            &.faved {
-            }
+          }
+
+          .add-emoji {
+            display: inline-block;
+          }
+
+          .fave-emoji {
+            max-width: 14px;
+            max-height: 14px;
+          }
+
+          .autocompleter {
+            position: absolute;
+            top: 31px;
           }
         }
 
@@ -467,29 +476,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         }
       }
 
-      .autocompleter {
-        list-style: none;
-        img {
-          max-width: 24px;
-          max-height: 24px;
-        }
-        li {
-          line-height: 24px;
-
-          &.highlight {
-            background: #e8e8e8;
-          }
-        }
-      }
-
-
-
-      .markItUpContainer {
-        padding-left: 0px;
-        padding-right: 0px;
-      }
-
-      .comment-box, .comment-box.markItUp {
+      .comment-box {
         box-sizing: border-box;
         width: 100%;
         color: #4D4D4D;
@@ -509,6 +496,7 @@ $large-screen: "only screen and (min-width: 1200px)";
         &.left {
           text-align: left;
           float: left;
+          margin-top: -32px;
         }
       }
 

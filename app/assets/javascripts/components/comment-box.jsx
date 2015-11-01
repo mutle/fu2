@@ -75,6 +75,11 @@ var AutoCompleterResult = React.createClass({
 });
 
 var AutoCompleter = React.createClass({
+  componentDidMount: function() {
+    if(this.props.mountCallback) {
+      this.props.mountCallback(this);
+    }
+  },
   render: function() {
     var input = this.props.input;
     var selection = this.props.selection;
@@ -170,28 +175,17 @@ var EditorShortcuts = React.createClass({
 
 var CommentBox = React.createClass({
   getInitialState: function() {
-    var syntax = $('#syntax').val();
-    if(!syntax || syntax.length == 0) syntax = "md"
-    return {text: "", valueName: "post[body]", syntax: syntax, autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
+    return {text: "", valueName: "post[body]", autocomplete: null, autocompleteobjects: [], autocompleteinput: "", autocompletestart: null, autocompleteselection: 0};
   },
   insertImage: function(url, prefix) {
-    if(this.state.syntax == "html") {
-      this.insert("<img src=\""+url+"\" />");
-    } else {
-      this.insert("![]("+url+")");
-    }
+    this.insert("![]("+url+")");
   },
   insert: function(text, prefix) {
-    var s = this.state.text;
-    if(this.state.syntax == "html") {
-      $.markItUp({target: $('.comment-box'), placeHolder: text})
-      this.setState({text: $('.comment-box').val()});
-    } else {
-      if(prefix && s.length > 0) s += prefix;
-      s += text;
-      this.setState({text: s});
-      $(this.getDOMNode()).find(".comment-box").focus();
-    }
+    var s = $(this.getDOMNode()).find(".comment-box").get(0).value;
+    if(prefix && s.length > 0) s += prefix;
+    s += text;
+    this.setState({text: s});
+    $(this.getDOMNode()).find(".comment-box").focus();
   },
   action: function(a) {
     var c = $(this.getDOMNode()).find(".comment-box").get(0);
@@ -338,8 +332,6 @@ var CommentBox = React.createClass({
     }
   },
   componentDidMount: function() {
-    if(this.state.syntax == "html")
-      $('.comment-box').markItUp(mySettings)
   },
   toggleMarkdown: function(e) {
     e.preventDefault();
@@ -354,12 +346,11 @@ var CommentBox = React.createClass({
     return <div>
       <form className="comment-box-form" onSubmit={this.submit}>
         <div className="comment-box-container">
-          <EditorShortcuts editor={this} />
           {autocompleter}
+          <EditorShortcuts editor={this} />
           <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
         </div>
         <div className="actions">
-          <button className="response-button content-button markdown-help" onClick={this.toggleMarkdown}><span className="octicon octicon-markdown"></span></button>
           <input className="response-button content-button" accessKey="s" value="Send" type="submit" />
         </div>
       </form>
@@ -376,4 +367,5 @@ var CommentBox = React.createClass({
 });
 
 // module.exports = CommentBox;
+window.AutoCompleter = AutoCompleter;
 window.CommentBox = CommentBox;

@@ -22,7 +22,7 @@ class Api::PostsController < Api::ApiController
   end
 
   def create
-    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: current_user.markdown?)
+    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: true)
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
@@ -50,10 +50,11 @@ class Api::PostsController < Api::ApiController
 
   def fave
     @post = Post.find(params[:id].to_i)
-    if @post.faved_by? @current_user
-      @post.unfave @current_user
+    emoji = params[:emoji] || "star"
+    if @post.faved_by? @current_user, nil, emoji
+      @post.unfave @current_user, emoji
     else
-      @post.fave @current_user
+      @post.fave @current_user, emoji
     end
     render "show"
   end
