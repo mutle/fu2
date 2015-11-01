@@ -32,4 +32,5 @@ class ChannelPostsTest < JSTest
     page.has_selector?(".channel-post .body", text: "Updated Comment")
     assert page.has_selector?(".channel-post .body", text: "Updated Comment")
   end
+
 end

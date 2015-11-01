@@ -1,7 +1,7 @@
 var ChannelPostHeader = React.createClass({
   edit: function(e) {
     e.preventDefault();
-    this.props.channelPost.setState({edit: true});
+    this.props.channelPost.setState({edit: !this.props.channelPost.state.edit});
   },
   deletePost: function(e) {
     e.preventDefault();

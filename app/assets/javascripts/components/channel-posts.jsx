@@ -127,8 +127,8 @@ var ChannelPosts = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.isMounted() && this.state.jump) {
-      if(this.updateAnchor())
-        this.setState({jump: false});
+      this.setState({jump: false});
+      // this.updateAnchor();
     }
   },
   render: function () {

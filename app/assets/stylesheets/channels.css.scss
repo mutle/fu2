@@ -322,8 +322,13 @@ $large-screen: "only screen and (min-width: 1200px)";
     }
 
     .channel-post, .channel-response {
-      margin-bottom: 15px;
+      margin-bottom: 2em;
       border-top: 1px solid #e8e8e8;
+
+      &.channel-edit {
+        border-top: none;
+        margin-top: -1em;
+      }
 
       .channel-post-header, .channel-response-header {
         position: relative;
@@ -406,7 +411,6 @@ $large-screen: "only screen and (min-width: 1200px)";
     }
 
     .channel-post {
-      margin-bottom: 1em;
 
       &.read .channel-post-header {
         .right a {

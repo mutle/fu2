@@ -10,7 +10,7 @@ var FaveCounter = React.createClass({
       if(t.hasClass("fave-emoji") || t.get(0).className == "") t = t.parents("button");
       var emoji = t.attr("class").replace(/^emoji-/, '').split(" ")[0];
       $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
-        Data.update("post", c.props.postId, data.post);
+        Data.update(data.post.type, c.props.postId, data.post);
       });
     }
   },
@@ -22,7 +22,7 @@ var FaveCounter = React.createClass({
     if(this.props.postId > 0) {
       var c = this;
       $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
-        Data.update("post", c.props.postId, data.post);
+        Data.update(data.post.type, c.props.postId, data.post);
       });
     }
   },
@@ -120,7 +120,7 @@ var FaveCounter = React.createClass({
         <input onKeyDown={this.input} onKeyPress={this.input} />
       </div>;
     }
-    var addNew = <button onClick={this.addNew}><img className="fave-emoji" src="/images/emoji/heavy_plus_sign.png" /></button>;
+    var addNew = <button className="add-emoji-button" onClick={this.addNew}><img className="fave-emoji" src="/images/emoji/heavy_plus_sign.png" /></button>;
     // if(!this.props.faves || this.props.faves.length == 0) inner = <span>{icon}{'0'}</span>;
     // else inner = <span>{icon}{this.props.faves.length}</span>;
     // var className = "";

@@ -153,7 +153,8 @@ class Data
   destroy: (type) ->
   update: (type, id, props) ->
     @store[type] ?= {}
-    @store[type][id]
+    @store[type][id] = props
+    console.log([type, props])
     @notify([type])
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
