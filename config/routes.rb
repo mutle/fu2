@@ -19,6 +19,7 @@ Fu2::Application.routes.draw do
       end
       collection do
         get :unread
+        get :unread_users
         get :counters
       end
     end

@@ -17,7 +17,6 @@ var Router = {
       var routes = this.routes[name];
       for(var routei in routes) {
         var route = routes[routei];
-        console.log([path, name, route, hash]);
         if(route && route.match) {
           var m = path.match(route.match);
           if(m) {
@@ -51,14 +50,12 @@ var Router = {
   },
   open: function(name, params, updateUrl, urlpath) {
     var responder = this.responders[name];
-    console.log(React);
     React.unmountComponentAtNode(this.content);
     responder.callback(params, this.content);
     if(urlpath) {
       history.pushState(null, null, urlpath);
     } else if(responder.url && updateUrl) {
       var url = responder.url(params);
-      console.log(url);
       history.pushState(null, null, url);
     }
   },
@@ -79,10 +76,8 @@ $(function() {
 
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
-    console.log("open "+channel_id);
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
     var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
-    console.log(anchor);
     posts.setState({anchor: anchor});
   }, function(params) {
     var post_id = params.post_id ? "#post-"+params.post_id : "";
@@ -122,7 +117,6 @@ $(function() {
   });
 
   $(document).on("click", "a", function(e) {
-    console.log(e);
     if(!e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && e.button == 0 && Router.route($(this).attr("href"), true)) {
       e.preventDefault();
       return false;

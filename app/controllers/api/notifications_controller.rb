@@ -35,6 +35,21 @@ class Api::NotificationsController < Api::ApiController
     render json: {messages: @view.message_counts, mentions: @view.mention_counts}
   end
 
+  def unread_users
+    @view = Views::NotificationCounts.new({
+      current_user: current_user
+    })
+    @view.finalize
+    result = User.active.map do |u|
+      if u.id == current_user.id
+        current_user.as_json.merge(messages: nil, mentions: nil)
+      else
+        u.as_json.merge(messages: @view.message_counts[u.id], mentions: @view.mention_counts[u.id])
+      end
+    end
+    respond_with result
+  end
+
   def counters
     result = update_counters(current_user)
     respond_with result

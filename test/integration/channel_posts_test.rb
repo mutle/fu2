@@ -33,4 +33,31 @@ class ChannelPostsTest < JSTest
     assert page.has_selector?(".channel-post .body", text: "Updated Comment")
   end
 
+  test "new channel" do
+    visit session_url("/channels/new")
+    assert page.has_selector?(".channel-new")
+    fill_in "Channel Title", with: "Test New Channel #{Time.now.to_f}"
+    fill_in "text", with: "Test Comment"
+    find_button("Create").click
+    assert page.has_selector?(".channel-post .body", text: "Test Comment")
+  end
+
+  # test "edit channel" do
+  #   visit session_url("/channels/#{@channel.id}")
+  #   p page.has_no_selector?(".channel-edit")
+  #   p page.has_selector?("h2 a", text: @channel.title)
+  #   page.save_screenshot
+  #   find(".edit-channel-link").click
+  #   p page.has_selector?(".channel-edit")
+  #   new_title = "Update Channel #{Time.now.to_f}"
+  #   fill_in "Channel Title", with: new_title
+  #   fill_in "text", with: "Update text"
+  #   find_button("Save").click
+  #   p page.has_selector?(".channel-text .title-text", text: "Update text")
+  #   p page.has_no_selector?(".channel-post .body", text: "Update text")
+  #   p page.has_no_selector?("h2 a", text: @channel.title)
+  #   p page.has_selector?("h2 a", text: new_title)
+  #   page.save_screenshot
+  # end
+
 end

@@ -43,6 +43,10 @@ class Live
       update :channel_update, channel, "channel", user.try(:id) || 0
     end
 
+    def event_create(event)
+      update :event_create, event, "post"
+    end
+
     def notification_counters(user)
       view = Views::CurrentUserView.new({current_user: user})
       view.finalize

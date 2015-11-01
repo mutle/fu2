@@ -14,7 +14,6 @@ class Socket
         for s in subscriptions
           s.open?()
     @connection.onerror = (error) =>
-      console.log("Socket error "+error)
     @connection.onmessage = (e) =>
       data = $.parseJSON($.parseJSON(e.data))
       console.log(data)

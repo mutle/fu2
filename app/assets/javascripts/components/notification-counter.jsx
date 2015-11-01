@@ -24,8 +24,6 @@ var NotificationCounter = React.createClass({
       $.getJSON(Data.url.notification.counters(), {}, function(data, status, xhr) {
         n.setState({messages: data.messages, mentions: data.mentions});
       });
-      if(!this.socket)
-        window.setTimeout(this.refresh, 12 * 1000);
     }
   },
   render: function() {

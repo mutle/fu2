@@ -11,7 +11,8 @@ var ChannelPostsData = {
   subscribe: [
     "post_create",
     "post_fave",
-    "post_unfave"
+    "post_unfave",
+    "event_create"
   ]
 };
 
@@ -21,11 +22,12 @@ function replyMessage(post) {
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
-    return {posts: [], channel: {}, view: {}, anchor: "", highlight: -1};
+    return {posts: [], events: [], channel: {}, view: {}, anchor: "", highlight: -1};
   },
   componentDidMount: function() {
     if(this.props.channelId > 0) {
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
+      Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
       Data.fetch(ChannelPostsData, this.props.channelId);
     }
@@ -114,6 +116,9 @@ var ChannelPosts = React.createClass({
     }
     this.setState({posts: objects, view: view, highlight: highlight, jump: true});
   },
+  updatedEvents: function(objects, view) {
+    this.setState({events: objects});
+  },
   updatedChannel: function(objects, view) {
     if(objects.length > 0) this.setState({channel: objects[0]});
   },
@@ -137,9 +142,14 @@ var ChannelPosts = React.createClass({
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
-      var posts = this.state.posts.map(function(post, i) {
+      var items = this.state.posts.concat(this.state.events).sort(function(a,b) { console.log([a.created_at - b.created_at, a, b]); return new Date(a.created_at) - new Date(b.created_at); });
+      var posts = items.map(function(post, i) {
         var user = Data.get("user", post.user_id);
-        return <ChannelPost key={post.id} id={post.id} highlight={i == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} />
+        if(post.type.match(/-event$/)) {
+          return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
+        } else {
+          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={i == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} />;
+        }
       });
       var commentbox = <div>
         <a name="comments"></a>
@@ -150,7 +160,7 @@ var ChannelPosts = React.createClass({
       </div>;
     }
     return <div>
-      <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} />
+      <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} channelPosts={this} />
       <ViewLoader callback={this.loadMore} callbackAll={this.loadAll} visible={this.state.posts.length} count={this.state.view ? this.state.view.count : 0} octicon={"chevron-up"} message={"older posts"} messageAll={"Show all"} />
       {posts}
       {commentbox}

@@ -2,7 +2,6 @@
 
 var user_id = 0;
 var notifications;
-var notificationsE;
 var month_names = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 var this_year = (new Date()).getFullYear();
@@ -27,11 +26,10 @@ var resize = function() {
   if(desktop()) {
     var input_height = parseInt($(".notifications .input-text").css("height"));
     var response_height = parseInt($(".notifications .response").css("height")) + input_height;
-    var h = $(window).height() - $(".notifications").get(0).offsetTop - 30;
+    h = $(window).height() - $(".notifications").get(0).offsetTop - 30;
     height = (h - response_height) + "px";
+    $(".notifications .users").css("height", h+"px");
   }
-
-  $(".notifications .users").css("height", h+"px");
   messages = $(".messages .message-list");
   messages.css("height", height);
   $(".notifications .empty").css("height", height);
@@ -41,8 +39,8 @@ var resize = function() {
 };
 
 var resetInput = function() {
-  $(".input-text").val("")
-  resize()
+  $(".input-text").val("");
+  resize();
 };
 
 var NotificationUser = React.createClass({
@@ -110,7 +108,7 @@ var NotificationView = React.createClass({
     };
     var response = <NotificationResponse showUser={this.props.selectedUser != 0} />;
     if(!this.props.notifications || !this.props.selectedUser) {
-      return <div className="welcome"><div className="message"><img src={notificationsE.data("arrow-left-image")} />{'Select a user to chat with \u2026'}</div><div className="message"><img src={notificationsE.data("arrow-down-image")} />and write your message.</div></div>;
+      return <div className="welcome"><div className="message"><img src="/assets/notifications-welcome-arrow-left.png" />{'Select a user to chat with \u2026'}</div><div className="message"><img src="/assets/notifications-welcome-arrow-down.png" />and write your message.</div></div>;
     }
     if(this.props.notifications.length == 0)
       return <div><div className="empty"><div className="message"><img src={notificationsE.data("arrow-down-image")} />Write a message to <span className="username">{this.props.selectedUser.login}</span>.</div>{response}</div></div>;
@@ -128,7 +126,7 @@ var NotificationResponse = React.createClass({
     e.preventDefault();
     if(!this.props.showUser) return;
     var message = inputValue();
-    $.post("/notifications.json", {user_id: notifications.state.selectedUser, message: message}, function(data, status, xhr) {
+    $.post("/api/notifications.json", {user_id: notifications.state.selectedUser, message: message}, function(data, status, xhr) {
       var n = notifications.state.notifications;
       n.push(data);
       notifications.setState({notifications:n, lastId: data.id+1});
@@ -151,7 +149,7 @@ var Notifications = React.createClass({
   },
   loadUsers: function() {
     var n = this;
-    $.getJSON("/notifications/unread.json", function(data, status, xhr) {
+    $.getJSON("/api/notifications/unread_users.json", function(data, status, xhr) {
       var users = data.notifications;
       var active = [];
       var inactive = [];
@@ -166,7 +164,8 @@ var Notifications = React.createClass({
   },
   show: function(user_id) {
     var n = this;
-    $.getJSON("/notifications/"+user_id+".json", function(data, status, xhr) {
+    $.getJSON("/api/notifications/"+user_id+".json", function(data, status, xhr) {
+      console.log(data);
       var id = 0;
       for(var i in data.notifications) {
         var notification = data.notifications[i];
@@ -175,7 +174,7 @@ var Notifications = React.createClass({
       $.ajax({
         dataType: "json",
         type: "POST",
-        url: "/notifications/"+user_id+"/read.json",
+        url: "/api/notifications/"+user_id+"/read.json",
         success: function(data) {
         }
       });
@@ -185,7 +184,7 @@ var Notifications = React.createClass({
   refresh: function() {
     if(this.state.selectedUser > 0) {
       var n = this;
-      $.getJSON("/notifications/"+this.state.selectedUser+".json?last_id="+this.state.lastId, function(data, status, xhr) {
+      $.getJSON("/api/notifications/"+this.state.selectedUser+".json?last_id="+this.state.lastId, function(data, status, xhr) {
         var notifications = n.state.notifications;
         if(data.notifications.length > 0) {
           var id = n.state.lastId;
@@ -202,6 +201,16 @@ var Notifications = React.createClass({
     }
     this.loadUsers();
     window.setTimeout(this.refresh, 12 * 1000);
+  },
+  componentDidMount: function() {
+    notifications = this;
+    this.loadUsers();
+    $(window).resize(resize);
+    this.refresh();
+    resize();
+  },
+  componentWillUnmount: function() {
+    notifications = null;
   },
   componentDidUpdate: function() {
     scrollMessages();
@@ -226,29 +235,18 @@ var Notifications = React.createClass({
   },
   render: function() {
     var className = "notifications-container" + (this.state.selectedUser > 0 ? " show" : "");
-    return <div className={className}>
-      <NotificationUserList activeUsers={this.state.activeUsers} inactiveUsers={this.state.inactiveUsers} selected={this.state.selectedUser} />
+    return <div className="notifications">
+      <div className={className}>
+        <NotificationUserList activeUsers={this.state.activeUsers} inactiveUsers={this.state.inactiveUsers} selected={this.state.selectedUser} />
 
-      <div className="messages">
-        <button className="back" onClick={this.deselectUser}><span className="octicon octicon-chevron-left"></span> Back</button>
-        <NotificationView selectedUser={this.selectedUser()} notifications={this.state.notifications} />
+        <div className="messages">
+          <button className="back" onClick={this.deselectUser}><span className="octicon octicon-chevron-left"></span> Back</button>
+          <NotificationView selectedUser={this.selectedUser()} notifications={this.state.notifications} />
+        </div>
       </div>
     </div>;
   }
 });
-
-$(function() {
-  notificationsE =  $(".notifications");
-  if(notificationsE.length > 0) {
-    user_id = notificationsE.data("user-id");
-    notifications = React.render(<Notifications />, notificationsE.get(0));
-    notifications.loadUsers();
-    $(window).resize(resize);
-    notifications.refresh();
-    resize();
-  }
-})
-
 
 // module.exports = Notifications;
 window.Notifications = Notifications;

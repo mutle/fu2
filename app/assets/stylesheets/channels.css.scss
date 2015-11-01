@@ -127,6 +127,9 @@ $large-screen: "only screen and (min-width: 1200px)";
       }
     }
 
+    input.channel-title {
+      margin-top: 0;
+    }
     .channel-title {
       font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
       font-size: 38px;
@@ -542,11 +545,12 @@ $large-screen: "only screen and (min-width: 1200px)";
     }
 
     .event {
-      margin: 1em 0px;
+      margin: 1.5em 0px;
       text-align: center;
       color: #888;
 
       .user {
+        color: #888;
         img {
           max-width: 16px;
           max-height: 16px;
