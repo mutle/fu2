@@ -16,7 +16,7 @@ var FaveCounter = React.createClass({
   },
   addNew: function(e) {
     e.preventDefault();
-    this.setState({add:true, input: "", selection: 0});
+    this.setState({add: !this.state.add, input: "", selection: 0});
   },
   fave: function(emoji) {
     if(this.props.postId > 0) {
@@ -28,7 +28,9 @@ var FaveCounter = React.createClass({
   },
   autocompleteClick: function(e) {
     e.preventDefault();
-    var emoji = $(e.target).parents(".result").data("value");
+    var emoji = $(e.target).data("value");
+    if(!emoji)
+      emoji = $(e.target).parents(".result").data("value");
     this.fave(emoji);
     this.setState({add:false});
   },
