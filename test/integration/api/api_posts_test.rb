@@ -42,7 +42,7 @@ class ApiPostsTest < ActionDispatch::IntegrationTest
   end
 
   test "show posts json" do
-    c = create_channel("Foo Channel")
+    c = create_channel("Foo Channel #{Time.now.to_f}")
     p = create_post("Post")
     get "/api/channels/#{c.id}/posts.json"
     j = json_body

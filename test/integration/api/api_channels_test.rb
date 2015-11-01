@@ -7,7 +7,8 @@ class ApiChannelsTest < ActionDispatch::IntegrationTest
   end
 
   test "list channels json" do
-    c = create_channel("Foo Channel")
+    title = "Foo Channel #{Time.now.to_f}"
+    c = create_channel(title)
     get '/api/channels.json'
     j = json_body
     jc = j['channels'].first
@@ -22,27 +23,31 @@ class ApiChannelsTest < ActionDispatch::IntegrationTest
   end
 
   test "create channel and post" do
-    post '/api/channels.json', {channel: {title: "Test Channel", body: "Testing"}}
+    title = "Test Channel #{Time.now.to_f}"
+    post '/api/channels.json', {channel: {title: title, body: "Testing"}}
     j = json_body
     assert_nil json_body['errors']
     jc = j['channel']
     assert_not_nil jc['id']
-    assert_equal "Test Channel", jc['title']
+    assert_equal title, jc['title']
     assert_equal true, jc['read']
   end
 
   test "create channel requires unique name" do
-    c = create_channel("Title in use")
-    post '/api/channels.json', {channel: {title: "Title in use", body: "Testing"}}
+    title = "Title in use #{Time.now.to_f}"
+    c = create_channel(title)
+    post '/api/channels.json', {channel: {title: title, body: "Testing"}}
     assert_not_nil json_body['errors']['title']
   end
 
   test "update channel title and text" do
-    c = create_channel("Foo Channel")
-    put "/api/channels/#{c.id}.json", {channel: {title: "Test Channel", text: "Channel text"}}
+    title = "Foo Channel #{Time.now.to_f}"
+    c = create_channel(title)
+    title2 = "FooTest Channel #{Time.now.to_f}"
+    put "/api/channels/#{c.id}.json", {channel: {title: title2, text: "Channel text"}}
     j = json_body
     jc = j['channel']
-    assert_equal "Test Channel", jc['title']
+    assert_equal title2, jc['title']
     assert_equal "Channel text", jc['text']
   end
 end
