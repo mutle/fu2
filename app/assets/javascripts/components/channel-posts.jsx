@@ -34,22 +34,30 @@ var ChannelPosts = React.createClass({
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
-      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
-      if(key == "J") {
-        if(self.state.highlight+1 < self.state.posts.length)
-          self.setState({highlight: self.state.highlight+1});
-        else
-          self.setState({highlight: 0});
+      if(key == "U" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+        self.setState({highlight: 0});
         self.updateAnchor();
         e.preventDefault();
       }
-      if(key == "K") {
-        if(self.state.highlight > 0)
-          self.setState({highlight: self.state.highlight-1});
-        else
-          self.setState({highlight: self.state.posts.length-1});
+      if(key == "D" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+        self.setState({highlight: self.state.posts.length-1});
         self.updateAnchor();
+        e.preventDefault();
+      }
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      if(key == "J") {
+        if(self.state.highlight < self.state.posts.length) {
+          self.setState({highlight: self.state.highlight+1});
+          self.updateAnchor();
+        }
+        e.preventDefault();
+      }
+      if(key == "K") {
+        if(self.state.highlight > 0) {
+          self.setState({highlight: self.state.highlight-1});
+          self.updateAnchor();
+        }
         e.preventDefault();
       }
       if(key == "M") {
@@ -93,9 +101,6 @@ var ChannelPosts = React.createClass({
       var post = this.state.posts[this.state.highlight];
       if(post) {
         return this.selectPost(post);
-        // var h = "#post-"+post.id;
-        // if(h != document.location.hash)
-          // document.location.hash = h;
       }
     }
     return false;
@@ -127,21 +132,25 @@ var ChannelPosts = React.createClass({
         Data.fetch(ChannelPostsData, this.props.channelId, {last_id: anchorPostId - 1, limit: view.count});
       }
     }
-    this.setState({posts: objects, view: view, highlight: highlight, jump: true});
+    var items = objects.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
+    this.setState({posts: objects, items: items, view: view, highlight: highlight, jump: true});
   },
   updatedEvents: function(objects, view) {
-    this.setState({events: objects});
+    var items = this.state.posts.concat(objects).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
+    this.setState({events: objects, items: items});
   },
   updatedChannel: function(objects, view) {
     if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) this.setState({channel: objects[0]});
   },
   loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
-    e.preventDefault();
+    if(e)
+      e.preventDefault();
   },
   loadAll: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {last_id: 0, limit: this.state.view.count});
-    e.preventDefault();
+    if(e)
+      e.preventDefault();
   },
   componentDidUpdate: function() {
     if(this.isMounted() && this.state.jump) {
@@ -155,13 +164,14 @@ var ChannelPosts = React.createClass({
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
-      var items = this.state.posts.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
-      var posts = items.map(function(post, i) {
+      var pi = 0;
+      var posts = this.state.items.map(function(post, i) {
         var user = Data.get("user", post.user_id);
         if(post.type.match(/-event$/)) {
           return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
         } else {
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={i == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} />;
+          pi++;
+          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} />;
         }
       });
       var commentbox = <div>

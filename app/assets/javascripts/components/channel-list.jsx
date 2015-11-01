@@ -47,22 +47,30 @@ var ChannelList = React.createClass({
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
-      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-      var key = String.fromCharCode(e.keyCode);
-      if(key == "J") {
-        if(self.state.highlight+1 < self.state.channels.length)
-          self.setState({highlight: self.state.highlight+1});
-        else
-          self.setState({highlight: 0});
+      if(key == "U" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+        self.setState({highlight: 0});
         self.scrollToHighlight();
         e.preventDefault();
       }
-      if(key == "K") {
-        if(self.state.highlight > 0)
-          self.setState({highlight: self.state.highlight-1});
-        else
-          self.setState({highlight: self.state.channels.length-1});
+      if(key == "D" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+        self.setState({highlight: self.state.channels.length - 1});
         self.scrollToHighlight();
+        e.preventDefault();
+      }
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      var key = String.fromCharCode(e.keyCode);
+      if(key == "J") {
+        if(self.state.highlight < self.state.channels.length) {
+          self.setState({highlight: self.state.highlight+1});
+          self.scrollToHighlight();
+        }
+        e.preventDefault();
+      }
+      if(key == "K") {
+        if(self.state.highlight > 0) {
+          self.setState({highlight: self.state.highlight-1});
+          self.scrollToHighlight();
+        }
         e.preventDefault();
       }
       if((key == "O" || e.keyCode == 13) && self.state.highlight >= 0) {

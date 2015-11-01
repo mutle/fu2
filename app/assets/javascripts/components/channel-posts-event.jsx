@@ -15,7 +15,6 @@ var ChannelEvent = React.createClass({
     $(".comment-box-form textarea").val(ChannelPosts.quote(this.props.event.data.text)).select();
   },
   render: function() {
-    console.log(this.props.event);
     var body = {__html: this.props.event.html_message};
     var userLink = "/users/"+this.props.user.id;
     var className = "event "+this.props.event.event;

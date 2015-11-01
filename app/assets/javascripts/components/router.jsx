@@ -90,11 +90,11 @@ $(function() {
 
   Router.addResponder("channels/new", function(params, e) {
     var posts = React.render(<ChannelPosts channelId={0} />, e);
-  }, null, {hotkey: "N"});
+  }, function(params) { return "/channels/new"; }, {hotkey: "N"});
 
   Router.addResponder("notifications/index", function(params, e) {
     var notifications = React.render(<Notifications />, e);
-  });
+  }, function(params) { return "/notifications"; }, {hotkey: "M"});
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);

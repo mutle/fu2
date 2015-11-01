@@ -429,6 +429,10 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-post {
 
+      .post-unread {
+        color: #474747;
+      }
+
       &.read .channel-post-header {
         .right a {
           color: #474747;
@@ -440,6 +444,9 @@ $large-screen: "only screen and (min-width: 1200px)";
           }
           &.faved {
           }
+        }
+        .post-unread {
+          color: #e8e8e8;
         }
       }
 
