@@ -11,7 +11,6 @@ var ChannelPostHeader = React.createClass({
     e.preventDefault();
   },
   unread: function(e) {
-    console.log("unread");
     e.preventDefault();
   },
   render: function() {

@@ -429,7 +429,7 @@ $large-screen: "only screen and (min-width: 1200px)";
 
     .channel-post {
 
-      .post-unread {
+      .right a.post-unread {
         color: #474747;
       }
 
@@ -445,7 +445,7 @@ $large-screen: "only screen and (min-width: 1200px)";
           &.faved {
           }
         }
-        .post-unread {
+        .right a.post-unread {
           color: #e8e8e8;
         }
       }
