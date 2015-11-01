@@ -6,7 +6,8 @@ var ChannelPostsHeader = React.createClass({
     e.preventDefault();
     this.setState({edit: !this.state.edit});
   },
-  save: function() {
+  save: function(e) {
+    e.preventDefault();
     var self = this;
     if(this.props.channelId == 0) {
       var data = {body: $(".channel-text .body textarea").val(), title: $(".channel-title input.channel-title").val() };
@@ -51,7 +52,6 @@ var ChannelPostsHeader = React.createClass({
       </div>;
     } else {
       var body = {__html: this.props.channel.display_text};
-      console.log(body.__html);
       var channelText = <div className="channel-text">
         <div className="body text-body" dangerouslySetInnerHTML={body} />
       </div>;

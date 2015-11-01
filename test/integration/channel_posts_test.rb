@@ -37,7 +37,7 @@ class ChannelPostsTest < JSTest
     visit session_url("/channels/new")
     assert page.has_selector?(".channel-new")
     fill_in "Channel Title", with: "Test New Channel #{Time.now.to_f}"
-    fill_in "text", with: "Test Comment"
+    find(".channel-new textarea").set("Test Comment")
     find_button("Create").click
     assert page.has_selector?(".channel-post .body", text: "Test Comment")
   end

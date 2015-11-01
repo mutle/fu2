@@ -32,10 +32,12 @@ var CommentBox = React.createClass({
   render: function() {
     if(this.props.cancelCallback)
       var cancelButton = <button onClick={this.props.cancelCallback} className="response-button content-button" accessKey="c">Cancel</button>;
+    var self = this;
+    var refFunc = function(ref) { self.editor = ref; };
     return <div>
       <form className="comment-box-form" onSubmit={this.submit}>
         <div className="comment-box-container">
-          <Editor ref={(ref) => this.editor = ref} initialText={this.props.initialText} textareaClass="comment-box" textareaId="post_body" valueName="post[body]" />
+          <Editor ref={refFunc} initialText={this.props.initialText} textareaClass="comment-box" textareaId="post_body" valueName="post[body]" />
         </div>
         <div className="actions">
           {cancelButton}

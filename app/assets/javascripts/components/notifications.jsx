@@ -102,8 +102,6 @@ var NotificationView = React.createClass({
     var showNotification = function(notification, index) {
       var displayId = (notification.notification_type == "response" ? notification.user_id : notification.created_by_id);
       var own = displayId == user_id;
-      console.log(notification);
-      console.log(displayId);
       return <Notification key={notification.id} message={notification.message} own={own} timestamp={notification.created_at} avatarUrl={notifications.getUser(displayId).avatar_url} />;
     };
     var response = <NotificationResponse showUser={this.props.selectedUser != 0} />;
@@ -165,7 +163,6 @@ var Notifications = React.createClass({
   show: function(user_id) {
     var n = this;
     $.getJSON("/api/notifications/"+user_id+".json", function(data, status, xhr) {
-      console.log(data);
       var id = 0;
       for(var i in data.notifications) {
         var notification = data.notifications[i];
@@ -188,13 +185,11 @@ var Notifications = React.createClass({
         var notifications = n.state.notifications;
         if(data.notifications.length > 0) {
           var id = n.state.lastId;
-          console.log(data.notifications);
           for(var i in data.notifications) {
             var notification = data.notifications[i];
             if(notification.id > id) id = notification.id;
             notifications.push(notification);
           }
-          console.log(id);
           n.setState({notifications:notifications, lastId: id});
         }
       });

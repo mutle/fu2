@@ -15,7 +15,8 @@ class Event < ActiveRecord::Base
   }
 
   def message
-    MESSAGE[event].call(self) || ""
+    m = MESSAGE[event]
+    m && m.call(self) || ""
   end
 
   def html_message

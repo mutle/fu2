@@ -13,6 +13,7 @@ class ActiveSupport::TestCase
   self.use_transactional_fixtures = true
 
   setup do
+    $redis.flushdb
     User.stubs(:fubot).returns(User.new)
   end
 

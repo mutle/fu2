@@ -328,7 +328,7 @@ $large-screen: "only screen and (min-width: 1200px)";
       margin-bottom: 2em;
       border-top: 1px solid #e8e8e8;
 
-      &.channel-edit {
+      &.channel-edit, &.channel-new {
         border-top: none;
         margin-top: -1em;
       }
@@ -452,7 +452,7 @@ $large-screen: "only screen and (min-width: 1200px)";
       margin: 32px 0px 16px 0px;
     }
 
-    .channel-response, .channel-edit {
+    .channel-response, .channel-edit, .channel-new {
 
       .editor-shortcuts {
         padding: 6px 0px;

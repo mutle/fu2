@@ -11,7 +11,7 @@ class Api::ChannelsController < Api::ApiController
   end
 
   def create
-    @channel = Channel.create(channel_params.merge(:user_id => current_user.id, :markdown => current_user.markdown?))
+    @channel = Channel.create(channel_params.merge(user_id: current_user.id, markdown: true))
     @channel.visit(current_user)
     if !@channel.valid?
       render json: {errors: @channel.errors}

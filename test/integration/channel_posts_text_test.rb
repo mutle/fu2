@@ -12,8 +12,7 @@ class ChannelPostsTextTest < JSTest
     @channel.text = "Lorem ipsum"
     @channel.save
     visit session_url("/channels/#{@channel.id}")
-    p page.has_selector?(".channel-text .body", text: "Lorem ipsum")
-    page.save_screenshot
+    assert page.has_selector?(".channel-text .body", text: "Lorem ipsum")
   end
 
 end

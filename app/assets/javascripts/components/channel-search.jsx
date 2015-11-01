@@ -23,7 +23,6 @@ var ChannelSearchResults = React.createClass({
       defaultResult = <ChannelSearchResult url={searchUrl(this.props.query)} selected={selectedDefault} title={searchTitle} />
     var showResult = function(result, index) {
       var selected = index == selection;
-      if(!result.id) console.log(result);
       return <ChannelSearchResult id={result.id} key={result.id} title={result.title} selected={selected} />;
     };
     return <div className='results-container'>

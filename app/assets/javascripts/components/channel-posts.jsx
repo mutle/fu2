@@ -120,7 +120,7 @@ var ChannelPosts = React.createClass({
     this.setState({events: objects});
   },
   updatedChannel: function(objects, view) {
-    if(objects.length > 0) this.setState({channel: objects[0]});
+    if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) this.setState({channel: objects[0]});
   },
   loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
@@ -142,7 +142,7 @@ var ChannelPosts = React.createClass({
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
-      var items = this.state.posts.concat(this.state.events).sort(function(a,b) { console.log([a.created_at - b.created_at, a, b]); return new Date(a.created_at) - new Date(b.created_at); });
+      var items = this.state.posts.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
       var posts = items.map(function(post, i) {
         var user = Data.get("user", post.user_id);
         if(post.type.match(/-event$/)) {

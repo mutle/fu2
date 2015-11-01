@@ -2,6 +2,9 @@ var Editor = React.createClass({
   getInitialState: function() {
     return {text: "", autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
   },
+  getInitialProps: function() {
+    return {valueName: "text"};
+  },
   insertImage: function(url, prefix) {
     this.insert("![]("+url+")");
   },

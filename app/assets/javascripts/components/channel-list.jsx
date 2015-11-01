@@ -75,10 +75,7 @@ var ChannelList = React.createClass({
     if(this.state.highlight >= 0) {
       var channel = this.state.channels[this.state.highlight];
       if(channel) {
-        console.log(channel);
-        console.log($(this.getDOMNode()).find(".channel-"+channel.id));
         o = $(this.getDOMNode()).find(".channel-"+channel.id).offset();
-        console.log(o);
         if(o) {
           $(window).scrollTop(o.top - 150);
         }
