@@ -6,6 +6,7 @@
       Red Cursor
     </title>
     <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "test" if Rails.env.test? %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <%= users_js %>

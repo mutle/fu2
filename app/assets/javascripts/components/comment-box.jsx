@@ -158,14 +158,14 @@ var EditorShortcuts = React.createClass({
   render: function() {
     var self = this;
     var b = this.buttons.map(function(button, i) {
-      if(button == "div") return <span className="divider" />;
+      if(button == "div") return <span key={"div-"+i} className="divider" />;
       var className = "editor-button button-"+button.name
       if(button.icon) {
         var oc = "octicon octicon-"+button.icon;
         var title = <span className={oc} />;
       } else
         var title = button.title;
-      return <span onClick={self.buttonClick} className={className} title={button.name}>{title}</span>;
+      return <span key={button.name} onClick={self.buttonClick} className={className} title={button.name}>{title}</span>;
     });
     return <div className="editor-shortcuts">
       {b}
@@ -212,14 +212,17 @@ var CommentBox = React.createClass({
     this.setState({text: newtext});
   },
   submit: function(e) {
+    console.log("submit");
     e.preventDefault();
     var c = this;
     var data = {body: this.state.text};
     Data.create("post", [this.props.channelId], data, {error: function() {
       $('.comment-box-form textarea').val(c.state.text)
       imageUpload.setState({message: "Error sending post. Please try again."})
-    }, success: function() {
-      c.setState({text: ""})
+    }, success: function(data) {
+      Data.insert(data.post);
+      Data.notify([data.post.type]);
+      c.setState({text: ""});
     }});
     // $.ajax({type: "POST", dataType: "json", url: $(this.getDOMNode()).parents("form").attr("action"), data: data,
     //   success: function(data) {

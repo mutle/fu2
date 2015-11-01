@@ -37,4 +37,7 @@ gem 'websocket-eventmachine-server'
 group :test do
   gem "mocha"
   gem "test-unit"
+  gem 'poltergeist'
+  gem "capybara"
+  gem "phantomjs", require: "phantomjs/poltergeist"
 end

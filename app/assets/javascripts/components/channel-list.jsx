@@ -108,7 +108,7 @@ var ChannelList = React.createClass({
     e.preventDefault();
   },
   fetchUpdatedChannels: function() {
-    Data.fetch(ChannelListData, 0, {last});
+    // Data.fetch(ChannelListData, 0, {last: true});
   },
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;

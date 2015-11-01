@@ -119,7 +119,7 @@ var FaveCounter = React.createClass({
     var buttons = emojinames.map(function(emoji, i) {
       var className = "emoji-"+emoji;
       if(user && emojis[emoji].indexOf(user) >= 0) className += " on"
-      return <button className={className} onClick={self.click}>
+      return <button key={emoji} className={className} onClick={self.click}>
         <img className="fave-emoji" src={"/images/emoji/"+emoji+".png"} title={emoji+": "+emojis[emoji].join(", ")} />
         {emojis[emoji].length}
       </button>;
@@ -136,7 +136,7 @@ var FaveCounter = React.createClass({
         }
       });
       this.filteredEmojis = filteredEmojis;
-      var newText = <div class="add-emoji">
+      var newText = <div className="add-emoji">
         <AutoCompleter objects={filteredEmojis} imageUrl={imageUrl} selection={this.state.selection} clickCallback={this.autocompleteClick} mountCallback={this.autocompleteMount} />
         <input onKeyDown={this.input} onKeyPress={this.input} />
       </div>;
