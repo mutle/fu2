@@ -69,11 +69,15 @@ var ChannelPosts = React.createClass({
         e.preventDefault();
       }
       if(key == "R") {
-        if(self.state.highlight >= 0) {
+        if(self.state.highlight >= 0 && $("textarea.comment-box").val().length == 0) {
           var post = self.state.posts[self.state.highlight];
           ChannelPosts.replyMessage(post);
           e.preventDefault();
         }
+      }
+      if(key == "C") {
+        $("textarea.comment-box").select();
+        e.preventDefault();
       }
     });
   },
