@@ -216,14 +216,26 @@ var CommentBox = React.createClass({
     e.preventDefault();
     var c = this;
     var data = {body: this.state.text};
-    Data.create("post", [this.props.channelId], data, {error: function() {
-      $('.comment-box-form textarea').val(c.state.text)
-      imageUpload.setState({message: "Error sending post. Please try again."})
-    }, success: function(data) {
-      Data.insert(data.post);
-      Data.notify([data.post.type]);
-      c.setState({text: ""});
-    }});
+    if(this.props.postId) {
+      Data.action("update", "post", [this.props.channelId, this.props.postId], data, {error: function() {
+        imageUpload.setState({message: "Error sending post. Please try again."})
+      }, success: function(data) {
+        Data.insert(data.post);
+        Data.notify([data.post.type]);
+        if(c.props.callback) {
+          c.props.callback();
+        }
+      }});
+    } else {
+      Data.action("create", "post", [this.props.channelId], data, {error: function() {
+        $('.comment-box-form textarea').val(c.state.text)
+        imageUpload.setState({message: "Error sending post. Please try again."})
+      }, success: function(data) {
+        Data.insert(data.post);
+        Data.notify([data.post.type]);
+        c.setState({text: ""});
+      }});
+    }
     // $.ajax({type: "POST", dataType: "json", url: $(this.getDOMNode()).parents("form").attr("action"), data: data,
     //   success: function(data) {
     //     var d = $(data.rendered)
@@ -335,6 +347,8 @@ var CommentBox = React.createClass({
     }
   },
   componentDidMount: function() {
+    if(this.state.text == "" && this.props.initialText)
+      this.setState({text: this.props.initialText});
   },
   toggleMarkdown: function(e) {
     e.preventDefault();
@@ -346,6 +360,8 @@ var CommentBox = React.createClass({
       if(this.state.autocomplete == "emoji") imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
       autocompleter = <AutoCompleter objects={this.state.autocompleteobjectsfiltered} selection={this.state.autocompleteselection} imageUrl={imageUrl} clickCallback={this.autocompleteClick} />;
     }
+    if(this.props.cancelCallback)
+      var cancelButton = <button onClick={this.props.cancelCallback} className="response-button content-button" accessKey="c">Cancel</button>;
     return <div>
       <form className="comment-box-form" onSubmit={this.submit}>
         <div className="comment-box-container">
@@ -354,7 +370,8 @@ var CommentBox = React.createClass({
           <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className="comment-box" name={this.state.valueName} id="post_body" value={this.state.text}></textarea>
         </div>
         <div className="actions">
-          <input className="response-button content-button" accessKey="s" value="Send" type="submit" />
+          {cancelButton}
+          <input className="response-button content-button button-default" accessKey="s" value="Send" type="submit" />
         </div>
       </form>
 

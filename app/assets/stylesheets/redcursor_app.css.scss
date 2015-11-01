@@ -339,6 +339,11 @@ form {
   padding: 12px 25px;
   border-radius: 3px;
   margin: 0px 4px;
+  cursor: pointer;
+
+  &.button-default {
+    font-weight: bold;
+  }
 }
 
 .notice {

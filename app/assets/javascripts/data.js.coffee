@@ -43,7 +43,7 @@ class Data
       update: (channel_id) -> "/api/channels/#{channel_id}.json"
     post:
       create: (channel_id) -> "/api/channels/#{channel_id}/posts.json"
-      update: (post_id) -> "/api/posts/#{post_id}.json"
+      update: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
     image:
       create: -> "/api/images.json"
@@ -51,7 +51,7 @@ class Data
       create: -> "/api/notifications.json"
       unread: -> "/api/notifications/unread.json"
       counters: -> "/api/notifications/counters.json"
-  constructor: (@socket) ->
+  constructor: (@socket, @user_id) ->
     @callbacks = {}
     @store = {}
     @views = {}
@@ -133,16 +133,18 @@ class Data
     a = []
     a.push(v) for k,v of @store[type]
     a
-  create: (type, url_props, props, {error, success}) ->
-    url = @url[type]?["create"]?.apply(this, url_props)
+  action: (action, type, url_props, props, {error, success}) ->
+    url = @url[type]?[action]?.apply(this, url_props)
     if !url
       console.log "No create URL for #{type}"
       return
     data = {}
     for key,prop of props
       data["#{type}[#{key}]"] = prop
+    actionType = "POST"
+    actionType = "PUT" if action == "update"
     $.ajax
-      type: "POST",
+      type: actionType,
       dataType: "json",
       url: url,
       data: data,
@@ -155,6 +157,6 @@ class Data
     @notify([type])
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
-  window.Data = new Data(window.socket)
+  window.Data = new Data(window.socket, $("body").data("user-id"))
   $.each window.Users, (i,user) ->
     window.Data.insert(user)

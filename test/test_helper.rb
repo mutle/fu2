@@ -52,7 +52,7 @@ class ActionDispatch::IntegrationTest
   end
 
   def login_user
-    u = create_user
+    u = @user || create_user
     login u.login, "testpassword"
     u
   end

@@ -10,6 +10,7 @@ class ChannelListTest < JSTest
 
   test "list current channels" do
     visit session_url("/")
-    find_link(@channel.title)
+    click_link(@channel.title)
+    assert has_selector?(".channel-post .body", text: "... has nothing to say")
   end
 end

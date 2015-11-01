@@ -6,6 +6,9 @@
 //= require components/channel-search
 //= require components/comment-box
 //= require components/channel-list
+//= require components/channel-posts-fave-counter
+//= require components/channel-posts-header
+//= require components/channel-posts-post
 //= require components/channel-posts
 //= require components/notifications
 //= require components/router
