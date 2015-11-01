@@ -18,8 +18,7 @@
       <ul>
         <% @user_posts.each do |post| %>
           <% next if !post || !post.channel %>
-          <% @channel = post.channel %>
-          <%= render partial: "channels/post", object: post, locals: {simple: true, show_channel: true} %>
+          <%= render partial: "channels/post", object: post, locals: {simple: true, show_channel: true, channel: post.channel} %>
         <% end %>
       </ul>
     <% end %>
@@ -30,8 +29,7 @@
     <ul>
       <% @user_faves.each do |fave| %>
         <% next unless fave.post %>
-        <% @channel = fave.post.channel %>
-        <%= render partial: "channels/post", object: fave.post, locals: {simple: true, show_channel: true} %>
+        <%= render partial: "channels/post", object: fave.post, locals: {simple: true, show_channel: true, channel: fave.post.channel} %>
       <% end %>
     </ul>
   </div>

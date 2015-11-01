@@ -52,12 +52,24 @@ var ChannelPostsHeader = React.createClass({
       </div>;
     } else {
       var body = {__html: this.props.channel.display_text};
+      if(this.props.channel.last_text_change) {
+        console.log(this.props.channel.last_text_change);
+        var user = Data.get("user", this.props.channel.last_text_change.user_id);
+        console.log(user);
+        var update_info = <span>
+          <img className="avatar-image" src={user.avatar_url} />
+          <Timestamp timestamp={this.props.channel.last_text_change.updated_at} />
+        </span>;
+      }
       var channelText = <div className="channel-text">
         <div className="body text-body" dangerouslySetInnerHTML={body} />
       </div>;
+
       return <div>
         <h2 className="channel-title">
-          <div className="right"><a onClick={this.toggleEdit} className="edit-channel-link" href="#">Edit</a></div>
+          <div className="right">
+            {update_info} <a onClick={this.toggleEdit} className="edit-channel-link" href="#">Edit</a>
+          </div>
           <span className="title-text" dangerouslySetInnerHTML={title} />
         </h2>
         {channelText}

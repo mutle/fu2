@@ -6,3 +6,4 @@ json.updated_by_user_id channel.updated_by_user.try(&:id) || 0
 json.display_name format_title(channel.title)
 json.display_text format_text(channel.text)
 json.display_date (channel.last_post_date || channel.updated_at).to_i * 1000
+json.last_text_change channel.last_text_change

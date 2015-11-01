@@ -292,6 +292,21 @@ class Channel < ActiveRecord::Base
     events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
   end
 
+  def change_text(text, current_user)
+    old_text = self.text
+    old_text_html = RenderPipeline.markdown(old_text)
+    return if old_text == text
+    self.text = text
+    text_html = RenderPipeline.markdown(text)
+    events.create(event: "text", data: {old_text: old_text, old_text_html: old_text_html, text: text, text_html: text_html}, user_id: current_user.id)
+  end
+
+  def last_text_change
+    change = events.where(event: "text").last
+    return {user_id: change.user.id, updated_at: change.created_at} if change
+    nil
+  end
+
   def update_index
     Search.update("channels", id)
   end

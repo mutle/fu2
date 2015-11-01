@@ -23,7 +23,7 @@ class Api::ChannelsController < Api::ApiController
   def update
     @channel = Channel.find params[:id]
     channel = params[:channel]
-    @channel.text = channel[:text]
+    @channel.change_text(channel[:text], @current_user)
     @channel.rename(channel[:title], @current_user)
     @channel.updated_by = current_user.id
     @channel.save

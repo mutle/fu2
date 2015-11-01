@@ -63,4 +63,20 @@ class ChannelTest < ActiveSupport::TestCase
     c.visit(u, p3.id)
     assert c.next_post(u) > p3.id
   end
+
+  test "rename channel event" do
+    u = create_user
+    c = create_channel
+    assert_equal 0, c.events.where(event: "rename").size
+    c.rename("#{c.title} - updated", u)
+    assert_equal 1, c.events.where(event: "rename").size
+  end
+
+  test "channel text change event" do
+    u = create_user
+    c = create_channel
+    assert_equal 0, c.events.where(event: "text").size
+    c.change_text("new text", u)
+    assert_equal 1, c.events.where(event: "text").size
+  end
 end

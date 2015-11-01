@@ -16,9 +16,7 @@ var ChannelPostsData = {
   ]
 };
 
-function replyMessage(post) {
-  $(".comment-box-form textarea").val(post.body.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n").select();
-}
+
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
@@ -65,7 +63,7 @@ var ChannelPosts = React.createClass({
       if(key == "R") {
         if(self.state.highlight >= 0) {
           var post = self.state.posts[self.state.highlight];
-          replyMessage(post);
+          ChannelPosts.replyMessage(post);
           e.preventDefault();
         }
       }
@@ -107,7 +105,7 @@ var ChannelPosts = React.createClass({
     if(highlight == -1) {
       for(var p in objects) {
         var post = objects[p];
-        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post-/, '')))) {
+        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post[-_]/, '')))) {
           highlight = parseInt(p);
           jump = true;
           break;
@@ -137,7 +135,7 @@ var ChannelPosts = React.createClass({
     }
   },
   render: function () {
-    var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post-/, ''))
+    var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
@@ -167,6 +165,14 @@ var ChannelPosts = React.createClass({
     </div>;
   }
 });
+
+ChannelPosts.quote = function(text) {
+  return text.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n";
+}
+
+ChannelPosts.replyMessage = function(post) {
+  $(".comment-box-form textarea").val(ChannelPosts.quote(post.body)).select();
+}
 
 // module.exports = ChannelPosts;
 window.ChannelPosts = ChannelPosts;

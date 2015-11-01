@@ -127,9 +127,11 @@ var Editor = React.createClass({
     var n = 0;
     if(!objects) objects = this.state.objects;
     var filtered = [];
+    input = input.toLowerCase();
     objects.map(function(r, i) {
       var s = r;
       if(r.login) s = r.login;
+      s = s.toLowerCase();
       if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
         n++;
         filtered.push(r);
