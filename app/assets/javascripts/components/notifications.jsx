@@ -146,6 +146,7 @@ var Notifications = React.createClass({
     return {activeUsers:[], inactiveUsers: [], users: [], selectedUser: 0, lastId: 0, notifications: null};
   },
   loadUsers: function() {
+    if(!this.isMounted()) return;
     var n = this;
     $.getJSON("/api/notifications/unread_users.json", function(data, status, xhr) {
       var users = data.notifications;

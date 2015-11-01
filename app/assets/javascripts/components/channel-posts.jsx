@@ -80,8 +80,9 @@ var ChannelPosts = React.createClass({
       if(this.isMounted())
         this.setState({anchor: h});
     }
-    o = $(this.getDOMNode()).find(".post-"+post.id).offset();
-    if(o) {
+    var post = $(this.getDOMNode()).find(".post-"+post.id);
+    if(post) {
+      var o = post.offset();
       $(window).scrollTop(o.top - 150);
       return true;
     }
@@ -110,6 +111,20 @@ var ChannelPosts = React.createClass({
           jump = true;
           break;
         }
+      }
+    }
+    if(this.state.posts.length == 0 && this.state.anchor !== "") {
+      var anchorPostId =  parseInt(this.state.anchor.replace(/#?post[-_]/, ''));
+      var found = false;
+      for(var p in objects) {
+        var post = objects[p];
+        if(post.id == anchorPostId) {
+          found = true;
+          break;
+        }
+      }
+      if(!found) {
+        Data.fetch(ChannelPostsData, this.props.channelId, {last_id: anchorPostId - 1, limit: view.count});
       }
     }
     this.setState({posts: objects, view: view, highlight: highlight, jump: true});
