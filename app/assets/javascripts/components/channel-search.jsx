@@ -80,7 +80,6 @@ var ChannelSearch = React.createClass({
         break;
       case "Enter":
         var c = this.state.cursor;
-        console.log(c);
         if(c == -1) {
           document.location.href = searchUrl(this.state.query);
         } else if(c > -1 && this.state.results.length > 0) {

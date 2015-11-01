@@ -74,7 +74,6 @@ $ ->
   if $('.channel-response form.channel-comment').length
     channel_id = parseInt document.location.href.replace(/#.*$/, '').replace(/^.*\/([0-9]+)$/, "$1")
     data = (data, type) ->
-      console.log(data.channel_id)
       if data.channel_id == channel_id
         refreshPosts(true)
     open = ->
