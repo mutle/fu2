@@ -161,9 +161,13 @@ var ChannelPosts = React.createClass({
       e.preventDefault();
   },
   componentDidUpdate: function() {
-    if(this.isMounted() && this.state.jump) {
-      if(this.updateAnchor())
+    if(this.isMounted()) {
+      if(this.state.jump && this.updateAnchor())
         this.setState({jump: false});
+      var self = this;
+      twttr.ready(function() {
+        twttr.widgets.load(self.getDOMNode());
+      });
     }
   },
   render: function () {

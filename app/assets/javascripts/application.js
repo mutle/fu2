@@ -11,4 +11,5 @@
 //= require markitup-html
 //= require emoji
 //= require data
+//= require twitter
 //= require components

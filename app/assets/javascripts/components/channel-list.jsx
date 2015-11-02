@@ -22,7 +22,7 @@ var Channel = React.createClass({
     var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var userLink = "/users/"+this.props.user.id;
     var userName = {__html: this.props.user.display_name};
-    var channelName = {__html: this.props.channel.title};
+    var channelName = {__html: this.props.channel.display_name};
     return <li>
       <div className={className}>
         <div className="timestamp">

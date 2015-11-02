@@ -379,7 +379,7 @@ $large-screen: "only screen and (min-width: 1200px)";
           position: relative;
 
           button {
-            border: 1px solid #e8e8e8;
+            border: 2px solid #e8e8e8;
             background: #fff;
             font-size: 12px;
             padding: 0px 3px 3px 3px;
@@ -394,11 +394,18 @@ $large-screen: "only screen and (min-width: 1200px)";
           .add-emoji {
             display: inline-block;
             padding-right: 12px;
+
+            .fave-emoji {
+              padding-top: 2px;
+              padding-right: 0;
+            }
           }
 
           .fave-emoji {
-            max-width: 14px;
-            max-height: 14px;
+            max-width: 20px;
+            max-height: 20px;
+            padding-top: 2px;
+            padding-right: 4px;
           }
 
           .autocompleter {

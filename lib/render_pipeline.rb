@@ -37,6 +37,7 @@ module RenderPipeline
             Resque.enqueue(FetchTweetJob, id, post_id, :tweet)
             content
           else
+            tweet.gsub!(/<script.*>.*<\/script>/, "")
             content.gsub(EMBEDS[:twitter][:pattern], tweet)
           end
         end
