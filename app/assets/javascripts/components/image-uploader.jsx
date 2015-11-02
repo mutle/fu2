@@ -11,7 +11,7 @@ var ImageUploader = React.createClass({
 
     xhr.onreadystatechange = function(e) {
       if(xhr.readyState == 4) {
-        if(xhr.status == 201 || xhr.status == 202) {
+        if(xhr.status == 200 || xhr.status == 201 || xhr.status == 202) {
           u.setState({message: "Finished uploading \""+filename+"\"", filename: filename});
           if(u.props.callback) {
             u.props.callback(JSON.parse(xhr.responseText).url);
