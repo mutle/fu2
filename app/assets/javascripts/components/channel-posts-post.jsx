@@ -7,7 +7,7 @@ var ChannelPostHeader = React.createClass({
     e.preventDefault();
   },
   reply: function(e) {
-    replyMessage(this.props.post);
+    ChannelPosts.replyMessage(this.props.post);
     e.preventDefault();
   },
   unread: function(e) {
@@ -56,7 +56,7 @@ var ChannelPost = React.createClass({
     var name = "post-"+this.props.post.id;
     if(this.props.post.read) className += " read";
     if(this.props.highlight) className += " highlight";
-    var content = <div className="body" dangerouslySetInnerHTML={body}></div>;
+    var content = <div className="body" onClick={this.props.bodyClick} dangerouslySetInnerHTML={body}></div>;
     if(this.props.editable && this.state.edit) {
       var comments = <CommentBox postId={this.props.post.id} initialText={this.props.post.body} postId={this.props.id} channelId={this.props.channelId} callback={this.cancelEdit} cancelCallback={this.cancelEdit} />;
       var edit = <div className="channel-response channel-edit">{comments}</div>;

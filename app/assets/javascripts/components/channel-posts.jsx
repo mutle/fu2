@@ -86,15 +86,17 @@ var ChannelPosts = React.createClass({
     Data.unsubscribe(this);
     $(document).off("keydown", this.keydownCallback);
   },
-  selectPost: function(post) {
+  selectPost: function(post, highlight, noscroll) {
+    if(!highlight) highlight = this.state.highlight;
     var h = "#post-"+post.id;
     if(document.location.hash != h) {
       history.pushState(null, null, location.pathname+h);
-      if(this.isMounted() && this.state.anchor != h)
-        this.setState({anchor: h});
+      if(this.isMounted() && this.state.anchor != h) {
+        this.setState({anchor: h, highlight: highlight});
+      }
     }
     var post = $(this.getDOMNode()).find(".post-"+post.id);
-    if(post.length > 0) {
+    if(!noscroll && post.length > 0) {
       var o = post.offset();
       $(window).scrollTop(o.top - 150);
       return true;
@@ -170,6 +172,21 @@ var ChannelPosts = React.createClass({
       });
     }
   },
+  bodyClick: function(e) {
+    var post = $(e.target).parents(".channel-post");
+    console.log(post);
+    var id = parseInt(post.get(0).className.replace(/[^0-9]+/, ''));
+    console.log(id);
+    var n = 0;
+    for(var i in this.state.posts) {
+      var p = this.state.posts[i];
+      if(p.id == id) {
+        this.selectPost(p, n, true);
+        break;
+      }
+      n++;
+    }
+  },
   render: function () {
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
@@ -177,13 +194,14 @@ var ChannelPosts = React.createClass({
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
       var pi = 0;
+      var self = this;
       var posts = this.state.items.map(function(post, i) {
         var user = Data.get("user", post.user_id);
         if(post.type.match(/-event$/)) {
           return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
         } else {
           pi++;
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} />;
+          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
         }
       });
       var commentbox = <div>
@@ -209,6 +227,7 @@ ChannelPosts.quote = function(text) {
 
 ChannelPosts.replyMessage = function(post) {
   $(".comment-box-form textarea").val(ChannelPosts.quote(post.body)).select();
+  $(window).scrollTop($(".comment-box-form textarea").offset().top - 150)
 }
 
 // module.exports = ChannelPosts;

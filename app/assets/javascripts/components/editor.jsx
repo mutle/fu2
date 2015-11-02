@@ -1,6 +1,6 @@
 var Editor = React.createClass({
   getInitialState: function() {
-    return {text: "", autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
+    return {text: "", active: false, textSelection: [0,0], autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
   },
   getInitialProps: function() {
     return {valueName: "text"};
@@ -22,7 +22,8 @@ var Editor = React.createClass({
     var selected = c.value.slice(cursorS, cursorE);
     var out = a(selected);
     var newtext = c.value.slice(0, cursorS) + out.join("") + c.value.slice(cursorE, c.value.length);
-    this.setState({text: newtext});
+    var newCursor = cursorS + out.join("").length;
+    this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   lineAction: function(a) {
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
@@ -37,7 +38,8 @@ var Editor = React.createClass({
     }
     var out = c.value.slice(cursorS, cursorE).split("\n").map(function(s,i) { return a(s).join(""); });
     var newtext = c.value.slice(0, cursorS) + out.join("\n") + c.value.slice(cursorE, c.value.length);
-    this.setState({text: newtext});
+    var newCursor = cursorS + out.join("").length;
+    this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0).selectionEnd;
@@ -106,9 +108,26 @@ var Editor = React.createClass({
         this.setState({input: input, filtered: this.filterObjects(input), selection: 0});
       }
     }
+
+    if(e.type == "keypress") this.change();
   },
   change: function(e) {
-    this.setState({text: e.target.value});
+    if(e) this.setState({text: e.target.value});
+
+    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
+      this.setState({textSelection: [cursorS, cursorE]});
+  },
+  click: function(e) {
+    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
+      this.setState({active: true, textSelection: [cursorS, cursorE]});
+    else
+      this.setState({active: true});
   },
   autocompleteClick: function(e) {
     if(this.state.autocomplete) {
@@ -123,7 +142,8 @@ var Editor = React.createClass({
     }
   },
   blur: function(e) {
-    this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val()});
+    e.preventDefault();
+    this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val(), active: false});
   },
   filterObjects: function(input, objects) {
     var n = 0;
@@ -145,6 +165,13 @@ var Editor = React.createClass({
     if(this.state.text === "" && this.props.initialText)
       this.setState({text: this.props.initialText});
   },
+  componentDidUpdate: function() {
+    if(this.isMounted() && this.state.active) {
+      var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+      c.focus();
+      c.setSelectionRange(this.state.textSelection[0], this.state.textSelection[1]);
+    }
+  },
   render: function() {
     var imageUrl;
     if(this.state.autocomplete) {
@@ -154,7 +181,7 @@ var Editor = React.createClass({
     return <div>
       {autocompleter}
       <EditorShortcuts editor={this} />
-      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className={this.props.textareaClass} name={this.props.valueName} id={this.props.textareaId} value={this.state.text}></textarea>
+      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onMouseDown={this.click} onChange={this.change} className={this.props.textareaClass} name={this.props.valueName} id={this.props.textareaId} value={this.state.text}></textarea>
     </div>;
   }
 });
