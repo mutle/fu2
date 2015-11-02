@@ -1,7 +1,6 @@
 class Api::ImagesController < Api::ApiController
-  before_filter :login_required
-  respond_to :json
-
+  skip_before_filter :verify_authenticity_token, only: :create
+  
   def create
     @image = Image.create image_params.merge(:user_id => current_user.id)
     respond_with @image

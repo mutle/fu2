@@ -65,9 +65,6 @@ Fu2::Application.routes.draw do
 
   resources :notifications
 
-  resources :images
-  resources :stylesheets
-
   get '/stats/websockets' => "stats#websockets"
   get '/tests' => "tests#index"
 

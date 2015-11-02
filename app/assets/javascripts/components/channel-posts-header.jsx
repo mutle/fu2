@@ -53,9 +53,7 @@ var ChannelPostsHeader = React.createClass({
     } else {
       var body = {__html: this.props.channel.display_text};
       if(this.props.channel.last_text_change) {
-        console.log(this.props.channel.last_text_change);
         var user = Data.get("user", this.props.channel.last_text_change.user_id);
-        console.log(user);
         var update_info = <span>
           <img className="avatar-image" src={user.avatar_url} />
           <Timestamp timestamp={this.props.channel.last_text_change.updated_at} />
