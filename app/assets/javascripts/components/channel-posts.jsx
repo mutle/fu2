@@ -47,7 +47,7 @@ var ChannelPosts = React.createClass({
       }
       if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       if(key == "J") {
-        if(self.state.highlight < self.state.posts.length) {
+        if(self.state.highlight < self.state.posts.length-1) {
           self.setState({highlight: self.state.highlight+1});
           self.updateAnchor();
         }
@@ -76,7 +76,8 @@ var ChannelPosts = React.createClass({
         }
       }
       if(key == "C") {
-        $("textarea.comment-box").select();
+        var o = $("textarea.comment-box").select().offset();
+        if(o) $(window).scrollTop(o.top - 150);
         e.preventDefault();
       }
     });
@@ -87,9 +88,10 @@ var ChannelPosts = React.createClass({
   },
   selectPost: function(post) {
     var h = "#post-"+post.id;
+    console.log(h+" "+this.state.anchor);
     if(document.location.hash != h) {
       history.pushState(null, null, location.pathname+h);
-      if(this.isMounted())
+      if(this.isMounted() && this.state.anchor != h)
         this.setState({anchor: h});
     }
     var post = $(this.getDOMNode()).find(".post-"+post.id);

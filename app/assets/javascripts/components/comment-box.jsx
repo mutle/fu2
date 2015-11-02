@@ -37,7 +37,7 @@ var CommentBox = React.createClass({
     return <div>
       <form className="comment-box-form" onSubmit={this.submit}>
         <div className="comment-box-container">
-          <Editor ref={refFunc} initialText={this.props.initialText} textareaClass="comment-box" textareaId="post_body" valueName="post[body]" />
+          <Editor ref={refFunc} initialText={this.props.initialText} textareaClass="comment-box" textareaId="post_body" valueName="post[body]" submit={this.submit} />
         </div>
         <div className="actions">
           {cancelButton}

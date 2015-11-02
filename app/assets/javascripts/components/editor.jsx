@@ -46,6 +46,7 @@ var Editor = React.createClass({
     if(this.state.autocomplete && cursorE < this.state.start) {
       this.setState({autocomplete: null});
     }
+    console.log(e);
     switch(e.key) {
       case "Escape":
       case " ":
@@ -53,7 +54,9 @@ var Editor = React.createClass({
         break;
       case "Enter":
         if(e.ctrlKey || e.metaKey) {
-          this.submit(e);
+          if(this.props.submit && this.state.text.length > 0)
+            this.props.submit(e);
+          e.preventDefault();
         } else if(this.state.autocomplete) {
           e.preventDefault();
           var result = this.state.filtered[this.state.selection];

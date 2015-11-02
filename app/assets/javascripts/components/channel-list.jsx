@@ -42,6 +42,7 @@ var ChannelList = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
+    $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated, fetch: this.fetchUpdatedChannels});
     Data.fetch(ChannelListData);
     this.keydownCallback = $(document).on("keydown", function(e) {
@@ -60,7 +61,7 @@ var ChannelList = React.createClass({
       if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       var key = String.fromCharCode(e.keyCode);
       if(key == "J") {
-        if(self.state.highlight < self.state.channels.length) {
+        if(self.state.highlight < self.state.channels.length - 1) {
           self.setState({highlight: self.state.highlight+1});
           self.scrollToHighlight();
         }
