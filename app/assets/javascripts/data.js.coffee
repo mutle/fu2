@@ -41,6 +41,7 @@ class Data
       update: (channel_id) -> "/api/channels/#{channel_id}.json"
     post:
       create: (channel_id) -> "/api/channels/#{channel_id}/posts.json"
+      delete: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       update: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
     image:
@@ -115,6 +116,9 @@ class Data
     if !@store[type][id] || !@store[type][id]['updated_at'] || @store[type][id]['updated_at'] <= object['updated_at']
       @store[type][id] = object
     object
+  remove: (type, id) ->
+    @store[type] ?= {}
+    delete @store[type][id]
   updateView: (type, view) ->
     v = @views[type]
     if v
@@ -141,6 +145,7 @@ class Data
       data["#{type}[#{key}]"] = prop
     actionType = "POST"
     actionType = "PUT" if action == "update"
+    actionType = "DELETE" if action == "delete"
     $.ajax
       type: actionType,
       dataType: "json",

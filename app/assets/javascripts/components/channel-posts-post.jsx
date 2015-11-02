@@ -4,7 +4,16 @@ var ChannelPostHeader = React.createClass({
     this.props.channelPost.setState({edit: !this.props.channelPost.state.edit});
   },
   deletePost: function(e) {
+    var type = this.props.post.type;
+    var id = this.props.id;
     e.preventDefault();
+    if(!confirm("Are you sure that you want to delete this post?")) return;
+    Data.action("delete", "post", [this.props.channelId, id], {}, {error: function() {
+      console.log("Failed to delete post...");
+    }, success: function(data) {
+      Data.remove(type, id);
+      Data.notify([type]);
+    }});
   },
   reply: function(e) {
     ChannelPosts.replyMessage(this.props.post);
