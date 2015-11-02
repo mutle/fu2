@@ -22,7 +22,7 @@ class ActiveSupport::TestCase
       login: login || "testuser#{Time.now.to_f.to_s.gsub(/\./, '')}",
       password: password,
       password_confirmation: password,
-      email: "user-#{Random.rand(1000)}@example.com",
+      email: "user-#{Random.rand(100000)}@example.com",
       markdown: true
     })
     if activate

@@ -34,9 +34,10 @@ var ChannelPostHeader = React.createClass({
       var fave = this.props.post.faves[i];
       favers.push([Data.get("user", fave.user_id).login, fave.emoji]);
     }
+    var name = {__html: this.props.user.display_name};
     return <div className="channel-post-header">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
-      <span className="user-name">{this.props.user.login}</span>
+      <span className="user-name" dangerouslySetInnerHTML={name} />
       <div className="right">
         <FaveCounter faves={favers} postId={this.props.id} user={this.props.user.login}  />
         {postDeleteLink}
