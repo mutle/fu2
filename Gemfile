@@ -29,6 +29,7 @@ gem 'resque-web', require: 'resque_web'
 gem 'resqued'
 gem 'faraday'
 gem 'responders', '~>2.0.0'
+gem "jbuilder"
 gem 'active_model_serializers'
 gem 'react-rails', '~>1.0.0'
 gem 'websocket-eventmachine-server'
@@ -36,4 +37,7 @@ gem 'websocket-eventmachine-server'
 group :test do
   gem "mocha"
   gem "test-unit"
+  gem 'poltergeist'
+  gem "capybara"
+  gem "phantomjs", require: "phantomjs/poltergeist"
 end

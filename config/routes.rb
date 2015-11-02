@@ -3,6 +3,29 @@ require "resque_web"
 Fu2::Application.routes.draw do
   mount ResqueWeb::Engine => "/resque", as: "resque"
 
+  namespace :api do
+    resources :channels do
+      resources :posts
+    end
+    resources :posts do
+      member do
+        post :fave
+      end
+    end
+
+    resources :notifications do
+      member do
+        post :read
+      end
+      collection do
+        get :unread
+        get :unread_users
+        get :counters
+      end
+    end
+    resources :images
+  end
+
   resources :users do
     member do
       put :block
@@ -38,46 +61,12 @@ Fu2::Application.routes.draw do
       get :merge
       post :do_merge
     end
-    resources :posts do
-      member do
-        post :unread
-      end
-    end
   end
 
-  resources :posts do
-    member do
-      post :fave
-    end
-    collection do
-      get :faved
-    end
-  end
-
-  resources :messages do
-    collection do
-      get :inbox
-      get :sent
-      delete :destroy_all
-    end
-  end
-
-  resources :notifications do
-    member do
-      post :read
-    end
-    collection do
-      get :unread
-      get :counters
-    end
-  end
-
-  resources :images
-  resources :stylesheets
+  resources :notifications
 
   get '/stats/websockets' => "stats#websockets"
+  get '/tests' => "tests#index"
 
   get '/' => 'channels#index', :as => :root
-
-  get '/react' => 'channels#react'
 end

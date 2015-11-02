@@ -1,5 +1,5 @@
 <% if @channel.can_read?(current_user) %>
-  <h2 class="channel-title" data-last-update="<%= @view.last_update %>">
+  <h2 class="channel-title">
     <div class="right"><%= link_to "Edit", "#", :class => "edit-channel-link" %></div>
     <span class="title-text"><%= format_title(@channel.title) %></span>
   </h2>
@@ -25,21 +25,7 @@
     <% end %>
   </div>
 
-  <% if (diff = @view.post_count - @view.posts.size) > 0 %>
-    <div class="post-loader scroll-loader" data-loader-url="<%= channel_posts_path(@channel) %>" data-loader-attr="data-post-id" data-loader-items=".channel-post:not(.preview)" data-loader-count="12">
-      <%= link_to "#{octicon "chevron-up"} <span class=\"loader-count\">#{diff}</span> older posts".html_safe, "#", class: "load-more" %>
-      <%= link_to "Show All", "#", class: "load-all" %>
-    </div>
-  <% end %>
-
   <div class="channel-posts loader-group">
-    <% @view.posts.each do |post| %>
-      <% if post.is_a?(Event) %>
-        <%= render partial: "event", object: post %>
-      <% elsif post.can_read?(current_user) %>
-        <%= render partial: "post", object: post %>
-      <% end %>
-    <% end %>
   </div>
 
 <% else %>

@@ -22,25 +22,28 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   test "login fails with invalid user name" do
-    login("testuser", "testpw")
+    login("testuser-#{Time.now.to_f.to_s.gsub(/\./, '')}", "testpw")
     assert_password_incorrect
   end
 
   test "login fails with incorrect password" do
-    create_user "testuser", "nottestpw"
-    login("testuser", "testpw")
+    l = "testuser-#{Time.now.to_f.to_s.gsub(/\./, '')}"
+    create_user l, "nottestpw"
+    login(l, "testpw")
     assert_password_incorrect
   end
 
   test "login fails with inactive account" do
-    create_user "testuser", "testpw", false
-    login("testuser", "testpw")
+    l = "testuser-#{Time.now.to_f.to_s.gsub(/\./, '')}"
+    create_user l, "testpw", false
+    login(l, "testpw")
     assert_password_incorrect
   end
 
   test "successful login redirects to root" do
-    create_user "testuser", "testpw"
-    login("testuser", "testpw")
+    l = "testuser-#{Time.now.to_f.to_s.gsub(/\./, '')}"
+    create_user l, "testpw"
+    login(l, "testpw")
     assert_redirected_to("/")
   end
 end

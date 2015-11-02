@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150704151044) do
+ActiveRecord::Schema.define(version: 20151031235058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,14 +60,18 @@ ActiveRecord::Schema.define(version: 20150704151044) do
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "faves", force: :cascade do |t|
-    t.integer  "user_id",                null: false
-    t.integer  "post_id",                null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "user_id",                     null: false
+    t.integer  "post_id",                     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "site_id",    default: 1
+    t.string   "emoji",      default: "star"
   end
 
+  add_index "faves", ["emoji"], name: "index_faves_on_emoji", using: :btree
+  add_index "faves", ["post_id"], name: "index_faves_on_post_id", using: :btree
   add_index "faves", ["site_id"], name: "index_faves_on_site_id", using: :btree
+  add_index "faves", ["user_id"], name: "index_faves_on_user_id", using: :btree
 
   create_table "images", force: :cascade do |t|
     t.integer  "user_id"

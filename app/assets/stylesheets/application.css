@@ -9,6 +9,7 @@
  *= require markitup
  *= require markitup-html
  *= require redcursor_app
+ *= require shared-components
  *= require login
  *= require notifications
  *= require profile

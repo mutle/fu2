@@ -172,8 +172,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def display_name_html
+    RenderPipeline.title(display_name)
+  end
+
   def as_json(*args)
-    {:id => id, :login => login, :display_name => display_name, :display_name_html => RenderPipeline.title(display_name), :display_color => display_color, :avatar_url => avatar_image_url}
+    {:id => id, :login => login, :display_name => display_name, :display_name_html => display_name_html, :display_color => display_color, :avatar_url => avatar_image_url}
   end
 
   def new_features

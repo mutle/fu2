@@ -55,7 +55,7 @@ class SearchTest < ActiveSupport::TestCase
     p = create_post
     Search.reset_index
     update_index
-    assert_equal 1, $elastomer.get('/channels-test/_search').body["hits"]["total"]
+    assert $elastomer.get('/channels-test/_search').body["hits"]["total"] > 0
   end
 
   test "indexes after create" do

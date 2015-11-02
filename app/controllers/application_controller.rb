@@ -31,10 +31,6 @@ class ApplicationController < ActionController::Base
     (session[:user_id] || params[:api_key]) && !current_user.nil?
   end
 
-  def notification(type, object, user_id=0)
-    Live.update(type, object, user_id)
-  end
-
   def increment_metric(name)
     METRICS.increment name
   end
@@ -62,5 +58,9 @@ class ApplicationController < ActionController::Base
     true # logged_in? && current_user.new_features && params["new_features"] != "false"
   end
   helper_method :new_features?
+
+  def empty_response
+    render text: "", layout: "application"
+  end
 
 end

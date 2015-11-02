@@ -66,7 +66,7 @@ $ ->
     return false
 
   if $(".comment-box").length > 0
-    window.scrollLoader = new ScrollLoader($(".post-loader"))
+    # window.scrollLoader = new ScrollLoader($(".post-loader"))
     if window.location.hash != "" && window.location.hash.lastIndexOf("#post_", 0) == 0
       post_id = parseInt(window.location.hash.replace(/^#post_/, ''))
       if $(".post-#{post_id}").length > 0
@@ -75,5 +75,5 @@ $ ->
         window.scrollLoader.loadMore post_id, () ->
           window.location.hash = "post_#{post_id}"
           $("body").scrollTop($(".post-#{post_id}").addClass("highlight").offset().top)
-  else if $(".channel-list.refresh").length > 0
-    window.scrollLoader = new ScrollLoader($(".channel-loader"), false)
+  # else if $(".channel-list.refresh").length > 0
+    # window.scrollLoader = new ScrollLoader($(".channel-loader"), false)

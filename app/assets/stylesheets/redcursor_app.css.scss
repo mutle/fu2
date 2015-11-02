@@ -43,9 +43,12 @@ form {
 
 .header {
   color: #484848;
+  background: #fff;
   z-index: 5;
-  background-color: #f2f2f2;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #e8e8e8;
+  border-top: 8px solid #d54e51;
+  border-top-image: linear-gradient(to right, #d54e51, #fea979);
+
   position: fixed;
   top: 0px;
   left: 0px;
@@ -69,12 +72,13 @@ form {
 
     .more {
       position: absolute;
-      top: 9px;
+      top: 4px;
+      padding: 8px 24px;
       text-align: left;
+      background: #fff;
       color: #484848;
       z-index: 5;
-      background-color: #f2f2f2;
-      border: 1px solid #eaeaea;
+      border: 1px solid #e8e8e8;
       display: none;
       line-height: 24px;
 
@@ -104,8 +108,8 @@ form {
 
     @media #{$small-screen} {
 
-      height: 68px;
-      line-height: 68px;
+      height: 58px;
+      line-height: 58px;
       margin-left: 5%;
       margin-right: 5%;
 
@@ -135,31 +139,31 @@ form {
 
       .octicon {
         display: none;
-        &.menu-indicator, &.search-icon, &.signout-icon {
+        &.menu-indicator, &.search-icon {
           display: inline;
         }
       }
       .text {
         display: inline;
       }
-      .toolbar-channel-search, .toolbar-logout  {
+      .toolbar-channel-search  {
         padding: 0px;
 
         .text {
           display: none;
         }
       }
-      .toolbar-logout {
-        margin-right: 12px;
-      }
-
       .logo {
         width: 38px;
         height: 38px;
       }
 
       a {
-        padding-left: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        &:first-child {
+          padding-left: 0px;
+        }
       }
     }
 
@@ -195,17 +199,15 @@ form {
 
   a {
     display: inline-block;
-    font-size: 15px;
+    font-size: 16px;
     text-decoration: none;
     color: #484848;
-    padding-left: 15px;
-  }
+    padding-left: 10px;
+    padding-right: 10px;
 
-
-  .logo {
-    width: 20px;
-    height: 20px;
-    padding-left: 2px;
+    &:first-child {
+      padding-left: 0px;
+    }
   }
 
   .counters {
@@ -267,7 +269,7 @@ form {
   #content {
     h2 {
       font-size: 32px;
-      margin-bottom: 0.5em;
+      margin-bottom: 1.5em;
     }
 
     .markdown-help-show {
@@ -331,14 +333,38 @@ form {
 }
 
 .content-button {
-  border: 1px solid #ADADAD;
+  border: 1px solid #b5b5b5;
   background: #fff;
-  padding: 8px 12px;
+  font-size: 12px;
+  padding: 12px 25px;
   border-radius: 3px;
+  margin: 0px 4px;
+  cursor: pointer;
+
+  &.button-default {
+    font-weight: bold;
+  }
 }
 
 .notice {
   text-align: center;
   margin-top: 0.5em;
   margin-bottom: 0px;
+}
+
+.autocompleter {
+  list-style: none;
+  background: #fff;
+  img {
+    max-width: 24px;
+    max-height: 24px;
+  }
+  li {
+    line-height: 24px;
+    padding: 4px 12px;
+
+    &.highlight {
+      background: #e8e8e8;
+    }
+  }
 }

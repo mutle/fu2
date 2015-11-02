@@ -2,9 +2,18 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'mocha/mini_test'
+require "capybara/rails"
+
+Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(app, js_errors: false, inspector: true, phantomjs: Phantomjs.path)
+end
+Capybara.javascript_driver = :poltergeist
 
 class ActiveSupport::TestCase
+  self.use_transactional_fixtures = true
+
   setup do
+    $redis.flushdb
     User.stubs(:fubot).returns(User.new)
   end
 
@@ -37,13 +46,42 @@ class ActiveSupport::TestCase
 end
 
 class ActionDispatch::IntegrationTest
+  self.use_transactional_fixtures = true
+
   def login(login, password)
     post("/session", login: login, password: password)
   end
 
   def login_user
-    u = create_user "testuser", "testpw"
-    login "testuser", "testpw"
+    u = @user || create_user
+    login u.login, "testpassword"
     u
+  end
+
+  def json_body
+    JSON.parse response.body
+  end
+end
+
+class JSTest < ActionDispatch::IntegrationTest
+  include Capybara::DSL
+  self.use_transactional_fixtures = false
+  Poltergeist = Capybara::Session.new(:poltergeist, Fu2::Application)
+
+  setup do
+    Capybara.current_driver = Capybara.javascript_driver
+    @session = Poltergeist
+  end
+
+  def session_url(path)
+   server = @session.server
+   "http://#{server.host}:#{server.port}#{path}"
+  end
+
+  def login(login, password)
+    visit session_url("/session/new")
+    fill_in "Username", with: login
+    fill_in "Password", with: password
+    find_button("Login").click
   end
 end
