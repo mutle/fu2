@@ -50,6 +50,7 @@ var Router = {
   },
   open: function(name, params, updateUrl, urlpath) {
     var responder = this.responders[name];
+    document.title = "Red Cursor";
     React.unmountComponentAtNode(this.content);
     responder.callback(params, this.content);
     if(urlpath) {

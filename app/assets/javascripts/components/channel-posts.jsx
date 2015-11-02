@@ -145,7 +145,10 @@ var ChannelPosts = React.createClass({
     this.setState({events: objects, items: items});
   },
   updatedChannel: function(objects, view) {
-    if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) this.setState({channel: objects[0]});
+    if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) {
+      document.title = objects[0].title+" | Red Cursor";
+      this.setState({channel: objects[0]});
+    }
   },
   loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
