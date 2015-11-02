@@ -46,7 +46,6 @@ var Editor = React.createClass({
     if(this.state.autocomplete && cursorE < this.state.start) {
       this.setState({autocomplete: null});
     }
-    console.log(e);
     switch(e.key) {
       case "Escape":
       case " ":

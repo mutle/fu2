@@ -88,14 +88,13 @@ var ChannelPosts = React.createClass({
   },
   selectPost: function(post) {
     var h = "#post-"+post.id;
-    console.log(h+" "+this.state.anchor);
     if(document.location.hash != h) {
       history.pushState(null, null, location.pathname+h);
       if(this.isMounted() && this.state.anchor != h)
         this.setState({anchor: h});
     }
     var post = $(this.getDOMNode()).find(".post-"+post.id);
-    if(post) {
+    if(post.length > 0) {
       var o = post.offset();
       $(window).scrollTop(o.top - 150);
       return true;
@@ -160,8 +159,8 @@ var ChannelPosts = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.isMounted() && this.state.jump) {
-      this.setState({jump: false});
-      // this.updateAnchor();
+      if(this.updateAnchor())
+        this.setState({jump: false});
     }
   },
   render: function () {
