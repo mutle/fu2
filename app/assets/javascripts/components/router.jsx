@@ -122,6 +122,22 @@ $(function() {
       return false;
     }
   });
+
+  $(document).on('scroll', function(e) {
+    if(document.body.scrollTop < document.body.scrollHeight - document.body.clientHeight)
+      $(".bottom-link .octicon").removeClass("octicon-arrow-up").addClass("octicon-arrow-down");
+    else
+      $(".bottom-link .octicon").removeClass("octicon-arrow-down").addClass("octicon-arrow-up");
+  });
+
+  $(".bottom-link").click(function(e) {
+    e.preventDefault();
+    if($(this).find(".octicon").hasClass("octicon-arrow-up"))
+      window.scrollTo(0,0);
+    else
+      window.scrollTo(0,document.body.scrollHeight);
+    return false
+  });
 });
 
 // module.exports = Router;
