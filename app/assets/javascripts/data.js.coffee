@@ -22,17 +22,22 @@ class Socket
     @connection.onclose = (e) =>
       @available = false
       @retryconnect()
+      callbacks = []
       for type,subscriptions of @subscriptions
+        if !type.match(/^offline_/) then continue
         for s in subscriptions
           s.close?()
   retryconnect: () ->
     c = () => @connect()
     window.setTimeout c, 10 * 1000
-  subscribe: (types, callback, opened, closed) ->
+  subscribe: (types, callback, opened, closed, object) ->
     for type in types
       @subscriptions[type] ?= []
       @subscriptions[type].push(data: callback, open: opened, close: closed)
     true
+  unsubscribe: (types) ->
+    for t in types
+      @subscriptions[t] = []
 
 class Data
   url:
@@ -56,9 +61,9 @@ class Data
     @views = {}
     @fetched = {}
     @socket.connect() if @socket
-  fetch: (info, id=0, args={}) ->
+  fetch: (info, id=0, args={}, fallback=null) ->
     return if !info
-    if info.view
+    if info.view && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
       if cached?
         @notify(cached)
@@ -84,13 +89,11 @@ class Data
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])
-    open = =>
-    close = =>
-    socket.subscribe info.subscribe, dataCallback, open, close
+    socket.subscribe info.subscribe, dataCallback, null, fallback
   subscribe: (type, object, id, callbacks) ->
     @callbacks[type] ?= []
     @callbacks[type].push(callbacks: callbacks, object: object, id: id)
-  unsubscribe: (object) ->
+  unsubscribe: (object, types) ->
     for type,c of @callbacks
       remove = []
       for callback in c
@@ -98,6 +101,7 @@ class Data
         remove.push(callback)
       for r in remove
         c = c.splice(c.indexOf(r), 1)
+    socket.unsubscribe(types)
   notify: (types) ->
     for type in types
       continue if !@callbacks[type]

@@ -68,8 +68,12 @@ class Channel < ActiveRecord::Base
   end
 
 
-  def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+  def self.recent_channels(_user, page, per_page = 50, last_update=nil)
+    if last_update
+      where("(updated_at > ? OR last_post_date > ?) AND (default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", last_update, last_update, true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+    else
+      where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+    end
   end
 
   def self.all_channels(_user, page)

@@ -27,7 +27,7 @@ var ChannelPosts = React.createClass({
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
-      Data.fetch(ChannelPostsData, this.props.channelId);
+      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew);
     }
 
     var self = this;
@@ -83,7 +83,7 @@ var ChannelPosts = React.createClass({
     });
   },
   componentWillUnmount: function() {
-    Data.unsubscribe(this);
+    Data.unsubscribe(this, ChannelPostsData.subscribe);
     $(document).off("keydown", this.keydownCallback);
   },
   selectPost: function(post, highlight, noscroll) {
@@ -162,6 +162,12 @@ var ChannelPosts = React.createClass({
     if(e)
       e.preventDefault();
   },
+  loadNew: function(e) {
+    if(!this.isMounted()) return;
+    Data.fetch(ChannelPostsData, this.props.channelId, {last_id: this.state.view.last_read_id, last_update: this.state.view.last_update});
+    if(e)
+      e.preventDefault();
+  },
   componentDidUpdate: function() {
     if(this.isMounted()) {
       if(this.state.jump && this.updateAnchor())
@@ -174,9 +180,7 @@ var ChannelPosts = React.createClass({
   },
   bodyClick: function(e) {
     var post = $(e.target).parents(".channel-post");
-    console.log(post);
     var id = parseInt(post.get(0).className.replace(/[^0-9]+/, ''));
-    console.log(id);
     var n = 0;
     for(var i in this.state.posts) {
       var p = this.state.posts[i];
