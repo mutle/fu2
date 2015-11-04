@@ -5,7 +5,8 @@ class Api::ChannelsController < Api::ApiController
     @view = Views::ChannelList.new({
       current_user: current_user,
       page: page,
-      per_page: 50
+      per_page: 50,
+      last_update_date: params[:last_update] ? Time.at(params[:last_update].to_i) : nil
     })
     @view.finalize
   end

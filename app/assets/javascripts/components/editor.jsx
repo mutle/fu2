@@ -1,6 +1,6 @@
 var Editor = React.createClass({
   getInitialState: function() {
-    return {text: "", autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
+    return {text: "", active: false, textSelection: [0,0], autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
   },
   getInitialProps: function() {
     return {valueName: "text"};
@@ -22,7 +22,12 @@ var Editor = React.createClass({
     var selected = c.value.slice(cursorS, cursorE);
     var out = a(selected);
     var newtext = c.value.slice(0, cursorS) + out.join("") + c.value.slice(cursorE, c.value.length);
-    this.setState({text: newtext});
+    var newCursor = cursorS;
+    for(var o in out) {
+      if(out[o] == "") break;
+      newCursor += out[o].length;
+    }
+    this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   lineAction: function(a) {
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
@@ -37,7 +42,8 @@ var Editor = React.createClass({
     }
     var out = c.value.slice(cursorS, cursorE).split("\n").map(function(s,i) { return a(s).join(""); });
     var newtext = c.value.slice(0, cursorS) + out.join("\n") + c.value.slice(cursorE, c.value.length);
-    this.setState({text: newtext});
+    var newCursor = cursorS + out.join("").length;
+    this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   input: function(e) {
     var cursorE = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0).selectionEnd;
@@ -61,9 +67,12 @@ var Editor = React.createClass({
           var result = this.state.filtered[this.state.selection];
           if(result) {
             if(result.login) result = result.login;
-            var input = e.target.value.slice(0, this.state.start) + result + (this.state.autocomplete == "emoji" ? ":" : "") + e.target.value.slice(cursorE, e.target.value.length);
+            if(result.title) result = result.title;
+            var extra = this.state.autocomplete == "emoji" ? ":" : "";
+            var input = e.target.value.slice(0, this.state.start) + result + extra + e.target.value.slice(cursorE, e.target.value.length);
             e.target.value = input;
-            this.setState({autocomplete: null, text: input});
+            var cursor = this.state.start + result.length + extra.length;
+            this.setState({autocomplete: null, text: input, textSelection: [cursor, cursor]});
           } else {
             this.setState({autocomplete: null});
           }
@@ -97,18 +106,41 @@ var Editor = React.createClass({
     }
     if(this.state.autocomplete) {
       var key = e.key;
+      var ce = cursorE;
       if(key == "Backspace") {
-        cursorE -= 2;
+        ce -= 1;
         key = "";
       }
       if(key.length <= 1) {
-        var input = e.target.value.slice(this.state.start, cursorE+1) + key;
-        this.setState({input: input, filtered: this.filterObjects(input), selection: 0});
+        if(ce < this.state.start) ce = this.state.start;
+        var text = e.target.value.slice(this.state.start, ce+1) + key;
+        this.setState({input: text, filtered: this.filterObjects(text), selection: 0, autocomplete: ce < this.state.start ? null : this.state.autocomplete, textSelection: [ce, ce]});
       }
+    }
+
+    if(e.type == "keypress") this.change();
+    else if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
+      this.setState({textSelection: [cursorS, cursorE]});
     }
   },
   change: function(e) {
-    this.setState({text: e.target.value});
+    if(e) this.setState({text: e.target.value});
+
+    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
+      this.setState({textSelection: [cursorS, cursorE]});
+    }
+  },
+  click: function(e) {
+    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var cursorE = c.selectionEnd;
+    var cursorS = c.selectionStart;
+    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
+      this.setState({active: true, text: c.value, textSelection: [cursorS, cursorE]});
+    else
+      this.setState({active: true, text: c.value});
   },
   autocompleteClick: function(e) {
     if(this.state.autocomplete) {
@@ -123,38 +155,74 @@ var Editor = React.createClass({
     }
   },
   blur: function(e) {
-    this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val()});
+    e.preventDefault();
+    this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val(), active: false});
   },
   filterObjects: function(input, objects) {
     var n = 0;
     if(!objects) objects = this.state.objects;
     var filtered = [];
     input = input.toLowerCase();
-    objects.map(function(r, i) {
-      var s = r;
-      if(r.login) s = r.login;
-      s = s.toLowerCase();
-      if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
-        n++;
-        filtered.push(r);
+    if(objects[0].aliases) {
+      var sorted = [];
+      var emoji = {};
+      objects.map(function(r,i) {
+        sorted.push(r.aliases[0]);
+        emoji[r.aliases[0]] = r;
+      });
+      sorted = sorted.sort();
+      for(var i in sorted) {
+        var k = sorted[i];
+        if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
+          n++;
+          filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
+        }
       }
-    });
+      // if(n < 10) {
+      //   for(var i in sorted) {
+      //     var k = sorted[i];
+      //     for(var t in emoji[k].tags) {
+      //       var tag = emoji[k].tags[t];
+      //       if(n < 10 && (input.length < 1 || tag.indexOf(input) === 0)) {
+      //         n++;
+      //         filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
+      //       }
+      //     }
+      //   }
+      // }
+    } else {
+      objects.map(function(r, i) {
+        var s = r;
+        if(r.login) s = r.login;
+        s = s.toLowerCase();
+        if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
+          n++;
+          filtered.push(r);
+        }
+      });
+    }
     return filtered;
   },
   componentDidMount: function() {
     if(this.state.text === "" && this.props.initialText)
       this.setState({text: this.props.initialText});
   },
+  componentDidUpdate: function() {
+    if(this.isMounted() && this.state.active) {
+      var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+      c.focus();
+      c.setSelectionRange(this.state.textSelection[0], this.state.textSelection[1]);
+    }
+  },
   render: function() {
     var imageUrl;
     if(this.state.autocomplete) {
-      if(this.state.autocomplete == "emoji") imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
-      var autocompleter = <AutoCompleter objects={this.state.filtered} selection={this.state.selection} imageUrl={imageUrl} clickCallback={this.autocompleteClick} />;
+      var autocompleter = <AutoCompleter objects={this.state.filtered} selection={this.state.selection} clickCallback={this.autocompleteClick} />;
     }
     return <div>
       {autocompleter}
       <EditorShortcuts editor={this} />
-      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onChange={this.change} className={this.props.textareaClass} name={this.props.valueName} id={this.props.textareaId} value={this.state.text}></textarea>
+      <textarea onBlur={this.blur} onKeyDown={this.input} onKeyPress={this.input} onMouseDown={this.click} onChange={this.change} className={this.props.textareaClass} name={this.props.valueName} id={this.props.textareaId} value={this.state.text}></textarea>
     </div>;
   }
 });

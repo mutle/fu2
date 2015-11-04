@@ -70,6 +70,7 @@ class ChannelTest < ActiveSupport::TestCase
     assert_equal 0, c.events.where(event: "rename").size
     c.rename("#{c.title} - updated", u)
     assert_equal 1, c.events.where(event: "rename").size
+    assert_equal 0, c.events.where(event: "text").size
   end
 
   test "channel text change event" do
@@ -78,5 +79,6 @@ class ChannelTest < ActiveSupport::TestCase
     assert_equal 0, c.events.where(event: "text").size
     c.change_text("new text", u)
     assert_equal 1, c.events.where(event: "text").size
+    assert_equal 0, c.events.where(event: "rename").size
   end
 end

@@ -23,6 +23,7 @@ class Api::NotificationsController < Api::ApiController
 
   def read
     from = User.find(params[:id])
+    Notification.mark_unread(current_user, from)
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end

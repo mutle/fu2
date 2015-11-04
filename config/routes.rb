@@ -24,6 +24,7 @@ Fu2::Application.routes.draw do
       end
     end
     resources :images
+    resources :emojis
   end
 
   resources :users do

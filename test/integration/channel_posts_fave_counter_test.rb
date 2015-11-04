@@ -22,12 +22,12 @@ class ChannelPostsFaceCounterTest < JSTest
   test "fave emoji" do
     visit session_url("/channels/#{@channel.id}")
     post = @channel.posts.first.id
-    assert page.has_no_selector?(".channel-post.post-#{post} .faves button.emoji-abcd")
+    assert page.has_no_selector?(".channel-post.post-#{post} .faves button.emoji-accept")
     page.find(".channel-post.post-#{post} .faves button.add-emoji-button").click
     page.find(".channel-post.post-#{post} .faves .add-emoji .autocompleter li:last-child").click
-    assert page.has_selector?(".channel-post.post-#{post} .faves button.emoji-abcd.on", text: "1")
-    page.find(".channel-post.post-#{post} .faves button.emoji-abcd").click
-    assert page.has_no_selector?(".channel-post.post-#{post} .faves button.emoji-abcd")
+    assert page.has_selector?(".channel-post.post-#{post} .faves button.emoji-accept.on", text: "1")
+    page.find(".channel-post.post-#{post} .faves button.emoji-accept").click
+    assert page.has_no_selector?(".channel-post.post-#{post} .faves button.emoji-accept")
   end
 
   test "fave emoji completer" do

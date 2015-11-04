@@ -12,7 +12,10 @@ var EditorShortcuts = React.createClass({
     },
     {
       name: "link", icon: "link-external", action: function(selection) {
-        return ["[", selection, "](", "URL", ")"];
+        if(selection.match(/:\/\//))
+          return ["[", "", "](", selection, ")"];
+        else
+          return ["[", selection, "](", "", ")"];
       }
     },
     "div",

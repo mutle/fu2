@@ -5,6 +5,7 @@ var Router = {
   hotkeys: {},
   routes: {},
   content: null,
+  current: null,
   route: function(path, updateUrl) {
     if(!path) return false;
     var urlpath = path;
@@ -52,7 +53,7 @@ var Router = {
     var responder = this.responders[name];
     document.title = "Red Cursor";
     React.unmountComponentAtNode(this.content);
-    responder.callback(params, this.content);
+    this.current = responder.callback(params, this.content);
     if(urlpath) {
       history.pushState(null, null, urlpath);
     } else if(responder.url && updateUrl) {
@@ -80,21 +81,22 @@ $(function() {
     var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
     var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
     posts.setState({anchor: anchor});
+    return posts;
   }, function(params) {
     var post_id = params.post_id ? "#post-"+params.post_id : "";
     return "/channels/"+params.channel_id+post_id;
   });
 
   Router.addResponder("channels/list", function(params, e) {
-    var channels = React.render(<ChannelList />, e);
+    return React.render(<ChannelList />, e);
   }, function(params) { return "/"; }, {hotkey: "H"});
 
   Router.addResponder("channels/new", function(params, e) {
-    var posts = React.render(<ChannelPosts channelId={0} />, e);
+    return React.render(<ChannelPosts channelId={0} />, e);
   }, function(params) { return "/channels/new"; }, {hotkey: "N"});
 
   Router.addResponder("notifications/index", function(params, e) {
-    var notifications = React.render(<Notifications />, e);
+    return React.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M"});
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);

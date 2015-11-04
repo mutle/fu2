@@ -30,7 +30,7 @@ class FetchTweetJob
 
   def get_embed_code
     if @type == :tweet
-      response = conn_for('https://api.twitter.com').get "/1/statuses/oembed.json?id=#{@id}&width=600"
+      response = conn_for('https://api.twitter.com').get "/1/statuses/oembed.json?id=#{@id}&width=600&omit_script=true"
       tweet = MultiJson.decode response.body
       tweet['html']
     elsif @type == :instagram

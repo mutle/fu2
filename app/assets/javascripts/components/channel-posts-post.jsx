@@ -4,10 +4,19 @@ var ChannelPostHeader = React.createClass({
     this.props.channelPost.setState({edit: !this.props.channelPost.state.edit});
   },
   deletePost: function(e) {
+    var type = this.props.post.type;
+    var id = this.props.id;
     e.preventDefault();
+    if(!confirm("Are you sure that you want to delete this post?")) return;
+    Data.action("delete", "post", [this.props.channelId, id], {}, {error: function() {
+      console.log("Failed to delete post...");
+    }, success: function(data) {
+      Data.remove(type, id);
+      Data.notify([type]);
+    }});
   },
   reply: function(e) {
-    replyMessage(this.props.post);
+    this.props.channelPost.props.posts.replyMessage(this.props.post);
     e.preventDefault();
   },
   unread: function(e) {
@@ -25,9 +34,10 @@ var ChannelPostHeader = React.createClass({
       var fave = this.props.post.faves[i];
       favers.push([Data.get("user", fave.user_id).login, fave.emoji]);
     }
+    var name = {__html: this.props.user.display_name};
     return <div className="channel-post-header">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
-      <span className="user-name">{this.props.user.login}</span>
+      <span className="user-name" dangerouslySetInnerHTML={name} />
       <div className="right">
         <FaveCounter faves={favers} postId={this.props.id} user={this.props.user.login}  />
         {postDeleteLink}
@@ -56,7 +66,7 @@ var ChannelPost = React.createClass({
     var name = "post-"+this.props.post.id;
     if(this.props.post.read) className += " read";
     if(this.props.highlight) className += " highlight";
-    var content = <div className="body" dangerouslySetInnerHTML={body}></div>;
+    var content = <div className="body" onClick={this.props.bodyClick} dangerouslySetInnerHTML={body}></div>;
     if(this.props.editable && this.state.edit) {
       var comments = <CommentBox postId={this.props.post.id} initialText={this.props.post.body} postId={this.props.id} channelId={this.props.channelId} callback={this.cancelEdit} cancelCallback={this.cancelEdit} />;
       var edit = <div className="channel-response channel-edit">{comments}</div>;

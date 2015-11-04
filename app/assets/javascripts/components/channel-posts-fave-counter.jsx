@@ -50,16 +50,7 @@ var FaveCounter = React.createClass({
       if(this.filteredEmojis) {
         var emoji = this.filteredEmojis[this.state.selection];
         if(emoji) {
-          var valid = false;
-          for(var i in window.Emojis) {
-            if(window.Emojis[i] == emoji) {
-              valid = true;
-              break;
-            }
-          }
-        }
-        if(valid) {
-          this.fave(emoji);
+          this.fave(emoji.title);
           this.setState({add: false});
         }
         return;
@@ -95,30 +86,39 @@ var FaveCounter = React.createClass({
       if(!emojis[f[1]]) emojis[f[1]] = [];
       emojis[f[1]].push(f[0]);
     }
-    var user = this.props.user;
+    var user = Data.get("user", Data.user_id);
     var self = this;
+    var all_emojis = {};
+    var sorted = [];
+    window.Emojis.map(function(r,i) {
+      sorted.push(r.aliases[0]);
+      all_emojis[r.aliases[0]] = r;
+    });
+    sorted = sorted.sort();
+    if(this.state.add) {
+      var filteredEmojis = [];
+      var input = this.state.input.toLowerCase();
+      var n = 0;
+      for(var i in sorted) {
+        var k = sorted[i];
+        if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
+          n++;
+          filteredEmojis.push({title: k, image: "/images/emoji/"+all_emojis[k].image});
+        }
+      }
+      this.filteredEmojis = filteredEmojis;
+    }
     var buttons = emojinames.map(function(emoji, i) {
       var className = "emoji-"+emoji;
-      if(user && emojis[emoji].indexOf(user) >= 0) className += " on"
-      return <button key={emoji} className={className} onClick={self.click}>
-        <img className="fave-emoji" src={"/images/emoji/"+emoji+".png"} title={emoji+": "+emojis[emoji].join(", ")} />
+      if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on"
+      return <button key={emoji} className={className} onClick={self.click}  title={emoji+": "+emojis[emoji].join(", ")}>
+        <img className="fave-emoji" src={"/images/emoji/"+all_emojis[emoji].image} />
         {emojis[emoji].length}
       </button>;
     });
     if(this.state.add) {
-      var imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
-      var filteredEmojis = [];
-      var input = this.state.input;
-      var n = 0;
-      window.Emojis.map(function(r, i) {
-        if(n < 10 && (input.length < 1 || r.indexOf(input) == 0)) {
-          n++;
-          filteredEmojis.push(r);
-        }
-      });
-      this.filteredEmojis = filteredEmojis;
       var newText = <div className="add-emoji">
-        <AutoCompleter objects={filteredEmojis} imageUrl={imageUrl} selection={this.state.selection} clickCallback={this.autocompleteClick} mountCallback={this.autocompleteMount} />
+        <AutoCompleter objects={filteredEmojis} selection={this.state.selection} clickCallback={this.autocompleteClick} mountCallback={this.autocompleteMount} />
         <input onKeyDown={this.input} onKeyPress={this.input} />
       </div>;
     }

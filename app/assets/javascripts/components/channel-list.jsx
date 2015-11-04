@@ -10,7 +10,8 @@ var ChannelListData = {
   subscribe: [
     "channel_update",
     "channel_create",
-    "channel_read"
+    "channel_read",
+    "offline_channel_list"
   ]
 };
 
@@ -22,7 +23,7 @@ var Channel = React.createClass({
     var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var userLink = "/users/"+this.props.user.id;
     var userName = {__html: this.props.user.display_name};
-    var channelName = {__html: this.props.channel.title};
+    var channelName = {__html: this.props.channel.display_name};
     return <li>
       <div className={className}>
         <div className="timestamp">
@@ -43,8 +44,8 @@ var ChannelList = React.createClass({
   componentDidMount: function() {
     var self = this;
     $(window).scrollTop(0);
-    Data.subscribe("channel", this, 0, {callback: this.updated, fetch: this.fetchUpdatedChannels});
-    Data.fetch(ChannelListData);
+    Data.subscribe("channel", this, 0, {callback: this.updated});
+    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels);
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
@@ -92,7 +93,7 @@ var ChannelList = React.createClass({
     }
   },
   componentWillUnmount: function() {
-    Data.unsubscribe(this);
+    Data.unsubscribe(this, ChannelListData.subscribe);
     $(document).off("keydown", this.keydownCallback);
   },
   updated: function(objects, view) {
@@ -114,7 +115,9 @@ var ChannelList = React.createClass({
     e.preventDefault();
   },
   fetchUpdatedChannels: function() {
-    // Data.fetch(ChannelListData, 0, {last: true});
+    if(this.state.view) {
+      Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
+    }
   },
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;

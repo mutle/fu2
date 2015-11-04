@@ -1,9 +1,9 @@
 module Views
   class ChannelList < ListView
 
-    attrs :current_user
+    attrs :current_user, :last_update_date
 
-    fetches :recent_channels, proc { Channel.recent_channels(current_user, page, per_page) }
+    fetches :recent_channels, proc { Channel.recent_channels(current_user, page, per_page, last_update_date) }
     fetches :channels_read, proc {
       recent_channels.each do |channel|
         channel.read = channel.has_posts?(current_user, channel.last_post)
