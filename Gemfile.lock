@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:github/gemoji.git
+  remote: https://github.com/github/gemoji.git
   revision: b84bf23a5b45cca3e15e025cab9953b31796b162
   specs:
     gemoji (2.1.0)
