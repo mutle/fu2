@@ -1,3 +1,9 @@
+GIT
+  remote: git@github.com:github/gemoji.git
+  revision: b84bf23a5b45cca3e15e025cab9953b31796b162
+  specs:
+    gemoji (2.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -76,7 +82,6 @@ GEM
     execjs (2.2.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    gemoji (2.1.0)
     github-markdown (0.6.8)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -249,7 +254,7 @@ DEPENDENCIES
   elastomer-client (~> 0.4.1)
   escape_utils (~> 1.0.1)
   faraday
-  gemoji
+  gemoji!
   github-markdown
   haml (~> 4.0.3)
   html-pipeline (~> 1.11.0)

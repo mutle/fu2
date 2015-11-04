@@ -7,9 +7,8 @@
 //= require underscore
 //= require jquery
 //= require jquery_ujs
-//= require jquery.markitup
-//= require markitup-html
-//= require emoji
+//= require emojis
 //= require data
 //= require twitter
 //= require components
+//= require search

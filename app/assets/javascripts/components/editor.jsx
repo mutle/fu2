@@ -67,6 +67,7 @@ var Editor = React.createClass({
           var result = this.state.filtered[this.state.selection];
           if(result) {
             if(result.login) result = result.login;
+            if(result.title) result = result.title;
             var extra = this.state.autocomplete == "emoji" ? ":" : "";
             var input = e.target.value.slice(0, this.state.start) + result + extra + e.target.value.slice(cursorE, e.target.value.length);
             e.target.value = input;
@@ -162,15 +163,44 @@ var Editor = React.createClass({
     if(!objects) objects = this.state.objects;
     var filtered = [];
     input = input.toLowerCase();
-    objects.map(function(r, i) {
-      var s = r;
-      if(r.login) s = r.login;
-      s = s.toLowerCase();
-      if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
-        n++;
-        filtered.push(r);
+    if(objects[0].aliases) {
+      var sorted = [];
+      var emoji = {};
+      objects.map(function(r,i) {
+        sorted.push(r.aliases[0]);
+        emoji[r.aliases[0]] = r;
+      });
+      sorted = sorted.sort();
+      for(var i in sorted) {
+        var k = sorted[i];
+        if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
+          n++;
+          filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
+        }
       }
-    });
+      // if(n < 10) {
+      //   for(var i in sorted) {
+      //     var k = sorted[i];
+      //     for(var t in emoji[k].tags) {
+      //       var tag = emoji[k].tags[t];
+      //       if(n < 10 && (input.length < 1 || tag.indexOf(input) === 0)) {
+      //         n++;
+      //         filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
+      //       }
+      //     }
+      //   }
+      // }
+    } else {
+      objects.map(function(r, i) {
+        var s = r;
+        if(r.login) s = r.login;
+        s = s.toLowerCase();
+        if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
+          n++;
+          filtered.push(r);
+        }
+      });
+    }
     return filtered;
   },
   componentDidMount: function() {
@@ -187,8 +217,7 @@ var Editor = React.createClass({
   render: function() {
     var imageUrl;
     if(this.state.autocomplete) {
-      if(this.state.autocomplete == "emoji") imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
-      var autocompleter = <AutoCompleter objects={this.state.filtered} selection={this.state.selection} imageUrl={imageUrl} clickCallback={this.autocompleteClick} />;
+      var autocompleter = <AutoCompleter objects={this.state.filtered} selection={this.state.selection} clickCallback={this.autocompleteClick} />;
     }
     return <div>
       {autocompleter}

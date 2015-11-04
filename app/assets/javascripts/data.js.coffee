@@ -2,13 +2,20 @@ class Socket
   constructor: (@url, @api_key) ->
     @subscriptions = {}
     @available = false
+    @reconnect = false
   connected: ->
   message: (msg) ->
     @connection.send JSON.stringify(msg) if @available
   connect: ->
     @connection = new WebSocket(@url)
     @connection.onopen = () =>
+      if @reconnect
+        for type,subscriptions of @subscriptions
+          if !type.match(/^offline_/) then continue
+          for s in subscriptions
+            s.close?()
       @available = true
+      @reconnect = true
       @message({type: "auth", api_key: @api_key})
       for type,subscriptions of @subscriptions
         for s in subscriptions

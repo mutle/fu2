@@ -12,7 +12,7 @@ gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
 gem "github-markdown"
-gem "gemoji"
+gem "gemoji", git: "git@github.com:github/gemoji.git"
 gem "rinku"
 gem "escape_utils", "~>1.0.1"
 gem "html-pipeline", "~>1.11.0", :require => "html/pipeline"

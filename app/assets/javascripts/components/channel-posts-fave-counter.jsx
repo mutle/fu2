@@ -108,14 +108,23 @@ var FaveCounter = React.createClass({
     if(this.state.add) {
       var imageUrl = function(s) { return "/images/emoji/"+s+".png"; };
       var filteredEmojis = [];
-      var input = this.state.input;
+      var input = this.state.input.toLowerCase();
       var n = 0;
-      window.Emojis.map(function(r, i) {
-        if(n < 10 && (input.length < 1 || r.indexOf(input) == 0)) {
-          n++;
-          filteredEmojis.push(r);
-        }
+
+      var sorted = [];
+      var emoji = {};
+      window.Emojis.map(function(r,i) {
+        sorted.push(r.aliases[0]);
+        emoji[r.aliases[0]] = r;
       });
+      sorted = sorted.sort();
+      for(var i in sorted) {
+        var k = sorted[i];
+        if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
+          n++;
+          filteredEmojis.push({title: k, image: "/images/emoji/"+emoji[k].image});
+        }
+      }
       this.filteredEmojis = filteredEmojis;
       var newText = <div className="add-emoji">
         <AutoCompleter objects={filteredEmojis} imageUrl={imageUrl} selection={this.state.selection} clickCallback={this.autocompleteClick} mountCallback={this.autocompleteMount} />
