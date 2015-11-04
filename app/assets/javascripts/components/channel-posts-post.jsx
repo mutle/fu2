@@ -16,7 +16,7 @@ var ChannelPostHeader = React.createClass({
     }});
   },
   reply: function(e) {
-    ChannelPosts.replyMessage(this.props.post);
+    this.props.channelPost.props.posts.replyMessage(this.props.post);
     e.preventDefault();
   },
   unread: function(e) {

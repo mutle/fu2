@@ -71,7 +71,7 @@ var ChannelPosts = React.createClass({
       if(key == "R") {
         if(self.state.highlight >= 0 && $("textarea.comment-box").val().length == 0) {
           var post = self.state.posts[self.state.highlight];
-          ChannelPosts.replyMessage(post);
+          self.replyMessage(post);
           e.preventDefault();
         }
       }
@@ -81,6 +81,13 @@ var ChannelPosts = React.createClass({
         e.preventDefault();
       }
     });
+  },
+  replyMessage: function(post) {
+    if(this.commentBox && this.commentBox.editor) {
+      var t = ChannelPosts.quote(post.body);
+      this.commentBox.editor.setState({text: t, textSelection: [0, t.length], active: true});
+      $(window).scrollTop($(".comment-box-form textarea").offset().top - 150)
+    }
   },
   componentWillUnmount: function() {
     Data.unsubscribe(this, ChannelPostsData.subscribe);
@@ -205,14 +212,15 @@ var ChannelPosts = React.createClass({
           return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
         } else {
           pi++;
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
+          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
         }
       });
+      var refFunc = function(ref) { self.commentBox = ref; };
       var commentbox = <div>
         <a name="comments"></a>
         <h3 className="channel-response-title">Comment</h3>
         <div className="channel-response">
-          <CommentBox channelId={channelId} />
+          <CommentBox ref={refFunc} channelId={channelId} />
         </div>
       </div>;
     }
@@ -227,11 +235,6 @@ var ChannelPosts = React.createClass({
 
 ChannelPosts.quote = function(text) {
   return text.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n";
-}
-
-ChannelPosts.replyMessage = function(post) {
-  $(".comment-box-form textarea").val(ChannelPosts.quote(post.body)).select();
-  $(window).scrollTop($(".comment-box-form textarea").offset().top - 150)
 }
 
 // module.exports = ChannelPosts;

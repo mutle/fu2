@@ -137,9 +137,9 @@ var Editor = React.createClass({
     var cursorE = c.selectionEnd;
     var cursorS = c.selectionStart;
     if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
-      this.setState({active: true, textSelection: [cursorS, cursorE]});
+      this.setState({active: true, text: c.value, textSelection: [cursorS, cursorE]});
     else
-      this.setState({active: true});
+      this.setState({active: true, text: c.value});
   },
   autocompleteClick: function(e) {
     if(this.state.autocomplete) {
