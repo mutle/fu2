@@ -22,7 +22,11 @@ var Editor = React.createClass({
     var selected = c.value.slice(cursorS, cursorE);
     var out = a(selected);
     var newtext = c.value.slice(0, cursorS) + out.join("") + c.value.slice(cursorE, c.value.length);
-    var newCursor = cursorS + out.join("").length;
+    var newCursor = cursorS;
+    for(var o in out) {
+      if(out[o] == "") break;
+      newCursor += out[o].length;
+    }
     this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   lineAction: function(a) {
@@ -63,9 +67,11 @@ var Editor = React.createClass({
           var result = this.state.filtered[this.state.selection];
           if(result) {
             if(result.login) result = result.login;
-            var input = e.target.value.slice(0, this.state.start) + result + (this.state.autocomplete == "emoji" ? ":" : "") + e.target.value.slice(cursorE, e.target.value.length);
+            var extra = this.state.autocomplete == "emoji" ? ":" : "";
+            var input = e.target.value.slice(0, this.state.start) + result + extra + e.target.value.slice(cursorE, e.target.value.length);
             e.target.value = input;
-            this.setState({autocomplete: null, text: input});
+            var cursor = this.state.start + result.length + extra.length;
+            this.setState({autocomplete: null, text: input, textSelection: [cursor, cursor]});
           } else {
             this.setState({autocomplete: null});
           }
@@ -99,17 +105,22 @@ var Editor = React.createClass({
     }
     if(this.state.autocomplete) {
       var key = e.key;
+      var ce = cursorE;
       if(key == "Backspace") {
-        cursorE -= 2;
+        ce -= 1;
         key = "";
       }
       if(key.length <= 1) {
-        var input = e.target.value.slice(this.state.start, cursorE+1) + key;
-        this.setState({input: input, filtered: this.filterObjects(input), selection: 0});
+        if(ce < this.state.start) ce = this.state.start;
+        var text = e.target.value.slice(this.state.start, ce+1) + key;
+        this.setState({input: text, filtered: this.filterObjects(text), selection: 0, autocomplete: ce < this.state.start ? null : this.state.autocomplete, textSelection: [ce, ce]});
       }
     }
 
     if(e.type == "keypress") this.change();
+    else if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
+      this.setState({textSelection: [cursorS, cursorE]});
+    }
   },
   change: function(e) {
     if(e) this.setState({text: e.target.value});
@@ -117,8 +128,9 @@ var Editor = React.createClass({
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
     var cursorE = c.selectionEnd;
     var cursorS = c.selectionStart;
-    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
+    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
       this.setState({textSelection: [cursorS, cursorE]});
+    }
   },
   click: function(e) {
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
