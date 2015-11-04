@@ -100,8 +100,8 @@ var FaveCounter = React.createClass({
     var buttons = emojinames.map(function(emoji, i) {
       var className = "emoji-"+emoji;
       if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on"
-      return <button key={emoji} className={className} onClick={self.click}>
-        <img className="fave-emoji" src={"/images/emoji/"+emoji+".png"} title={emoji+": "+emojis[emoji].join(", ")} />
+      return <button key={emoji} className={className} onClick={self.click}  title={emoji+": "+emojis[emoji].join(", ")}>
+        <img className="fave-emoji" src={"/images/emoji/"+emoji+".png"} />
         {emojis[emoji].length}
       </button>;
     });
