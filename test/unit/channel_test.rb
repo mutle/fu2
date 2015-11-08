@@ -38,12 +38,15 @@ class ChannelTest < ActiveSupport::TestCase
     c2 = create_channel("foo 2", "baz")
     @channel = c
     create_post("foo")
-    c.merge(c2)
+    old_id = c2.id
+    c.merge(c2, u)
     assert_raise(ActiveRecord::RecordNotFound) { Channel.find(c2.id) }
     assert_equal 3, c.posts.count
     assert_equal "foo", c.posts.all[0].body
     assert_equal "baz", c.posts.all[1].body
     assert_equal "bar", c.posts.all[2].body
+    assert_equal 1, c.events.where(event: "merge").size
+    assert_equal c.id, ChannelRedirect.from_id(old_id).target_channel_id
   end
 
   test "next post" do
@@ -59,5 +62,23 @@ class ChannelTest < ActiveSupport::TestCase
     assert_equal p3.id, c.next_post(u)
     c.visit(u, p3.id)
     assert c.next_post(u) > p3.id
+  end
+
+  test "rename channel event" do
+    u = create_user
+    c = create_channel
+    assert_equal 0, c.events.where(event: "rename").size
+    c.rename("#{c.title} - updated", u)
+    assert_equal 1, c.events.where(event: "rename").size
+    assert_equal 0, c.events.where(event: "text").size
+  end
+
+  test "channel text change event" do
+    u = create_user
+    c = create_channel
+    assert_equal 0, c.events.where(event: "text").size
+    c.change_text("new text", u)
+    assert_equal 1, c.events.where(event: "text").size
+    assert_equal 0, c.events.where(event: "rename").size
   end
 end

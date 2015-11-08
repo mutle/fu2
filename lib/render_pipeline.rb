@@ -37,6 +37,7 @@ module RenderPipeline
             Resque.enqueue(FetchTweetJob, id, post_id, :tweet)
             content
           else
+            tweet.gsub!(/<script.*>.*<\/script>/, "")
             content.gsub(EMBEDS[:twitter][:pattern], tweet)
           end
         end
@@ -101,7 +102,7 @@ module RenderPipeline
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
-    Pipeline::PlainTextInputFilter,
+    Pipeline::MarkdownFilter,
     Pipeline::EmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "bundler", "~>1.7.3"
+gem "bundler", "~>1.9.9"
 gem "rails", "~>4.2.1"
 gem "pg", "~>0.18.1"
 gem "haml", "~>4.0.3"
@@ -12,7 +12,7 @@ gem 'dynamic_form'
 gem "bcrypt-ruby", :require => 'bcrypt'
 gem "redis"
 gem "github-markdown"
-gem "gemoji"
+gem "gemoji", git: "https://github.com/github/gemoji.git"
 gem "rinku"
 gem "escape_utils", "~>1.0.1"
 gem "html-pipeline", "~>1.11.0", :require => "html/pipeline"
@@ -29,8 +29,15 @@ gem 'resque-web', require: 'resque_web'
 gem 'resqued'
 gem 'faraday'
 gem 'responders', '~>2.0.0'
+gem "jbuilder"
+gem 'active_model_serializers'
+gem 'react-rails', '~>1.0.0'
+gem 'websocket-eventmachine-server'
 
 group :test do
   gem "mocha"
   gem "test-unit"
+  gem 'poltergeist'
+  gem "capybara"
+  gem "phantomjs", require: "phantomjs/poltergeist"
 end

@@ -1,27 +1,35 @@
 <div class="profile">
 
-  <div class="user-info">
-    <%= render :partial => "profile", :locals => {:user => @user} %>
+  <div class="large">
+    <%= render :partial => "profile", locals: {user: @user, avatar_size: 128} %>
   </div>
 
-  <div class="box">
-    <h3>Recent Posts</h3>
+  <h2>Stats</h2>
+  <div class="stats content-block">
+    <p><span class="label">Posts:</span> <%= @user.posts.count %></p>
+    <p><span class="label">Channels created:</span> <%= @user_channel_count %></p>
+    <p><span class="label">Faves given:</span> <%= @user.faves.count %></p>
+    <p><span class="label">Faves received:</span> <%= @user_faves_received %></p>
+  </div>
+
+  <div>
+    <h2>Recent Posts</h2>
     <% if @user.posts.count > 0 %>
       <ul>
         <% @user_posts.each do |post| %>
-          <% next unless post and post.channel %>
-          <%= render :partial => "post", :object => post %>
+          <% next if !post || !post.channel %>
+          <%= render partial: "channels/post", object: post, locals: {simple: true, show_channel: true, channel: post.channel} %>
         <% end %>
       </ul>
     <% end %>
   </div>
 
-  <div class="box">
-    <h3>Faves</h3>
+  <div>
+    <h2>Faves</h2>
     <ul>
       <% @user_faves.each do |fave| %>
         <% next unless fave.post %>
-        <%= render :partial => "post", :object => fave.post %>
+        <%= render partial: "channels/post", object: fave.post, locals: {simple: true, show_channel: true, channel: fave.post.channel} %>
       <% end %>
     </ul>
   </div>

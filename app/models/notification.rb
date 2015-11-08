@@ -26,7 +26,9 @@ class Notification < ActiveRecord::Base
         :channel_id => channel.id,
         :post_id => post.id
       }
-      create(attrs)
+      n = create(attrs)
+      Live.notification_counters(to)
+      n
     end
 
     def message(from, to, message, no_response=false)
@@ -47,8 +49,14 @@ class Notification < ActiveRecord::Base
         }
         create(attrs)
       end
+      Live.notification_counters(to)
       m.process_fubot_message
       m
+    end
+
+    def mark_unread(current_user, from)
+      Notification.for_user(current_user).toolbar_notifications.from_user(from).unread.update_all(:read => true)
+      Live.notification_counters(current_user)
     end
   end
 
@@ -83,7 +91,7 @@ class Notification < ActiveRecord::Base
   end
 
   def default_message
-    if notification_type == "mention"
+    if notification_type == "mention" && channel
       "I mentioned you in [#{channel.title}](/channels/#{channel_id}#post_#{post_id})"
     end
   end

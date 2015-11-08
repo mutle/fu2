@@ -25,11 +25,14 @@ class Channel < ActiveRecord::Base
   before_create :generate_permalink
   after_create :add_first_post
 
+  after_create :notify_create
+  after_update :notify_update
+
   after_create :update_index
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :current_user, :markdown
+  attr_accessor :current_user, :markdown, :read
 
   class << self
     def indexed_type
@@ -42,9 +45,9 @@ class Channel < ActiveRecord::Base
         mappings: {
           indexed_type => {
             properties: {
-              title: { type: 'string', analyze: 'standard' },
+              title: { type: 'string', analyzer: 'simple' },
               created: { type: 'date', index: 'not_analyzed' },
-              text: { type: 'string', analyze: 'standard' },
+              text: { type: 'string', analyzer: 'standard' },
               site_id: { type: 'integer', index: 'not_analyzed' }
             }
           }
@@ -65,8 +68,12 @@ class Channel < ActiveRecord::Base
   end
 
 
-  def self.recent_channels(_user, page, per_page = 50)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("last_post DESC").paginate(:page => page, :per_page => per_page)
+  def self.recent_channels(_user, page, per_page = 50, last_update=nil)
+    if last_update
+      where("(updated_at > ? OR last_post_date > ?) AND (default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", last_update, last_update, true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+    else
+      where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+    end
   end
 
   def self.all_channels(_user, page)
@@ -147,12 +154,14 @@ class Channel < ActiveRecord::Base
     }
   end
 
-  def self.recent_posts(channels)
+  def self.recent_posts(channels, user)
     ids = channels.map(&:id)
     recent = Post.select("channel_id, MAX(id) as id").where("channel_id IN (?)", ids).group("channel_id").load
     posts = Post.select("id, channel_id, user_id, created_at").where("channel_id IN (?)", ids).includes(:user).to_a
     out = {}
-    recent.each { |p| out[p.channel_id] = posts.find { |p1| p1.id == p.id } }
+    recent.each do |p|
+      out[p.channel_id] = posts.find { |p1| p1.id == p.id }
+    end
     out
   end
 
@@ -161,7 +170,7 @@ class Channel < ActiveRecord::Base
   end
 
   def body
-    ""
+    @body || ""
   end
 
   def add_first_post
@@ -184,9 +193,13 @@ class Channel < ActiveRecord::Base
     default_write
   end
 
-  def as_json(*args)
-    {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
+  def last_post_user_id
+    last_post.try(:user_id) || 0
   end
+
+  # def as_json(*args)
+  #   {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
+  # end
 
   def next_post(current_user)
     i = last_read_id(current_user)
@@ -207,6 +220,10 @@ class Channel < ActiveRecord::Base
     @last_post ||= posts.reorder("id DESC").first
   end
 
+  def last_post=(post)
+    @last_post = post
+  end
+
   def last_post_id
     last_post.try(:id)
   end
@@ -217,15 +234,23 @@ class Channel < ActiveRecord::Base
 
   def has_posts?(current_user, post=nil)
     i = last_read_id(current_user)
-    i == 0 || (post || last_post).nil? || i < (post || last_post).id
+    (i == 0 || (post || last_post).nil? || i < (post || last_post).id) == true
   end
 
   def visit(current_user, post_id=nil)
     if !post_id
+      num = $redis.zscore "mentions:#{current_user.id}", id
       $redis.zadd "mentions:#{current_user.id}", 0, id
+      Live.notification_counters(current_user) if num && num.to_i > 0
     end
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
+    if user && i != post_id
+      self.read = true
+      Live.channel_update(self, current_user)
+    elsif user && post_id == nil
+      self.read = true
+    end
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
     i
@@ -243,10 +268,10 @@ class Channel < ActiveRecord::Base
     updated_by && User.find(updated_by)
   end
 
-  def show_posts(current_user, last_read)
+  def show_posts(current_user, last_read, per_page=12)
     p = posts.where("id >= :last_read", last_read: last_read).includes(:user, :faves).load.reverse
-    if p.size < 12
-      p = posts.includes(:user, :faves).limit(12).load.reverse
+    if p.size < per_page
+      p = posts.includes(:user, :faves).limit(per_page).load.reverse
     end
     if p.first
       e = events.includes(:user).from_post(p.first)
@@ -257,8 +282,10 @@ class Channel < ActiveRecord::Base
     result.sort_by(&:created_at)
   end
 
-  def merge(other)
+  def merge(other, current_user)
     Post.where(channel_id: other.id).update_all(channel_id: id)
+    events.create(event: "merge", data: {merged_title: other.title, title: title}, user_id: current_user.id)
+    ChannelRedirect.create(original_channel_id: other.id, target_channel_id: id)
     other.destroy
   end
 
@@ -269,12 +296,35 @@ class Channel < ActiveRecord::Base
     events.create(event: "rename", data: {old_title: old_title, title: title}, user_id: current_user.id)
   end
 
+  def change_text(text, current_user)
+    old_text = self.text
+    old_text_html = RenderPipeline.markdown(old_text)
+    return if old_text == text
+    self.text = text
+    text_html = RenderPipeline.markdown(text)
+    events.create(event: "text", data: {old_text: old_text, old_text_html: old_text_html, text: text, text_html: text_html}, user_id: current_user.id)
+  end
+
+  def last_text_change
+    change = events.where(event: "text").last
+    return {user_id: change.user.id, updated_at: change.created_at} if change
+    nil
+  end
+
   def update_index
     Search.update("channels", id)
   end
 
   def remove_index
     Search.remove("channels", id)
+  end
+
+  def notify_create
+    Live.channel_create self
+  end
+
+  def notify_update
+    Live.channel_update self
   end
 
 end

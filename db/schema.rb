@@ -11,23 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403202551) do
+ActiveRecord::Schema.define(version: 20151031235058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "channel_redirects", force: :cascade do |t|
+    t.integer  "original_channel_id"
+    t.integer  "target_channel_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "channel_redirects", ["original_channel_id"], name: "index_channel_redirects_on_original_channel_id", using: :btree
+  add_index "channel_redirects", ["target_channel_id"], name: "index_channel_redirects_on_target_channel_id", using: :btree
+
   create_table "channels", force: :cascade do |t|
-    t.string   "title",         limit: 255,                null: false
-    t.integer  "user_id",                                  null: false
-    t.string   "permalink",     limit: 255,                null: false
-    t.boolean  "default_read",              default: true, null: false
-    t.boolean  "default_write",             default: true, null: false
+    t.string   "title",          limit: 255,                null: false
+    t.integer  "user_id",                                   null: false
+    t.string   "permalink",      limit: 255,                null: false
+    t.boolean  "default_read",               default: true, null: false
+    t.boolean  "default_write",              default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_post"
+    t.datetime "last_post_date"
     t.text     "text"
     t.integer  "updated_by"
-    t.integer  "site_id",                   default: 1
+    t.integer  "site_id",                    default: 1
   end
 
   add_index "channels", ["created_at"], name: "index_channels_on_created_at", using: :btree
@@ -50,14 +60,18 @@ ActiveRecord::Schema.define(version: 20150403202551) do
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "faves", force: :cascade do |t|
-    t.integer  "user_id",                null: false
-    t.integer  "post_id",                null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "user_id",                     null: false
+    t.integer  "post_id",                     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "site_id",    default: 1
+    t.string   "emoji",      default: "star"
   end
 
+  add_index "faves", ["emoji"], name: "index_faves_on_emoji", using: :btree
+  add_index "faves", ["post_id"], name: "index_faves_on_post_id", using: :btree
   add_index "faves", ["site_id"], name: "index_faves_on_site_id", using: :btree
+  add_index "faves", ["user_id"], name: "index_faves_on_user_id", using: :btree
 
   create_table "images", force: :cascade do |t|
     t.integer  "user_id"

@@ -14,9 +14,15 @@ class Post < ActiveRecord::Base
   after_create :scan_for_mentions
   after_create :process_fubot_message
 
+  after_create :notify_create
+  after_update :notify_update
+  before_destroy :notify_destroy
+
   after_create :update_index
   after_update :update_index
   before_destroy :remove_index
+
+  attr_accessor :read
 
   class << self
     def indexed_type
@@ -57,7 +63,9 @@ class Post < ActiveRecord::Base
   end
 
   def update_channel_last_post
-    channel.update_attribute(:last_post, created_at) if channel
+    if channel
+      channel.update_attribute(:last_post_date, created_at)
+    end
     true
   end
 
@@ -70,6 +78,7 @@ class Post < ActiveRecord::Base
         mentioned[u.id] = true
         channel.add_mention(u)
         Notification.mention(user, u, channel, self)
+        Live.notification_counters(u)
       end
     end
     true
@@ -99,29 +108,31 @@ class Post < ActiveRecord::Base
     channel.can_read?(user)
   end
 
-  def faves_for(user)
-     faves.where(:user_id => user.id)
+  def faves_for(user, emoji="star")
+     faves.where(user_id: user.id, emoji: emoji)
   end
 
-  def faved_by?(user, faves=nil)
+  def faved_by?(user, faves=nil, emoji="star")
     if faves
-      faves.select { |f| f.user_id == user.id }.any?
+      faves.select { |f| f.user_id == user.id && f.emoji == emoji }.any?
     else
-      faves_for(user).count > 0
+      faves_for(user, emoji).count > 0
     end
   end
 
-  def fave(user)
-    faves.create :user_id => user.id
+  def fave(user, emoji="star")
+    faves.create user_id: user.id, emoji: emoji
+    Live.post_fave self
   end
 
-  def unfave(user)
-    faves_for(user).destroy_all
+  def unfave(user, emoji="star")
+    faves_for(user, emoji).destroy_all
+    Live.post_unfave self
   end
 
-  def as_json(*args)
-    {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?, :html_body => html_body}
-  end
+  # def as_json(*args)
+  #   {:body => body, :created_at => created_at, :id => id, :updated_at => updated_at, :user_id => user_id, :user_name => user.login, :channel_id => channel_id, :channel_title => channel.title, :markdown => markdown?, :html_body => html_body}
+  # end
 
   def process_fubot_message
     if Rails.env.development?
@@ -152,6 +163,18 @@ class Post < ActiveRecord::Base
 
   def remove_index
     Search.remove("posts", id)
+  end
+
+  def notify_create
+    Live.post_create self
+  end
+
+  def notify_update
+    Live.post_update self
+  end
+
+  def notify_destroy
+    Live.post_destroy self
   end
 
 end

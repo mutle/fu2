@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   serialize :block_users
 
   scope :with_login, lambda { |login| where("LOWER(login) = LOWER(:login) and activated_at IS NOT NULL", :login => login) }
+  scope :with_api_key, proc { |key| where(api_key: key) }
+  scope :active, proc { where("login NOT LIKE '%-disabled'") }
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -170,8 +172,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def display_name_html
+    RenderPipeline.title(display_name)
+  end
+
   def as_json(*args)
-    {:id => id, :login => login, :display_name => display_name, :display_name_html => RenderPipeline.title(display_name), :display_color => display_color, :avatar_url => avatar_image_url}
+    {:id => id, :login => login, :display_name => display_name, :display_name_html => display_name_html, :display_color => display_color, :avatar_url => avatar_image_url}
   end
 
   def new_features
@@ -186,7 +192,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def avatar_image_url(size=42)
+  def avatar_image_url(size=32)
     if avatar_url.blank?
       gravatar_id = Digest::MD5.hexdigest(email.downcase)
       "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"

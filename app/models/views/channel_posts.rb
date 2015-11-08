@@ -1,9 +1,8 @@
 module Views
-  class ChannelPosts < ApplicationView
+  class ChannelPosts < ListView
 
     attrs :current_user, :channel, :last_read_id, :first_id, :last_id, :limit, :last_update
 
-    fetches :post_count, proc { channel.posts.count }
     fetches :posts, proc {
       p = if first_id
         Post.before(channel, first_id)
@@ -23,12 +22,15 @@ module Views
       posts = p || channel.show_posts(current_user, last_read_id)
       posts.each do |p|
         p.channel = channel
+        p.read = !(last_read_id && p.id > last_read_id)
       end
       posts
     }
     fetches :updated_posts, proc { last_update ? Post.updated_since(channel, last_update) : [] }
     fetches :last_update, proc { (posts.map(&:created_at) + posts.map(&:updated_at) + updated_posts.map(&:updated_at)).map(&:utc).max.to_i }, [:posts, :updated_posts]
-    fetches :updated_by_user, proc { channel.updated_by_user }
+    fetches :count, proc { channel.posts.count }
+    fetches :start_id, proc { posts.select { |p| p.is_a?(Post) }.map(&:id).min }, [:posts]
+    fetches :end_id, proc { posts.select { |p| p.is_a?(Post) }.map(&:id).max }, [:posts]
 
   end
 end

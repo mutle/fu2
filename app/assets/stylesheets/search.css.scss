@@ -48,11 +48,6 @@
   }
 
   #search-results {
-    background-color: #fff;
-    padding: 0px;
-    margin-top: 1em;
-    list-style: none;
-
     li, li.channel {
       margin-bottom: 2em;
     }
@@ -143,6 +138,7 @@
   }
 
   .search-info {
+    clear: both;
     margin-bottom: 2em;
   }
 

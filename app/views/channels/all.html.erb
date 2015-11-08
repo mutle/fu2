@@ -1,0 +1,13 @@
+<h3 class="channel-response-title">All Channels</h3>
+<ul class="select-letters">
+  <li><%= link_to "#", all_channels_path(:letter => "#") %></li>
+  <% ('a'..'z').each do |c| %>
+    <li><%= link_to c.upcase, all_channels_path(:letter => c) %></li>
+  <% end %>
+</ul>
+<ul class="channel-list">
+  <% @view.channels.each do |channel| %>
+    <%= render partial: "channel", object: channel %>
+  <% end %>
+</ul>
+<%= will_paginate @view.channels %>
