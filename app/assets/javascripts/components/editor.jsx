@@ -1,6 +1,6 @@
 var Editor = React.createClass({
   getInitialState: function() {
-    return {text: "", active: false, textSelection: [0,0], autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
+    return {text: "", active: false, textSelection: null, autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
   },
   getInitialProps: function() {
     return {valueName: "text"};
@@ -72,7 +72,7 @@ var Editor = React.createClass({
             var input = e.target.value.slice(0, this.state.start) + result + extra + e.target.value.slice(cursorE, e.target.value.length);
             e.target.value = input;
             var cursor = this.state.start + result.length + extra.length;
-            this.setState({autocomplete: null, text: input, textSelection: [cursor, cursor]});
+            this.setState({autocomplete: null, text: input});
           } else {
             this.setState({autocomplete: null});
           }
@@ -113,34 +113,21 @@ var Editor = React.createClass({
       }
       if(key.length <= 1) {
         if(ce < this.state.start) ce = this.state.start;
-        var text = e.target.value.slice(this.state.start, ce+1) + key;
-        this.setState({input: text, filtered: this.filterObjects(text), selection: 0, autocomplete: ce < this.state.start ? null : this.state.autocomplete, textSelection: [ce, ce]});
+        var input = e.target.value.slice(this.state.start, ce);
+        var text = input + key;
+
+        this.setState({input: text, filtered: this.filterObjects(text), selection: 0, autocomplete: ce < this.state.start ? null : this.state.autocomplete});
       }
     }
 
     if(e.type == "keypress") this.change();
-    else if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
-      this.setState({textSelection: [cursorS, cursorE]});
-    }
   },
   change: function(e) {
     if(e) this.setState({text: e.target.value});
 
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
-    var cursorE = c.selectionEnd;
-    var cursorS = c.selectionStart;
-    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1]) {
-      this.setState({textSelection: [cursorS, cursorE]});
-    }
   },
   click: function(e) {
-    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
-    var cursorE = c.selectionEnd;
-    var cursorS = c.selectionStart;
-    if(cursorS != this.state.textSelection[0] || cursorE != this.state.textSelection[1])
-      this.setState({active: true, text: c.value, textSelection: [cursorS, cursorE]});
-    else
-      this.setState({active: true, text: c.value});
   },
   autocompleteClick: function(e) {
     if(this.state.autocomplete) {
@@ -211,11 +198,13 @@ var Editor = React.createClass({
     if(this.isMounted() && this.state.active) {
       var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
       c.focus();
-      c.setSelectionRange(this.state.textSelection[0], this.state.textSelection[1]);
+      if(this.state.textSelection != null) {
+        c.setSelectionRange(this.state.textSelection[0], this.state.textSelection[1]);
+        this.setState({textSelection: null});
+      }
     }
   },
   render: function() {
-    var imageUrl;
     if(this.state.autocomplete) {
       var autocompleter = <AutoCompleter objects={this.state.filtered} selection={this.state.selection} clickCallback={this.autocompleteClick} />;
     }
