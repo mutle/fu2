@@ -1,0 +1,29 @@
+.editor-shortcuts {
+  padding: 6px 0px;
+  .editor-button {
+    display: inline-block;
+    text-align: center;
+    line-height: 22px;
+    width: 32px;
+    border: 1px solid #b5b5b5;
+    border-radius: 3px;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  .divider {
+    display: inline-block;
+    text-align: center;
+    width: 24px;
+  }
+
+  .button-bold, .button-h2 {
+    font-weight: bold;
+  }
+  .button-italic {
+    font-style: italic;
+  }
+  .button-strike {
+    text-decoration: line-through;
+  }
+}
