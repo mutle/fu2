@@ -35,11 +35,6 @@ class ApplicationController < ActionController::Base
     METRICS.increment name
   end
 
-  def highlight_results(text, query)
-    query.split(" ").inject(text) { |s,q| s = highlight(s, "<strong>#{q}</strong>") }
-  end
-  helper_method :highlight_results
-
   helper_method :current_user
 
   def mobile_device?

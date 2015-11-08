@@ -25,6 +25,8 @@ Fu2::Application.routes.draw do
     end
     resources :images
     resources :emojis
+
+    get 'stats/websockets' => "stats#websockets"
   end
 
   resources :users do
@@ -53,21 +55,11 @@ Fu2::Application.routes.draw do
     collection do
       get :search
       get :channel_names
-      get :activity
-      get :live
       get :all
-    end
-    member do
-      post :visit
-      get :merge
-      post :do_merge
     end
   end
 
   resources :notifications
-
-  get '/stats/websockets' => "stats#websockets"
-  get '/tests' => "tests#index"
 
   get '/' => 'channels#index', :as => :root
 end
