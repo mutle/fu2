@@ -8,15 +8,6 @@ class ChannelsController < ApplicationController
     empty_response
   end
 
-  def live
-    if Post.most_recent.first.id > params[:last_id].to_i
-      index(false)
-      render :partial => "channels", :layout => false
-    else
-      render :text => ""
-    end
-  end
-
   def show
     if params[:id] == "all"
       all
@@ -38,22 +29,6 @@ class ChannelsController < ApplicationController
 
   def new
     empty_response
-  end
-
-  def merge
-    @channel = Channel.find params[:id]
-    @view = Views::ChannelMerge.new({
-      current_user: current_user,
-      channel: @channel
-    })
-    @view.finalize
-  end
-
-  def do_merge
-    @channel = Channel.find params[:id]
-    @other_channel = Channel.find params[:merge_id]
-    @channel.merge(@other_channel, current_user)
-    redirect_to channel_path(@channel)
   end
 
   private

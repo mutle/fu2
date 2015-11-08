@@ -3,6 +3,7 @@
 //= require components/view-loader
 //= require components/timestamp
 //= require components/notification-counter
+//= require components/navigation
 //= require components/auto-completer
 //= require components/image-uploader
 //= require components/editor-shortcuts

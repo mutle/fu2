@@ -5,15 +5,10 @@
  *= require_self
  *= require reset
  *= require sprockets-octicons
- *= require jquery.textcomplete
- *= require markitup
- *= require markitup-html
- *= require redcursor_app
- *= require shared-components
  *= require login
- *= require notifications
+ *= require layout
  *= require profile
- *= require channels
  *= require search
  *= require channel-search
+ *= require components
 */

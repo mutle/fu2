@@ -1,0 +1,197 @@
+#container {
+  #content {
+
+    .body {
+
+      line-height: 1.3em;
+
+      [title] {
+        border-bottom: 1px dotted #BBB;
+      }
+
+      blockquote {
+        border-left: 3px solid black;
+        margin: 1em 3px 1em 3px;
+        padding: 8px;
+      }
+
+      blockquote p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+      }
+
+      blockquote blockquote {
+        margin-top: 0em;
+      }
+
+      blockquote p:last-child {
+        margin-bottom: 0px;
+      }
+      blockquote br {
+        margin-bottom: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      p:last-child {
+        margin-bottom: 0px;
+      }
+      ul {
+        padding-left: 1em;
+        margin-bottom: 1em;
+      }
+      ol {
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+      }
+      dt {
+        padding-left: 1em;
+        margin-bottom: 0.3em;
+      }
+      dd {
+        padding-left: 4em;
+        margin-bottom: 0em;
+      }
+
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.channel-post, .channel-response {
+  margin-bottom: 2em;
+  border-top: 1px solid #e8e8e8;
+
+  &.channel-edit, &.channel-new {
+    border-top: none;
+    margin-top: -1em;
+  }
+
+  .channel-post-header, .channel-response-header {
+    position: relative;
+    height: 32px;
+    line-height: 31px;
+    color: #474747;
+    font-weight: bold;
+
+    a {
+      color: #474747;
+      text-decoration: none;
+    }
+
+    .avatar {
+      position: absolute;
+      width: 42px;
+      top: -2px;
+      left: 0px;
+      background: #fff;
+      padding-right: 10px;
+    }
+
+    .user-name {
+      margin-left: 52px;
+    }
+
+    .faves {
+      display: inline-block;
+      margin-top: -3px;
+      line-height: 31px;
+      position: relative;
+
+      button {
+        border: 2px solid #e8e8e8;
+        background: #fff;
+        font-size: 12px;
+        padding: 0px 3px 3px 3px;
+        border-radius: 3px;
+        margin: 0px 4px;
+
+        &.on {
+          border-color: #b5b5b5;
+        }
+      }
+
+      .add-emoji {
+        display: inline-block;
+        padding-right: 12px;
+
+        .fave-emoji {
+          padding-top: 2px;
+          padding-right: 0;
+        }
+      }
+
+      .fave-emoji {
+        max-width: 20px;
+        max-height: 20px;
+        padding-top: 2px;
+        padding-right: 4px;
+      }
+
+      .autocompleter {
+        position: absolute;
+        top: 31px;
+      }
+    }
+
+    .right {
+      margin-right: 8px;
+
+      a {
+        margin-right: 10px;
+      }
+
+      .timestamp {
+        margin-left: 16px;
+        margin-right: 0px;
+      }
+
+
+      .faves .octicon {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+.channel-post {
+
+  .right a.post-unread {
+    color: #474747;
+  }
+
+  &.read .channel-post-header {
+    .right a {
+      color: #474747;
+    }
+
+    .right .faves a {
+      &.on {
+        color: goldenrod;
+      }
+      &.faved {
+      }
+    }
+    .right a.post-unread {
+      color: #e8e8e8;
+    }
+  }
+
+  &.highlight {
+    .body {
+      border-left: 5px solid #dfa099;
+      margin-left: -10px;
+      padding-left: 5px;
+    }
+  }
+
+  .body {
+    color: #4D4D4D;
+    margin: 1em 0;
+    line-height: 1.4em;
+  }
+
+}

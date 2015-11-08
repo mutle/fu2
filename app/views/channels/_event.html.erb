@@ -1,9 +1,0 @@
-<div class="event <%= event.event %>">
-  <span class="user">
-    <%= link_to image_tag(avatar_url(event.user, 16)), user_path(event.user) %>
-    <%= user_link event.user %>
-  </span>
-  <span class="message">
-    <%= format_event event %>
-  </span>
-</div>

@@ -1,9 +1,4 @@
-// Place all the styles related to the notifications controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-$small-screen: "only screen and (min-width : 800px)";
-$large-phone: "only screen and (min-width : 421px)";
+@import "screen.scss";
 
 .notifications {
   img.avatar {

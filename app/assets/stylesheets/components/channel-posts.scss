@@ -1,0 +1,123 @@
+.channel-response-title {
+  font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  margin: 32px 0px 16px 0px;
+}
+
+.channel-response, .channel-edit, .channel-new {
+  .actions {
+    height: 32px;
+    line-height: 32px;
+    text-align: right;
+
+    &.left {
+      text-align: left;
+      float: left;
+      margin-top: -32px;
+    }
+  }
+}
+
+.post, .comment-box {
+
+  .autocomplete-image {
+    max-width: 22px;
+    max-height: 22px;
+  }
+
+  .body {
+    padding-bottom: 20px;
+    min-height: 1em;
+  }
+
+  .post-options {
+    float: right;
+    padding-right: 12px;
+
+    .octicon {
+      font-size: 18px;
+    }
+
+    a {
+      color: #000;
+      text-decoration: none;
+      padding: 6px;
+      border-left: 1px solid #999;
+      border-bottom: none;
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
+}
+
+.event {
+  margin: 1.5em 0px;
+  text-align: center;
+  color: #888;
+
+  a {
+    color: #888;
+    margin-left: 12px;
+  }
+
+  .user {
+    color: #888;
+    img {
+      max-width: 16px;
+      max-height: 16px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #888;
+    }
+
+    margin-right: 12px;
+  }
+
+  .message {
+    em {
+      color: #555;
+    }
+  }
+
+  .event-details {
+    text-align: left;
+    margin-top: 1em;
+    margin-bottom: 2em;
+
+    .column {
+      box-sizing: border-box;
+      width: 50%;
+      margin-left: 50%;
+
+      h3 {
+        margin-bottom: 1em;
+
+        .octicon {
+          float: left;
+          margin-right: 12px;
+        }
+      }
+
+      &:first-child {
+        float: left;
+        margin-left: 0;
+      }
+    }
+
+    .after {
+      clear: both;
+    }
+  }
+}
+
+.select-letters {
+  margin: 1em 0px;
+  li {
+    display: inline;
+  }
+}
