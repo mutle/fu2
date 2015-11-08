@@ -1,3 +1,12 @@
+window.Slashcommands = [
+  {title: "ascii", description: "/ascii text"},
+  {title: "deploy", description: "/deploy branch"},
+  {title: "image", description: "/image key words"},
+  {title: "gif", description: "/gif key words"},
+  {title: "roll", description: "/roll, /roll 3d6"},
+  {title: "stock", description: "/stock AAPL"}
+];
+
 var Editor = React.createClass({
   getInitialState: function() {
     return {text: "", active: false, textSelection: null, autocomplete: null, objects: [], filtered: [], input: "", start: null, selection: 0};
@@ -103,6 +112,10 @@ var Editor = React.createClass({
       case "@":
         this.setState({autocomplete: "users", selection: 0, objects: window.Users, filtered: this.filterObjects("", window.Users), input: "", start: cursorE+1});
         break;
+      case "/":
+        if(cursorS == 0)
+          this.setState({autocomplete: "slash", selection: 0, objects: window.Slashcommands, filtered: this.filterObjects("", window.Slashcommands), input: "", start: cursorE+1});
+        break;
     }
     if(this.state.autocomplete) {
       var key = e.key;
@@ -143,7 +156,7 @@ var Editor = React.createClass({
   },
   blur: function(e) {
     e.preventDefault();
-    this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val(), active: false});
+    // this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val(), active: false});
   },
   filterObjects: function(input, objects) {
     var n = 0;
@@ -162,25 +175,26 @@ var Editor = React.createClass({
         var k = sorted[i];
         if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
           n++;
-          filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
+          filtered.push({title: k, image: "/images/emoji/"+emoji[k].image, description: emoji[k].tags.join(", ")});
         }
       }
-      // if(n < 10) {
-      //   for(var i in sorted) {
-      //     var k = sorted[i];
-      //     for(var t in emoji[k].tags) {
-      //       var tag = emoji[k].tags[t];
-      //       if(n < 10 && (input.length < 1 || tag.indexOf(input) === 0)) {
-      //         n++;
-      //         filtered.push({title: k, image: "/images/emoji/"+emoji[k].image});
-      //       }
-      //     }
-      //   }
-      // }
+      if(n < 10) {
+        for(var i in sorted) {
+          var k = sorted[i];
+          for(var t in emoji[k].tags) {
+            var tag = emoji[k].tags[t];
+            if(n < 10 && (input.length < 1 || tag.indexOf(input) === 0)) {
+              n++;
+              filtered.push({title: k, image: "/images/emoji/"+emoji[k].image, description: emoji[k].tags.join(", ")});
+            }
+          }
+        }
+      }
     } else {
       objects.map(function(r, i) {
         var s = r;
         if(r.login) s = r.login;
+        if(r.title) s = r.title;
         s = s.toLowerCase();
         if(n < 10 && (input.length < 1 || s.indexOf(input) === 0)) {
           n++;
