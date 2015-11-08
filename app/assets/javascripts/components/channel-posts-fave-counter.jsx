@@ -110,7 +110,8 @@ var FaveCounter = React.createClass({
     }
     var buttons = emojinames.map(function(emoji, i) {
       var className = "emoji-"+emoji;
-      if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on"
+      if(!all_emojis[emoji]) return;
+      if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on";
       return <button key={emoji} className={className} onClick={self.click}  title={emoji+": "+emojis[emoji].join(", ")}>
         <img className="fave-emoji" src={"/images/emoji/"+all_emojis[emoji].image} />
         {emojis[emoji].length}
@@ -122,7 +123,7 @@ var FaveCounter = React.createClass({
         <input onKeyDown={this.input} onKeyPress={this.input} />
       </div>;
     }
-    var addNew = <button className="add-emoji-button" onClick={this.addNew}><img className="fave-emoji" src="/images/emoji/heavy_plus_sign.png" /></button>;
+    var addNew = <button className="add-emoji-button" onClick={this.addNew}><img className="fave-emoji" src="/images/emoji/unicode/2795.png" /></button>;
     // if(!this.props.faves || this.props.faves.length == 0) inner = <span>{icon}{'0'}</span>;
     // else inner = <span>{icon}{this.props.faves.length}</span>;
     // var className = "";

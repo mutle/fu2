@@ -366,5 +366,11 @@ form {
     &.highlight {
       background: #e8e8e8;
     }
+
+    .description {
+      float: right;
+      margin-right: 25px;
+      color: #aaa;
+    }
   }
 }
