@@ -17,7 +17,6 @@ var ChannelPostsData = {
 };
 
 
-
 var ChannelPosts = React.createClass({
   getInitialState: function() {
     return {posts: [], events: [], channel: {}, view: {}, anchor: "", highlight: -1};

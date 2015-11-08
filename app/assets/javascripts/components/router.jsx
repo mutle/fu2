@@ -99,10 +99,15 @@ $(function() {
     return React.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M"});
 
+  Router.addResponder("users/show", function(params, e) {
+    return React.render(<UserProfile userId={params.user_id} />, e);
+  }, function(params) { return "/notifications"; }, {hotkey: "M"})
+
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
+  Router.addRoute("users/show", /^\/users\/(.+)\/?$/, ["user_id"]);
 
   Router.route(document.location.pathname+document.location.hash);
 

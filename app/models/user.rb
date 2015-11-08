@@ -177,7 +177,15 @@ class User < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:id => id, :login => login, :display_name => display_name, :display_name_html => display_name_html, :display_color => display_color, :avatar_url => avatar_image_url}
+    {
+      id: id,
+      login: login,
+      display_name: display_name,
+      display_name_html: display_name_html,
+      display_color: display_color,
+      avatar_url: avatar_image_url,
+      created_at: created_at
+    }
   end
 
   def new_features
