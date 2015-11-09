@@ -88,10 +88,11 @@ var UserProfile = React.createClass({
           var user_title = <span> {title[1]} <UserLink user={Data.get("user", parseInt(title[0]))}/></span>;
         }
       }
-      var name = {__html: this.user.display_name_html.replace(/<\/?p>/, '')};
+      var name = {__html: this.user.display_name_html.replace(/<\/?p>/g, '')};
+      console.log(name);
       return <div className="user-profile">
         <h2 className="title">
-          <img className="avatar-image" src={this.user.avatar_url_full} /> {name}
+          <img className="avatar-image" src={this.user.avatar_url_full} /> <span dangerouslySetInnerHTML={name} />
           <div className="user-title">{user_title}</div>
         </h2>
         {profile}
