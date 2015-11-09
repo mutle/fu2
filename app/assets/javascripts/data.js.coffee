@@ -81,6 +81,10 @@ class Data
       if info.view
         view = info.view.replace(/\$ID/, id)
         @updateView(view, data.view)
+      if !info.result
+        @insert(data)
+        @notify([data.type])
+        return
       for rkey, rformat of info.result
         if typeof(rformat) != "string"
           for o in data[rkey]

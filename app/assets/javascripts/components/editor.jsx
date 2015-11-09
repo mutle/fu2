@@ -1,10 +1,12 @@
 window.Slashcommands = [
-  {title: "ascii", description: "/ascii text"},
-  {title: "deploy", description: "/deploy branch"},
-  {title: "image", description: "/image key words"},
-  {title: "gif", description: "/gif key words"},
-  {title: "roll", description: "/roll, /roll 3d6"},
-  {title: "stock", description: "/stock AAPL"}
+  {title: "ascii ", description: "/ascii <text>"},
+  {title: "deploy ", description: "/deploy <branch>"},
+  {title: "image ", description: "/image <key words>"},
+  {title: "gif ", description: "/gif <key words>"},
+  {title: "remember ", description: "/remember <user> is <title>"},
+  {title: "roll ", description: "/roll, /roll 3d6"},
+  {title: "stock ", description: "/stock <symbol>"},
+  {title: "who is ", description: "/who is <user>"}
 ];
 
 var Editor = React.createClass({
