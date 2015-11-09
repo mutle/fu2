@@ -13,6 +13,12 @@ Fu2::Application.routes.draw do
       end
     end
 
+    resources :users do
+      member do
+        get :stats
+      end
+    end
+
     resources :notifications do
       member do
         post :read

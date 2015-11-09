@@ -23,7 +23,6 @@ var ChannelPostHeader = React.createClass({
     e.preventDefault();
   },
   render: function() {
-    var userLink = "/users/"+this.props.user.id;
     var postLink = "/channels/"+this.props.channelId+"#post-"+this.props.id;
     var postDeleteLink = this.props.editable ? <a href="#" className="post-delete" onClick={this.deletePost}><span className="octicon octicon-trashcan"></span></a> : null;
     var postEditLink = this.props.editable ? <a href="#" className="post-edit" onClick={this.edit}><span className="octicon octicon-pencil"></span></a> : null;
@@ -34,10 +33,8 @@ var ChannelPostHeader = React.createClass({
       var fave = this.props.post.faves[i];
       favers.push([Data.get("user", fave.user_id).login, fave.emoji]);
     }
-    var name = {__html: this.props.user.display_name};
     return <div className="channel-post-header">
-      <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} /></a>
-      <span className="user-name" dangerouslySetInnerHTML={name} />
+      <UserLink user={this.props.user} />
       <div className="right">
         <FaveCounter faves={favers} postId={this.props.id} user={this.props.user.login}  />
         {postDeleteLink}

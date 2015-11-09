@@ -1,4 +1,5 @@
 //= require react
+//= require components/error-message
 //= require components/loading-indicator
 //= require components/view-loader
 //= require components/timestamp
@@ -8,6 +9,8 @@
 //= require components/image-uploader
 //= require components/editor-shortcuts
 //= require components/editor
+//= require components/user-profile
+//= require components/user-link
 //= require components/channel-search
 //= require components/comment-box
 //= require components/channel-list

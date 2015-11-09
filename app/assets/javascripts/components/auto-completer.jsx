@@ -3,7 +3,6 @@ var AutoCompleterResult = React.createClass({
     var className = "result "+ (this.props.highlight ? "highlight" : "");
     var title = this.props.value.login ? this.props.value.login :  this.props.value.title ? this.props.value.title : this.props.value;
     var image = this.props.value.image ? this.props.value.image  : null;
-    console.log(this.props.value.description);
     var description = this.props.value.description ? <span className="description">{this.props.value.description}</span> : null;
     return <li className={className} onClick={this.props.clickCallback} data-value={title}><img src={image} />{title}{description}</li>;
   }

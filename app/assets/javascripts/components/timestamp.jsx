@@ -47,6 +47,8 @@ var Timestamp = React.createClass({
 // module.exports = Timestamp;
 window.Timestamp = Timestamp;
 
+window.formatTimestamp = formatTimestamp;
+
 $(function() {
   window.updateTimestamps = function(timestampE) {
     $.each(timestampE, function(i,e) {
