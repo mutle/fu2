@@ -13,7 +13,10 @@ Fu2::Application.routes.draw do
       end
     end
 
-    resources :users do
+    resource :users do
+      collection do
+        get :current
+      end
       member do
         get :stats
       end
@@ -42,6 +45,7 @@ Fu2::Application.routes.draw do
       get :password
     end
   end
+  get '/settings' => 'users#show', as: :settings
 
   resources :invites do
     member do

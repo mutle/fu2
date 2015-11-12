@@ -1,0 +1,45 @@
+.user-settings {
+
+  .setting {
+    margin: 2em 0px;
+    line-height: 38px;
+    font-size: 16px;
+  }
+
+  input.setting-value {
+    font-size: 16px;
+    width: 350px;
+    padding: 4px 2px;
+  }
+
+  .editLink {
+    margin-left: 12px;
+  }
+
+  .value {
+    display: inline-block;
+    width: 356px;
+    max-width: 356px;
+    padding-left: 4px;
+    overflow: hidden;
+  }
+
+  a {
+    display: inline-block;
+  }
+
+  .settings-button {
+    margin-left: 16px;
+    padding: 6px 18px;
+
+    &.password-button {
+      margin-left: 0px;
+    }
+  }
+
+  .change-password {
+    .settings-button.password-button {
+      margin-left: 16px;
+    }
+  }
+}
