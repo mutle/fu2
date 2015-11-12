@@ -14,6 +14,9 @@ Fu2::Application.routes.draw do
     end
 
     resource :users do
+    end
+    
+    resources :users do
       collection do
         get :current
       end
