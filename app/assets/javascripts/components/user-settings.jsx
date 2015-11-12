@@ -79,6 +79,10 @@ var UserSettings = React.createClass({
       this.setState({edit: "password"});
     }
   },
+  cancelEditPassword: function(e) {
+    if(e) e.preventDefault();
+    this.setState({edit: null});
+  },
   editEmail: function(e) {
     if(e) e.preventDefault();
     this.setState({edit: this.state.edit == "email" ? null: "email"});
@@ -128,7 +132,7 @@ var UserSettings = React.createClass({
           <UserSettingEdit name="old-password" title="Old Password" inputType="password" />
           <UserSettingEdit name="password" title="New Password" inputType="password" />
           <UserSettingEdit name="password-confirmation" title="Repeat Password" inputType="password" />
-          <a href="#" onClick={this.changePassword}>Cancel</a>
+          <a href="#" onClick={this.cancelEditPassword}>Cancel</a>
           <button className="content-button settings-button" onClick={this.changePassword}>Save Password</button>
         </div>;
       }
