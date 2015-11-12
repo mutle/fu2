@@ -4,6 +4,10 @@ $large-screen: "only screen and (min-width: 1200px)";
 #login_container {
   margin: 100px 10%;
   background-color: #fff;
+
+  h3 {
+    text-align: center;
+  }
   .login-box {
     padding: 16px;
 
@@ -23,10 +27,18 @@ $large-screen: "only screen and (min-width: 1200px)";
   }
 
   .notice {
-    background-color: #ffc;
-    padding: 1em;
-    padding-left: 8px;
+    display: block;
+    text-align: left;
+    line-height: 38px;
+    color: #f66;
+    padding-right: 8px;
     font-weight: bold;
+    margin-right: 100px;
+  }
+
+  .content-button {
+    float: right;
+    margin-left: 4px;
   }
 
 
@@ -51,7 +63,7 @@ $large-screen: "only screen and (min-width: 1200px)";
   }
 
   .actions {
-    text-align: right;
+    line-height: 38px;
   }
 
 }
