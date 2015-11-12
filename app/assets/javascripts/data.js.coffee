@@ -58,6 +58,8 @@ class Data
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
     image:
       create: -> "/api/images.json"
+    user:
+      update: -> "/api/users.json"
     notification:
       create: -> "/api/notifications.json"
       unread: -> "/api/notifications/unread.json"

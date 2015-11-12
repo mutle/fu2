@@ -11,7 +11,7 @@
   <div class="more">
     <%= link_to octicon('book')+content_tag(:span, "Channels", class: "text"), channel_path(:all), title: "Channels" %>
     <%= link_to octicon('organization')+content_tag(:span, "Users", class: "text"), users_path, title: "Users" %>
-    <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), edit_user_path(current_user), title: "Settings", class: "last" %>
+    <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), settings_path, title: "Settings", class: "last" %>
     <%= link_to octicon("sign-out", false, "signout-icon")+content_tag(:span, "Signout", class: "text"), session_path, title: "Logout", class: "toolbar-logout", method: :delete %>
   </div>
 </div>

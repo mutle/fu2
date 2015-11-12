@@ -99,14 +99,21 @@ $(function() {
     return React.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M"});
 
+  Router.addResponder("users/settings", function(params, e) {
+    $(".more").hide();
+    var user = Data.get("user", Data.user_id);
+    return React.render(<UserSettings user={user} />, e);
+  }, function(params) { return "/users/settings"; });
+
   Router.addResponder("users/show", function(params, e) {
     return React.render(<UserProfile userId={params.user_id} />, e);
-  }, function(params) { return "/notifications"; }, {hotkey: "M"})
+  }, function(params) { return "/users"+params.user_id; });
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("channels/list", /^\/(channels)?\/?$/);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
+  Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
 
   Router.route(document.location.pathname+document.location.hash);

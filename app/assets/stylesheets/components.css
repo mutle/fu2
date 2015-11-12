@@ -12,6 +12,7 @@
  *= require components/editor
  *= require components/user-profile
  *= require components/user-link
+ *= require components/user-settings
  *= require components/channel-search
  *= require components/comment-box
  *= require components/channel-list
