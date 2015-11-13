@@ -44,6 +44,10 @@ class FetchTweetJob
     return if $redis.get redis_key
 
     $redis.set redis_key, get_embed_code
-    Post.find(@post_id).touch if @post_id
+    if @post_id
+      p = Post.find(@post_id)
+      p.touch
+      p.notify_update
+    end
   end
 end
