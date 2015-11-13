@@ -12,7 +12,8 @@ var ChannelPostsData = {
     "post_create",
     "post_fave",
     "post_unfave",
-    "event_create"
+    "event_create",
+    "offline_channel_posts"
   ]
 };
 
