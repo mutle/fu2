@@ -126,7 +126,7 @@ var ChannelPosts = React.createClass({
     if(highlight == -1) {
       for(var p in objects) {
         var post = objects[p];
-        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post[-_]/, '')))) {
+        if(this.state.posts.length == 0 && this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post[-_]/, ''))) {
           highlight = parseInt(p);
           jump = true;
           break;
@@ -148,7 +148,7 @@ var ChannelPosts = React.createClass({
       }
     }
     var items = objects.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
-    this.setState({posts: objects, items: items, view: view, highlight: highlight, jump: true});
+    this.setState({posts: objects, items: items, view: view, highlight: highlight, jump: jump});
   },
   updatedEvents: function(objects, view) {
     var items = this.state.posts.concat(objects).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
@@ -178,8 +178,9 @@ var ChannelPosts = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.isMounted()) {
-      if(this.state.jump && this.updateAnchor())
+      if(this.state.jump && this.updateAnchor()) {
         this.setState({jump: false});
+      }
       var self = this;
       twttr.ready(function() {
         twttr.widgets.load(self.getDOMNode());
