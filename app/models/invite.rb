@@ -1,4 +1,5 @@
 class Invite < ActiveRecord::Base
+  include SiteScope
 
   validates_presence_of     :email
   validates_length_of       :email,    :within => 3..100

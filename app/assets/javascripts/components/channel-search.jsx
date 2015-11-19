@@ -2,7 +2,7 @@
 
 var ChannelSearchResult = React.createClass({
   render: function() {
-    var url = this.props.url ? this.props.url : "/channels/"+this.props.id+"#comments";
+    var url = this.props.url ? this.props.url : Data.url_root + "/channels/"+this.props.id+"#comments";
     var selected = "";
     if(this.props.selected) selected = "selected";
     return <li className={selected}><a href={url}>{this.props.title}</a></li>;
@@ -10,7 +10,7 @@ var ChannelSearchResult = React.createClass({
 });
 
 function searchUrl(query) {
-  return document.location.origin + "/search?utf8=✓&search="+encodeURIComponent(query);
+  return Data.url_root + "/search?utf8=✓&search="+encodeURIComponent(query);
 }
 
 var ChannelSearchResults = React.createClass({

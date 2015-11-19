@@ -28,7 +28,7 @@ var ChannelPosts = React.createClass({
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
-      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew);
+      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew, this.loadError);
     }
 
     var self = this;
@@ -82,6 +82,9 @@ var ChannelPosts = React.createClass({
         e.preventDefault();
       }
     });
+  },
+  loadError: function(e) {
+    this.setState({error: true});
   },
   replyMessage: function(post) {
     if(this.commentBox && this.commentBox.editor) {
@@ -201,6 +204,7 @@ var ChannelPosts = React.createClass({
     }
   },
   render: function () {
+    if(this.state.error) return <ErrorMessage title="Failed to load channel" />;
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {

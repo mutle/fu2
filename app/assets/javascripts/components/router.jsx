@@ -8,6 +8,8 @@ var Router = {
   current: null,
   route: function(path, updateUrl) {
     if(!path) return false;
+    if(path.indexOf(Data.url_root) != 0) return;
+    path = path.slice(Data.url_root.length);
     var urlpath = path;
     var hash = path.replace(/^.*#/, '');
     if(hash == path) hash = "";
@@ -55,9 +57,9 @@ var Router = {
     React.unmountComponentAtNode(this.content);
     this.current = responder.callback(params, this.content);
     if(urlpath) {
-      history.pushState(null, null, urlpath);
+      history.pushState(null, null, Data.url_root + urlpath);
     } else if(responder.url && updateUrl) {
-      var url = responder.url(params);
+      var url = Data.url_root + responder.url(params);
       history.pushState(null, null, url);
     }
   },
@@ -111,10 +113,10 @@ $(function() {
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
-  Router.addRoute("channels/list", /^\/(channels)?\/?$/);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
   Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
+  Router.addRoute("channels/list", /^(\/channels)?\/?$/);
 
   Router.route(document.location.pathname+document.location.hash);
 

@@ -4,6 +4,7 @@ var ChannelPostsHeader = React.createClass({
   },
   toggleEdit: function(e) {
     e.preventDefault();
+    console.log("edit");
     this.setState({edit: !this.state.edit});
   },
   save: function(e) {

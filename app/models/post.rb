@@ -1,4 +1,6 @@
 class Post < ActiveRecord::Base
+  include SiteScope
+  
   belongs_to :channel
   belongs_to :user
   has_many :faves
@@ -58,7 +60,7 @@ class Post < ActiveRecord::Base
       :faves => faves.size,
       :faver => faves.map { |fave| fave.user.login }.join(" "),
       :mention => mentioned_users.join(" "),
-      :site_id => 1
+      :site_id => site_id
     }
   end
 

@@ -64,13 +64,16 @@ class Data
       create: -> "/api/notifications.json"
       unread: -> "/api/notifications/unread.json"
       counters: -> "/api/notifications/counters.json"
-  constructor: (@socket, @user_id) ->
+  constructor: (@socket, @user_id, @url_root) ->
     @callbacks = {}
     @store = {}
     @views = {}
     @fetched = {}
+    @url_root = @url_root.replace(/^https?:\/\/[^\/]+(\/$)?/, '')
+    @url_root = "" if @url_root == "/"
+    console.log(@url_root)
     @socket.connect() if @socket
-  fetch: (info, id=0, args={}, fallback=null) ->
+  fetch: (info, id=0, args={}, fallback=null, errorCallback=null) ->
     return if !info
     if info.view && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
@@ -78,27 +81,33 @@ class Data
         @notify(cached)
         return
     url = info.url.replace(/{id}/, id)
-    $.ajax url: url, dataType: "json", type: "get", data: args, success: (data) =>
-      types = []
-      if info.view
-        view = info.view.replace(/\$ID/, id)
-        @updateView(view, data.view)
-      if !info.result
-        @insert(data)
-        @notify([data.type])
-        return
-      for rkey, rformat of info.result
-        if typeof(rformat) != "string"
-          for o in data[rkey]
-            t = o.type
+    $.ajax
+      url: @url_root+url,
+      dataType: "json",
+      type: "get",
+      data: args,
+      error: (e) => errorCallback?(e)
+      success: (data) =>
+        types = []
+        if info.view
+          view = info.view.replace(/\$ID/, id)
+          @updateView(view, data.view)
+        if !info.result
+          @insert(data)
+          @notify([data.type])
+          return
+        for rkey, rformat of info.result
+          if typeof(rformat) != "string"
+            for o in data[rkey]
+              t = o.type
+              if types.indexOf(t) < 0 then types.push(t)
+              @insert(o, t)
+          else
+            t = data[rkey].type
             if types.indexOf(t) < 0 then types.push(t)
-            @insert(o, t)
-        else
-          t = data[rkey].type
-          if types.indexOf(t) < 0 then types.push(t)
-          @insert(data[rkey])
-      @notify(types)
-      @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types
+            @insert(data[rkey])
+        @notify(types)
+        @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])
@@ -166,7 +175,7 @@ class Data
     $.ajax
       type: actionType,
       dataType: "json",
-      url: url,
+      url: @url_root+url,
       data: data,
       error: error,
       success: success
@@ -177,6 +186,6 @@ class Data
     @notify([type])
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
-  window.Data = new Data(window.socket, $("body").data("user-id"))
+  window.Data = new Data(window.socket, $("body").data("user-id"), $("body").data("api-root"))
   $.each window.Users, (i,user) ->
     window.Data.insert(user)

@@ -5,7 +5,7 @@ var ImageUploader = React.createClass({
   startUpload: function(filename, form) {
     var u = this;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', Data.url.image.create(), true);
+    xhr.open('POST', Data.url_root+Data.url.image.create(), true);
     var token = $('meta[name="csrf-token"]').attr('content');
     xhr.setRequestHeader('X_CSRF_TOKEN', token);
 

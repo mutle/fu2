@@ -1,4 +1,6 @@
 class Event < ActiveRecord::Base
+  include SiteScope
+  
   scope :from_post, proc { |p| where("created_at >= :p", p: p.created_at).order("created_at") }
   belongs_to :channel
   belongs_to :user

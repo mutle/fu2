@@ -20,7 +20,7 @@ var Channel = React.createClass({
     var className = "channel channel-"+this.props.channel.id;
     if(this.props.channel.read) className += " read";
     if(this.props.highlight) className += " highlight";
-    var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
+    var url = Data.url_root + "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var channelName = {__html: this.props.channel.display_name};
     return <li>
       <div className={className}>
@@ -42,7 +42,7 @@ var ChannelList = React.createClass({
     var self = this;
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
-    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels);
+    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels, this.loadError);
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(!self.isMounted()) return;
       if(e.target != $("body").get(0)) return;
@@ -77,6 +77,9 @@ var ChannelList = React.createClass({
         e.preventDefault();
       }
     });
+  },
+  loadError: function(e) {
+    this.setState({error: true});
   },
   scrollToHighlight: function() {
     if(this.state.highlight >= 0) {
@@ -117,6 +120,7 @@ var ChannelList = React.createClass({
     }
   },
   render: function() {
+    if(this.state.error) return <ErrorMessage title="Failed to load channels" />;
     if(this.state.channels.length < 1) return <LoadingIndicator />;
     var highlightId = this.state.highlight;
     var channels = this.state.channels.map(function(channel, i) {

@@ -1,4 +1,6 @@
 class Channel < ActiveRecord::Base
+  include SiteScope
+
   scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
   scope :with_ids, proc { |ids| where(id: ids) }
 
@@ -20,7 +22,7 @@ class Channel < ActiveRecord::Base
   has_many :events
 
   validates_presence_of :title, :user_id
-  validates_uniqueness_of :title, :on => :create
+  validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
 
   before_create :generate_permalink
   after_create :add_first_post
@@ -63,21 +65,21 @@ class Channel < ActiveRecord::Base
       :title => title,
       :created => created_at,
       :text => text,
-      :site_id => 1
+      :site_id => site_id
     }
   end
 
 
-  def self.recent_channels(_user, page, per_page = 50, last_update=nil)
+  def self.recent_channels(site, _user, page, per_page = 50, last_update=nil)
     if last_update
-      where("(updated_at > ? OR last_post_date > ?) AND (default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", last_update, last_update, true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+      where("(updated_at > ? OR last_post_date > ?) AND ((default_read = ? AND default_write = ?) OR user_id = ?) AND last_post_date != NULL AND site_id = ?", last_update, last_update, true, true, _user.id, site.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
     else
-      where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, _user.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+      where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
     end
   end
 
-  def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
+  def self.all_channels(site, _user, page)
+    where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)

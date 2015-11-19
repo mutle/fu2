@@ -4,7 +4,7 @@ module Views
     attrs :current_user
 
     fetches :message_counts, proc {
-      n = Notification.for_user(current_user).messages
+      n = Notification.site_scope(site).for_user(current_user).messages
       n.load
       counts = {}
       n.each do |notification|
@@ -18,7 +18,7 @@ module Views
     }
 
     fetches :mention_counts, proc {
-      n = Notification.for_user(current_user).mentions
+      n = Notification.site_scope(site).for_user(current_user).mentions
       n.load
       counts = {}
       n.each do |notification|

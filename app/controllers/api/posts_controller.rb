@@ -13,7 +13,8 @@ class Api::PostsController < Api::ApiController
       first_id: params[:first_id],
       last_id: params[:last_id],
       limit: params[:limit] || 12,
-      last_update: last_update
+      last_update: last_update,
+      site: @site
     })
     @channel.visit(current_user)
     @last_post_id = 0
@@ -22,7 +23,7 @@ class Api::PostsController < Api::ApiController
   end
 
   def create
-    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: true)
+    @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: true, site_id: @site.id)
     increment_metric "posts.all"
     increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
@@ -49,7 +50,7 @@ class Api::PostsController < Api::ApiController
   end
 
   def fave
-    @post = Post.find(params[:id].to_i)
+    @post = sitePost.find(params[:id].to_i)
     emoji = params[:emoji] || "star"
     if @post.faved_by? @current_user, nil, emoji
       @post.unfave @current_user, emoji
@@ -60,7 +61,7 @@ class Api::PostsController < Api::ApiController
   end
 
   def unread
-    @post_id = params[:id].to_i == 0 ? 0 : Post.find(params[:id].to_i).id
+    @post_id = params[:id].to_i == 0 ? 0 : sitePost.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
     render json: {status: "OK"}
   end
@@ -71,6 +72,6 @@ class Api::PostsController < Api::ApiController
   end
 
   def load_channel
-    @channel = Channel.find(params[:channel_id].to_i)
+    @channel = siteChannel.find(params[:channel_id].to_i)
   end
 end

@@ -124,7 +124,7 @@ var NotificationResponse = React.createClass({
     e.preventDefault();
     if(!this.props.showUser) return;
     var message = inputValue();
-    $.post("/api/notifications.json", {user_id: notifications.state.selectedUser, message: message}, function(data, status, xhr) {
+    $.post(Data.url_root + "/api/notifications.json", {user_id: notifications.state.selectedUser, message: message}, function(data, status, xhr) {
       var n = notifications.state.notifications;
       n.push(data);
       notifications.setState({notifications:n, lastId: data.id+1});
@@ -148,7 +148,7 @@ var Notifications = React.createClass({
   loadUsers: function() {
     if(!this.isMounted()) return;
     var n = this;
-    $.getJSON("/api/notifications/unread_users.json", function(data, status, xhr) {
+    $.getJSON(Data.url_root + "/api/notifications/unread_users.json", function(data, status, xhr) {
       var users = data.notifications;
       var active = [];
       var inactive = [];
@@ -163,7 +163,7 @@ var Notifications = React.createClass({
   },
   show: function(user_id) {
     var n = this;
-    $.getJSON("/api/notifications/"+user_id+".json", function(data, status, xhr) {
+    $.getJSON(Data.url_root + "/api/notifications/"+user_id+".json", function(data, status, xhr) {
       var id = 0;
       for(var i in data.notifications) {
         var notification = data.notifications[i];
@@ -172,7 +172,7 @@ var Notifications = React.createClass({
       $.ajax({
         dataType: "json",
         type: "POST",
-        url: "/api/notifications/"+user_id+"/read.json",
+        url: Data.url_root + "/api/notifications/"+user_id+"/read.json",
         success: function(data) {
         }
       });
@@ -182,7 +182,7 @@ var Notifications = React.createClass({
   refresh: function() {
     if(this.state.selectedUser > 0) {
       var n = this;
-      $.getJSON("/api/notifications/"+this.state.selectedUser+".json?last_id="+this.state.lastId, function(data, status, xhr) {
+      $.getJSON(Data.url_root + "/api/notifications/"+this.state.selectedUser+".json?last_id="+this.state.lastId, function(data, status, xhr) {
         var notifications = n.state.notifications;
         if(data.notifications.length > 0) {
           var id = n.state.lastId;

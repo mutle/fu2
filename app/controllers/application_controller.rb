@@ -1,8 +1,57 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_site_path
+
+  def set_site_path
+    @site = request.env['_site']
+    @site_id = @site ? @site.id : nil
+    if @site
+      default_url_options[:site_path] = @site.path
+      if @site.domain
+        default_url_options[:host] = @site.domain
+      end
+    end
+  end
+
+  def site_url(site)
+    {site_path: site.path, host: site.domain}
+  end
+  helper_method :site_url
+
+  def siteUser
+    User.site_scope(@site_id)
+  end
+
+  def siteChannel
+    Channel.site_scope(@site_id)
+  end
+
+  def sitePost
+    Post.site_scope(@site_id)
+  end
+
+  def siteEvent
+    Event.site_scope(@site_id)
+  end
+
+  def siteFave
+    Fave.site_scope(@site_id)
+  end
+
+  def siteKeyValue
+    KeyValue.site_scope(@site_id)
+  end
+
+  def siteImage
+    Image.site_scope(@site_id)
+  end
+
+  def siteNotification
+    Notification.site_scope(@site_id)
+  end
 
   def login_required
-    logged_in? || redirect_to(new_session_path)
+    logged_in? || redirect_to(new_session_path(site_path: nil))
   end
 
   def current_user

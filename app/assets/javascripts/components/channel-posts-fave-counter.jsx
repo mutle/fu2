@@ -9,7 +9,7 @@ var FaveCounter = React.createClass({
       var t = $(e.target);
       if(t.hasClass("fave-emoji") || t.get(0).className == "") t = t.parents("button");
       var emoji = t.attr("class").replace(/^emoji-/, '').split(" ")[0];
-      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
+      $.ajax({url:Data.url_root + "/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
@@ -21,7 +21,7 @@ var FaveCounter = React.createClass({
   fave: function(emoji) {
     if(this.props.postId > 0) {
       var c = this;
-      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
+      $.ajax({url:Data.url_root + "/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
