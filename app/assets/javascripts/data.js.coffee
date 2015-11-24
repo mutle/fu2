@@ -72,7 +72,7 @@ class Data
     @socket.connect() if @socket
   fetch: (info, id=0, args={}, fallback=null) ->
     return if !info
-    if info.view && !args['last_update']
+    if info.view && !info.noCache && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
       if cached?
         @notify(cached)
@@ -87,6 +87,8 @@ class Data
         @insert(data)
         @notify([data.type])
         return
+      if info.noCache && info.view
+        @store[info.view] = {}
       for rkey, rformat of info.result
         if typeof(rformat) != "string"
           for o in data[rkey]
@@ -98,7 +100,7 @@ class Data
           if types.indexOf(t) < 0 then types.push(t)
           @insert(data[rkey])
       @notify(types)
-      @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types
+      @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types if !info.noCache
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])

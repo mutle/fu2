@@ -14,6 +14,69 @@ var ChannelListData = {
     "offline_channel_list"
   ]
 };
+var ChannelListFilterData = {
+  url: "/api/channels.json",
+  result: {
+    channels: ["channel-filtered"]
+  },
+  view: "channel-filtered",
+  noCache: true,
+  subscribe: [
+    "channel_update",
+    "channel_create",
+    "channel_read",
+    "offline_channel_list"
+  ]
+};
+
+
+var ChannelListFilter = React.createClass({
+  getInitialState: function() {
+    return {text: "", unread: true, date: ""};
+  },
+  reset: function(e) {
+    e.preventDefault();
+    var self = this;
+    this.setState(this.getInitialState(), function(e) {
+      self.updateQuery(self.state);
+    });
+  },
+  onChange: function(e) {
+    var query = e.target.value;
+    var n = this.state.n + 1;
+    var key = e.target.className == "text-filter" ? "text" : "date";
+    var s = {};
+    s[key] = query;
+    var self = this;
+    this.setState(s, function(e) {
+      self.updateQuery(self.state);
+    });
+  },
+  onKeydown: function(e) {
+  },
+  toggleUnread: function(e) {
+    var self = this;
+    this.setState({unread: e.target.checked}, function(e) {
+      self.updateQuery(self.state);
+    });
+  },
+  updateQuery: function(q) {
+    this.props.channelList.filter(q);
+  },
+  render: function() {
+    var _1 = <span className="group"><input className="unread-filter" type="checkbox"  checked={this.state.unread} onChange={this.toggleUnread} /> Unread</span>;
+    var _2 = <span className="group"><input placeholder="Date" className="date-filter" value={this.state.date} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>;
+    if(this.state.text.length > 0) {
+      var searchUrl = "/search?utf8=%E2%9C%93&search="+encodeURIComponent(this.state.text);
+      var searchLink = <a className="search" href={searchUrl}>Search for <em>{this.state.text}</em></a>;
+    }
+    return <div className="filter">
+      <span className="group"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>
+      <a href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
+      {searchLink}
+    </div>;
+  }
+});
 
 var Channel = React.createClass({
   render: function() {
@@ -36,12 +99,13 @@ var Channel = React.createClass({
 
 var ChannelList = React.createClass({
   getInitialState: function() {
-    return {channels: [], view: {}, highlight: -1};
+    return {channels: [], view: {}, highlight: -1, query: null};
   },
   componentDidMount: function() {
     var self = this;
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
+    Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
     Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels);
     this.keydownCallback = $(document).on("keydown", function(e) {
       if(!self.isMounted()) return;
@@ -95,7 +159,7 @@ var ChannelList = React.createClass({
   },
   updated: function(objects, view) {
     var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
-    highlight = this.state.highlight;
+    var highlight = this.state.highlight;
     if(highlight == -1) {
       for(var c in sorted) {
         var chan = sorted[c];
@@ -107,13 +171,29 @@ var ChannelList = React.createClass({
     }
     this.setState({channels: sorted, view: view, highlight: highlight});
   },
+  filter: function(filter) {
+    if(filter && filter.text.length > 0) {
+      Data.fetch(ChannelListFilterData, 0, {query: filter});
+    } else {
+      Data.fetch(ChannelListData, 0, {});
+    }
+    this.setState({query: filter});
+  },
   loadMore: function(e) {
-    Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
+    if(this.state.query) {
+      Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1, query: this.state.query});
+    } else {
+      Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
+    }
     e.preventDefault();
   },
   fetchUpdatedChannels: function() {
     if(this.state.view) {
-      Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
+      if(this.state.query) {
+        Data.fetch(ChannelListFilterData, 0, {query: this.state.query, last_update: this.state.view.last_update + 1}, this.fetchUpdatedChannels);
+      } else {
+        Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
+      }
     }
   },
   render: function() {
@@ -124,7 +204,8 @@ var ChannelList = React.createClass({
       var highlight = (i == highlightId);
       return <Channel key={channel.id} id={channel.id} user={user} channel={channel} highlight={highlight} />;
     });
-    return <div>
+    return <div className="channel-list-container">
+      <ChannelListFilter channelList={this} />
       <ul className="channel-list refresh">
         {channels}
       </ul>

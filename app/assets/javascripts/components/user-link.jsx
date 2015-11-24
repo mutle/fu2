@@ -1,5 +1,6 @@
 var UserLink = React.createClass({
   render: function() {
+    if(!this.props.user) return null;
     var userLink = "/users/"+this.props.user.id;
     var name = {__html: this.props.user.display_name_html.replace(/<\/?p>/g, '')};
     return <div className="user-link">
