@@ -1,5 +1,36 @@
 @import "screen.scss";
 
+.channel-list-container {
+  .filter {
+    margin-bottom: 1em;
+
+    .text-filter, .date-filter  {
+      font-size: 16px;
+    }
+    .text-filter {
+      width: 300px;
+    }
+
+    .date-filter {
+
+    }
+
+    .group {
+      padding-right: 12px;
+    }
+
+    a, a:visited {
+      color: #000;
+      padding: 4px;
+    }
+
+    a.search {
+      display: block;
+      margin: 0.5em 0 1em;
+    }
+  }
+}
+
 .channel-list {
   list-style-type: none;
 
