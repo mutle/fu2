@@ -94,7 +94,15 @@ var Channel = React.createClass({
     if(this.props.channel.read) className += " read";
     if(this.props.highlight) className += " highlight";
     var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
-    var channelName = {__html: this.props.channel.display_name};
+    var displayName = this.props.channel.display_name;
+    if(this.props.query) {
+      var q = this.props.query.split(" ");
+      for(var i in q) {
+        displayName = displayName.replace(new RegExp(q[i], "i"), function(i) { return "<strong>"+i+"</strong>" });
+        displayName = displayName.replace(/(=\".*)\<strong\>(.*)\<\/strong\>(.*\")/, "$1$2$3");
+      }
+    }
+    var channelName = {__html: displayName};
     return <li>
       <div className={className}>
         <div className="timestamp">
@@ -228,10 +236,12 @@ var ChannelList = React.createClass({
   render: function() {
     if(this.state.channels.length < 1) return <LoadingIndicator />;
     var highlightId = this.state.highlight;
+    var query = null;
+    if(this.state.query) query = this.state.query.text;
     var channels = this.state.channels.map(function(channel, i) {
       var user = Data.get("user", channel.last_post_user_id);
       var highlight = (i == highlightId);
-      return <Channel key={channel.id} id={channel.id} user={user} channel={channel} highlight={highlight} />;
+      return <Channel key={channel.id} id={channel.id} user={user} channel={channel} highlight={highlight} query={query} />;
     });
     var self = this;
     var refFunc = function(ref) { self.channelListFilter = ref; };
