@@ -96,8 +96,11 @@ var Channel = React.createClass({
     var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var displayName = this.props.channel.display_name;
     if(this.props.query) {
-      displayName = displayName.replace(new RegExp(this.props.query, "i"), function(i) { return "<strong>"+i+"</strong>" });
-      displayName = displayName.replace(/(=\".*)\<strong\>(.*)\<\/strong\>(.*\")/, "$1$2$3");
+      var q = this.props.query.split(" ");
+      for(var i in q) {
+        displayName = displayName.replace(new RegExp(q[i], "i"), function(i) { return "<strong>"+i+"</strong>" });
+        displayName = displayName.replace(/(=\".*)\<strong\>(.*)\<\/strong\>(.*\")/, "$1$2$3");
+      }
     }
     var channelName = {__html: displayName};
     return <li>
