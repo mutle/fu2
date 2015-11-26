@@ -48,6 +48,7 @@ Fu2::Application.routes.draw do
         resources :emojis
 
         get 'stats/websockets' => "stats#websockets"
+        get 'info' => "api#info"
       end
 
       resources :users do
