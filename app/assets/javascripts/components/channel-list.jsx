@@ -201,7 +201,7 @@ var ChannelList = React.createClass({
     this.setState({channels: sorted, view: view, highlight: highlight});
   },
   filter: function(filter) {
-    if(filter && filter.show && filter.text.length > 0) {
+    if(filter && filter.text.length > 0) {
       Data.fetch(ChannelListFilterData, 0, {query: filter});
     } else {
       Data.fetch(ChannelListData, 0, {});
