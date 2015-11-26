@@ -89,7 +89,6 @@ var UserProfile = React.createClass({
         }
       }
       var name = {__html: this.user.display_name_html.replace(/<\/?p>/g, '')};
-      console.log(name);
       return <div className="user-profile">
         <h2 className="title">
           <img className="avatar-image" src={this.user.avatar_url_full} /> <span dangerouslySetInnerHTML={name} />

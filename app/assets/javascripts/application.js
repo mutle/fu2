@@ -7,6 +7,7 @@
 //= require underscore
 //= require jquery
 //= require jquery_ujs
+//= require jquery.hotkeys
 //= require emojis
 //= require data
 //= require twitter
