@@ -158,7 +158,7 @@ var Editor = React.createClass({
   },
   blur: function(e) {
     e.preventDefault();
-    // this.setState({autocomplete: null, text: $("."+this.props.textareaClass).val(), active: false});
+    this.setState({active: false});
   },
   filterObjects: function(input, objects) {
     var n = 0;

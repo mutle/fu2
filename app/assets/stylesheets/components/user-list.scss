@@ -1,0 +1,16 @@
+.user-list {
+  .list {
+    -moz-column-count: 3;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 20px;
+  }
+
+  .user-list-user {
+    margin-bottom: 1em;
+  }
+
+  .user-name {
+    padding-left: 12px;
+  }
+}

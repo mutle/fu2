@@ -5,8 +5,7 @@ class UsersController < ApplicationController
   respond_to :html, :json
 
   def index
-    @users = User.all_users.reject { |u| u.login =~ /-disabled$/ }
-    respond_with @users
+    empty_response
   end
 
   def activate
@@ -43,15 +42,6 @@ class UsersController < ApplicationController
     else
       @user.activation_code = @invite.activation_code
       render :action => 'new', :layout => 'unauthorized'
-    end
-  end
-
-
-  def edit
-    if params[:id].to_i == current_user.id
-      @user = current_user
-    else
-      redirect_to user_path(User.find(params[:id].to_i))
     end
   end
 

@@ -7,7 +7,8 @@ class Api::ChannelsController < Api::ApiController
       page: page,
       per_page: 50,
       last_update_date: params[:last_update] ? Time.at(params[:last_update].to_i) : nil,
-      site: @site
+      site: @site,
+      query: params[:query]
     })
     @view.finalize
   end

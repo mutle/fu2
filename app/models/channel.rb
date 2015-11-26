@@ -69,13 +69,29 @@ class Channel < ActiveRecord::Base
     }
   end
 
-
-  def self.recent_channels(site, _user, page, per_page = 50, last_update=nil)
-    if last_update
-      where("(updated_at > ? OR last_post_date > ?) AND ((default_read = ? AND default_write = ?) OR user_id = ?) AND last_post_date != NULL AND site_id = ?", last_update, last_update, true, true, _user.id, site.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
-    else
-      where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).reorder("last_post_date DESC").paginate(:page => page, :per_page => per_page)
+  def self.filter_ids(query)
+    return nil if !query
+    ids = nil
+    if !query[:text].blank?
+      q = query[:text].split(" ").map { |t| t.length > 1 ? "title:#{t}" : nil }.compact.join(" ")
+      res = Search.query(q, per_page: 500, sort: "score").results
+      ids = res[:objects].compact.map(&:id) if res[:result_count] <= 500
     end
+    ids
+  end
+
+  def self.recent_channels(site, user, page, per_page = 50, last_update=nil, ids=nil)
+    results = if ids
+      site_scope(site).where(id: ids)
+    else
+      Channel.site_scope(site)
+    end
+
+    if last_update
+      results = results.where("updated_at > ? OR last_post_date > ?", last_update, last_update)
+    end
+    results = results.where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, user.id)
+    results.reorder("last_post_date DESC").paginate(page: page, per_page: per_page)
   end
 
   def self.all_channels(site, _user, page)

@@ -18,7 +18,8 @@
 <%= link_to content_tag(:span, "More", class: "text")+octicon("triangle-down", false, "menu-indicator"), "#", class: "toolbar-more-link" %>
 
 <div class="right">
-  <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), "#", title: "Search", class: "toolbar-channel-search" %>
+  <%= link_to octicon("info", false, "info-icon")+content_tag(:span, "Info", class: "text"), "#", title: "Info", class: "toolbar-info" %>
+  <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), root_url(anchor: "search"), title: "Search", class: "toolbar-channel-search" %>
 
   <%= link_to octicon("arrow-down"), "", class: "bottom-link" %>
 </div>

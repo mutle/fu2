@@ -98,19 +98,22 @@
 
       .octicon {
         display: none;
-        &.menu-indicator, &.search-icon {
+        &.menu-indicator, &.search-icon, &.info-icon {
           display: inline;
         }
       }
       .text {
         display: inline;
       }
-      .toolbar-channel-search  {
+      .toolbar-channel-search, .toolbar-info {
         padding: 0px;
 
         .text {
           display: none;
         }
+      }
+      .toolbar-info {
+        margin-right: 10px;
       }
       .logo {
         width: 38px;
