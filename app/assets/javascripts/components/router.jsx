@@ -12,7 +12,6 @@ var Router = {
     if(!path) return false;
     var m = path.match(/^https?:\/\/([^\/]+)(\/.*)$/)
     if(m) {
-      console.log(m[1]);
       path = m[2];
     }
     if(path.indexOf(Data.url_root) != 0) return;
@@ -21,7 +20,6 @@ var Router = {
     var hash = path.replace(/^.*#/, '');
     if(hash == path) hash = "";
     var params = {anchor: hash};
-    console.log(params);
     path = path.replace(/#.*$/, '');
     this.content = $(".content-inner").get(0);
 
@@ -123,7 +121,6 @@ $(function() {
 
   Router.addResponder("channels/list", function(params, e) {
     var channels = React.render(<ChannelList />, e);
-    console.log(params.anchor);
     if(params.anchor && params.anchor == "search") channels.setState({showQuery: true});
     return channels;
   }, function(params) { return "/"+(params.anchor ?  "#"+params.anchor : ""); }, {hotkey: "H", name: "Home"});

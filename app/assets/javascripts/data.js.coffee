@@ -73,7 +73,6 @@ class Data
     @fetched = {}
     @url_root = @url_root.replace(/^https?:\/\/[^\/]+(\/$)?/, '')
     @url_root = "" if @url_root == "/"
-    console.log(@url_root)
     @socket.connect() if @socket
   fetch: (info, id=0, args={}, fallback=null, errorCallback=null) ->
     return if !info

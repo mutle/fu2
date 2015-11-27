@@ -234,7 +234,7 @@ class User < ActiveRecord::Base
   end
 
   def multi_site?
-    id == 1 || id == User.fubot.id
+    site_users.count > 0
   end
 
   protected
