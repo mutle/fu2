@@ -231,7 +231,7 @@ var ChannelPosts = React.createClass({
             return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
           } else {
             pi++;
-            return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
+            return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user &&& user.id == Data.user_id} bodyClick={self.bodyClick} />;
           }
         });
       }
