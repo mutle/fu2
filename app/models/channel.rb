@@ -192,7 +192,7 @@ class Channel < ActiveRecord::Base
   end
 
   def add_first_post
-    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown)
+    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown, :site_id => site_id)
   end
 
   def generate_permalink

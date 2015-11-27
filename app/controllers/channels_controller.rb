@@ -33,13 +33,6 @@ class ChannelsController < ApplicationController
   end
 
   private
-  def posts(respond=true)
-    @channel = Channel.find(params[:id])
-    # @last_read_id = @channel.visit(current_user)
-    @last_post_id = 0
-    @post = Post.new
-  end
-
   def channel_redirect
     r = ChannelRedirect.from_id(params[:id])
     if r && r.respond_to?(:target_channel_id)
