@@ -1,6 +1,8 @@
 class Site < ActiveRecord::Base
   scope :path, proc { |p| where(path: p) }
   scope :domain, proc { |d| where("domain = :d OR domain IS NULL", d: d) }
+  has_many :site_users
+  has_many :users, through: :site_users
 
   def to_param
     path

@@ -15,7 +15,8 @@ class ActiveSupport::TestCase
   setup do
     $redis.flushdb
     User.stubs(:fubot).returns(User.new)
-    @site ||= Site.create
+    Site.destroy_all
+    @site ||= Site.create(path: "")
   end
 
   def create_user(login=nil, password="testpassword", activate=true)
@@ -30,19 +31,20 @@ class ActiveSupport::TestCase
       u.activated_at = Time.now
       u.save
     end
+    SiteUser.create(user: u, site: @site)
     @user ||= u
     u
   end
 
   def create_channel(title=nil, body=nil)
-    c = Channel.create(title: title || "test c #{Time.now.to_f}", body: body, user: @user, site_id: @site.id)
+    c = Channel.create(site_id: @site.id, title: title || "test c #{Time.now.to_f}", body: body, user: @user, site_id: @site.id)
     @channel ||= c
     c
   end
 
   def create_post(body="post")
     @channel ||= create_channel
-    @channel.posts.create(user: @user, body: body, markdown: true)
+    @channel.posts.create(site_id: @site.id, user: @user, body: body, markdown: true)
   end
 end
 
