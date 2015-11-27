@@ -4,9 +4,9 @@ module Views
 
     fetches :channels, proc {
       if letter && !letter.blank?
-        Channel.with_letter(letter)
+        Channel.with_letter(site, letter)
       else
-        Channel.all_channels(current_user, page)
+        Channel.all_channels(site, current_user, page)
       end
     }
   end

@@ -4,7 +4,7 @@ module Views
     attrs :current_user, :last_update_date, :query
 
     fetches :filter_ids, proc { Channel.filter_ids(query) }
-    fetches :recent_channels, proc { Channel.recent_channels(current_user, page, per_page, last_update_date, filter_ids) }, [:filter_ids]
+    fetches :recent_channels, proc { Channel.recent_channels(site, current_user, page, per_page, last_update_date, filter_ids) }, [:filter_ids]
     fetches :channels_read, proc {
       recent_channels.each do |channel|
         channel.read = channel.has_posts?(current_user, channel.last_post)

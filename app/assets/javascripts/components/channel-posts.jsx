@@ -93,8 +93,11 @@ var ChannelPosts = React.createClass({
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
-      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew);
+      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew, this.loadError);
     }
+  },
+  loadError: function(e) {
+    this.setState({error: true});
   },
   replyMessage: function(post) {
     if(this.commentBox && this.commentBox.editor) {
@@ -213,6 +216,7 @@ var ChannelPosts = React.createClass({
     }
   },
   render: function () {
+    if(this.state.error) return <ErrorMessage title="Failed to load channel" />;
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
     if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
@@ -220,15 +224,18 @@ var ChannelPosts = React.createClass({
       var highlight = this.state.highlight;
       var pi = 0;
       var self = this;
-      var posts = this.state.items.map(function(post, i) {
-        var user = Data.get("user", post.user_id);
-        if(post.type.match(/-event$/)) {
-          return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
-        } else {
-          pi++;
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
-        }
-      });
+      if(this.state.items && this.state.items.length > 0) {
+        var posts = this.state.items.map(function(post, i) {
+          var user = Data.get("user", post.user_id);
+          if(post.type.match(/-event$/)) {
+            return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
+          } else {
+            pi++;
+            var editable = user && user.id == Data.user_id;
+            return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={editable} bodyClick={self.bodyClick} />;
+          }
+        });
+      }
       var refFunc = function(ref) { self.commentBox = ref; };
       var commentbox = <div>
         <a name="comments"></a>

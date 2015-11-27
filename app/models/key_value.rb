@@ -1,4 +1,6 @@
 class KeyValue < ActiveRecord::Base
+  include SiteScope
+  
   class << self
     def get(key)
       if key =~ /\[\]$/

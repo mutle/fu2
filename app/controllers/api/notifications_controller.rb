@@ -5,7 +5,8 @@ class Api::NotificationsController < Api::ApiController
       @view = Views::NotificationList.new({
         current_user: current_user,
         user: user,
-        last_id: params[:last_id].to_i
+        last_id: params[:last_id].to_i,
+        site: @site
       })
       @view.finalize
       respond_with @view.notifications
@@ -16,7 +17,7 @@ class Api::NotificationsController < Api::ApiController
     to = User.find(params[:user_id])
     @message = {}
     if to
-      @message = Notification.message(current_user, to, params[:message])
+      @message = siteNotification.message(current_user, to, params[:message])
     end
     respond_with @message
   end
@@ -30,7 +31,8 @@ class Api::NotificationsController < Api::ApiController
 
   def unread
     @view = Views::NotificationCounts.new({
-      current_user: current_user
+      current_user: current_user,
+      site: @site
     })
     @view.finalize
     render json: {messages: @view.message_counts, mentions: @view.mention_counts}
@@ -38,7 +40,8 @@ class Api::NotificationsController < Api::ApiController
 
   def unread_users
     @view = Views::NotificationCounts.new({
-      current_user: current_user
+      current_user: current_user,
+      site: @site
     })
     @view.finalize
     result = User.active.map do |u|
@@ -59,7 +62,7 @@ class Api::NotificationsController < Api::ApiController
   private
 
   def update_counters(user)
-    @view = Views::CurrentUserView.new({current_user: user})
+    @view = Views::CurrentUserView.new({current_user: user, site: @site})
     @view.finalize
     return @view.counters
   end

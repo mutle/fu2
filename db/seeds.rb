@@ -9,4 +9,11 @@
 u = User.create(:login => "admin", :password => "admin", :password_confirmation => "admin", :email => "admin@example.com")
 u.activate
 
+Site.create(name: "Main", path: "", user_id: 1)
+Site.create(name: "Test-Path", path: "test", user_id: 1)
+
+SiteUser.create(user_id: 1, site_id: 1)
+SiteUser.create(user_id: 1, site_id: 2)
+
+
 puts "You can now login as admin/admin."

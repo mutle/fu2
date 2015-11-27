@@ -1,5 +1,7 @@
 class Channel < ActiveRecord::Base
-  scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+  include SiteScope
+
+  scope :with_letter, proc { |site, c| site_scope(site).where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
   scope :with_ids, proc { |ids| where(id: ids) }
 
   MentionPattern = /
@@ -20,7 +22,7 @@ class Channel < ActiveRecord::Base
   has_many :events
 
   validates_presence_of :title, :user_id
-  validates_uniqueness_of :title, :on => :create
+  validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
 
   before_create :generate_permalink
   after_create :add_first_post
@@ -63,7 +65,7 @@ class Channel < ActiveRecord::Base
       :title => title,
       :created => created_at,
       :text => text,
-      :site_id => 1
+      :site_id => site_id
     }
   end
 
@@ -78,12 +80,11 @@ class Channel < ActiveRecord::Base
     ids
   end
 
-
-  def self.recent_channels(user, page, per_page = 50, last_update=nil, ids=nil)
+  def self.recent_channels(site, user, page, per_page = 50, last_update=nil, ids=nil)
     results = if ids
-      where(id: ids)
+      site_scope(site).where(id: ids)
     else
-      Channel
+      Channel.site_scope(site)
     end
 
     if last_update
@@ -93,8 +94,8 @@ class Channel < ActiveRecord::Base
     results.reorder("last_post_date DESC").paginate(page: page, per_page: per_page)
   end
 
-  def self.all_channels(_user, page)
-    where("(default_read = ? AND default_write = ?) OR user_id = ?", true, true, _user.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
+  def self.all_channels(site, _user, page)
+    where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def self.search_channels(title, page)
@@ -191,7 +192,7 @@ class Channel < ActiveRecord::Base
   end
 
   def add_first_post
-    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown)
+    posts.create(:body => @body || "... has nothing to say", :user_id => user_id, :markdown => @markdown, :site_id => site_id)
   end
 
   def generate_permalink

@@ -22,6 +22,7 @@
 //= require components/channel-posts
 //= require components/notifications
 //= require components/hotkeys
+//= require components/site-switcher
 //= require components/router
 //= require_self
 //= require react_ujs

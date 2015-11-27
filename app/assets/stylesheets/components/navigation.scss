@@ -98,21 +98,21 @@
 
       .octicon {
         display: none;
-        &.menu-indicator, &.search-icon, &.info-icon {
+        &.menu-indicator, &.search-icon, &.info-icon, &.site-switch-icon {
           display: inline;
         }
       }
       .text {
         display: inline;
       }
-      .toolbar-channel-search, .toolbar-info {
+      .toolbar-channel-search, .toolbar-info, .toolbar-sites {
         padding: 0px;
 
         .text {
           display: none;
         }
       }
-      .toolbar-info {
+      .toolbar-info, .toolbar-sites {
         margin-right: 10px;
       }
       .logo {

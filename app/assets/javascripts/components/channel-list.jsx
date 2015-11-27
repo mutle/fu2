@@ -93,7 +93,7 @@ var Channel = React.createClass({
     var className = "channel channel-"+this.props.channel.id;
     if(this.props.channel.read) className += " read";
     if(this.props.highlight) className += " highlight";
-    var url = "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
+    var url = Data.url_root + "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var displayName = this.props.channel.display_name;
     if(this.props.query) {
       var q = this.props.query.split(" ");
@@ -178,7 +178,10 @@ var ChannelList = React.createClass({
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
     Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
-    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels);
+    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels, this.loadError);
+  },
+  loadError: function(e) {
+    this.setState({error: true});
   },
   scrollToHighlight: function() {
     if(this.state.highlight >= 0) {
@@ -234,6 +237,7 @@ var ChannelList = React.createClass({
     }
   },
   render: function() {
+    if(this.state.error) return <ErrorMessage title="Failed to load channels" />;
     if(this.state.channels.length < 1) return <LoadingIndicator />;
     var highlightId = this.state.highlight;
     var query = null;

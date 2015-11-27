@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
 
   has_many :faves
 
+  has_many :site_users
+  has_many :sites, through: :site_users
+
   belongs_to :stylesheet
 
   class << self
@@ -228,6 +231,10 @@ class User < ActiveRecord::Base
     else
       avatar_url
     end
+  end
+
+  def multi_site?
+    site_users.count > 1
   end
 
   protected
