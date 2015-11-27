@@ -10,6 +10,7 @@ var Router = {
   current: null,
   route: function(path, updateUrl) {
     if(!path) return false;
+    if(path == "#") return false;
     var m = path.match(/^https?:\/\/([^\/]+)(\/.*)$/)
     if(m) {
       path = m[2];
@@ -157,7 +158,8 @@ $(function() {
 
   Router.route(document.location.pathname+document.location.hash);
 
-  var hotkeys = React.render(<Hotkeys />, $("#pre-content").get(0));
+  var hotkeys = null;
+  var switcher = null;
 
   $(document).bind("keydown", "shift+/", function(e) {
     if(e.target != $("body").get(0)) return;
@@ -173,7 +175,9 @@ $(function() {
 
   $(document).on("click", "a.toolbar-sites", function(e) {
     hotkeys = null;
-    var switcher = React.render(<SiteSwitcher />, $("#pre-content").get(0));
+    if(!switcher)
+      switcher = React.render(<SiteSwitcher />, $("#pre-content").get(0));
+    switcher.setState({show: true});
     e.preventDefault();
   });
 

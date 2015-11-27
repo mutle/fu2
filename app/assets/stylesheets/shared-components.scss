@@ -7,6 +7,11 @@
   top: 0px;
   border: 1px solid #e8e8e8;
 
+  &.small {
+    left: 200px;
+    right: 200px;
+  }
+
   h3 {
     font-size: 20px;
     margin-bottom: 1em;
