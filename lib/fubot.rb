@@ -7,7 +7,7 @@ class Fubot
     /\/?fubot /,
     /\//,
   ]
-  attr_accessor :user, :responder
+  attr_accessor :user, :responder, :site
 
   class << self
     def commands
@@ -34,9 +34,10 @@ class Fubot
     end
   end
 
-  def initialize(responder=nil, user=nil)
+  def initialize(responder=nil, user=nil, site=nil)
     @responder = responder
     @user = user
+    @site = site
   end
 
   def match_line(line)

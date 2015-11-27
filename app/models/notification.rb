@@ -1,10 +1,11 @@
 class Notification < ActiveRecord::Base
   include SiteScope
-  
+
   belongs_to :user
   belongs_to :created_by, :class_name => "User"
   belongs_to :channel
   belongs_to :post
+  belongs_to :site
 
   scope :for_user, proc { |user|
     where(:user_id => user.id).order("notifications.id DESC")
@@ -73,7 +74,7 @@ class Notification < ActiveRecord::Base
 
   def process_fubot_message!
     if user_id == User.fubot.id && notification_type == "message"
-      Fubot.new(self, created_by).call(self.message(false))
+      Fubot.new(self, created_by, site).call(self.message(false))
     end
   end
 

@@ -78,7 +78,7 @@ class Data
     return if !info
     if info.view && !info.noCache && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
-      if cached?
+      if cached? && cached.length > 0
         @notify(cached)
         return
     url = info.url.replace(/{id}/, id)

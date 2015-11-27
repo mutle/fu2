@@ -1,8 +1,9 @@
 class Post < ActiveRecord::Base
   include SiteScope
-  
+
   belongs_to :channel
   belongs_to :user
+  belongs_to :site
   has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
@@ -146,7 +147,7 @@ class Post < ActiveRecord::Base
 
   def process_fubot_message!
     return if self.user_id == User.fubot.id
-    Fubot.new(self, user).call(self.body)
+    Fubot.new(self, user, site).call(self.body)
   end
 
   def send_fubot_message(m)

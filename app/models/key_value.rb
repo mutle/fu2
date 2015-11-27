@@ -1,20 +1,20 @@
 class KeyValue < ActiveRecord::Base
   include SiteScope
-  
+
   class << self
-    def get(key)
+    def get(site, key)
       if key =~ /\[\]$/
-        where(key: key).map(&:value)
+        site_scope(site).where(key: key).map(&:value)
       else
-        where(key: key).first.try(:value)
+        site_scope(site).where(key: key).first.try(:value)
       end
     end
 
-    def set(key, value)
+    def set(site, key, value)
       if key =~ /\[\]$/
-        create(key: key, value: value)
+        create(key: key, value: value, site_id: site.id)
       else
-        create_with(value: value).find_or_create_by(key: key)
+        create_with(value: value).find_or_create_by(key: key, site_id: site.id)
       end
     end
   end
