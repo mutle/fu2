@@ -224,15 +224,17 @@ var ChannelPosts = React.createClass({
       var highlight = this.state.highlight;
       var pi = 0;
       var self = this;
-      var posts = this.state.items.map(function(post, i) {
-        var user = Data.get("user", post.user_id);
-        if(post.type.match(/-event$/)) {
-          return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
-        } else {
-          pi++;
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
-        }
-      });
+      if(this.state.items && this.state.items.length > 0) {
+        var posts = this.state.items.map(function(post, i) {
+          var user = Data.get("user", post.user_id);
+          if(post.type.match(/-event$/)) {
+            return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
+          } else {
+            pi++;
+            return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
+          }
+        });
+      }
       var refFunc = function(ref) { self.commentBox = ref; };
       var commentbox = <div>
         <a name="comments"></a>
