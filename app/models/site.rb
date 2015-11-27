@@ -17,6 +17,7 @@ class Site < ActiveRecord::Base
   end
 
   def user?(user)
-    !SiteUser.site_scope(self).where(user_id: user).first.nil?
+    u = SiteUser.site_scope(self).where(user_id: user).first
+    !u.nil? && u.role != "disabled"
   end
 end
