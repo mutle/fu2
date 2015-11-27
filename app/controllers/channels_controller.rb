@@ -21,6 +21,7 @@ class ChannelsController < ApplicationController
     @view = Views::AllChannels.new({
       current_user: current_user,
       page: (params[:page] || 1).to_i,
+      site: @site,
       letter: params[:letter]
     })
     @view.finalize

@@ -18,6 +18,9 @@
 <%= link_to content_tag(:span, "More", class: "text")+octicon("triangle-down", false, "menu-indicator"), "#", class: "toolbar-more-link" %>
 
 <div class="right">
+  <% if current_user.multi_site? %>
+    <%= link_to octicon("sync", false, "site-switch-icon")+content_tag(:span, "Sites", class: "text"), "#", title: "Sites", class: "toolbar-sites" %>
+  <% end %>
   <%= link_to octicon("info", false, "info-icon")+content_tag(:span, "Info", class: "text"), "#", title: "Info", class: "toolbar-info" %>
   <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), root_url(anchor: "search"), title: "Search", class: "toolbar-channel-search" %>
 

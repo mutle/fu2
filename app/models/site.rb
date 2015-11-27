@@ -13,4 +13,8 @@ class Site < ActiveRecord::Base
   def url
     "#{schema}://#{domain}/#{path}"
   end
+
+  def user?(user)
+    !SiteUser.site_scope(self).where(user_id: user).first.nil?
+  end
 end

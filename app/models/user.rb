@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
 
   has_many :faves
 
+  has_many :site_users
+  has_many :sites, through: :site_users
+
   belongs_to :stylesheet
 
   class << self
@@ -231,7 +234,7 @@ class User < ActiveRecord::Base
   end
 
   def multi_site?
-    id == 1
+    id == 1 || id == User.fubot.id
   end
 
   protected

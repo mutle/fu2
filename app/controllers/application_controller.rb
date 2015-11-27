@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in?
-    (session[:user_id] || params[:api_key]) && !current_user.nil?
+    (session[:user_id] || params[:api_key]) && !current_user.nil? && (!@site || @site.user?(current_user))
   end
 
   def increment_metric(name)

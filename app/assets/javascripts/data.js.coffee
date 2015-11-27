@@ -1,5 +1,5 @@
 class Socket
-  constructor: (@url, @api_key) ->
+  constructor: (@url, @api_key, @site_id) ->
     @subscriptions = {}
     @available = false
     @reconnect = false
@@ -16,7 +16,7 @@ class Socket
             s.close?()
       @available = true
       @reconnect = true
-      @message({type: "auth", api_key: @api_key})
+      @message({type: "auth", api_key: @api_key, site_id: @site_id})
       for type,subscriptions of @subscriptions
         for s in subscriptions
           s.open?()
@@ -64,6 +64,8 @@ class Data
       create: -> "/api/notifications.json"
       unread: -> "/api/notifications/unread.json"
       counters: -> "/api/notifications/counters.json"
+    sites:
+      index: -> "/api/sites.json"
   constructor: (@socket, @user_id, @url_root) ->
     @callbacks = {}
     @store = {}
@@ -171,6 +173,7 @@ class Data
     for key,prop of props
       data["#{type}[#{key}]"] = prop
     actionType = "POST"
+    actionType = "GET" if action == "index" || action == "show"
     actionType = "PUT" if action == "update"
     actionType = "DELETE" if action == "delete"
     $.ajax
@@ -186,7 +189,7 @@ class Data
     @store[type][id] = props
     @notify([type])
 $ ->
-  window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
+  window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"), $("body").data("site-id"))
   window.Data = new Data(window.socket, $("body").data("user-id"), $("body").data("api-root"))
   $.each window.Users, (i,user) ->
     window.Data.insert(user)

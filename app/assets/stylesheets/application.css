@@ -9,5 +9,6 @@
  *= require layout
  *= require profile
  *= require search
+ *= require shared-components
  *= require components
 */

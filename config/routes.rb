@@ -10,6 +10,10 @@ Fu2::Application.routes.draw do
     end
   end
 
+  namespace :api do
+    resources :sites
+  end
+
   scope '(:site_path)' do
     constraints SiteConstraint.new do
       namespace :api do
@@ -44,6 +48,8 @@ Fu2::Application.routes.draw do
             get :counters
           end
         end
+
+        resources :sites
         resources :images
         resources :emojis
 

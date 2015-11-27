@@ -155,11 +155,8 @@ $(function() {
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
   Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
-<<<<<<< HEAD
-  Router.addRoute("channels/list", /^(\/channels)?\/?$/);
-=======
   Router.addRoute("users/list", /^\/users\/?$/);
->>>>>>> origin/master
+  Router.addRoute("channels/list", /^(\/channels)?\/?$/);
 
   Router.route(document.location.pathname+document.location.hash);
 
@@ -167,16 +164,24 @@ $(function() {
 
   $(document).bind("keydown", "shift+/", function(e) {
     if(e.target != $("body").get(0)) return;
+    if(!hotkeys) hotkeys = React.render(<Hotkeys />, $("#pre-content").get(0));
     hotkeys.setState({show: !hotkeys.state.show});
     e.preventDefault();
   });
 
   $(document).bind("keydown", "esc", function(e) {
-    if(e.target != $("body").get(0) || !hotkeys.state.show) return;
+    if(e.target != $("body").get(0) || !hotkeys || !hotkeys.state.show) return;
     hotkeys.setState({show: false});
   });
 
+  $(document).on("click", "a.toolbar-sites", function(e) {
+    hotkeys = null;
+    var switcher = React.render(<SiteSwitcher />, $("#pre-content").get(0));
+    e.preventDefault();
+  });
+
   $(document).on("click", "a.toolbar-info", function(e) {
+    if(!hotkeys) hotkeys = React.render(<Hotkeys />, $("#pre-content").get(0));
     hotkeys.setState({show: !hotkeys.state.show});
     e.preventDefault();
   });

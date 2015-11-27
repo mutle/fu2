@@ -26,9 +26,10 @@ class WebsocketServer
           on.message do |channel,msg|
             data = JSON.parse(msg)
             user_id = data.delete('user_id')
+            site_id = data.delete('site_id')
             msg = data.to_json
             connections.each do |c|
-              send(c, msg) if user_id == 0 || user_id == c[:user_id]
+              send(c, msg) if (!site_id || c[:site_id] == site_id) && (user_id == 0 || user_id == c[:user_id])
             end
           end
         end
@@ -54,9 +55,12 @@ class WebsocketServer
                   if data['type'] == "auth"
                     user = User.with_api_key(data['api_key']).first
                     if user && user.api_key == data['api_key']
-                      Rails.logger.info "Websocket Connected: #{user.login}"
-                      connections.push({user_id: user.id, socket: ws})
-                      update_count(connections, redis)
+                      site = Site.find(data['site_id'])
+                      if site.user?(user)
+                        Rails.logger.info "Websocket Connected: #{user.login} (#{site.id})"
+                        connections.push({user_id: user.id, site_id: site.id, socket: ws})
+                        update_count(connections, redis)
+                      end
                     end
                   end
                 rescue => e

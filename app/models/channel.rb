@@ -1,7 +1,7 @@
 class Channel < ActiveRecord::Base
   include SiteScope
 
-  scope :with_letter, proc { |c| where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
+  scope :with_letter, proc { |site, c| site_scope(site).where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
   scope :with_ids, proc { |ids| where(id: ids) }
 
   MentionPattern = /
