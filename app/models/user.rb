@@ -234,7 +234,7 @@ class User < ActiveRecord::Base
   end
 
   def multi_site?
-    site_users.count > 0
+    site_users.count > 1
   end
 
   protected
