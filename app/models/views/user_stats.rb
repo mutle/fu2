@@ -8,7 +8,7 @@ module Views
     fetches :faves_count, proc { Fave.site_scope(site).where(user_id: user.id).count }
     fetches :faves_received, proc { Fave.site_scope(site).includes(:post).where("posts.user_id = ?", @user.id).references(:post).count }
 
-    fetches :emojis, proc { Fave.user_emojis(user) }
+    fetches :emojis, proc { Fave.user_emojis(site, user) }
     fetches :title, proc { KeyValue.get("Fubot:Whois:#{user.login}[]") }
 
     fetches :last_posts, proc { @user.posts.site_scope(site).where("channels.default_read = ? AND channels.default_write = ?", true, true).limit(5).order("posts.created_at DESC").includes(:channel).references(:channel) }
