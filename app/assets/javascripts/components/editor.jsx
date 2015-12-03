@@ -150,7 +150,7 @@ var Editor = React.createClass({
       var cursorE = text.get(0).selectionEnd;
       var s = text.val();
       var value = $(e.target).parents(".result").data("value");
-      var input = s.slice(0, this.state.autocompletestart) + value + (this.state.autocomplete == "emoji" ? ":" : "") + s.slice(cursorE, s.length);
+      var input = s.slice(0, this.state.start) + value + (this.state.autocomplete == "emoji" ? ":" : "") + s.slice(cursorE, s.length);
       e.target.value = input;
       this.setState({autocomplete: null, text: input});
       text.focus();
