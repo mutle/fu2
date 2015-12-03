@@ -27,6 +27,7 @@ var Editor = React.createClass({
     $(this.getDOMNode()).find("."+this.props.textareaClass).focus();
   },
   action: function(a) {
+    console.log(a);
     var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
     var cursorE = c.selectionEnd;
     var cursorS = c.selectionStart;

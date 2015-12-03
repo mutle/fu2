@@ -4,6 +4,7 @@ var Router = {
   responders: {},
   hotkeys: {},
   local_hotkeys: null,
+  hotkey_groups: {},
   current_name: "",
   routes: {},
   content: null,
@@ -59,6 +60,46 @@ var Router = {
       }
     }
   },
+  bindKeys: function(hotkeys, local, current, name) {
+    if(!local) {
+      this.hotkey_groups[name] = {};
+    }
+    for(var k in hotkeys) {
+      if(!hotkeys[k].callback) continue;
+      var f = function(key) {
+        return function(e) {
+          e.preventDefault();
+          console.log(key);
+          hotkeys[key].callback.apply(current, [e]);
+        };
+      }(k);
+      $(document).bind('keydown', k, f);
+      if(local) {
+        this.local_hotkeys[k] = {callback: f, hotkey: hotkeys[k]};
+      } else {
+        this.hotkey_groups[name][k] = {callback: f, hotkey: hotkeys[k]};
+      }
+      var a = hotkeys[k].alternative;
+      if(a) {
+        for(var ai in a) {
+          var ak = a[ai];
+          $(document).bind('keydown', ak, f);
+          if(local) {
+            this.local_hotkeys[ak] = {callback: f, alias: ai};
+          } else {
+            this.hotkey_groups[name][ak] = {callback: f, alias: ai};
+          }
+        }
+      }
+    }
+  },
+  unbindKeys: function(keys) {
+    if(keys) {
+      for(var k in keys) {
+        $(document).unbind('keydown', key[k].callback);
+      }
+    }
+  },
   addRoute: function(name, regex, params) {
     if(!this.routes[name]) this.routes[name] = [];
     this.routes[name].push({match: regex, params: params});
@@ -68,9 +109,7 @@ var Router = {
     this.current_name = responder && responder.options ? responder.options.name : null;
     document.title = "Red Cursor";
     if(this.local_hotkeys) {
-      for(var k in this.local_hotkeys) {
-        $(document).unbind('keydown', this.local_hotkeys[k]);
-      }
+      this.unbindKeys(this.local_hotkeys);
       this.local_hotkeys = null;
     }
     React.unmountComponentAtNode(this.content);
@@ -79,25 +118,7 @@ var Router = {
       this.local_hotkeys = {};
       var hotkeys = this.current.hotkeys();
       var current = this.current;
-      for(var k in hotkeys) {
-        if(!hotkeys[k].callback) continue;
-        var f = function(key) {
-          return function(e) {
-            e.preventDefault();
-            hotkeys[key].callback.apply(current, [e]);
-          };
-        }(k);
-        $(document).bind('keydown', k, f);
-        this.local_hotkeys[k] = f;
-        var a = hotkeys[k].alternative;
-        if(a) {
-          for(var ai in a) {
-            var ak = a[ai];
-            $(document).bind('keydown', ak, f);
-            this.local_hotkeys[ak] = f;
-          }
-        }
-      }
+      this.bindKeys(hotkeys, true, current);
     }
     if(urlpath) {
       history.pushState(null, null, Data.url_root + urlpath);
