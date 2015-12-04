@@ -28,7 +28,18 @@ var Hotkeys = React.createClass({
       var commands = [];
       for(var k in hotkeys) {
         var hk = hotkeys[k];
-        var hotkey = hk.hotkey;
+        var hkname = hk;
+        if(!hk.name) {
+          if(Router.responders[hk])
+            hkname = Router.responders[hk].options.name;
+          // hkname = Router.responders[hk];
+        } else {
+          hkname = hk.name;
+        }
+        if(hk.hotkey) {
+          var hotkey = hk.hotkey;
+          if(hotkey && hotkey.name) hkname = hotkey.name;
+        }
         if(hk.alternative) {
           var alternatives = hk.alternative.map(function(hk, i) {
             return <span className="alternative"> or <Hotkey hotkey={hk} /></span>;
@@ -37,7 +48,7 @@ var Hotkeys = React.createClass({
         var command = <div className="command">
           <Hotkey hotkey={k} />
           {alternatives}
-          <span className="label">{hotkey.name}</span>
+          <span className="label">{hkname}</span>
         </div>;
         commands.push(command);
       }

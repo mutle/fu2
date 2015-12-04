@@ -41,6 +41,7 @@ var EditorShortcuts = React.createClass({
     }
   ],
   execCommand: function(action) {
+    console.log(action);
     for(var b in this.buttons) {
       var button = this.buttons[b];
       if(button == "div") continue;
@@ -69,9 +70,9 @@ var EditorShortcuts = React.createClass({
           keys[button.hotkey] = {
             name: button.description,
             callback: function(e) {
-              console.log(e.target.className);
-              this.execCommand(button.action);
-            }
+              this.execCommand(button.name);
+            },
+            hotkey: button
           };
         }
       })(button);
@@ -80,10 +81,10 @@ var EditorShortcuts = React.createClass({
     return keys;
   },
   componentDidMount: function() {
-    Router.bindKeys(this.hotkeys(), false, this, "Editor");
+    Router.bindKeys(this.hotkeys(), false, this, "Editor", $(this.props.editor.getDOMNode()).find("textarea"));
   },
   componentWillUnmount: function() {
-    Router.unbindKeys(Router.hotkey_groups["editor"], this);
+    Router.unbindKeys(Router.hotkey_groups["editor"], this, $(this.props.editor.getDOMNode()).find("textarea"));
     Router.hotkey_groups["editor"] = null;
   },
   render: function() {

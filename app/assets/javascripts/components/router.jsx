@@ -60,7 +60,7 @@ var Router = {
       }
     }
   },
-  bindKeys: function(hotkeys, local, current, name) {
+  bindKeys: function(hotkeys, local, current, name, target) {
     if(!local) {
       this.hotkey_groups[name] = {};
     }
@@ -69,11 +69,12 @@ var Router = {
       var f = function(key) {
         return function(e) {
           e.preventDefault();
-          console.log(key);
+          console.log(hotkeys[key]);
           hotkeys[key].callback.apply(current, [e]);
         };
       }(k);
-      $(document).bind('keydown', k, f);
+      if(!target) target = document;
+      $(target).bind('keydown', k, f);
       if(local) {
         this.local_hotkeys[k] = {callback: f, hotkey: hotkeys[k]};
       } else {
@@ -83,7 +84,7 @@ var Router = {
       if(a) {
         for(var ai in a) {
           var ak = a[ai];
-          $(document).bind('keydown', ak, f);
+          $(target).bind('keydown', ak, f);
           if(local) {
             this.local_hotkeys[ak] = {callback: f, alias: ai};
           } else {
@@ -93,10 +94,11 @@ var Router = {
       }
     }
   },
-  unbindKeys: function(keys) {
+  unbindKeys: function(keys, target) {
     if(keys) {
+      if(!target) target = document;
       for(var k in keys) {
-        $(document).unbind('keydown', key[k].callback);
+        $(target).unbind('keydown', key[k].callback);
       }
     }
   },
