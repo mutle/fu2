@@ -69,7 +69,6 @@ var Router = {
       var f = function(key) {
         return function(e) {
           e.preventDefault();
-          console.log(hotkeys[key]);
           hotkeys[key].callback.apply(current, [e]);
         };
       }(k);

@@ -41,12 +41,10 @@ var EditorShortcuts = React.createClass({
     }
   ],
   execCommand: function(action) {
-    console.log(action);
     for(var b in this.buttons) {
       var button = this.buttons[b];
       if(button == "div") continue;
       if(button.name == action) {
-        console.log(button);
         if(button.line)
           this.props.editor.lineAction(button.action);
         else
@@ -77,7 +75,6 @@ var EditorShortcuts = React.createClass({
         }
       })(button);
     }
-    console.log(keys);
     return keys;
   },
   componentDidMount: function() {

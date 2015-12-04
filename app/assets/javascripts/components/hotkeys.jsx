@@ -64,7 +64,6 @@ var Hotkeys = React.createClass({
     var globalCommands = this.hotkeyGroup("Global", Router.hotkeys);
     var localCommands = this.hotkeyGroup(Router.current_name, Router.current.hotkeys());
     var otherCommands = [];
-    console.log(Router.hotkey_groups);
     for(var n in Router.hotkey_groups) {
       otherCommands.push(this.hotkeyGroup(n, Router.hotkey_groups[n]));
     }
