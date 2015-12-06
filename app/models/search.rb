@@ -133,6 +133,7 @@ class Search
     }
     n = 0
     QUERIES.each do |query|
+      next if @options[:type] && @options[:type] != query.index
       r = query.new(@query, @options.merge(offset: offset)).results
       @results[:total_count] += r[:total_count]
       @results[:result_count] += r[:result_count]

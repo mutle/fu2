@@ -3,6 +3,12 @@ class Search
 
     include ActiveSupport::Benchmarkable
 
+    class << self
+      def index
+        ""
+      end
+    end
+
     def initialize(query=nil, options={})
       @query = query
       @options = options
@@ -47,7 +53,6 @@ class Search
     end
 
     def search_query_for(field, query)
-      p [:wild, wildcard, field, query]
       if wildcard.include?(field.to_sym)
         [
           {

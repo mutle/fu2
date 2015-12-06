@@ -1,6 +1,12 @@
 class Search
   class ChannelsQuery < Query
 
+    class << self
+      def index
+        "channels"
+      end
+    end
+
     def index
       "channels"
     end

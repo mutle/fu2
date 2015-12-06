@@ -1,6 +1,12 @@
 class Search
   class PostsQuery < Query
 
+    class << self
+      def index
+        "posts"
+      end
+    end
+
     def index
       "posts"
     end

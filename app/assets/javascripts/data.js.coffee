@@ -56,6 +56,7 @@ class Data
       delete: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       update: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
+      search: -> "/api/posts/search.json"
     image:
       create: -> "/api/images.json"
     user:

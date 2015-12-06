@@ -21,6 +21,9 @@ Fu2::Application.routes.draw do
           resources :posts
         end
         resources :posts do
+          collection do
+            post :search
+          end
           member do
             post :fave
           end
@@ -72,7 +75,7 @@ Fu2::Application.routes.draw do
         end
       end
 
-      resource :search, :controller => :search
+      resources :search, :controller => :search
 
       resources :channels do
         collection do
