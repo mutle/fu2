@@ -317,7 +317,7 @@ class Channel < ActiveRecord::Base
   def change_text(text, current_user)
     old_text = self.text
     old_text_html = RenderPipeline.markdown(old_text)
-    return if old_text == text
+    return if old_text == text || (old_text.blank? && text.blank?)
     self.text = text
     text_html = RenderPipeline.markdown(text)
     events.create(event: "text", data: {old_text: old_text, old_text_html: old_text_html, text: text, text_html: text_html}, user_id: current_user.id)
