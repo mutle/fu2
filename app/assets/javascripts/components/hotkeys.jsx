@@ -23,48 +23,56 @@ var Hotkeys = React.createClass({
     e.preventDefault();
     this.setState({show: false});
   },
+  hotkeyGroup: function(name, hotkeys) {
+    if(hotkeys) {
+      var commands = [];
+      for(var k in hotkeys) {
+        var hk = hotkeys[k];
+        var hkname = hk;
+        if(!hk.name) {
+          if(Router.responders[hk])
+            hkname = Router.responders[hk].options.name;
+          // hkname = Router.responders[hk];
+        } else {
+          hkname = hk.name;
+        }
+        if(hk.hotkey) {
+          var hotkey = hk.hotkey;
+          if(hotkey && hotkey.name) hkname = hotkey.name;
+        }
+        if(hk.alternative) {
+          var alternatives = hk.alternative.map(function(hk, i) {
+            return <span className="alternative"> or <Hotkey hotkey={hk} /></span>;
+          });
+        }
+        var command = <div className="command">
+          <Hotkey hotkey={k} />
+          {alternatives}
+          <span className="label">{hkname}</span>
+        </div>;
+        commands.push(command);
+      }
+      return <div>
+        <h3>{name} Hotkeys</h3>
+        {commands}
+      </div>;
+    }
+    return null;
+  },
   render: function() {
     if(!this.state.show) return null;
-    var globalCommands = [];
-    var localCommands = [];
-    for(var k in Router.hotkeys) {
-      var responder = Router.hotkeys[k];
-      var r = Router.responders[responder];
-      var command = <div className="command">
-        <Hotkey hotkey={k} />
-        <span className="label">{r.options.name}</span>
-      </div>;
-      globalCommands.push(command);
-    }
-    if(Router.current.hotkeys) {
-      var localHotkeys = Router.current.hotkeys();
-      if(localHotkeys) {
-        for(var k in localHotkeys) {
-          var hotkey = localHotkeys[k];
-          if(hotkey.alternative) {
-            var alternatives = hotkey.alternative.map(function(hk, i) {
-              return <span className="alternative"> or <Hotkey hotkey={hk} /></span>;
-            });
-          }
-          var command = <div className="command">
-            <Hotkey hotkey={k} />
-            {alternatives}
-            <span className="label">{hotkey.name}</span>
-          </div>;
-          localCommands.push(command);
-        }
-        var local = <div>
-          <h3>{Router.current_name} Hotkeys</h3>
-          {localCommands}
-        </div>;
-      }
+    var globalCommands = this.hotkeyGroup("Global", Router.hotkeys);
+    var localCommands = this.hotkeyGroup(Router.current_name, Router.current.hotkeys());
+    var otherCommands = [];
+    for(var n in Router.hotkey_groups) {
+      otherCommands.push(this.hotkeyGroup(n, Router.hotkey_groups[n]));
     }
     return <div className="hotkeys dialog">
       <span className="close octicon octicon-x" onClick={this.close} />
       <div className="content">
-        <h3>Global Hotkeys</h3>
         {globalCommands}
-        {local}
+        {localCommands}
+        {otherCommands}
       </div>
     </div>;
   }

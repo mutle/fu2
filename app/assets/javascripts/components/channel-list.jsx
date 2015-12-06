@@ -62,6 +62,11 @@ var ChannelListFilter = React.createClass({
     if(e.keyCode == 27) {
       this.reset(e);
     }
+    if(e.keyCode == 13) {
+      e.preventDefault();
+      var url = this.searchUrl();
+      document.location.href = url;
+    }
   },
   toggleUnread: function(e) {
     var self = this;
@@ -72,15 +77,19 @@ var ChannelListFilter = React.createClass({
   updateQuery: function(q) {
     this.props.channelList.filter(q);
   },
+  searchUrl: function() {
+    return "/search?utf8=%E2%9C%93&search="+encodeURIComponent(this.state.text);
+  },
   render: function() {
-    if(!this.props.channelList.state.showQuery && !this.state.show) return null;
     var _1 = <span className="group"><input className="unread-filter" type="checkbox"  checked={this.state.unread} onChange={this.toggleUnread} /> Unread</span>;
     var _2 = <span className="group"><input placeholder="Date" className="date-filter" value={this.state.date} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>;
     if(this.state.text.length > 0) {
-      var searchUrl = "/search?utf8=%E2%9C%93&search="+encodeURIComponent(this.state.text);
+      var searchUrl = this.searchUrl();
       var searchLink = <a className="search" href={searchUrl}>Search for <em>{this.state.text}</em></a>;
     }
-    return <div className="filter">
+    var className = "filter";
+    if(this.props.channelList.state.showQuery || this.state.show) className += " show";
+    return <div name="search" className={className}>
       <span className="group"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>
       <a href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
       {searchLink}
@@ -175,6 +184,7 @@ var ChannelList = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
+    console.log("mount");
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
     Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
@@ -192,6 +202,12 @@ var ChannelList = React.createClass({
           $(window).scrollTop(o.top - 150);
         }
       }
+    }
+  },
+  componentDidUpdate: function() {
+    if(this.state.showQuery && !this.state.showingQuery) {
+      this.setState({showingQuery: true});
+      $(this.getDOMNode()).find(".text-filter").focus()
     }
   },
   componentWillUnmount: function() {

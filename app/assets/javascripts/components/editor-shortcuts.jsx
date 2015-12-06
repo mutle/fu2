@@ -1,48 +1,46 @@
 var EditorShortcuts = React.createClass({
   buttons: [
     {
-      name: "quote", icon: "quote", line: true, action: function(selection) {
+      name: "quote", icon: "quote", hotkey: "ctrl+q", line: true, action: function(selection) {
         return ["> ", selection];
-      }
+      }, description: "Quote"
     },
     {
-      name: "image", icon: "file-media", action: function(selection) {
+      name: "image", icon: "file-media", hotkey: "ctrl+i", action: function(selection) {
         return ["![](", selection, ")"];
-      }
+      }, description: "Insert Image"
     },
     {
-      name: "link", icon: "link-external", action: function(selection) {
+      name: "link", icon: "link-external", hotkey: "ctrl+l", action: function(selection) {
         if(selection.match(/:\/\//))
           return ["[", "", "](", selection, ")"];
         else
           return ["[", selection, "](", "", ")"];
-      }
+      }, description: "Insert Link"
     },
     "div",
     {
-      name: "bold", title: "B", action: function(selection) {
+      name: "bold", title: "B", hotkey: "ctrl+b", action: function(selection) {
         return ["**", selection, "**"];
-      }
+      }, description: "Bold"
     },
     {
-      name: "italic", title: "I", action: function(selection) {
+      name: "italic", title: "I", hotkey: "ctrl+i", action: function(selection) {
         return ["_", selection, "_"];
-      }
+      }, description: "Italic"
     },
     {
-      name: "strike", title: "S", action: function(selection) {
+      name: "strike", title: "S", hotkey: "ctrl+s", action: function(selection) {
         return ["~~", selection, "~~"];
-      }
+      }, description: "Strike through"
     },
     {
-      name: "h2", title: "H", line: true, action: function(selection) {
+      name: "h2", title: "H", hotkey: "ctrl+h", line: true, action: function(selection) {
         return ["## ", selection];
-      }
+      }, description: "Header"
     }
   ],
-  buttonClick: function(e) {
-    var action = e.target.title;
-    if(action == "") action = $(e.target).parents(".editor-button").attr("title");
+  execCommand: function(action) {
     for(var b in this.buttons) {
       var button = this.buttons[b];
       if(button == "div") continue;
@@ -53,7 +51,38 @@ var EditorShortcuts = React.createClass({
           this.props.editor.action(button.action);
       }
     }
+  },
+  buttonClick: function(e) {
+    var action = $(e.target).data("editor-action");
+    if(!action)
+      action = $(e.target).parents(".editor-button").data("editor-action");
+    this.execCommand(action);
     e.preventDefault();
+  },
+  hotkeys: function() {
+    var keys = {};
+    for(var k in this.buttons) {
+      var button = this.buttons[k];
+      (function(button) {
+        if(button && button != "div" && button.hotkey) {
+          keys[button.hotkey] = {
+            name: button.description,
+            callback: function(e) {
+              this.execCommand(button.name);
+            },
+            hotkey: button
+          };
+        }
+      })(button);
+    }
+    return keys;
+  },
+  componentDidMount: function() {
+    Router.bindKeys(this.hotkeys(), false, this, "Editor", $(this.props.editor.getDOMNode()).find("textarea"));
+  },
+  componentWillUnmount: function() {
+    Router.unbindKeys(Router.hotkey_groups["editor"], this, $(this.props.editor.getDOMNode()).find("textarea"));
+    Router.hotkey_groups["editor"] = null;
   },
   render: function() {
     var self = this;
@@ -65,7 +94,7 @@ var EditorShortcuts = React.createClass({
         var title = <span className={oc} />;
       } else
         var title = button.title;
-      return <span key={button.name} onClick={self.buttonClick} className={className} title={button.name}>{title}</span>;
+      return <span key={button.name} onClick={self.buttonClick} className={className} title={button.description} data-editor-action={button.name}>{title}</span>;
     });
     return <div className="editor-shortcuts">
       {b}
