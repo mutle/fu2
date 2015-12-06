@@ -2,7 +2,12 @@
 
 .channel-list-container {
   .filter {
+    display: none;
     margin-bottom: 1em;
+
+    &.show {
+      display: block;
+    }
 
     .text-filter, .date-filter  {
       font-size: 16px;

@@ -97,7 +97,7 @@ var Router = {
     if(keys) {
       if(!target) target = document;
       for(var k in keys) {
-        $(target).unbind('keydown', key[k].callback);
+        $(target).unbind('keydown', keys[k].callback);
       }
     }
   },
