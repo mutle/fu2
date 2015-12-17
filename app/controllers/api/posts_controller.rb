@@ -1,5 +1,5 @@
 class Api::PostsController < Api::ApiController
-  before_filter :load_channel, :except => [:fave, :faved]
+  before_filter :load_channel, :except => [:fave, :faved, :search, :advanced_search]
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
@@ -64,6 +64,26 @@ class Api::PostsController < Api::ApiController
     @post_id = params[:id].to_i == 0 ? 0 : sitePost.find(params[:id].to_i).id
     @channel.visit(current_user, @post_id)
     render json: {status: "OK"}
+  end
+
+  def search
+    query = params[:post][:query].to_s
+    page = (params[:post][:page] || 1).to_i
+    sort = params[:post][:sort] || "score"
+    per_page = (params[:post][:per_page] || 25).to_i
+    @view = Views::Search.new({
+      query: query,
+      page: page,
+      sort: sort,
+      type: "posts",
+      per_page: per_page
+    })
+    @view.finalize
+  end
+
+  def advanced_search
+    q = Search::PostsQuery.new
+    render json: q.searchable
   end
 
   private

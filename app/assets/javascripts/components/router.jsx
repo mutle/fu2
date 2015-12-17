@@ -164,11 +164,18 @@ $(function() {
 
   Router.addResponder("users/show", function(params, e) {
     return React.render(<UserProfile userId={params.user_id} />, e);
-  }, function(params) { return "/users"+params.user_id; }, {name: "User"});
+  }, function(params) { return "/users/"+params.user_id; }, {name: "User"});
 
   Router.addResponder("users/list", function(params, e) {
     return React.render(<UserList users={window.Users} />, e);
   }, function(params) { return "/users"; }, {hotkey: "U", name: "User List"});
+
+  Router.addResponder("posts/search", function(params, e) {
+    var search = React.render(<ChannelPostsSearch />, e);
+    if(params.sort) search.setState({sort: params.sort});
+    if(params.query) search.performQuery(decodeURIComponent(params.query));
+    return search;
+  }, function(params) { return "/search/"+params.query; }, {name: "Search results"});
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
@@ -176,6 +183,9 @@ $(function() {
   Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
   Router.addRoute("users/list", /^\/users\/?$/);
+  Router.addRoute("posts/search", /^\/search\/([^\/]*)\/([^\/]*)\/?$/, ["query", "sort"]);
+  Router.addRoute("posts/search", /^\/search\/([^\/]*)\/?$/, ["query"]);
+  Router.addRoute("posts/search", /^\/search\/?$/);
   Router.addRoute("channels/list", /^(\/channels)?\/?$/);
 
   Router.route(document.location.pathname+document.location.hash);

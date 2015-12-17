@@ -78,7 +78,7 @@ var ChannelListFilter = React.createClass({
     this.props.channelList.filter(q);
   },
   searchUrl: function() {
-    return "/search?utf8=%E2%9C%93&search="+encodeURIComponent(this.state.text);
+    return "/search/"+encodeURIComponent(this.state.text);
   },
   render: function() {
     var _1 = <span className="group"><input className="unread-filter" type="checkbox"  checked={this.state.unread} onChange={this.toggleUnread} /> Unread</span>;
@@ -184,7 +184,6 @@ var ChannelList = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
-    console.log("mount");
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
     Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
