@@ -1,6 +1,38 @@
+var ChannelPostsSearchHelp = React.createClass({
+  getInitialState: function() {
+    return {show: false, props: null};
+  },
+  toggle: function(e) {
+    e.preventDefault();
+    if(!this.state.show && !this.state.props) {
+      var self = this;
+      Data.action("advanced_search", "post", [], {}, {error: function() {
+        console.log("Search failed.");
+      }, success: function(data) {
+        self.setState({show: true, props: data.posts});
+      }});
+    } else {
+      this.setState({show: !this.state.show});
+    }
+  },
+  render: function() {
+    if(this.state.show && this.state.props) {
+      return <span>
+        <a href="#" className="toggle-help" onClick={this.toggle}>Hide Help</a>
+        <div className="help">
+          <p>The following attributes can be queried directly using attribute:search</p>
+          <p>{this.state.props.join(" ")}</p>
+        </div>
+      </span>;
+    } else {
+      return <a href="#" className="toggle-help" onClick={this.toggle}>Help</a>;
+    }
+  }
+});
+
 var ChannelPostsSearch = React.createClass({
   getInitialState: function() {
-    return {page: 1, query: null, results: null, view: null, sort: "score", showSortMenu: false};
+    return {query: null, results: null, view: null, sort: "score", showSortMenu: false};
   },
   componentDidMount: function() {
     if(this.state.query)
@@ -41,11 +73,10 @@ var ChannelPostsSearch = React.createClass({
     e.preventDefault();
     var self = this;
     this.setState({sort: $(e.target).text(), showSortMenu: false}, function() {
-      this.performQuery(this.state.query, true);
+      this.performQuery(this.state.query, true, 1);
     });
   },
-  performQuery: function(query, force) {
-    console.log(query);
+  performQuery: function(query, force, page) {
     if(!query || query.length == 0) {
       if(this.state.query) history.pushState(null, null, "/search");
       this.setState({query: null, results: null});
@@ -54,17 +85,33 @@ var ChannelPostsSearch = React.createClass({
     if(!force && query == this.state.query) {
       return;
     }
-    var data = {query: query, sort: this.state.sort, page: this.state.page};
+    if(!page || page < 1) {
+      if(this.state.view) page = this.state.view.page;
+      else page = 1;
+    }
+    var data = {query: query, sort: this.state.sort, page: page};
     var self = this;
     this.setState({query: query}, function(e) {
       Data.action("search", "post", [], data, {error: function() {
         console.log("Search failed.");
       }, success: function(data) {
-        console.log(data);
-        self.setState({sort: data['sort'], view: data['view'], results: data['results']});
-        history.pushState(null, null, "/search/"+encodeURIComponent(query));
+        var results = [];
+        if(page > 1 && self.state && self.state.results) results = self.state.results;
+        Array.prototype.push.apply(results, data['results']);
+        self.setState({sort: data['sort'], view: data['view'], results: results});
+        var sortUrl = "";
+        if(self.state.sort != "score") {
+          sortUrl = "/"+self.state.sort;
+        }
+        history.pushState(null, null, "/search/"+encodeURIComponent(query)+sortUrl);
       }});
     });
+  },
+  loadMore: function(e) {
+    if(this.state.query && this.state.view.page) {
+      this.performQuery(this.state.query, true, this.state.view.page + 1);
+    }
+    e.preventDefault();
   },
   render: function() {
     if(this.state.results && this.state.results.length > 0) {
@@ -72,6 +119,7 @@ var ChannelPostsSearch = React.createClass({
         var user = Data.get("user", post.user_id);
         return  <ChannelPost key={"post-"+post.id} id={post.id} channelId={post.channel_id} user={user} post={post} posts={self} editable={false} />;
       });
+      var viewLoader = <ViewLoader callback={this.loadMore} visible={this.state.results.length} octicon="chevron-down" count={this.state.view.count} message={"more results"} />;
     } else {
       var results = "No results found.";
     }
@@ -81,7 +129,7 @@ var ChannelPostsSearch = React.createClass({
       var resultHeader = <header className="search-header">
         <span className="result-count">
           Results
-          <span className="result-start"> {(this.state.view.page - 1) * this.state.view.per_page + 1} </span>
+          <span className="result-start"> 1 </span>
           -
           <span className="result-end"> {this.state.view.end} </span>
           of
@@ -98,15 +146,17 @@ var ChannelPostsSearch = React.createClass({
             <span className="title" onClick={this.toggleSort}>{this.state.sort} <span className="octicon octicon-chevron-down" /></span>
           </span>
         </span>
-      </header>
+      </header>;
     }
     return <div className="search-results">
       <div className="search-box">
         <input type="search" value={this.state.query} onKeyDown={this.onKeydown} onChange={this.onChange} />
-        <button onClick={this.search}>Search</button>
+        <button onClick={this.search} className="search-button content-button button-default">Search</button>
+        <ChannelPostsSearchHelp />
       </div>
       {resultHeader}
       {results}
+      {viewLoader}
     </div>;
   }
 });

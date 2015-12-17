@@ -184,7 +184,6 @@ var ChannelList = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
-    console.log("mount");
     $(window).scrollTop(0);
     Data.subscribe("channel", this, 0, {callback: this.updated});
     Data.subscribe("channel-filtered", this, 0, {callback: this.updated});

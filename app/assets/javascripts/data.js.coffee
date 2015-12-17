@@ -57,6 +57,7 @@ class Data
       update: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
       search: -> "/api/posts/search.json"
+      advanced_search: -> "/api/posts/advanced_search.json"
     image:
       create: -> "/api/images.json"
     user:
@@ -173,7 +174,7 @@ class Data
     for key,prop of props
       data["#{type}[#{key}]"] = prop
     actionType = "POST"
-    actionType = "GET" if action == "index" || action == "show"
+    actionType = "GET" if action == "index" || action == "show" || action == "advanced_search"
     actionType = "PUT" if action == "update"
     actionType = "DELETE" if action == "delete"
     $.ajax

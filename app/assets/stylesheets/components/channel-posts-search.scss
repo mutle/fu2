@@ -3,6 +3,22 @@
   .search-box {
     margin-bottom: 1em;
     text-align: center;
+
+    .toggle-help {
+      padding-left: 12px;
+      font-size: 12px;
+    }
+
+    .search-button {
+      padding: 4px 6px;
+    }
+
+    .help {
+      width: 400px;
+      margin: 1em auto;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
   }
 
   .search-header {

@@ -172,6 +172,7 @@ $(function() {
 
   Router.addResponder("posts/search", function(params, e) {
     var search = React.render(<ChannelPostsSearch />, e);
+    if(params.sort) search.setState({sort: params.sort});
     if(params.query) search.performQuery(decodeURIComponent(params.query));
     return search;
   }, function(params) { return "/search/"+params.query; }, {name: "Search results"});
@@ -182,6 +183,7 @@ $(function() {
   Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
   Router.addRoute("users/list", /^\/users\/?$/);
+  Router.addRoute("posts/search", /^\/search\/([^\/]*)\/([^\/]*)\/?$/, ["query", "sort"]);
   Router.addRoute("posts/search", /^\/search\/([^\/]*)\/?$/, ["query"]);
   Router.addRoute("posts/search", /^\/search\/?$/);
   Router.addRoute("channels/list", /^(\/channels)?\/?$/);

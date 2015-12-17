@@ -1,5 +1,5 @@
 class Api::PostsController < Api::ApiController
-  before_filter :load_channel, :except => [:fave, :faved, :search]
+  before_filter :load_channel, :except => [:fave, :faved, :search, :advanced_search]
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]
@@ -79,6 +79,11 @@ class Api::PostsController < Api::ApiController
       per_page: per_page
     })
     @view.finalize
+  end
+
+  def advanced_search
+    q = Search::PostsQuery.new
+    render json: q.searchable
   end
 
   private

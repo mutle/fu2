@@ -23,6 +23,7 @@ Fu2::Application.routes.draw do
         resources :posts do
           collection do
             post :search
+            get :advanced_search
           end
           member do
             post :fave
@@ -75,7 +76,11 @@ Fu2::Application.routes.draw do
         end
       end
 
-      resources :search, :controller => :search
+      resources :search, :controller => :search do
+        collection do
+          get ':query/:sort' => "search#index"
+        end
+      end
 
       resources :channels do
         collection do
