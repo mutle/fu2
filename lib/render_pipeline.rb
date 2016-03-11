@@ -27,6 +27,18 @@ module RenderPipeline
     end
   end
 
+  class CustomEmojiFilter < Pipeline::EmojiFilter
+    def self.emoji_names
+      super + CustomEmoji.custom_emojis.map { |e| e[:aliases] }.flatten.sort
+    end
+
+    def emoji_url(name)
+      e = CustomEmoji.custom_emojis.find { |e| e[:aliases].include?(name) }
+      return e[:image] if e
+      super(name)
+    end
+  end
+
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
       twitter: {
@@ -88,7 +100,7 @@ module RenderPipeline
     Pipeline::MarkdownFilter,
     # Pipeline::ImageMaxWidthFilter,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
@@ -97,18 +109,18 @@ module RenderPipeline
     # Pipeline::ImageMaxWidthFilter,
     PreserveFormatting,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
-    Pipeline::EmojiFilter
+    CustomEmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT

@@ -50,7 +50,7 @@ var UserProfile = React.createClass({
         var emojis = [];
         for(var i in sorted) {
           var emoji = sorted[i];
-          var e = <span className="emoji-reaction"><img className="emoji" src={"/images/emoji/" + emoji[2].image} />{emoji[0]}</span>;
+          var e = <span className="emoji-reaction"><img className="emoji" src={emoji[2].image} />{emoji[0]}</span>;
           emojis.push(e);
         }
         var last_posts = this.state.stats.last_posts.map(function(post, i) {

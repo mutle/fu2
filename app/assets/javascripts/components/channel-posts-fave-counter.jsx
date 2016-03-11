@@ -103,7 +103,7 @@ var FaveCounter = React.createClass({
         var k = sorted[i];
         if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
           n++;
-          filteredEmojis.push({title: k, image: "/images/emoji/"+all_emojis[k].image});
+          filteredEmojis.push({title: k, image: all_emojis[k].image});
         }
       }
       this.filteredEmojis = filteredEmojis;
@@ -113,7 +113,7 @@ var FaveCounter = React.createClass({
       if(!all_emojis[emoji]) return;
       if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on";
       return <button key={emoji} className={className} onClick={self.click}  title={":"+emoji+": "+emojis[emoji].join(", ")}>
-        <img className="fave-emoji" src={"/images/emoji/"+all_emojis[emoji].image} />
+        <img className="fave-emoji" src={all_emojis[emoji].image} />
         {emojis[emoji].length}
       </button>;
     });

@@ -8,7 +8,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.hotkeys
-//= require emojis
+//= require emoji_loader
 //= require data
 //= require twitter
 //= require components
