@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/basecamp/trashed.git
+  revision: 7eb2da3d5c80dd7f10fc4c68759631e94a5036b6
+  ref: 7eb2da3
+  specs:
+    trashed (3.2.5)
+      statsd-ruby (~> 1.1)
+
+GIT
   remote: https://github.com/github/gemoji.git
   revision: b84bf23a5b45cca3e15e025cab9953b31796b162
   ref: b84bf23a
@@ -280,6 +288,7 @@ DEPENDENCIES
   statsd-ruby
   syslog-logger
   test-unit
+  trashed!
   unicorn (~> 4.9.0)
   websocket-eventmachine-server
   will_paginate

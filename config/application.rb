@@ -1,3 +1,4 @@
+require 'trashed/railtie'
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -50,6 +51,24 @@ module Fu2
       'X-XSS-Protection' => '0'
     }
 
+    METRICS = Statsd.new(ENV['STATSD_HOST'] || 'localhost', 8125)
+    METRICS.namespace = "fu2"
+    
+    config.trashed.statsd = METRICS
+
+    config.trashed.timing_dimensions = ->(env) do
+      # Rails 3 and 4 set this. Other Rack endpoints won't have it.
+      if controller = env['action_controller.instance']
+        name    = controller.controller_name
+        action  = controller.action_name
+        format  = controller.rendered_format || :none
+        variant = controller.request.variant || :none  # Rails 4.1+ only!
+
+        [ :All,
+          :"Controllers.#{name}",
+          :"Actions.#{name}.#{action}.#{format}+#{variant}" ]
+      end
+    end
   end
 
   def self.time_format

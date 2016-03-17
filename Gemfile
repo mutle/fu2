@@ -33,6 +33,7 @@ gem "jbuilder"
 gem 'active_model_serializers'
 gem 'react-rails', '~>1.0.0'
 gem 'websocket-eventmachine-server'
+gem 'trashed', git: "https://github.com/basecamp/trashed.git", ref: "7eb2da3"
 
 group :test do
   gem "mocha"
