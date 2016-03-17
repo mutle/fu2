@@ -18,7 +18,7 @@ class CustomEmoji < ActiveRecord::Base
 
     def for_user(user)
       {
-        aliases: [user.login],
+        aliases: [user.login.downcase],
         tags: [],
         image: user.avatar_image_url
       }
@@ -27,7 +27,7 @@ class CustomEmoji < ActiveRecord::Base
 
   def as_json
     {
-      aliases: [name],
+      aliases: [name.downcase],
       unicode_aliases: [],
       tags: [alias_list],
       image: url
