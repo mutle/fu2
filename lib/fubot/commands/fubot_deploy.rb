@@ -23,11 +23,12 @@ Fubot.command /deploy ?([^ ]*)/ do
     if !DEPLOY_USERS.include?(bot.user.login)
       bot.reply "You are not allowed to deploy."
     else
-      bot.reply "Deploying #{branch} to production."
-      script = DEPLOY_SCRIPT.call(branch)
-      result = `#{script}`
-      bot.reply "```\n#{result}\n```"
-      bot.reply "Deploy completed."
+      bot.reply "Deploys via Fubot are temporarily disabled."
+      # bot.reply "Deploying #{branch} to production."
+      # script = DEPLOY_SCRIPT.call(branch)
+      # result = `#{script}`
+      # bot.reply "```\n#{result}\n```"
+      # bot.reply "Deploy completed."
     end
   end
 end
