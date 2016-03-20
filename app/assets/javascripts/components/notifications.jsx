@@ -109,7 +109,7 @@ var NotificationView = React.createClass({
       return <div className="welcome"><div className="message"><img src="/assets/notifications-welcome-arrow-left.png" />{'Select a user to chat with \u2026'}</div><div className="message"><img src="/assets/notifications-welcome-arrow-down.png" />and write your message.</div></div>;
     }
     if(this.props.notifications.length == 0)
-      return <div><div className="empty"><div className="message"><img src={notificationsE.data("arrow-down-image")} />Write a message to <span className="username">{this.props.selectedUser.login}</span>.</div>{response}</div></div>;
+      return <div><div className="empty"><div className="message"><img src="/assets/notifications-welcome-arrow-down-image.png" />Write a message to <span className="username">{this.props.selectedUser.login}</span>.</div>{response}</div></div>;
 
     var className = "message-list" + (this.props.notifications.length > 0 ? " show" : "");
     return <div className={className}>
