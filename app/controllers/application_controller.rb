@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
   end
 
   def increment_metric(name)
-    METRICS.increment name
+    Fu2::Application::METRICS.increment name
   end
 
   helper_method :current_user
