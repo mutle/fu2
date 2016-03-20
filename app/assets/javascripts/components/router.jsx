@@ -18,7 +18,6 @@ var Router = {
       host = m[1].split(":")[0];
       path = m[2];
     }
-    console.log(host+" "+document.location.hostname);
     if(host != null && host != document.location.hostname) return;
     if(path.indexOf(Data.url_root) != 0) return;
     path = path.slice(Data.url_root.length);
