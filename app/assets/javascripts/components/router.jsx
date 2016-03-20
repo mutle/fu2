@@ -13,9 +13,12 @@ var Router = {
     if(!path) return false;
     if(path == "#") return false;
     var m = path.match(/^https?:\/\/([^\/]+)(\/.*)$/)
+    var host = null;
     if(m) {
+      host = m[1];
       path = m[2];
     }
+    if(host != null && host != document.location.hostname) return;
     if(path.indexOf(Data.url_root) != 0) return;
     path = path.slice(Data.url_root.length);
     var urlpath = path;
