@@ -53,7 +53,7 @@ module Fu2
 
     METRICS = Statsd.new(ENV['STATSD_HOST'] || 'localhost', 8125)
     METRICS.namespace = "fu2"
-    
+
     config.trashed.statsd = METRICS
 
     config.trashed.timing_dimensions = ->(env) do
@@ -69,6 +69,12 @@ module Fu2
           :"Actions.#{name}.#{action}.#{format}+#{variant}" ]
       end
     end
+
+    config.trashed.gauge_dimensions = ->(env) {
+      [ :All,
+        :"Stage.#{Rails.env}",
+        :"Hosts.#{`hostname -s`.chomp}" ]
+    }
   end
 
   def self.time_format
