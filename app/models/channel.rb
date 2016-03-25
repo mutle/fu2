@@ -74,7 +74,7 @@ class Channel < ActiveRecord::Base
     ids = nil
     if !query[:text].blank?
       q = query[:text].split(" ").map { |t| t.length > 1 ? "title:#{t}" : nil }.compact.join(" ")
-      res = Search.query(q, per_page: 500, sort: "score").results
+      res = Search.query(q, type: "channels", per_page: 500, sort: "score").results
       ids = res[:objects].compact.map(&:id) if res[:result_count] <= 500
     end
     ids
