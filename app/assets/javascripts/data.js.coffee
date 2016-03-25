@@ -110,7 +110,10 @@ class Data
             t = data[rkey].type
             if types.indexOf(t) < 0 then types.push(t)
             @insert(data[rkey])
-        @notify(types)
+        if types.length > 0
+          @notify(types)
+        else
+          @notify([info.view])
         @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types if !info.noCache
     dataCallback = (data, type) =>
       @insert(data)
@@ -156,6 +159,7 @@ class Data
       view.start = v.start if v.start < view.start
       view.end_id = v.end_id if v.end_id > view.end_id
       view.start_id = v.start_id if v.start_id < view.start_id
+      view.type = type
     @views[type] = view
   viewInfo: (type) ->
     @views[type]

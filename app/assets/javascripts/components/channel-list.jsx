@@ -53,6 +53,7 @@ var ChannelListFilter = React.createClass({
     var key = e.target.className == "text-filter" ? "text" : "date";
     var s = {};
     s[key] = query;
+    s.show = query.length > 0;
     var self = this;
     this.setState(s, function(e) {
       self.updateQuery(self.state);
@@ -126,7 +127,7 @@ var Channel = React.createClass({
 
 var ChannelList = React.createClass({
   getInitialState: function() {
-    return {channels: [], view: {}, highlight: -1, query: null};
+    return {channels: [], channels_filtered: [], view: {}, view_filtered: {}, highlight: -1, highlight_filtered: -1, query: null};
   },
   hotkeys: function() {
     return {
@@ -214,7 +215,7 @@ var ChannelList = React.createClass({
   },
   updated: function(objects, view) {
     var sorted = objects.sort(function(a,b) { return b.display_date - a.display_date; });
-    var highlight = this.state.highlight;
+    var highlight = this.state.hightlight;
     if(highlight == -1) {
       for(var c in sorted) {
         var chan = sorted[c];
@@ -224,7 +225,11 @@ var ChannelList = React.createClass({
         }
       }
     }
-    this.setState({channels: sorted, view: view, highlight: highlight});
+    if(view.type == "channel-filtered") {
+      this.setState({channels_filtered: sorted, view_filtered: view, highlight_filtered: highlight});
+    } else {
+      this.setState({channels: sorted, view: view, highlight: highlight});
+    }
   },
   filter: function(filter) {
     if(filter && filter.text.length > 0) {
@@ -236,7 +241,7 @@ var ChannelList = React.createClass({
   },
   loadMore: function(e) {
     if(this.state.query) {
-      Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1, query: this.state.query});
+      Data.fetch(ChannelListData, 0, {page: this.state.view_filtered.page + 1, query: this.state.query});
     } else {
       Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
     }
@@ -244,20 +249,40 @@ var ChannelList = React.createClass({
   },
   fetchUpdatedChannels: function() {
     if(this.state.view) {
-      if(this.state.query) {
-        Data.fetch(ChannelListFilterData, 0, {query: this.state.query, last_update: this.state.view.last_update + 1}, this.fetchUpdatedChannels);
+      if(this.state.query && this.state.query.show) {
+        Data.fetch(ChannelListFilterData, 0, {query: this.state.query, last_update: this.state.view_filtered.last_update + 1}, this.fetchUpdatedChannels);
       } else {
         Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
       }
     }
   },
+  activeChannels: function() {
+    if(this.state.query && this.state.query.show) {
+      return this.state.channels_filtered;
+    }
+    return this.state.channels;
+  },
+  activeView: function() {
+    if(this.state.query && this.state.query.show) {
+      return this.state.view_filtered;
+    }
+    return this.state.view;
+  },
+  activeHighlight: function() {
+    if(this.state.query && this.state.query.show) {
+      return this.state.highlight_filtered;
+    }
+    return this.state.highlight;
+  },
   render: function() {
     if(this.state.error) return <ErrorMessage title="Failed to load channels" />;
     if(this.state.channels.length < 1) return <LoadingIndicator />;
-    var highlightId = this.state.highlight;
+    var highlightId = this.activeHighlight();
     var query = null;
     if(this.state.query) query = this.state.query.text;
-    var channels = this.state.channels.map(function(channel, i) {
+    var activeChannels = this.activeChannels();
+    var activeView = this.activeView();
+    var channels = activeChannels.map(function(channel, i) {
       var user = Data.get("user", channel.last_post_user_id);
       var highlight = (i == highlightId);
       return <Channel key={channel.id} id={channel.id} user={user} channel={channel} highlight={highlight} query={query} />;
@@ -269,7 +294,7 @@ var ChannelList = React.createClass({
       <ul className="channel-list refresh">
         {channels}
       </ul>
-      <ViewLoader callback={this.loadMore} visible={this.state.channels.length} octicon="chevron-down" count={this.state.view.count} message={"older channels"} />
+      <ViewLoader callback={this.loadMore} visible={activeChannels.length} octicon="chevron-down" count={activeView.count} message={"older channels"} />
     </div>;
   }
 });
