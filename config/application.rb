@@ -65,16 +65,9 @@ module Fu2
         variant = controller.request.variant || :none  # Rails 4.1+ only!
 
         [ :All,
-          :"Controllers.#{name}",
           :"Actions.#{name}.#{action}.#{format}+#{variant}" ]
       end
     end
-
-    config.trashed.gauge_dimensions = ->(env) {
-      [ :All,
-        :"Stage.#{Rails.env}",
-        :"Hosts.#{`hostname -s`.chomp}" ]
-    }
   end
 
   def self.time_format
