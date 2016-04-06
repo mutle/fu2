@@ -203,6 +203,7 @@ var ChannelPosts = React.createClass({
       twttr.ready(function() {
         twttr.widgets.load(self.getDOMNode());
       });
+      if(FB) FB.XFBML.parse(self.getDOMNode());
     }
   },
   bodyClick: function(e) {
