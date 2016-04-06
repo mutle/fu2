@@ -68,7 +68,7 @@ module RenderPipeline
         end
       },
       imgur: {
-        pattern: %r{http://(i.)?imgur.com/([a-zA-Z0-9]+)\.gifv},
+        pattern: %r{https?://(i.)?imgur.com/([a-zA-Z0-9]+)\.gifv},
         callback: proc do |content, id|
           "<video poster=\"//i.imgur.com/#{id}.jpg\" preload=\"auto\" autoplay=\"autoplay\" muted=\"muted\" loop=\"loop\" webkit-playsinline=\"\" style=\"width: 480px; height: 270px;\"><source src=\"//i.imgur.com/#{id}.webm\" type=\"video/webm\"><source src=\"//i.imgur.com/#{id}.mp4\" type=\"video/mp4\"></video>"
         end
