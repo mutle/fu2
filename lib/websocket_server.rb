@@ -13,6 +13,7 @@ class WebsocketServer
         users[c[:user_id]] += 1
       end
       self.connected_users = users
+      Fu2::Application::METRICS.gauge "websocket-connections", connection_count
       $redis.set "Stats:Websockets:connection-count", connection_count
       $redis.set "Stats:Websockets:connected-users", connected_users.to_json
     end
