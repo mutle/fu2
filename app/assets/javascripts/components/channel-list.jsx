@@ -31,7 +31,7 @@ var ChannelListFilterData = {
 
 var ChannelListFilter = React.createClass({
   getInitialState: function() {
-    return {show: false, text: "", unread: true, date: ""};
+    return {show: false, text: "", unread: false, date: ""};
   },
   reset: function(e) {
     e.preventDefault();
@@ -53,7 +53,7 @@ var ChannelListFilter = React.createClass({
     var key = e.target.className == "text-filter" ? "text" : "date";
     var s = {};
     s[key] = query;
-    s.show = query.length > 0;
+    s.show = query.length > 0 || this.state.unread;
     var self = this;
     this.setState(s, function(e) {
       self.updateQuery(self.state);
@@ -71,7 +71,7 @@ var ChannelListFilter = React.createClass({
   },
   toggleUnread: function(e) {
     var self = this;
-    this.setState({unread: e.target.checked}, function(e) {
+    this.setState({unread: e.target.checked, show: e.target.checked || this.state.text.length > 0}, function(e) {
       self.updateQuery(self.state);
     });
   },
@@ -92,6 +92,7 @@ var ChannelListFilter = React.createClass({
     if(this.props.channelList.state.showQuery || this.state.show) className += " show";
     return <div name="search" className={className}>
       <span className="group"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>
+      <span className="group"><input type="checkbox" className="read-filter" checked={this.state.unread} onChange={this.toggleUnread} /> Only unread</span>
       <a href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
       {searchLink}
     </div>;
@@ -232,9 +233,20 @@ var ChannelList = React.createClass({
     }
   },
   filter: function(filter) {
+    var query = {};
+    var filtering = false;
     if(filter && filter.text.length > 0) {
-      Data.fetch(ChannelListFilterData, 0, {query: filter});
+      query["text"] = filter.text;
+      filtering = true;
+    }
+    if(filter && filter.unread) {
+      query["unread"] = true;
+      filtering = true;
+    }
+    if(filtering) {
+      Data.fetch(ChannelListFilterData, 0, {query: query});
     } else {
+      query = null;
       Data.fetch(ChannelListData, 0, {});
     }
     this.setState({query: filter});
