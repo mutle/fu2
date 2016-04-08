@@ -11,5 +11,6 @@
 //= require emoji_loader
 //= require data
 //= require twitter
+//= require facebook
 //= require components
 //= require search

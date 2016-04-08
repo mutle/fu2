@@ -4,7 +4,7 @@ module Views
     attrs :query, :sort, :type, :per_page
 
     fetches :results, proc {
-      ::Search.query(query, type: type, per_page: per_page, offset: (page * per_page), sort: sort).results
+      ::Search.query(query, type: type, per_page: per_page, offset: ((page - 1) * per_page), sort: sort).results
     }
 
     fetches :last_update, proc { Time.now }

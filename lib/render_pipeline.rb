@@ -55,7 +55,7 @@ module RenderPipeline
         end
       },
       youtube: {
-        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
+        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?.*v=|youtu\.be/)([A-Za-z\-_0-9]+)[^ ]*},
         callback: proc do |content, id|
           content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
         end
@@ -72,6 +72,18 @@ module RenderPipeline
             content.gsub(EMBEDS[:instagram][:pattern], image)
           end
         end
+      },
+      facebook: {
+        pattern: %r{https?://www.facebook.com/[^/]+/((videos|posts)/[0-9]+)/?},
+        callback: proc do |content, id, post_id, match|
+          "<div class=\"fb-#{match[2].to_s.gsub(/s$/, '')}\" data-href=\"#{match[0]}\" data-width=\"500\" data-allowfullscreen=\"true\"></div>"
+        end
+      },
+      imgur: {
+        pattern: %r{https?://(i.)?imgur.com/([a-zA-Z0-9]+)\.gifv},
+        callback: proc do |content, id|
+          "<video poster=\"//i.imgur.com/#{id}.jpg\" preload=\"auto\" autoplay=\"autoplay\" muted=\"muted\" loop=\"loop\" webkit-playsinline=\"\" style=\"width: 480px; height: 270px;\"><source src=\"//i.imgur.com/#{id}.webm\" type=\"video/webm\"><source src=\"//i.imgur.com/#{id}.mp4\" type=\"video/mp4\"></video>"
+        end
       }
     }
 
@@ -80,8 +92,8 @@ module RenderPipeline
         next unless node.respond_to?(:to_html)
         content = node.to_html
         EMBEDS.each do |k,embed|
-          if content =~ embed[:pattern]
-            html = embed[:callback].call(content, $2, context[:post_id])
+          if m = content.match(embed[:pattern])
+            html = embed[:callback].call(content, m[2], context[:post_id], m)
             next if html == content
             node.replace(html)
           end

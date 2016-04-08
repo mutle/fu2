@@ -81,7 +81,11 @@ class ApplicationController < ActionController::Base
   end
 
   def increment_metric(name)
-    METRICS.increment name
+    Fu2::Application::METRICS.increment name
+  end
+
+  def set_metric_gauge(name, value)
+    Fu2::Application::METRICS.gauge name, value
   end
 
   helper_method :current_user

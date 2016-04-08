@@ -171,9 +171,12 @@ var ChannelPosts = React.createClass({
   },
   updatedChannel: function(objects, view) {
     if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) {
-      document.title = objects[0].title+" | Red Cursor";
+      document.title = this.channelTitle(objects[0].title)+" | Red Cursor";
       this.setState({channel: objects[0]});
     }
+  },
+  channelTitle: function(title) {
+    return title;
   },
   loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
@@ -200,6 +203,7 @@ var ChannelPosts = React.createClass({
       twttr.ready(function() {
         twttr.widgets.load(self.getDOMNode());
       });
+      if(FB) FB.XFBML.parse(self.getDOMNode());
     }
   },
   bodyClick: function(e) {
@@ -255,7 +259,7 @@ var ChannelPosts = React.createClass({
 });
 
 ChannelPosts.quote = function(text) {
-  return text.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n";
+  return text.split("\n\n").map(function(l,i) { return "> "+l.replace(/([ ^\n])\@([^ $\n]+)/mg, "$1$2"); }).join("\n\n")+"\n\n";
 }
 
 // module.exports = ChannelPosts;
