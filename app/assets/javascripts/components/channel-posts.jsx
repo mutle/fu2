@@ -203,6 +203,7 @@ var ChannelPosts = React.createClass({
       twttr.ready(function() {
         twttr.widgets.load(self.getDOMNode());
       });
+      if(FB) FB.XFBML.parse(self.getDOMNode());
     }
   },
   bodyClick: function(e) {
@@ -258,7 +259,7 @@ var ChannelPosts = React.createClass({
 });
 
 ChannelPosts.quote = function(text) {
-  return text.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n";
+  return text.split("\n\n").map(function(l,i) { return "> "+l.replace(/([ ^\n])\@([^ $\n]+)/mg, "$1$2"); }).join("\n\n")+"\n\n";
 }
 
 // module.exports = ChannelPosts;

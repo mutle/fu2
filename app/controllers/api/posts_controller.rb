@@ -25,7 +25,6 @@ class Api::PostsController < Api::ApiController
   def create
     @post = @channel.posts.create(body: params[:post][:body], user_id: current_user.id, markdown: true, site_id: @site.id)
     increment_metric "posts.all"
-    increment_metric "channels.id.#{@channel.id}.posts"
     increment_metric "posts.user.#{current_user.id}"
     @channel.visit current_user, @post.id
     # rendered = render_to_string(partial: "/channels/post", object: @post) if request.format.symbol == :json
