@@ -69,13 +69,24 @@ class Channel < ActiveRecord::Base
     }
   end
 
-  def self.filter_ids(query)
+  def self.filter_ids(site, query, current_user)
     return nil if !query
     ids = nil
     if !query[:text].blank?
       q = query[:text].split(" ").map { |t| t.length > 1 ? "title:#{t}" : nil }.compact.join(" ")
+      # TODO site scope for search
       res = Search.query(q, type: "channels", per_page: 500, sort: "score").results
       ids = res[:objects].compact.map(&:id) if res[:result_count] <= 500
+    end
+    if query[:unread]
+      temp_ids = ids || site_scope(site).reorder("last_post_date DESC").limit(500).to_a.map(&:id)
+      ids = []
+      temp_ids.each do |r|
+        last_id = ($redis.zscore("last-post:#{current_user.id}", r) || 0).to_i
+        if last_id == 0
+          ids << r
+        end
+      end
     end
     ids
   end
