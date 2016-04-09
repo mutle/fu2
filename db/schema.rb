@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311154352) do
+ActiveRecord::Schema.define(version: 20160409002550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,11 +71,13 @@ ActiveRecord::Schema.define(version: 20160311154352) do
     t.string   "name"
     t.string   "aliases"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "site_id",    default: 1
   end
 
   add_index "custom_emojis", ["aliases"], name: "index_custom_emojis_on_aliases", using: :btree
+  add_index "custom_emojis", ["site_id"], name: "index_custom_emojis_on_site_id", using: :btree
   add_index "custom_emojis", ["user_id"], name: "index_custom_emojis_on_user_id", using: :btree
 
   create_table "events", force: :cascade do |t|

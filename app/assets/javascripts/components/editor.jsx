@@ -1,6 +1,8 @@
 window.Slashcommands = [
   {title: "ascii ", description: "/ascii <text>"},
   {title: "deploy ", description: "/deploy <branch>"},
+  {title: "emoji", description: "/emoji <name> at <url>"},
+  {title: "emojis", description: "/emojis"},
   {title: "image ", description: "/image <key words>"},
   {title: "gif ", description: "/gif <key words>"},
   {title: "remember ", description: "/remember <user> is <title>"},

@@ -1,4 +1,5 @@
 class CustomEmoji < ActiveRecord::Base
+  belongs_to :user
   class << self
     def all_emojis
       custom_emojis + default_emojis
@@ -23,6 +24,15 @@ class CustomEmoji < ActiveRecord::Base
         image: user.avatar_image_url
       }
     end
+
+    def last_update
+      e = order("updated_at DESC").first
+      if e
+        e.updated_at.to_i
+      else
+        0
+      end
+    end
   end
 
   def as_json
@@ -35,6 +45,6 @@ class CustomEmoji < ActiveRecord::Base
   end
 
   def alias_list
-    (aliases || "").gsub(/\w/, '').split(",")
+    (aliases || "").gsub(/\w/, '').split(",") + ["by #{user.login}"]
   end
 end

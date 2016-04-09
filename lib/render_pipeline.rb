@@ -28,8 +28,28 @@ module RenderPipeline
   end
 
   class CustomEmojiFilter < Pipeline::EmojiFilter
+    def emoji_image_filter(text)
+      regex = emoji_pattern
+      text.gsub(regex) do |match|
+        emoji_image_tag($1)
+      end
+    end
+
     def self.emoji_names
       super + CustomEmoji.custom_emojis.map { |e| e[:aliases] }.flatten.sort
+    end
+
+    def self.emoji_pattern
+      last_update = CustomEmoji.last_update
+      if !@last_update || @last_update < last_update || !@emoji_pattern
+        @emoji_pattern = /:(#{emoji_names.map { |name| Regexp.escape(name) }.join('|')}):/
+        @last_update = last_update
+      end
+      @emoji_pattern
+    end
+
+    def emoji_image_tag(name)
+      "<img class='emoji' title=':#{name}:' alt=':#{name}:' src='#{emoji_url(name)}' height='20' width='20' align='absmiddle' />"
     end
 
     def emoji_url(name)
