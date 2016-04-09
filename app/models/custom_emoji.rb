@@ -6,7 +6,7 @@ class CustomEmoji < ActiveRecord::Base
     end
 
     def custom_emojis
-      all.to_a.map(&:as_json) + user_emojis
+      all.includes(:user).to_a.map(&:as_json) + user_emojis
     end
 
     def user_emojis
@@ -31,6 +31,18 @@ class CustomEmoji < ActiveRecord::Base
         e.updated_at.to_i
       else
         0
+      end
+    end
+
+    def all_emojis_cached
+      last = $redis.get("CustomEmoji:All:Updated")
+      if !last || last.to_i < last_update
+        text = {emojis: CustomEmoji.all_emojis}.to_json
+        $redis.set("CustomEmoji:All:json", text)
+        $redis.set("CustomEmoji:All:Updated", last_update)
+        text
+      else
+        $redis.get("CustomEmoji:All:json")
       end
     end
   end

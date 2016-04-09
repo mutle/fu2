@@ -9,7 +9,6 @@ class FetchTweetJob
     @id = id
     @post_id = post_id
     @type = type.to_sym
-    Rails.logger.info @type
   end
 
   def redis_key
