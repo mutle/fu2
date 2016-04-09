@@ -1,6 +1,8 @@
 window.Slashcommands = [
   {title: "ascii ", description: "/ascii <text>"},
   {title: "deploy ", description: "/deploy <branch>"},
+  {title: "emoji", description: "/emoji <name> at <url>"},
+  {title: "emojis", description: "/emojis"},
   {title: "image ", description: "/image <key words>"},
   {title: "gif ", description: "/gif <key words>"},
   {title: "remember ", description: "/remember <user> is <title>"},
@@ -177,7 +179,7 @@ var Editor = React.createClass({
         var k = sorted[i];
         if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
           n++;
-          filtered.push({title: k, image: "/images/emoji/"+emoji[k].image, description: emoji[k].tags.join(", ")});
+          filtered.push({title: k, image: emoji[k].image, description: emoji[k].tags.join(", ")});
         }
       }
       if(n < 10) {
@@ -187,7 +189,7 @@ var Editor = React.createClass({
             var tag = emoji[k].tags[t];
             if(n < 10 && (input.length < 1 || tag.indexOf(input) === 0)) {
               n++;
-              filtered.push({title: k, image: "/images/emoji/"+emoji[k].image, description: emoji[k].tags.join(", ")});
+              filtered.push({title: k, image: emoji[k].image, description: emoji[k].tags.join(", ")});
             }
           }
         }

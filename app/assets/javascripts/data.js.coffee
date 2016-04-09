@@ -196,5 +196,6 @@ class Data
 $ ->
   window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"), $("body").data("site-id"))
   window.Data = new Data(window.socket, $("body").data("user-id"), $("body").data("api-root"))
+  window.Emojis.load($("body").data("api-root"))
   $.each window.Users, (i,user) ->
     window.Data.insert(user)
