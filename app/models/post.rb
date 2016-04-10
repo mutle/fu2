@@ -1,6 +1,10 @@
 class Post < ActiveRecord::Base
   include SiteScope
 
+  class Highlighter
+    include ActionView::Helpers::TextHelper
+  end
+
   belongs_to :channel
   belongs_to :user
   belongs_to :site
@@ -25,7 +29,7 @@ class Post < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :read
+  attr_accessor :read, :query
 
   class << self
     def indexed_type
@@ -156,7 +160,11 @@ class Post < ActiveRecord::Base
   end
 
   def html_body
-    result = markdown? ? RenderPipeline.markdown(body, id) : RenderPipeline.simple(body, id)
+    text = body
+    if query && query["text"]
+      text = Highlighter.new.highlight(text, query["text"])
+    end
+    result = markdown? ? RenderPipeline.markdown(text, id) : RenderPipeline.simple(text, id)
     result.html_safe
   end
 

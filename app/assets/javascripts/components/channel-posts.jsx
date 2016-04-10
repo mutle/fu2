@@ -222,7 +222,7 @@ var ChannelPosts = React.createClass({
   render: function () {
     if(this.state.error) return <ErrorMessage title="Failed to load channel" />;
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
-    if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
+    if(this.props.channelId > 0 && !this.state.channel.id) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;

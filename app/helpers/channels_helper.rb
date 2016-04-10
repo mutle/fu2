@@ -9,7 +9,7 @@ module ChannelsHelper
     return result.html_safe
   end
 
-  def format_text(text)
+  def format_text(text, query)
     result = RenderPipeline.markdown(text)
     return result.html_safe
   end
@@ -36,8 +36,12 @@ module ChannelsHelper
     user_link(user)
   end
 
-  def format_title(channel)
-    RenderPipeline.title(channel.is_a?(String) ? channel : channel.title).gsub(/<\/?(div|p)>/,'').html_safe
+  def format_title(channel, query=nil)
+    title = channel.is_a?(String) ? channel : channel.title
+    if query && query["text"]
+      title = highlight(title, query["text"])
+    end
+    RenderPipeline.title(title).gsub(/<\/?(div|p)>/,'').html_safe
   end
 
   def format_event(event)

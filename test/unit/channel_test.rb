@@ -49,21 +49,6 @@ class ChannelTest < ActiveSupport::TestCase
     assert_equal c.id, ChannelRedirect.from_id(old_id).target_channel_id
   end
 
-  test "next post" do
-    u = create_user
-    c = create_channel
-    @channel = c
-    p1 = create_post("p1")
-    p2 = create_post("p2")
-    p3 = create_post("p3")
-    c.visit(u, p1.id)
-    assert_equal p2.id, c.next_post(u)
-    c.visit(u, p2.id)
-    assert_equal p3.id, c.next_post(u)
-    c.visit(u, p3.id)
-    assert c.next_post(u) > p3.id
-  end
-
   test "rename channel event" do
     u = create_user
     c = create_channel

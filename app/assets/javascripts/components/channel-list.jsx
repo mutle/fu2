@@ -90,10 +90,10 @@ var ChannelListFilter = React.createClass({
     }
     var className = "filter";
     if(this.props.channelList.state.showQuery || this.state.show) className += " show";
-    return <div name="search" className={className}>
-      <span className="group"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>
-      <span className="group"><input type="checkbox" className="read-filter" checked={this.state.unread} onChange={this.toggleUnread} /> Only unread</span>
-      <a href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
+    return <div className={className}>
+      <a className="close-link" href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
+      <div className="group first"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></div>
+      <div className="group"><input type="checkbox" className="read-filter" checked={this.state.unread} onChange={this.toggleUnread} /> Only unread</div>
       {searchLink}
     </div>;
   }
@@ -106,13 +106,6 @@ var Channel = React.createClass({
     if(this.props.highlight) className += " highlight";
     var url = Data.url_root + "/channels/"+this.props.channel.id+"#post-"+this.props.channel.last_post_id;
     var displayName = this.props.channel.display_name;
-    if(this.props.query) {
-      var q = this.props.query.split(" ");
-      for(var i in q) {
-        displayName = displayName.replace(new RegExp(q[i], "i"), function(i) { return "<strong>"+i+"</strong>" });
-        displayName = displayName.replace(/(=\".*)\<strong\>(.*)\<\/strong\>(.*\")/, "$1$2$3");
-      }
-    }
     var channelName = {__html: displayName};
     return <li>
       <div className={className}>
@@ -244,7 +237,12 @@ var ChannelList = React.createClass({
       filtering = true;
     }
     if(filtering) {
-      Data.fetch(ChannelListFilterData, 0, {query: query});
+      if(this.filter_request)
+        window.clearTimeout(this.filter_request);
+      this.filter_request = window.setTimeout(function() {
+        Data.fetch(ChannelListFilterData, 0, {query: query});
+        this.filter_request = null;
+      }, 500);
     } else {
       query = null;
       Data.fetch(ChannelListData, 0, {});

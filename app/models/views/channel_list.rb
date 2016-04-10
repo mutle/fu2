@@ -11,6 +11,12 @@ module Views
       end
       nil
     }, [:recent_channels]
+    fetches :highlight_query, proc {
+      recent_channels.each do |channel|
+        channel.query = query
+      end
+      nil
+    }
 
     fetches :count, proc { recent_channels.count }
     fetches :start_index, proc { (page - 1) * per_page }

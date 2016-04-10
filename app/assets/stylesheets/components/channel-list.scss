@@ -20,8 +20,18 @@
 
     }
 
+    .close-link {
+      float: right;
+    }
+
     .group {
       padding-right: 12px;
+    }
+
+    @media #{$small-screen} {
+      .group.first {
+        float: left;
+      }
     }
 
     a, a:visited {
@@ -50,6 +60,10 @@
     line-height: 26px;
     margin-right: 120px;
     position: relative;
+
+    mark {
+      font-weight: bold;
+    }
 
     .avatar {
       margin: 0px;
