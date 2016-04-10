@@ -10,7 +10,6 @@ module ChannelsHelper
   end
 
   def format_text(text, query)
-    p query
     result = RenderPipeline.markdown(text)
     return result.html_safe
   end

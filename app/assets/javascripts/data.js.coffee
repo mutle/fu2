@@ -164,7 +164,8 @@ class Data
       view.start = v.start if v.start < view.start
       view.end_id = v.end_id if v.end_id > view.end_id
       view.start_id = v.start_id if v.start_id < view.start_id
-    view.type = type
+    if view && type
+      view.type = type
     @views[type] = view
   viewInfo: (type) ->
     @views[type]
