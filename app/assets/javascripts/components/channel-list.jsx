@@ -244,7 +244,12 @@ var ChannelList = React.createClass({
       filtering = true;
     }
     if(filtering) {
-      Data.fetch(ChannelListFilterData, 0, {query: query});
+      if(this.filter_request)
+        window.clearTimeout(this.filter_request);
+      this.filter_request = window.setTimeout(function() {
+        Data.fetch(ChannelListFilterData, 0, {query: query});
+        this.filter_request = null;
+      }, 500);
     } else {
       query = null;
       Data.fetch(ChannelListData, 0, {});

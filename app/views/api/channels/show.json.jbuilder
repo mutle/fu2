@@ -3,5 +3,5 @@ if @channel.errors.any?
 end
 
 json.channel do
-  json.partial! 'shared/channel', channel: @channel
+  json.partial! 'shared/channel', channel: @channel, show: true
 end

@@ -84,7 +84,7 @@ class Data
         @notify(cached)
         return
     url = info.url.replace(/{id}/, id)
-    $.ajax
+    xhr = $.ajax
       url: @url_root+url,
       dataType: "json",
       type: "get",
@@ -119,6 +119,8 @@ class Data
       @insert(data)
       @notify([data.type])
     socket.subscribe info.subscribe, dataCallback, null, fallback
+    xhr.args = args
+    xhr
   subscribe: (type, object, id, callbacks) ->
     @callbacks[type] ?= []
     @callbacks[type].push(callbacks: callbacks, object: object, id: id)
@@ -159,7 +161,7 @@ class Data
       view.start = v.start if v.start < view.start
       view.end_id = v.end_id if v.end_id > view.end_id
       view.start_id = v.start_id if v.start_id < view.start_id
-      view.type = type
+    view.type = type
     @views[type] = view
   viewInfo: (type) ->
     @views[type]
