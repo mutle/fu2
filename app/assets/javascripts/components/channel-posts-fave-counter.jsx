@@ -14,7 +14,6 @@ var FaveCounter = React.createClass({
         dataType: "json",
         type: "post"
       }).done(function(data) {
-        console.log(data.post);
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
@@ -31,7 +30,6 @@ var FaveCounter = React.createClass({
         dataType: "json",
         type: "post"
       }).done(function(data) {
-        console.log(data.post);
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
