@@ -34,7 +34,7 @@ class Channel < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :current_user, :markdown, :read
+  attr_accessor :current_user, :markdown, :read, :query
 
   class << self
     def indexed_type
