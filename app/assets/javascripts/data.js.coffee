@@ -153,6 +153,9 @@ class Data
     object
   remove: (type, id) ->
     @store[type] ?= {}
+    v = @views[type]
+    if v && @store[type][id]
+      v.end = v.end - 1
     delete @store[type][id]
   updateView: (type, view) ->
     v = @views[type]
