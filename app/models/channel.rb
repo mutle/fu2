@@ -109,91 +109,6 @@ class Channel < ActiveRecord::Base
     where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
-  def self.search_channels(title, page)
-    # search :per_page => 25, :page => page, :load => true do
-    #   query do
-    #     boolean do
-    #       title.split(' ').each do |t|
-    #         must { string "*#{t}*" }
-    #       end
-    #     end
-    #   end
-    # end
-  end
-
-  def self.search_channels_and_posts(searchquery, page)
-    # Tire.search ["channels-#{Rails.env}", "posts-#{Rails.env}"], :load => true do
-    #   per_page = 25
-    #   size per_page
-    #   from page.to_i <= 1 ? 0 : (per_page.to_i * (page.to_i-1))
-    #   searchquery.split(' ').each do |q|
-    #     query { string q }
-    #   end
-    # end.results
-  end
-
-  def self.recently_active_interval
-    3.days.ago
-  end
-
-  def self.recently_active(current_user)
-    p = Post.where("created_at > :t", t: recently_active_interval).includes(:user).order("created_at DESC")
-    posts = {}
-    users = {}
-    has_posts = {}
-    hours = {}
-    p.each do |post|
-      (posts[post.channel_id] ||= []) << post
-      (users[post.channel_id] ||= []) << post.user
-    end
-    users.each do |cid,u|
-      users[cid] = u.uniq(&:id)
-    end
-    unread_posts = {}
-    other_posts = {}
-    num_hours = 12
-    posts.each do |cid,p|
-      last_id = ($redis.zscore("last-post:#{current_user.id}", cid) || 0).to_i
-      has_posts[cid] = last_id == 0 || last_id < p.first.id
-      unread = []
-      read = []
-      activity = Array.new(num_hours, 0)
-      t = Time.now
-      p.each do |post|
-        hour = (t - post.created_at) / 3600
-        activity[hour] += 1 if hour < num_hours
-        if last_id < post.id
-          unread << post
-        else
-          read << post
-        end
-      end
-      hours[cid] = activity.reverse
-      unread_posts[cid] = unread
-      other_posts[cid] = read.slice(0, 2)
-    end
-    channels = where("id IN(:ids)", ids: posts.keys).order("last_post DESC").limit(10)
-    {
-      channels: channels,
-      has_posts: has_posts,
-      users: users,
-      unread_posts: unread_posts,
-      other_posts: other_posts,
-      activity_hours: hours
-    }
-  end
-
-  def self.recent_posts(channels, user)
-    ids = channels.map(&:id)
-    recent = Post.select("channel_id, MAX(id) as id").where("channel_id IN (?)", ids).group("channel_id").load
-    posts = Post.select("id, channel_id, user_id, created_at").where("channel_id IN (?)", ids).includes(:user).to_a
-    out = {}
-    recent.each do |p|
-      out[p.channel_id] = posts.find { |p1| p1.id == p.id }
-    end
-    out
-  end
-
   def body=(body)
     @body ||= body
   end
@@ -229,17 +144,6 @@ class Channel < ActiveRecord::Base
   # def as_json(*args)
   #   {:created_at => created_at, :id => id, :last_post => last_post, :last_post_user_id => (Post.first_channel_post(self).first.user_id rescue 0), :permalink => permalink, :title => title, :updated_at => updated_at, :user_id => user_id, :read => @current_user ? has_posts?(@current_user) : false}
   # end
-
-  def next_post(current_user)
-    i = last_read_id(current_user)
-    return 0 if i == 0
-    p = posts.where("id > :last_id", :last_id => i).reorder("id").first
-    if p
-      p.id
-    else
-      i+1
-    end
-  end
 
   def last_read_id(current_user)
     ($redis.zscore("last-post:#{current_user.id}", id) || 0).to_i
