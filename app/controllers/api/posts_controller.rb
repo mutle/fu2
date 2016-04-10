@@ -50,6 +50,7 @@ class Api::PostsController < Api::ApiController
 
   def fave
     @post = sitePost.find(params[:id].to_i)
+    @post.read = true
     emoji = params[:emoji] || "star"
     if @post.faved_by? @current_user, nil, emoji
       @post.unfave @current_user, emoji
