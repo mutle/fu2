@@ -20,8 +20,18 @@
 
     }
 
+    .close-link {
+      float: right;
+    }
+
     .group {
       padding-right: 12px;
+    }
+
+    @media #{$small-screen} {
+      .group.first {
+        float: left;
+      }
     }
 
     a, a:visited {

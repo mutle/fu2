@@ -32,7 +32,7 @@ var ChannelPostsSearchHelp = React.createClass({
 
 var ChannelPostsSearch = React.createClass({
   getInitialState: function() {
-    return {query: null, results: null, view: null, sort: "score", showSortMenu: false};
+    return {query: null, results: null, view: null, sort: "score", showSortMenu: false, loading: true};
   },
   componentDidMount: function() {
     if(this.state.query)
@@ -79,7 +79,7 @@ var ChannelPostsSearch = React.createClass({
   performQuery: function(query, force, page) {
     if(!query || query.length == 0) {
       if(this.state.query) history.pushState(null, null, "/search");
-      this.setState({query: null, results: null});
+      this.setState({query: null, results: null, loading: false});
       return;
     }
     if(!force && query == this.state.query) {
@@ -92,19 +92,24 @@ var ChannelPostsSearch = React.createClass({
     var data = {query: query, sort: this.state.sort, page: page};
     var self = this;
     this.setState({query: query}, function(e) {
-      Data.action("search", "post", [], data, {error: function() {
-        console.log("Search failed.");
-      }, success: function(data) {
-        var results = [];
-        if(page > 1 && self.state && self.state.results) results = self.state.results;
-        Array.prototype.push.apply(results, data['results']);
-        self.setState({sort: data['sort'], view: data['view'], results: results});
-        var sortUrl = "";
-        if(self.state.sort != "score") {
-          sortUrl = "/"+self.state.sort;
-        }
-        history.pushState(null, null, "/search/"+encodeURIComponent(query)+sortUrl);
-      }});
+      if(self.search_request)
+        window.clearTimeout(self.search_request);
+      self.search_request = window.setTimeout(function() {
+        Data.action("search", "post", [], data, {error: function() {
+          console.log("Search failed.");
+        }, success: function(data) {
+          var results = [];
+          if(page > 1 && self.state && self.state.results) results = self.state.results;
+          Array.prototype.push.apply(results, data['results']);
+          self.setState({sort: data['sort'], view: data['view'], results: results, loading: false});
+          var sortUrl = "";
+          if(self.state.sort != "score") {
+            sortUrl = "/"+self.state.sort;
+          }
+          history.pushState(null, null, "/search/"+encodeURIComponent(query)+sortUrl);
+        }});
+        self.search_request = null;
+      }, 500);
     });
   },
   loadMore: function(e) {
@@ -120,6 +125,8 @@ var ChannelPostsSearch = React.createClass({
         return  <ChannelPost key={"post-"+post.id} id={post.id} channelId={post.channel_id} user={user} post={post} posts={self} editable={false} />;
       });
       var viewLoader = <ViewLoader callback={this.loadMore} visible={this.state.results.length} octicon="chevron-down" count={this.state.view.count} message={"more results"} />;
+    } else if(this.state.loading) {
+      var results = "Loading results....";
     } else {
       var results = "No results found.";
     }

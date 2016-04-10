@@ -90,10 +90,10 @@ var ChannelListFilter = React.createClass({
     }
     var className = "filter";
     if(this.props.channelList.state.showQuery || this.state.show) className += " show";
-    return <div name="search" className={className}>
-      <span className="group"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></span>
-      <span className="group"><input type="checkbox" className="read-filter" checked={this.state.unread} onChange={this.toggleUnread} /> Only unread</span>
-      <a href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
+    return <div className={className}>
+      <a className="close-link" href="#" onClick={this.reset}><span className="octicon octicon-x" /></a>
+      <div className="group first"><input placeholder="Title" className="text-filter" value={this.state.text} onKeyDown={this.onKeydown} onChange={this.onChange} /></div>
+      <div className="group"><input type="checkbox" className="read-filter" checked={this.state.unread} onChange={this.toggleUnread} /> Only unread</div>
       {searchLink}
     </div>;
   }
