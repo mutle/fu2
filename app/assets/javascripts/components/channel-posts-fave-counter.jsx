@@ -43,11 +43,12 @@ var FaveCounter = React.createClass({
     this.setState({add:false});
   },
   autocompleteMount: function(auto) {
-    $(this.getDOMNode()).find("input").get(0).select();
+    $(ReactDOM.findDOMNode(this)).find("input").get(0).select();
   },
   input: function(e) {
-    var cursorE = $(this.getDOMNode()).find("input").get(0).selectionEnd;
-    var cursorS = $(this.getDOMNode()).find("input").get(0).selectionStart;
+    var inputField = $(ReactDOM.findDOMNode(this)).find("input").get(0);
+    var cursorE = inputField.selectionEnd;
+    var cursorS = inputField.selectionStart;
     var key = e.key;
     if(key == "Escape") {
       this.setState({add: false});

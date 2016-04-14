@@ -19,8 +19,8 @@ module RenderPipeline
   end
 
   class BetterMentionFilter < Pipeline::MentionFilter
-    def self.mentioned_logins_in(text)
-      text.gsub Channel::MentionPattern do |match|
+    def self.mentioned_logins_in(text, username_pattern=Channel::UsernamePattern)
+      text.gsub Channel::MentionPatterns[username_pattern] do |match|
         login = $1
         yield match, login, false
       end

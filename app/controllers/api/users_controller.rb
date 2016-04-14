@@ -3,8 +3,6 @@ class Api::UsersController < Api::ApiController
   def update
     user = current_user
     p = update_password_params
-    puts p.inspect
-    puts p.size
     if p.size > 0
       errors = {}
       user.update_password p[:old_password], p[:password], p[:password_confirmation]
@@ -13,7 +11,6 @@ class Api::UsersController < Api::ApiController
         return
       end
     else
-      puts "p"
       u = update_params
       user.update_attributes u if u.size > 0
     end

@@ -146,7 +146,6 @@ class Search
           end
         end
       end
-      p [@query,q]
       q
     end
 

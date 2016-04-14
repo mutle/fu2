@@ -1,5 +1,0 @@
-<% avatar_size ||= 42 %>
-<div class="user-info content-block">
-  <%= link_to image_tag(avatar_url(user, avatar_size), class: "avatar-image"), user_path(user), class: "avatar" %>
-  <span class="user-name"><%= format_title(user.display_name) %></h2>
-</div>

@@ -4,17 +4,21 @@ class Channel < ActiveRecord::Base
   scope :with_letter, proc { |site, c| site_scope(site).where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
   scope :with_ids, proc { |ids| where(id: ids) }
 
-  MentionPattern = /
-    (?:^|\W|\n)                   # beginning of string or non-word char
-    @((?>[^\s\.,\/-][^\s\.:,\/]*))  # @username
-    (?!\/)                     # without a trailing slash
-    (?=
-      \.+[ \t\W]|              # dots followed by space or non-word character
-      \.+$|                    # dots at end of line
-      [^0-9a-zA-Z_.]|          # non-word character except dot
-      $                        # end of line
-    )
-  /ix
+  UsernamePattern = /[^\s\.,\/-][^\s\.:,\/]*/
+
+  MentionPatterns = Hash.new do |hash, key|
+    hash[key] = /
+      (?:^|\W|\n)                   # beginning of string or non-word char
+      @((?>#{key}))  # @username
+      (?!\/)                     # without a trailing slash
+      (?=
+        \.+[ \t\W]|              # dots followed by space or non-word character
+        \.+$|                    # dots at end of line
+        [^0-9a-zA-Z_.]|          # non-word character except dot
+        $                        # end of line
+      )
+    /ix
+  end
 
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }

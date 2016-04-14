@@ -118,7 +118,7 @@ var ChannelPosts = React.createClass({
         this.setState({anchor: h, highlight: highlight});
       }
     }
-    var post = $(this.getDOMNode()).find(".post-"+post.id);
+    var post = $(ReactDOM.findDOMNode(this)).find(".post-"+post.id);
     if(!noscroll && post.length > 0) {
       var o = post.offset();
       $(window).scrollTop(o.top - 150);
@@ -201,9 +201,9 @@ var ChannelPosts = React.createClass({
       }
       var self = this;
       twttr.ready(function() {
-        twttr.widgets.load(self.getDOMNode());
+        twttr.widgets.load(ReactDOM.findDOMNode(self));
       });
-      if(FB) FB.XFBML.parse(self.getDOMNode());
+      if(FB) FB.XFBML.parse(ReactDOM.findDOMNode(self));
     }
   },
   bodyClick: function(e) {

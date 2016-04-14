@@ -1,12 +1,5 @@
 class UsersController < ApplicationController
-
-  before_filter :login_required, :except => ["activate", "create"]
-
-  respond_to :html, :json
-
-  def index
-    empty_response
-  end
+  respond_to :html
 
   def activate
     # if current_user
@@ -18,10 +11,6 @@ class UsersController < ApplicationController
     @user.activation_code = @invite.activation_code
     render :action => "new", :layout => "unauthorized"
     # end
-  end
-
-  def show
-    empty_response
   end
 
   def create

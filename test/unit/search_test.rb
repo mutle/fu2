@@ -51,6 +51,8 @@ class SearchTest < ActiveSupport::TestCase
   # end
 
   test "update index" do
+    Channel.delete_all
+    Post.delete_all
     u = create_user
     p = create_post
     Search.reset_index

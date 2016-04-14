@@ -78,10 +78,10 @@ var EditorShortcuts = React.createClass({
     return keys;
   },
   componentDidMount: function() {
-    Router.bindKeys(this.hotkeys(), false, this, "Editor", $(this.props.editor.getDOMNode()).find("textarea"));
+    Router.bindKeys(this.hotkeys(), false, this, "Editor", $(ReactDOM.findDOMNode(this.props.editor)).find("textarea"));
   },
   componentWillUnmount: function() {
-    Router.unbindKeys(Router.hotkey_groups["editor"], this, $(this.props.editor.getDOMNode()).find("textarea"));
+    Router.unbindKeys(Router.hotkey_groups["editor"], this, $(ReactDOM.findDOMNode(this.props.editor)).find("textarea"));
     Router.hotkey_groups["editor"] = null;
   },
   render: function() {

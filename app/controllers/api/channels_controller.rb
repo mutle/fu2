@@ -13,6 +13,17 @@ class Api::ChannelsController < Api::ApiController
     @view.finalize
   end
 
+  def all
+    @view = Views::AllChannels.new({
+      current_user: current_user,
+      page: (params[:page] || 1).to_i,
+      site: @site,
+      letter: params[:letter]
+    })
+    @view.finalize
+    render "index"
+  end
+
   def create
     @channel = siteChannel.create(channel_params.merge(user_id: current_user.id, markdown: true))
     @channel.visit(current_user)

@@ -78,7 +78,7 @@ class Post < ActiveRecord::Base
 
   def scan_for_mentions
     mentioned = {}
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       login = mention[0]
       if u = User.where("LOWER(login) = LOWER(:login)", :login => login).first
         next if mentioned[u.id]
@@ -92,7 +92,7 @@ class Post < ActiveRecord::Base
   end
 
   def mentions?(user)
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       login = mention[0]
       return true if login.downcase == user.login.downcase
     end
@@ -101,7 +101,7 @@ class Post < ActiveRecord::Base
 
   def mentioned_users
     users = []
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       users << mention[0]
     end
     users
