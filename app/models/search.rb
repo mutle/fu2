@@ -55,9 +55,20 @@ class Search
     def index_doc(name, obj, n, count)
       data = obj.to_indexed_json
       return if data.keys.size < 1
-      d = docs(name)
-      Rails.logger.info "+#{index_name name}: #{data[:id]} (#{n+1}/#{count})"
-      d.index(data)
+      rt = 0
+      begin
+        d = docs(name)
+        Rails.logger.info "+#{index_name name}: #{data[:id]} (#{n+1}/#{count})"
+        d.index(data)
+      rescue Elastomer::Client::TimeoutError => e
+        rt += 1
+        if rt < 5
+          Rails.logger.info "retry +#{index_name name}: #{data[:id]} (#{n+1}/#{count})"
+          retry
+        else
+          raise e
+        end
+      end
     end
 
     def remove_doc(name, id, type, n, count)
@@ -133,6 +144,7 @@ class Search
     }
     n = 0
     QUERIES.each do |query|
+      next if @options[:type] && @options[:type] != query.index
       r = query.new(@query, @options.merge(offset: offset)).results
       @results[:total_count] += r[:total_count]
       @results[:result_count] += r[:result_count]

@@ -1,0 +1,18 @@
+.view-loader, .scroll-loader {
+  text-align: center;
+  margin-bottom: 1em;
+  clear: both;
+
+  a {
+    color: #444;
+    text-decoration: none;
+  }
+
+  .octicon {
+    margin-right: 10px;
+  }
+
+  a.load-all {
+    margin-left: 24px;
+  }
+}

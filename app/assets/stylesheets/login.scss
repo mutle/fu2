@@ -1,0 +1,69 @@
+$small-phone: "only screen and (max-width : 320px)";
+$large-screen: "only screen and (min-width: 1200px)";
+
+#login_container {
+  margin: 100px 10%;
+  background-color: #fff;
+
+  h3 {
+    text-align: center;
+  }
+  .login-box {
+    padding: 16px;
+
+    p {
+      padding: 0px;
+    }
+  }
+
+  @media #{$small-phone} {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  @media #{$large-screen} {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  .notice {
+    display: block;
+    text-align: left;
+    line-height: 38px;
+    color: #f66;
+    padding-right: 8px;
+    font-weight: bold;
+    margin-right: 100px;
+  }
+
+  .content-button {
+    float: right;
+    margin-left: 4px;
+  }
+
+
+
+  form {
+    padding-top: 26px;
+
+    p {
+      padding: 0px;
+
+      input {
+        box-sizing: border-box;
+        width: 100%;
+      }
+    }
+  }
+
+  form.activate {
+    p {
+      float: none;
+    }
+  }
+
+  .actions {
+    line-height: 38px;
+  }
+
+}

@@ -12,75 +12,92 @@ var ChannelPostsData = {
     "post_create",
     "post_fave",
     "post_unfave",
-    "event_create"
+    "post_update",
+    "event_create",
+    "offline_channel_posts"
   ]
 };
-
 
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
     return {posts: [], events: [], channel: {}, view: {}, anchor: "", highlight: -1};
   },
+  hotkeys: function() {
+    if(this.props.channelId == 0) return null;
+    return {
+      "ctrl+u": {
+        name: "Jump to Top",
+        callback: function() {
+          this.setState({highlight: 0});
+          this.updateAnchor();
+        }
+      },
+      "ctrl+d": {
+        name: "Jump to Bottom",
+        callback: function() {
+          this.setState({highlight: this.state.posts.length-1});
+          this.updateAnchor();
+        }
+      },
+      "j": {
+        name: "Next Post",
+        callback: function() {
+          if(this.state.highlight < this.state.posts.length-1) {
+            this.setState({highlight: this.state.highlight+1});
+            this.updateAnchor();
+          }
+        }
+      },
+      "k": {
+        name: "Previous Post",
+        callback: function() {
+          if(this.state.highlight > 0) {
+            this.setState({highlight: this.state.highlight-1});
+            this.updateAnchor();
+          }
+        }
+      },
+      "m": {
+        name: "Load more",
+        callback: function() {
+          this.loadMore();
+        }
+      },
+      "a": {
+        name: "Load all Posts",
+        callback: function() {
+          this.loadAll();
+        }
+      },
+      "r": {
+        name: "Respond to selected Post",
+        callback: function() {
+          if(this.state.highlight >= 0 && $("textarea.comment-box").val().length == 0) {
+            var post = this.state.posts[this.state.highlight];
+            this.replyMessage(post);
+          }
+        }
+      },
+      "c": {
+        name: "Jump to Comment box",
+        callback: function() {
+          var o = $("textarea.comment-box").select().offset();
+          if(o) $(window).scrollTop(o.top - 150);
+        }
+      }
+    };
+  },
   componentDidMount: function() {
     if(this.props.channelId > 0) {
       Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
       Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
       Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
-      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew);
+      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew, this.loadError);
     }
-
-    var self = this;
-    this.keydownCallback = $(document).on("keydown", function(e) {
-      if(!self.isMounted()) return;
-      if(e.target != $("body").get(0)) return;
-      var key = String.fromCharCode(e.keyCode);
-      if(key == "U" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-        self.setState({highlight: 0});
-        self.updateAnchor();
-        e.preventDefault();
-      }
-      if(key == "D" && e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-        self.setState({highlight: self.state.posts.length-1});
-        self.updateAnchor();
-        e.preventDefault();
-      }
-      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-      if(key == "J") {
-        if(self.state.highlight < self.state.posts.length-1) {
-          self.setState({highlight: self.state.highlight+1});
-          self.updateAnchor();
-        }
-        e.preventDefault();
-      }
-      if(key == "K") {
-        if(self.state.highlight > 0) {
-          self.setState({highlight: self.state.highlight-1});
-          self.updateAnchor();
-        }
-        e.preventDefault();
-      }
-      if(key == "M") {
-        self.loadMore();
-        e.preventDefault();
-      }
-      if(key == "A") {
-        self.loadAll();
-        e.preventDefault();
-      }
-      if(key == "R") {
-        if(self.state.highlight >= 0 && $("textarea.comment-box").val().length == 0) {
-          var post = self.state.posts[self.state.highlight];
-          self.replyMessage(post);
-          e.preventDefault();
-        }
-      }
-      if(key == "C") {
-        var o = $("textarea.comment-box").select().offset();
-        if(o) $(window).scrollTop(o.top - 150);
-        e.preventDefault();
-      }
-    });
+  },
+  loadError: function(e) {
+    this.setState({error: true});
   },
   replyMessage: function(post) {
     if(this.commentBox && this.commentBox.editor) {
@@ -91,7 +108,6 @@ var ChannelPosts = React.createClass({
   },
   componentWillUnmount: function() {
     Data.unsubscribe(this, ChannelPostsData.subscribe);
-    $(document).off("keydown", this.keydownCallback);
   },
   selectPost: function(post, highlight, noscroll) {
     if(!highlight) highlight = this.state.highlight;
@@ -102,7 +118,7 @@ var ChannelPosts = React.createClass({
         this.setState({anchor: h, highlight: highlight});
       }
     }
-    var post = $(this.getDOMNode()).find(".post-"+post.id);
+    var post = $(ReactDOM.findDOMNode(this)).find(".post-"+post.id);
     if(!noscroll && post.length > 0) {
       var o = post.offset();
       $(window).scrollTop(o.top - 150);
@@ -125,7 +141,7 @@ var ChannelPosts = React.createClass({
     if(highlight == -1) {
       for(var p in objects) {
         var post = objects[p];
-        if((this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post[-_]/, '')))) {
+        if(this.state.posts.length == 0 && this.state.anchor.length > 0 && post.id == parseInt(this.state.anchor.replace(/#?post[-_]/, ''))) {
           highlight = parseInt(p);
           jump = true;
           break;
@@ -147,7 +163,7 @@ var ChannelPosts = React.createClass({
       }
     }
     var items = objects.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
-    this.setState({posts: objects, items: items, view: view, highlight: highlight, jump: true});
+    this.setState({posts: objects, items: items, view: view, highlight: highlight, jump: jump});
   },
   updatedEvents: function(objects, view) {
     var items = this.state.posts.concat(objects).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
@@ -155,9 +171,12 @@ var ChannelPosts = React.createClass({
   },
   updatedChannel: function(objects, view) {
     if(objects.length > 0 && (!this.state.channel.id || objects[0].id == this.state.channel.id)) {
-      document.title = objects[0].title+" | Red Cursor";
+      document.title = this.channelTitle(objects[0].title)+" | Red Cursor";
       this.setState({channel: objects[0]});
     }
+  },
+  channelTitle: function(title) {
+    return title;
   },
   loadMore: function(e) {
     Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
@@ -177,12 +196,14 @@ var ChannelPosts = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.isMounted()) {
-      if(this.state.jump && this.updateAnchor())
+      if(this.state.jump && this.updateAnchor()) {
         this.setState({jump: false});
+      }
       var self = this;
       twttr.ready(function() {
-        twttr.widgets.load(self.getDOMNode());
+        twttr.widgets.load(ReactDOM.findDOMNode(self));
       });
+      if(FB) FB.XFBML.parse(ReactDOM.findDOMNode(self));
     }
   },
   bodyClick: function(e) {
@@ -199,22 +220,26 @@ var ChannelPosts = React.createClass({
     }
   },
   render: function () {
+    if(this.state.error) return <ErrorMessage title="Failed to load channel" />;
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
-    if(this.props.channelId > 0 && (this.state.posts.length < 1 || !this.state.channel.id)) return <LoadingIndicator />;
+    if(this.props.channelId > 0 && !this.state.channel.id) return <LoadingIndicator />;
     if(this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
       var pi = 0;
       var self = this;
-      var posts = this.state.items.map(function(post, i) {
-        var user = Data.get("user", post.user_id);
-        if(post.type.match(/-event$/)) {
-          return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
-        } else {
-          pi++;
-          return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={user.id == Data.user_id} bodyClick={self.bodyClick} />;
-        }
-      });
+      if(this.state.items && this.state.items.length > 0) {
+        var posts = this.state.items.map(function(post, i) {
+          var user = Data.get("user", post.user_id);
+          if(post.type.match(/-event$/)) {
+            return <ChannelEvent key={"event-"+post.id} id={post.id} event={post} user={user} />;
+          } else {
+            pi++;
+            var editable = user && user.id == Data.user_id;
+            return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={editable} bodyClick={self.bodyClick} />;
+          }
+        });
+      }
       var refFunc = function(ref) { self.commentBox = ref; };
       var commentbox = <div>
         <a name="comments"></a>
@@ -234,7 +259,7 @@ var ChannelPosts = React.createClass({
 });
 
 ChannelPosts.quote = function(text) {
-  return text.split("\n\n").map(function(l,i) { return "> "+l; }).join("\n\n")+"\n\n";
+  return text.split("\n\n").map(function(l,i) { return "> "+l.replace(/([ ^\n])\@([^ $\n]+)/mg, "$1$2"); }).join("\n\n")+"\n\n";
 }
 
 // module.exports = ChannelPosts;

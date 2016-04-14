@@ -7,8 +7,10 @@
 //= require underscore
 //= require jquery
 //= require jquery_ujs
-//= require emojis
+//= require jquery.hotkeys
+//= require emoji_loader
 //= require data
 //= require twitter
+//= require facebook
 //= require components
 //= require search

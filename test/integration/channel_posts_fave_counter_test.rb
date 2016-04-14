@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ChannelPostsFaceCounterTest < JSTest
+class ChannelPostsFaveCounterTest < JSTest
 
   setup do
     create_user

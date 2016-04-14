@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151031235058) do
+ActiveRecord::Schema.define(version: 20160409002550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,12 +19,33 @@ ActiveRecord::Schema.define(version: 20151031235058) do
   create_table "channel_redirects", force: :cascade do |t|
     t.integer  "original_channel_id"
     t.integer  "target_channel_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "site_id",             default: 1
   end
 
   add_index "channel_redirects", ["original_channel_id"], name: "index_channel_redirects_on_original_channel_id", using: :btree
+  add_index "channel_redirects", ["site_id"], name: "index_channel_redirects_on_site_id", using: :btree
   add_index "channel_redirects", ["target_channel_id"], name: "index_channel_redirects_on_target_channel_id", using: :btree
+
+  create_table "channel_users", force: :cascade do |t|
+    t.integer  "channel_id",                null: false
+    t.integer  "user_id",                   null: false
+    t.boolean  "priv_read",  default: true, null: false
+    t.boolean  "priv_write", default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "channel_visits", force: :cascade do |t|
+    t.integer  "channel_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "channel_visits", ["channel_id"], name: "index_channel_visits_on_channel_id", using: :btree
+  add_index "channel_visits", ["user_id"], name: "index_channel_visits_on_user_id", using: :btree
 
   create_table "channels", force: :cascade do |t|
     t.string   "title",          limit: 255,                null: false
@@ -45,18 +66,34 @@ ActiveRecord::Schema.define(version: 20151031235058) do
   add_index "channels", ["site_id"], name: "index_channels_on_site_id", using: :btree
   add_index "channels", ["title"], name: "index_channels_on_title", using: :btree
 
+  create_table "custom_emojis", force: :cascade do |t|
+    t.string   "url"
+    t.string   "name"
+    t.string   "aliases"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "site_id",    default: 1
+  end
+
+  add_index "custom_emojis", ["aliases"], name: "index_custom_emojis_on_aliases", using: :btree
+  add_index "custom_emojis", ["site_id"], name: "index_custom_emojis_on_site_id", using: :btree
+  add_index "custom_emojis", ["user_id"], name: "index_custom_emojis_on_user_id", using: :btree
+
   create_table "events", force: :cascade do |t|
     t.integer  "channel_id"
     t.integer  "user_id"
     t.string   "event"
     t.text     "data"
     t.text     "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "site_id",    default: 1
   end
 
   add_index "events", ["channel_id"], name: "index_events_on_channel_id", using: :btree
   add_index "events", ["event"], name: "index_events_on_event", using: :btree
+  add_index "events", ["site_id"], name: "index_events_on_site_id", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "faves", force: :cascade do |t|
@@ -64,8 +101,8 @@ ActiveRecord::Schema.define(version: 20151031235058) do
     t.integer  "post_id",                     null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.integer  "site_id",    default: 1
     t.string   "emoji",      default: "star"
+    t.integer  "site_id",    default: 1
   end
 
   add_index "faves", ["emoji"], name: "index_faves_on_emoji", using: :btree
@@ -100,6 +137,32 @@ ActiveRecord::Schema.define(version: 20151031235058) do
     t.boolean  "approved",                    default: false, null: false
     t.boolean  "sent",                        default: false, null: false
     t.text     "approved_users"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "site_id",                     default: 1
+  end
+
+  add_index "invites", ["site_id"], name: "index_invites_on_site_id", using: :btree
+
+  create_table "key_values", force: :cascade do |t|
+    t.string   "key"
+    t.text     "value"
+    t.integer  "post_id",    default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "site_id",    default: 1
+  end
+
+  add_index "key_values", ["key"], name: "index_key_values_on_key", using: :btree
+  add_index "key_values", ["post_id"], name: "index_key_values_on_post_id", using: :btree
+  add_index "key_values", ["site_id"], name: "index_key_values_on_site_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "sender_id"
+    t.integer  "status",                 default: 0
+    t.string   "subject",    limit: 255
+    t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -146,10 +209,19 @@ ActiveRecord::Schema.define(version: 20151031235058) do
   add_index "posts", ["site_id"], name: "index_posts_on_site_id", using: :btree
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
+  create_table "site_users", force: :cascade do |t|
+    t.integer "site_id"
+    t.integer "user_id"
+    t.string  "role"
+  end
+
+  add_index "site_users", ["site_id"], name: "index_site_users_on_site_id", using: :btree
+  add_index "site_users", ["user_id"], name: "index_site_users_on_user_id", using: :btree
+
   create_table "sites", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "domain",     limit: 255
-    t.string   "path",       limit: 255
+    t.string   "name"
+    t.string   "domain"
+    t.string   "path"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -158,6 +230,25 @@ ActiveRecord::Schema.define(version: 20151031235058) do
   add_index "sites", ["domain"], name: "index_sites_on_domain", using: :btree
   add_index "sites", ["path"], name: "index_sites_on_path", using: :btree
   add_index "sites", ["user_id"], name: "index_sites_on_user_id", using: :btree
+
+  create_table "stylesheets", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "title"
+    t.text     "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stylesheets", ["user_id"], name: "index_stylesheets_on_user_id", using: :btree
+
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "user_id",                null: false
+    t.string   "file_id",    limit: 255, null: false
+    t.string   "file_name",  limit: 255, null: false
+    t.string   "file_ext",   limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "login",                     limit: 255
@@ -181,12 +272,10 @@ ActiveRecord::Schema.define(version: 20151031235058) do
     t.string   "api_key",                   limit: 255, default: ""
     t.boolean  "markdown",                              default: true
     t.text     "avatar_url"
-    t.integer  "site_id",                               default: 1
   end
 
   add_index "users", ["activation_code"], name: "index_users_on_activation_code", using: :btree
   add_index "users", ["crypted_password"], name: "index_users_on_crypted_password", using: :btree
   add_index "users", ["login"], name: "index_users_on_login", using: :btree
-  add_index "users", ["site_id"], name: "index_users_on_site_id", using: :btree
 
 end

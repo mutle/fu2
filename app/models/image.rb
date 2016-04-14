@@ -1,4 +1,6 @@
 class Image < ActiveRecord::Base
+  include SiteScope
+  
   mount_uploader :image_file, ImageUploader
   belongs_to :user
 

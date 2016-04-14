@@ -8,6 +8,7 @@ class Live
       object_data = JbuilderTemplate.encode(context) do |json|
         json.type type
         json.user_id user_id
+        json.site_id object.site_id if object.respond_to?(:site_id)
         json.object do
           json.partial! "shared/#{template}", template.to_sym => object
         end

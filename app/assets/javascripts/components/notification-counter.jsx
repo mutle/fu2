@@ -21,7 +21,7 @@ var NotificationCounter = React.createClass({
   refresh: function(force) {
     var n = this;
     if(force || !this.socket) {
-      $.getJSON(Data.url.notification.counters(), {}, function(data, status, xhr) {
+      $.getJSON(Data.url_root+Data.url.notification.counters(), {}, function(data, status, xhr) {
         n.setState({messages: data.messages, mentions: data.mentions});
       });
     }
@@ -39,7 +39,7 @@ var NotificationCounter = React.createClass({
 $(function() {
   var counters = $(".header .counters .counters-inner");
   if(counters.length > 0) {
-    var counter = React.render(<NotificationCounter />, counters.get(0));
+    var counter = ReactDOM.render(<NotificationCounter />, counters.get(0));
     counter.connect();
   }
 });

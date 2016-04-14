@@ -1,6 +1,13 @@
 class Post < ActiveRecord::Base
+  include SiteScope
+
+  class Highlighter
+    include ActionView::Helpers::TextHelper
+  end
+
   belongs_to :channel
   belongs_to :user
+  belongs_to :site
   has_many :faves
 
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
@@ -22,7 +29,7 @@ class Post < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :read
+  attr_accessor :read, :query
 
   class << self
     def indexed_type
@@ -58,7 +65,7 @@ class Post < ActiveRecord::Base
       :faves => faves.size,
       :faver => faves.map { |fave| fave.user.login }.join(" "),
       :mention => mentioned_users.join(" "),
-      :site_id => 1
+      :site_id => site_id
     }
   end
 
@@ -71,7 +78,7 @@ class Post < ActiveRecord::Base
 
   def scan_for_mentions
     mentioned = {}
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       login = mention[0]
       if u = User.where("LOWER(login) = LOWER(:login)", :login => login).first
         next if mentioned[u.id]
@@ -85,7 +92,7 @@ class Post < ActiveRecord::Base
   end
 
   def mentions?(user)
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       login = mention[0]
       return true if login.downcase == user.login.downcase
     end
@@ -94,7 +101,7 @@ class Post < ActiveRecord::Base
 
   def mentioned_users
     users = []
-    body.scan Channel::MentionPattern do |mention|
+    body.scan Channel::MentionPatterns[Channel::UsernamePattern] do |mention|
       users << mention[0]
     end
     users
@@ -144,7 +151,7 @@ class Post < ActiveRecord::Base
 
   def process_fubot_message!
     return if self.user_id == User.fubot.id
-    Fubot.new(self, user).call(self.body)
+    Fubot.new(self, user, site).call(self.body)
   end
 
   def send_fubot_message(m)
@@ -153,7 +160,11 @@ class Post < ActiveRecord::Base
   end
 
   def html_body
-    result = markdown? ? RenderPipeline.markdown(body, id) : RenderPipeline.simple(body, id)
+    text = body
+    if query && query["text"]
+      text = Highlighter.new.highlight(text, query["text"])
+    end
+    result = markdown? ? RenderPipeline.markdown(text, id) : RenderPipeline.simple(text, id)
     result.html_safe
   end
 

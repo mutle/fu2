@@ -1,0 +1,27 @@
+.hotkeys {
+  .alternative {
+    .key {
+      margin-left: 8px;
+    }
+  }
+
+  .command {
+    margin-bottom: 1em;
+    position: relative;
+  }
+
+  .key {
+    display: inline-block;
+    border: 1px solid #777;
+    border-bottom-width: 3px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+  }
+
+  .label {
+    position: absolute;
+    left: 200px;
+  }
+
+}

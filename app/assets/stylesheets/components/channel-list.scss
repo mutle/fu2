@@ -1,0 +1,190 @@
+@import "screen.scss";
+
+.channel-list-container {
+  .filter {
+    display: none;
+    margin-bottom: 1em;
+
+    &.show {
+      display: block;
+    }
+
+    .text-filter, .date-filter  {
+      font-size: 16px;
+    }
+    .text-filter {
+      width: 300px;
+    }
+
+    .date-filter {
+
+    }
+
+    .close-link {
+      float: right;
+    }
+
+    .group {
+      padding-right: 12px;
+    }
+
+    @media #{$small-screen} {
+      .group.first {
+        float: left;
+      }
+    }
+
+    a, a:visited {
+      color: #000;
+      padding: 4px;
+    }
+
+    a.search {
+      display: block;
+      margin: 0.5em 0 1em;
+    }
+  }
+}
+
+.channel-list {
+  list-style-type: none;
+
+  a {
+    text-decoration: none;
+  }
+
+  .channel {
+
+    background: #D8D8D8;
+    margin-bottom: 24px;
+    line-height: 26px;
+    margin-right: 120px;
+    position: relative;
+
+    mark {
+      font-weight: bold;
+    }
+
+    .avatar {
+      margin: 0px;
+      margin-left: 10px;
+      margin-right: 10px;
+      line-height: 26px;
+      float: left;
+    }
+
+    .user-name {
+      color: #666666;
+      display: none;
+      width: 130px;
+      float: left;
+      padding: 7px;
+    }
+
+    .channel-name {
+      color: #333333;
+      line-height: 26px;
+      display: block;
+      padding: 7px;
+    }
+
+    &.read {
+      background: #F2F2F2;
+      .user-name { color: #8C8C8C; }
+      .channel-name { color: #595959; }
+    }
+
+    &.highlight {
+      border-left: 5px solid #dfa099;
+      margin-left: -5px;
+    }
+
+    @media #{$small-screen} {
+      line-height: 32px;
+      margin-bottom: 12px;
+
+      .avatar {
+        line-height: 32px;
+      }
+
+      .timestamp {
+        line-height: 32px;
+      }
+
+      .channel-name {
+        margin-left: 200px;
+        line-height: 32px;
+        min-height: 32px;
+      }
+
+      .user-name {
+        display: inline-block;
+      }
+    }
+
+    @media #{$large-screen} {
+      width: 810px;
+      float: left;
+
+      .avatar {
+        margin-top: 4px;
+      }
+    }
+
+    @media #{$small-phone-landscape} {
+      padding: 0;
+
+      .avatar {
+        padding: 0px;
+        margin: 0px;
+        margin-right: 4px;
+        margin-top: -1px;
+        .avatar-image {
+          max-width: 24px;
+          max-height: 24px;
+        }
+      }
+
+      .channel-name {
+        display: block;
+        padding: 0 4px;
+      }
+
+    }
+
+  }
+
+  .timestamp {
+
+    color: #8C8C8C;
+
+    // @media #{$large-screen} {
+      position: absolute;;
+      padding: 0 0 0 10px;
+      top: 0;
+      bottom: 0;
+      right: -120px;
+      width: 120px;
+      line-height: 26px;
+      background: #fff;
+    // }
+  }
+
+  .channel-loader {
+    clear: both;
+  }
+
+}
+
+.channel-text {
+  color: #4D4D4D;
+  line-height: 1.4em;
+
+  form {
+    display: none;
+  }
+
+  .body {
+    margin-bottom: 2em;
+  }
+}

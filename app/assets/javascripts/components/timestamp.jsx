@@ -47,11 +47,13 @@ var Timestamp = React.createClass({
 // module.exports = Timestamp;
 window.Timestamp = Timestamp;
 
+window.formatTimestamp = formatTimestamp;
+
 $(function() {
   window.updateTimestamps = function(timestampE) {
     $.each(timestampE, function(i,e) {
      var t = parseInt($(e).data("timestamp")) * 1000;
-     var ts = React.render(<Timestamp timestamp={t} />, e);
+     var ts = ReactDOM.render(<Timestamp timestamp={t} />, e);
      timestamps.push(ts);
    });
   }

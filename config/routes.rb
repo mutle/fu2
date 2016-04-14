@@ -1,45 +1,8 @@
 require "resque_web"
+require "site_constraint"
 
 Fu2::Application.routes.draw do
   mount ResqueWeb::Engine => "/resque", as: "resque"
-
-  namespace :api do
-    resources :channels do
-      resources :posts
-    end
-    resources :posts do
-      member do
-        post :fave
-      end
-    end
-
-    resources :notifications do
-      member do
-        post :read
-      end
-      collection do
-        get :unread
-        get :unread_users
-        get :counters
-      end
-    end
-    resources :images
-    resources :emojis
-  end
-
-  resources :users do
-    member do
-      put :block
-      get :activate
-      get :password
-    end
-  end
-
-  resources :invites do
-    member do
-      put :approve
-    end
-  end
 
   resource :session, :controller => :session do
     collection do
@@ -47,27 +10,74 @@ Fu2::Application.routes.draw do
     end
   end
 
-  resource :search, :controller => :search
-
-  resources :channels do
-    collection do
-      get :search
-      get :channel_names
-      get :activity
-      get :live
-      get :all
-    end
-    member do
-      post :visit
-      get :merge
-      post :do_merge
-    end
+  namespace :api do
+    resources :sites
   end
 
-  resources :notifications
+  scope '(:site_path)' do
+    constraints SiteConstraint.new do
+      namespace :api do
+        resources :channels do
+          resources :posts
+        end
+        resources :posts do
+          collection do
+            post :search
+            get :advanced_search
+          end
+          member do
+            post :fave
+          end
+        end
 
-  get '/stats/websockets' => "stats#websockets"
-  get '/tests' => "tests#index"
+        resource :users do
+        end
 
-  get '/' => 'channels#index', :as => :root
+        resources :users do
+          collection do
+            get :current
+          end
+          member do
+            get :stats
+          end
+        end
+
+        resources :notifications do
+          member do
+            post :read
+          end
+          collection do
+            get :unread
+            get :unread_users
+            get :counters
+          end
+        end
+
+        resources :sites
+        resources :images
+        resources :emojis
+
+        get 'stats/websockets' => "stats#websockets"
+        get 'info' => "api#info"
+      end
+
+      resources :users do
+        member do
+          get :activate
+        end
+      end
+
+      Fu2::REACT_ROUTES.each do |route|
+        if route.is_a?(Array)
+          if route.size > 2
+            get route[0] => "react##{route[2]}", as: route[1]
+          else
+            get route[0] => "react#index", as: route[1]
+          end
+        else
+          get route => "react#index"
+        end
+      end
+    end
+  end
 end

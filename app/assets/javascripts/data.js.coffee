@@ -1,5 +1,5 @@
 class Socket
-  constructor: (@url, @api_key) ->
+  constructor: (@url, @api_key, @site_id) ->
     @subscriptions = {}
     @available = false
     @reconnect = false
@@ -16,7 +16,7 @@ class Socket
             s.close?()
       @available = true
       @reconnect = true
-      @message({type: "auth", api_key: @api_key})
+      @message({type: "auth", api_key: @api_key, site_id: @site_id})
       for type,subscriptions of @subscriptions
         for s in subscriptions
           s.open?()
@@ -56,47 +56,71 @@ class Data
       delete: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       update: (channel_id, post_id) -> "/api/channels/#{channel_id}/posts/#{post_id}.json"
       fave: (post_id) -> "/api/posts/#{post_id}/fave.json"
+      search: -> "/api/posts/search.json"
+      advanced_search: -> "/api/posts/advanced_search.json"
     image:
       create: -> "/api/images.json"
+    user:
+      update: -> "/api/users.json"
     notification:
       create: -> "/api/notifications.json"
       unread: -> "/api/notifications/unread.json"
       counters: -> "/api/notifications/counters.json"
-  constructor: (@socket, @user_id) ->
+    sites:
+      index: -> "/api/sites.json"
+  constructor: (@socket, @user_id, @url_root) ->
     @callbacks = {}
     @store = {}
     @views = {}
     @fetched = {}
+    @url_root = @url_root.replace(/^https?:\/\/[^\/]+(\/$)?/, '')
+    @url_root = "" if @url_root == "/"
     @socket.connect() if @socket
-  fetch: (info, id=0, args={}, fallback=null) ->
+  fetch: (info, id=0, args={}, fallback=null, errorCallback=null) ->
     return if !info
-    if info.view && !args['last_update']
+    if info.view && !info.noCache && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
-      if cached?
+      if cached? && cached.length > 0
         @notify(cached)
         return
     url = info.url.replace(/{id}/, id)
-    $.ajax url: url, dataType: "json", type: "get", data: args, success: (data) =>
-      types = []
-      if info.view
-        view = info.view.replace(/\$ID/, id)
-        @updateView(view, data.view)
-      for rkey, rformat of info.result
-        if typeof(rformat) != "string"
-          for o in data[rkey]
-            t = o.type
+    xhr = $.ajax
+      url: @url_root+url,
+      dataType: "json",
+      type: "get",
+      data: args,
+      success: (data) =>
+        types = []
+        if info.view
+          view = info.view.replace(/\$ID/, id)
+          @updateView(view, data.view)
+        if !info.result
+          @insert(data)
+          @notify([data.type])
+          return
+        if info.noCache && info.view
+          @store[info.view] = {}
+        for rkey, rformat of info.result
+          if typeof(rformat) != "string"
+            for o in data[rkey]
+              t = o.type
+              if types.indexOf(t) < 0 then types.push(t)
+              @insert(o, t)
+          else
+            t = data[rkey].type
             if types.indexOf(t) < 0 then types.push(t)
-            @insert(o, t)
+            @insert(data[rkey])
+        if types.length > 0
+          @notify(types)
         else
-          t = data[rkey].type
-          if types.indexOf(t) < 0 then types.push(t)
-          @insert(data[rkey])
-      @notify(types)
-      @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types
+          @notify([info.view])
+        @fetched["#{view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"] = types if !info.noCache
     dataCallback = (data, type) =>
       @insert(data)
       @notify([data.type])
     socket.subscribe info.subscribe, dataCallback, null, fallback
+    xhr.args = args
+    xhr
   subscribe: (type, object, id, callbacks) ->
     @callbacks[type] ?= []
     @callbacks[type].push(callbacks: callbacks, object: object, id: id)
@@ -129,6 +153,9 @@ class Data
     object
   remove: (type, id) ->
     @store[type] ?= {}
+    v = @views[type]
+    if v && @store[type][id]
+      v.end = v.end - 1
     delete @store[type][id]
   updateView: (type, view) ->
     v = @views[type]
@@ -137,6 +164,8 @@ class Data
       view.start = v.start if v.start < view.start
       view.end_id = v.end_id if v.end_id > view.end_id
       view.start_id = v.start_id if v.start_id < view.start_id
+    if view && type
+      view.type = type
     @views[type] = view
   viewInfo: (type) ->
     @views[type]
@@ -155,12 +184,13 @@ class Data
     for key,prop of props
       data["#{type}[#{key}]"] = prop
     actionType = "POST"
+    actionType = "GET" if action == "index" || action == "show" || action == "advanced_search"
     actionType = "PUT" if action == "update"
     actionType = "DELETE" if action == "delete"
     $.ajax
       type: actionType,
       dataType: "json",
-      url: url,
+      url: @url_root+url,
       data: data,
       error: error,
       success: success
@@ -170,7 +200,8 @@ class Data
     @store[type][id] = props
     @notify([type])
 $ ->
-  window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"))
-  window.Data = new Data(window.socket, $("body").data("user-id"))
+  window.socket = new Socket($("body").data("socket-server"), $("body").data("api-key"), $("body").data("site-id"))
+  window.Data = new Data(window.socket, $("body").data("user-id"), $("body").data("api-root"))
+  window.Emojis.load($("body").data("api-root"))
   $.each window.Users, (i,user) ->
     window.Data.insert(user)

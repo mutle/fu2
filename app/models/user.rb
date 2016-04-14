@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
 
   has_many :faves
 
+  has_many :site_users
+  has_many :sites, through: :site_users
+
   belongs_to :stylesheet
 
   class << self
@@ -84,6 +87,27 @@ class User < ActiveRecord::Base
       @password ||= ""
     else
       @password ||= BCrypt::Password.new(password_hash)
+    end
+  end
+
+  def update_password(oldpw, pw, repeatpw)
+    if !authenticated?(oldpw)
+      errors.add(:old_password, " does not match the current password")
+    end
+    if pw != repeatpw
+      errors.add(:password_repeat, " does not match the password")
+    end
+    length = pw.to_s.size
+    if length < 4
+      errors.add(:password, " is too short (minimum is 4 characters)")
+    elsif length > 40
+      errors.add(:password, " is too long (maximum is 40 characters)")
+    end
+
+    if errors.any?
+      @password = nil
+    else
+      @password = BCrypt::Password.create(pw)
     end
   end
 
@@ -177,7 +201,15 @@ class User < ActiveRecord::Base
   end
 
   def as_json(*args)
-    {:id => id, :login => login, :display_name => display_name, :display_name_html => display_name_html, :display_color => display_color, :avatar_url => avatar_image_url}
+    {
+      id: id,
+      login: login,
+      display_name: display_name,
+      display_name_html: display_name_html,
+      display_color: display_color,
+      avatar_url: avatar_image_url,
+      created_at: created_at
+    }
   end
 
   def new_features
@@ -199,6 +231,10 @@ class User < ActiveRecord::Base
     else
       avatar_url
     end
+  end
+
+  def multi_site?
+    site_users.count > 1
   end
 
   protected

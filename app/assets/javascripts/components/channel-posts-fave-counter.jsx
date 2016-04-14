@@ -9,7 +9,11 @@ var FaveCounter = React.createClass({
       var t = $(e.target);
       if(t.hasClass("fave-emoji") || t.get(0).className == "") t = t.parents("button");
       var emoji = t.attr("class").replace(/^emoji-/, '').split(" ")[0];
-      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
+      $.ajax({
+        url:Data.url_root + "/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji),
+        dataType: "json",
+        type: "post"
+      }).done(function(data) {
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
@@ -21,7 +25,11 @@ var FaveCounter = React.createClass({
   fave: function(emoji) {
     if(this.props.postId > 0) {
       var c = this;
-      $.ajax({url:"/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji), dataType: "json", type: "post"}).done(function(data) {
+      $.ajax({
+        url:Data.url_root + "/api/posts/"+this.props.postId+"/fave?emoji="+encodeURIComponent(emoji),
+        dataType: "json",
+        type: "post"
+      }).done(function(data) {
         Data.update(data.post.type, c.props.postId, data.post);
       });
     }
@@ -35,11 +43,12 @@ var FaveCounter = React.createClass({
     this.setState({add:false});
   },
   autocompleteMount: function(auto) {
-    $(this.getDOMNode()).find("input").get(0).select();
+    $(ReactDOM.findDOMNode(this)).find("input").get(0).select();
   },
   input: function(e) {
-    var cursorE = $(this.getDOMNode()).find("input").get(0).selectionEnd;
-    var cursorS = $(this.getDOMNode()).find("input").get(0).selectionStart;
+    var inputField = $(ReactDOM.findDOMNode(this)).find("input").get(0);
+    var cursorE = inputField.selectionEnd;
+    var cursorS = inputField.selectionStart;
     var key = e.key;
     if(key == "Escape") {
       this.setState({add: false});
@@ -103,7 +112,7 @@ var FaveCounter = React.createClass({
         var k = sorted[i];
         if(n < 10 && (input.length < 1 || k.indexOf(input) === 0)) {
           n++;
-          filteredEmojis.push({title: k, image: "/images/emoji/"+all_emojis[k].image});
+          filteredEmojis.push({title: k, image: all_emojis[k].image});
         }
       }
       this.filteredEmojis = filteredEmojis;
@@ -112,8 +121,8 @@ var FaveCounter = React.createClass({
       var className = "emoji-"+emoji;
       if(!all_emojis[emoji]) return;
       if(user && emojis[emoji].indexOf(user.login) >= 0) className += " on";
-      return <button key={emoji} className={className} onClick={self.click}  title={emoji+": "+emojis[emoji].join(", ")}>
-        <img className="fave-emoji" src={"/images/emoji/"+all_emojis[emoji].image} />
+      return <button key={emoji} className={className} onClick={self.click}  title={":"+emoji+": "+emojis[emoji].join(", ")}>
+        <img className="fave-emoji" src={all_emojis[emoji].image} />
         {emojis[emoji].length}
       </button>;
     });

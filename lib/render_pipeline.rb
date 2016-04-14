@@ -19,11 +19,43 @@ module RenderPipeline
   end
 
   class BetterMentionFilter < Pipeline::MentionFilter
-    def self.mentioned_logins_in(text)
-      text.gsub Channel::MentionPattern do |match|
+    def self.mentioned_logins_in(text, username_pattern=Channel::UsernamePattern)
+      text.gsub Channel::MentionPatterns[username_pattern] do |match|
         login = $1
         yield match, login, false
       end
+    end
+  end
+
+  class CustomEmojiFilter < Pipeline::EmojiFilter
+    def emoji_image_filter(text)
+      regex = emoji_pattern
+      text.gsub(regex) do |match|
+        emoji_image_tag($1)
+      end
+    end
+
+    def self.emoji_names
+      super + CustomEmoji.custom_emojis.map { |e| e[:aliases] }.flatten.sort
+    end
+
+    def self.emoji_pattern
+      last_update = CustomEmoji.last_update
+      if !@last_update || @last_update < last_update || !@emoji_pattern
+        @emoji_pattern = /:(#{emoji_names.map { |name| Regexp.escape(name) }.join('|')}):/
+        @last_update = last_update
+      end
+      @emoji_pattern
+    end
+
+    def emoji_image_tag(name)
+      "<img class='emoji' title=':#{name}:' alt=':#{name}:' src='#{emoji_url(name)}' height='20' width='20' align='absmiddle' />"
+    end
+
+    def emoji_url(name)
+      e = CustomEmoji.custom_emojis.find { |e| e[:aliases].include?(name) }
+      return e[:image] if e
+      super(name)
     end
   end
 
@@ -43,7 +75,7 @@ module RenderPipeline
         end
       },
       youtube: {
-        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?v=|youtu\.be/)([A-Za-z\-_0-9]+)},
+        pattern: %r{https?://(www\.youtube\.com/watch\?v=|m\.youtube\.com/watch\?.*v=|youtu\.be/)([A-Za-z\-_0-9]+)[^ ]*},
         callback: proc do |content, id|
           content.gsub EMBEDS[:youtube][:pattern], %{<iframe width="560" height="315" src="//www.youtube.com/embed/#{id}" frameborder="0" allowfullscreen></iframe>}
         end
@@ -60,6 +92,18 @@ module RenderPipeline
             content.gsub(EMBEDS[:instagram][:pattern], image)
           end
         end
+      },
+      facebook: {
+        pattern: %r{https?://www.facebook.com/[^/]+/((videos|posts)/[0-9]+)/?},
+        callback: proc do |content, id, post_id, match|
+          "<div class=\"fb-#{match[2].to_s.gsub(/s$/, '')}\" data-href=\"#{match[0]}\" data-width=\"500\" data-allowfullscreen=\"true\"></div>"
+        end
+      },
+      imgur: {
+        pattern: %r{https?://(i.)?imgur.com/([a-zA-Z0-9]+)\.gifv},
+        callback: proc do |content, id|
+          "<video poster=\"//i.imgur.com/#{id}.jpg\" preload=\"auto\" autoplay=\"autoplay\" muted=\"muted\" loop=\"loop\" webkit-playsinline=\"\" style=\"width: 480px; height: 270px;\"><source src=\"//i.imgur.com/#{id}.webm\" type=\"video/webm\"><source src=\"//i.imgur.com/#{id}.mp4\" type=\"video/mp4\"></video>"
+        end
       }
     }
 
@@ -68,8 +112,8 @@ module RenderPipeline
         next unless node.respond_to?(:to_html)
         content = node.to_html
         EMBEDS.each do |k,embed|
-          if content =~ embed[:pattern]
-            html = embed[:callback].call(content, $2, context[:post_id])
+          if m = content.match(embed[:pattern])
+            html = embed[:callback].call(content, m[2], context[:post_id], m)
             next if html == content
             node.replace(html)
           end
@@ -88,7 +132,7 @@ module RenderPipeline
     Pipeline::MarkdownFilter,
     # Pipeline::ImageMaxWidthFilter,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
@@ -97,18 +141,18 @@ module RenderPipeline
     # Pipeline::ImageMaxWidthFilter,
     PreserveFormatting,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
-    Pipeline::EmojiFilter
+    CustomEmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [
     Pipeline::MarkdownFilter,
     BetterMentionFilter,
-    Pipeline::EmojiFilter,
+    CustomEmojiFilter,
     AutoEmbedFilter,
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT

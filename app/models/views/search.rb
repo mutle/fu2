@@ -1,11 +1,23 @@
 module Views
-  class Search < ApplicationView
+  class Search < ListView
 
-    attrs :query, :start, :sort, :per_page
+    attrs :query, :sort, :type, :per_page
 
     fetches :results, proc {
-      ::Search.query(query, per_page: per_page, offset: start, sort: sort).results
+      ::Search.query(query, type: type, per_page: per_page, offset: ((page - 1) * per_page), sort: sort).results
     }
+    fetches :highlight_query, proc {
+      results[:objects].each do |post|
+        if post.respond_to?(:query=)
+          post.query = {"text" => query}
+        end
+      end
+      nil
+    }
+
+    fetches :last_update, proc { Time.now }
+    fetches :count, proc { results[:result_count] }, [:results]
+    fetches :end_index, proc { (page - 1) * per_page + results[:objects].size }, [:results]
 
   end
 end

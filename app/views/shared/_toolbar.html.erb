@@ -11,14 +11,18 @@
   <div class="more">
     <%= link_to octicon('book')+content_tag(:span, "Channels", class: "text"), channel_path(:all), title: "Channels" %>
     <%= link_to octicon('organization')+content_tag(:span, "Users", class: "text"), users_path, title: "Users" %>
-    <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), edit_user_path(current_user), title: "Settings", class: "last" %>
-    <%= link_to octicon("sign-out", false, "signout-icon")+content_tag(:span, "Signout", class: "text"), session_path, title: "Logout", class: "toolbar-logout", method: :delete %>
+    <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), settings_path, title: "Settings", class: "last" %>
+    <%= link_to octicon("sign-out", false, "signout-icon")+content_tag(:span, "Signout", class: "text"), session_path(site_path: nil, site_domain: nil), title: "Logout", class: "toolbar-logout", method: :delete %>
   </div>
 </div>
 <%= link_to content_tag(:span, "More", class: "text")+octicon("triangle-down", false, "menu-indicator"), "#", class: "toolbar-more-link" %>
 
 <div class="right">
-  <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), "#", title: "Search", class: "toolbar-channel-search" %>
+  <% if current_user.multi_site? %>
+    <%= link_to octicon("sync", false, "site-switch-icon")+content_tag(:span, "Sites", class: "text"), "#", title: "Sites", class: "toolbar-sites" %>
+  <% end %>
+  <%= link_to octicon("info", false, "info-icon")+content_tag(:span, "Info", class: "text"), "#", title: "Info", class: "toolbar-info" %>
+  <%= link_to octicon("search", false, "search-icon")+content_tag(:span, "Search", class: "text"), root_url(anchor: "search"), title: "Search", class: "toolbar-channel-search" %>
 
   <%= link_to octicon("arrow-down"), "", class: "bottom-link" %>
 </div>
