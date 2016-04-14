@@ -38,7 +38,7 @@ gem 'sinatra'
 group :test do
   gem "mocha"
   gem "test-unit"
-  gem 'poltergeist'
-  gem "capybara"
-  gem "phantomjs", require: "phantomjs/poltergeist"
+  gem 'poltergeist', '~>1.7.0'
+  gem "capybara", '~>2.5.0'
+  gem "phantomjs", "~>1.9.8.0", require: "phantomjs/poltergeist"
 end
