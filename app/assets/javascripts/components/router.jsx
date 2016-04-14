@@ -116,7 +116,7 @@ var Router = {
       this.unbindKeys(this.local_hotkeys);
       this.local_hotkeys = null;
     }
-    React.unmountComponentAtNode(this.content);
+    ReactDOM.unmountComponentAtNode(this.content);
     this.current = responder.callback(params, this.content);
     if(this.current.hotkeys) {
       this.local_hotkeys = {};
@@ -136,7 +136,7 @@ var Router = {
 $(function() {
   Router.addResponder("channels/show", function(params, e) {
     var channel_id = parseInt(params.channel_id);
-    var posts = React.render(<ChannelPosts channelId={channel_id} />, e);
+    var posts = ReactDOM.render(<ChannelPosts channelId={channel_id} />, e);
     var anchor = params.anchor ? params.anchor : params.post_id ? "post-"+params.post_id : document.location.hash;
     posts.setState({anchor: anchor});
     return posts;
@@ -146,35 +146,35 @@ $(function() {
   }, {name: "Channel Posts"});
 
   Router.addResponder("channels/list", function(params, e) {
-    var channels = React.render(<ChannelList />, e);
+    var channels = ReactDOM.render(<ChannelList />, e);
     if(params.anchor && params.anchor == "search") channels.setState({showQuery: true});
     return channels;
   }, function(params) { return "/"+(params.anchor ?  "#"+params.anchor : ""); }, {hotkey: "H", name: "Home"});
 
   Router.addResponder("channels/new", function(params, e) {
-    return React.render(<ChannelPosts channelId={0} />, e);
+    return ReactDOM.render(<ChannelPosts channelId={0} />, e);
   }, function(params) { return "/channels/new"; }, {hotkey: "N", name: "New Channel"});
 
   Router.addResponder("notifications/index", function(params, e) {
-    return React.render(<Notifications />, e);
+    return ReactDOM.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M", name: "Notifications"});
 
   Router.addResponder("users/settings", function(params, e) {
     $(".more").hide();
     var user = Data.get("user", Data.user_id);
-    return React.render(<UserSettings user={user} />, e);
+    return ReactDOM.render(<UserSettings user={user} />, e);
   }, function(params) { return "/users/settings"; }, {name: "Settings"});
 
   Router.addResponder("users/show", function(params, e) {
-    return React.render(<UserProfile userId={params.user_id} />, e);
+    return ReactDOM.render(<UserProfile userId={params.user_id} />, e);
   }, function(params) { return "/users/"+params.user_id; }, {name: "User"});
 
   Router.addResponder("users/list", function(params, e) {
-    return React.render(<UserList users={window.Users} />, e);
+    return ReactDOM.render(<UserList users={window.Users} />, e);
   }, function(params) { return "/users"; }, {hotkey: "U", name: "User List"});
 
   Router.addResponder("posts/search", function(params, e) {
-    var search = React.render(<ChannelPostsSearch />, e);
+    var search = ReactDOM.render(<ChannelPostsSearch />, e);
     if(params.sort) search.setState({sort: params.sort});
     if(params.query) search.performQuery(decodeURIComponent(params.query));
     return search;
@@ -198,7 +198,7 @@ $(function() {
 
   $(document).bind("keydown", "shift+/", function(e) {
     if(e.target != $("body").get(0)) return;
-    if(!hotkeys) hotkeys = React.render(<Hotkeys />, $("#pre-content").get(0));
+    if(!hotkeys) hotkeys = ReactDOM.render(<Hotkeys />, $("#pre-content").get(0));
     hotkeys.setState({show: !hotkeys.state.show});
     e.preventDefault();
   });
@@ -211,13 +211,13 @@ $(function() {
   $(document).on("click", "a.toolbar-sites", function(e) {
     hotkeys = null;
     if(!switcher)
-      switcher = React.render(<SiteSwitcher />, $("#pre-content").get(0));
+      switcher = ReactDOM.render(<SiteSwitcher />, $("#pre-content").get(0));
     switcher.setState({show: true});
     e.preventDefault();
   });
 
   $(document).on("click", "a.toolbar-info", function(e) {
-    if(!hotkeys) hotkeys = React.render(<Hotkeys />, $("#pre-content").get(0));
+    if(!hotkeys) hotkeys = ReactDOM.render(<Hotkeys />, $("#pre-content").get(0));
     hotkeys.setState({show: !hotkeys.state.show});
     e.preventDefault();
   });

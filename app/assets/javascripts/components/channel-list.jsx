@@ -191,7 +191,7 @@ var ChannelList = React.createClass({
     if(this.state.highlight >= 0) {
       var channel = this.state.channels[this.state.highlight];
       if(channel) {
-        o = $(this.getDOMNode()).find(".channel-"+channel.id).offset();
+        o = $(ReactDOM.findDOMNode(this)).find(".channel-"+channel.id).offset();
         if(o) {
           $(window).scrollTop(o.top - 150);
         }
@@ -201,7 +201,7 @@ var ChannelList = React.createClass({
   componentDidUpdate: function() {
     if(this.state.showQuery && !this.state.showingQuery) {
       this.setState({showingQuery: true});
-      $(this.getDOMNode()).find(".text-filter").focus()
+      $(ReactDOM.findDOMNode(this)).find(".text-filter").focus()
     }
   },
   componentWillUnmount: function() {

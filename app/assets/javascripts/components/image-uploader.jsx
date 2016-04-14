@@ -36,7 +36,7 @@ var ImageUploader = React.createClass({
   },
   click: function(e) {
     e.preventDefault();
-    var form = $(this.getDOMNode()).parents("form");
+    var form = $(ReactDOM.findDOMNode(this)).parents("form");
     var file = form.find("input.file");
     var u = this;
     file.off('change');
@@ -46,7 +46,7 @@ var ImageUploader = React.createClass({
     file.trigger("click");
   },
   selectFile: function(e) {
-    var form = $(this.getDOMNode()).parents("form");
+    var form = $(ReactDOM.findDOMNode(this)).parents("form");
     var file = form.find("input.file");
     var f = file.val().split("\\");
     var filename = f[f.length - 1];

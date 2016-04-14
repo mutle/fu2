@@ -61,42 +61,23 @@ Fu2::Application.routes.draw do
         get 'info' => "api#info"
       end
 
-      # Legacy routes
-
-      mount Fu2::ReactRoutes
-
       resources :users do
         member do
-          put :block
           get :activate
-          get :password
-        end
-      end
-      get '/settings' => 'users#show', as: :settings
-
-      resources :invites do
-        member do
-          put :approve
         end
       end
 
-      resources :search, :controller => :search do
-        collection do
-          get ':query/:sort' => "search#index"
+      Fu2::REACT_ROUTES.each do |route|
+        if route.is_a?(Array)
+          if route.size > 2
+            get route[0] => "react##{route[2]}", as: route[1]
+          else
+            get route[0] => "react#index", as: route[1]
+          end
+        else
+          get route => "react#index"
         end
       end
-
-      resources :channels do
-        collection do
-          get :search
-          get :channel_names
-          get :all
-        end
-      end
-
-      resources :notifications
-
-      get '/' => 'channels#index', :as => :root
     end
   end
 end

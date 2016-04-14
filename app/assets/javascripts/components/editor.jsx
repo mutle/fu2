@@ -22,14 +22,14 @@ var Editor = React.createClass({
     this.insert("![]("+url+")");
   },
   insert: function(text, prefix) {
-    var s = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0).value;
+    var s = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0).value;
     if(prefix && s.length > 0) s += prefix;
     s += text;
     this.setState({text: s});
-    $(this.getDOMNode()).find("."+this.props.textareaClass).focus();
+    $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).focus();
   },
   action: function(a) {
-    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var c = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0);
     var cursorE = c.selectionEnd;
     var cursorS = c.selectionStart;
     var selected = c.value.slice(cursorS, cursorE);
@@ -43,7 +43,7 @@ var Editor = React.createClass({
     this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   lineAction: function(a) {
-    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var c = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0);
     var cursorE = c.selectionEnd;
     var cursorS = c.selectionStart;
     var v = c.value;
@@ -59,8 +59,8 @@ var Editor = React.createClass({
     this.setState({text: newtext, textSelection: [newCursor, newCursor], active: true});
   },
   input: function(e) {
-    var cursorE = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0).selectionEnd;
-    var cursorS = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0).selectionStart;
+    var cursorE = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0).selectionEnd;
+    var cursorS = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0).selectionStart;
 
     if(this.state.autocomplete && cursorE < this.state.start) {
       this.setState({autocomplete: null});
@@ -142,13 +142,13 @@ var Editor = React.createClass({
   change: function(e) {
     if(e) this.setState({text: e.target.value});
 
-    var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+    var c = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0);
   },
   click: function(e) {
   },
   autocompleteClick: function(e) {
     if(this.state.autocomplete) {
-      var text = $(this.getDOMNode()).find("."+this.props.textareaClass);
+      var text = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass);
       var cursorE = text.get(0).selectionEnd;
       var s = text.val();
       var value = $(e.target).parents(".result").data("value");
@@ -214,7 +214,7 @@ var Editor = React.createClass({
   },
   componentDidUpdate: function() {
     if(this.isMounted() && this.state.active) {
-      var c = $(this.getDOMNode()).find("."+this.props.textareaClass).get(0);
+      var c = $(ReactDOM.findDOMNode(this)).find("."+this.props.textareaClass).get(0);
       c.focus();
       if(this.state.textSelection != null) {
         c.setSelectionRange(this.state.textSelection[0], this.state.textSelection[1]);
