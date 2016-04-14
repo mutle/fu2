@@ -61,12 +61,6 @@ Fu2::Application.routes.draw do
         get 'info' => "api#info"
       end
 
-      resources :users do
-        member do
-          get :activate
-        end
-      end
-
       Fu2::REACT_ROUTES.each do |route|
         if route.is_a?(Array)
           if route.size > 2
@@ -76,6 +70,12 @@ Fu2::Application.routes.draw do
           end
         else
           get route => "react#index"
+        end
+      end
+
+      resources :users do
+        member do
+          get :activate
         end
       end
     end
