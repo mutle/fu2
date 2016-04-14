@@ -46,6 +46,7 @@ class ApiPostsTest < ActionDispatch::IntegrationTest
     p = create_post("Post")
     get "/api/channels/#{c.id}/posts.json"
     j = json_body
+    puts j.inspect
     jc = j['channel']
     assert_equal c.id, jc['id']
     jp = j['posts'].last
