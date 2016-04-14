@@ -61,6 +61,10 @@ Fu2::Application.routes.draw do
         get 'info' => "api#info"
       end
 
+      # Legacy routes
+
+      mount Fu2::ReactRoutes
+
       resources :users do
         member do
           put :block
