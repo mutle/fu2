@@ -13,7 +13,7 @@ module Views
         end
       end
       nil
-    }
+    }, [:results]
 
     fetches :last_update, proc { Time.now }
     fetches :count, proc { results[:result_count] }, [:results]

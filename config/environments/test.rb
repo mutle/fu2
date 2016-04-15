@@ -39,7 +39,7 @@ Fu2::Application.configure do
   # Allow pass debug_assets=true as a query parameter to load pages with unpackaged assets
   config.assets.allow_debugging = true
 
-  config.eager_load = false
+  config.eager_load = true
 
   config.active_support.test_order = :random
 
