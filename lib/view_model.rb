@@ -47,22 +47,24 @@ class ViewModel
 
   def finalize
     dependencies = []
-    self.class.fetch_args.each do |arg|
-      if !send("fetch_#{arg}")
-        dependencies << arg
-      end
-    end
-    while dependencies.size > 0
-      d = []
-      dependencies.each do |arg|
+    time = Benchmark.ms do
+      self.class.fetch_args.each do |arg|
         if !send("fetch_#{arg}")
-          d << arg
+          dependencies << arg
         end
       end
-      dependencies = d
+      while dependencies.size > 0
+        d = []
+        dependencies.each do |arg|
+          if !send("fetch_#{arg}")
+            d << arg
+          end
+        end
+        dependencies = d
+      end
     end
 
-    Rails.logger.info "view model finalized"
+    Rails.logger.info "view model finalized (#{"%.3f" % time}ms)"
   end
 
 end
