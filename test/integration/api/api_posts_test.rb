@@ -3,6 +3,7 @@ require 'test_helper'
 class ApiPostsTest < ActionDispatch::IntegrationTest
 
   setup do
+    stub_callbacks
     login_user
   end
 

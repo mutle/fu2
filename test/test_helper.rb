@@ -64,6 +64,17 @@ class ActionDispatch::IntegrationTest
   def json_body
     JSON.parse response.body
   end
+
+  def stub_callbacks
+    [Channel, Post].each do |klass|
+      klass.any_instance.stubs(:update_index)
+      klass.any_instance.stubs(:remove_index)
+      klass.any_instance.stubs(:notify_update)
+      klass.any_instance.stubs(:notify_create)
+    end
+    Post.any_instance.stubs(:process_fubot_message)
+    Post.any_instance.stubs(:scan_for_mentions)
+  end
 end
 
 class JSTest < ActionDispatch::IntegrationTest
@@ -74,6 +85,7 @@ class JSTest < ActionDispatch::IntegrationTest
   setup do
     Capybara.current_driver = Capybara.javascript_driver
     @session = Poltergeist
+    stub_callbacks
   end
 
   def session_url(path)

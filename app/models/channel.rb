@@ -4,7 +4,7 @@ class Channel < ActiveRecord::Base
   scope :with_letter, proc { |site, c| site_scope(site).where("LOWER(title) LIKE '#{c}%'").paginate(:per_page => 1_000_000, :page => 1).order("LOWER(title)") }
   scope :with_ids, proc { |ids| where(id: ids) }
 
-  UsernamePattern = /[^\s\.,\/-][^\s\.:,\/]*/
+  UsernamePattern = /[^\s\.,\/-][^\s\.:,\/]*/ix
 
   MentionPatterns = Hash.new do |hash, key|
     hash[key] = /
@@ -38,7 +38,7 @@ class Channel < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :current_user, :markdown, :read, :query
+  attr_accessor :current_user, :markdown, :read, :query, :last_post_user_id, :last_post_id
 
   class << self
     def indexed_type
@@ -73,44 +73,74 @@ class Channel < ActiveRecord::Base
     }
   end
 
-  def self.filter_ids(site, query, current_user)
-    return nil if !query
-    ids = nil
-    if !query[:text].blank?
-      q = query[:text].split(" ").map { |t| t.length > 1 ? "title:#{t}" : nil }.compact.join(" ")
-      # TODO site scope for search
-      res = Search.query(q, type: "channels", per_page: 500, sort: "score").results
-      ids = res[:objects].compact.map(&:id) if res[:result_count] <= 500
+  class << self
+    def filter_ids(site, query, current_user)
+      return nil if !query
+      ids = nil
+      if !query[:text].blank?
+        q = query[:text].split(" ").map { |t| t.length > 1 ? "title:#{t}" : nil }.compact.join(" ")
+        # TODO site scope for search
+        res = Search.query(q, type: "channels", per_page: 500, sort: "score").results
+        ids = res[:objects].compact.map(&:id) if res[:result_count] <= 500
+      end
+      if query[:unread]
+        temp_ids = ids || site_scope(site).reorder("last_post_date DESC").limit(500).to_a.map(&:id)
+        ids = []
+        temp_ids.each do |r|
+          last_id = ($redis.zscore("last-post:#{current_user.id}", r) || 0).to_i
+          if last_id == 0
+            ids << r
+          end
+        end
+      end
+      ids
     end
-    if query[:unread]
-      temp_ids = ids || site_scope(site).reorder("last_post_date DESC").limit(500).to_a.map(&:id)
-      ids = []
-      temp_ids.each do |r|
-        last_id = ($redis.zscore("last-post:#{current_user.id}", r) || 0).to_i
-        if last_id == 0
-          ids << r
+
+    def recent_channels(site, user, page, per_page = 50, last_update=nil, ids=nil)
+      results = if ids
+        site_scope(site).where(id: ids)
+      else
+        Channel.site_scope(site)
+      end
+
+      if last_update
+        results = results.where("updated_at > ? OR last_post_date > ?", last_update, last_update)
+      end
+      results = results.where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, user.id)
+      results.reorder("last_post_date DESC").paginate(page: page, per_page: per_page)
+    end
+
+    def all_channels(site, _user, page)
+      where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
+    end
+
+    def last_posts(channels, current_user)
+      ids = channels.map(&:id)
+      res = connection.query(<<-SQL)
+SELECT MAX(id),channel_id,user_id FROM posts WHERE channel_id IN(#{ids.join(",")}) GROUP BY channel_id, user_id;
+SQL
+      chanmap = {}
+      res_ids = []
+      res.each do |r|
+        res_ids << r[1].to_i
+        m = chanmap[r[1].to_i]
+        if !m || m[0].to_i < r[0].to_i
+          chanmap[r[1].to_i] = r
+        end
+      end
+      channels.each do |c|
+        m = chanmap[c.id]
+        if !m
+          c.last_post_user_id = 0
+          c.last_post_id = 0
+          c.read = true
+        else
+          c.last_post_user_id = m[2].to_i
+          c.last_post_id = m[0].to_i
+          c.read = !c.has_posts?(current_user, m[0].to_i)
         end
       end
     end
-    ids
-  end
-
-  def self.recent_channels(site, user, page, per_page = 50, last_update=nil, ids=nil)
-    results = if ids
-      site_scope(site).where(id: ids)
-    else
-      Channel.site_scope(site)
-    end
-
-    if last_update
-      results = results.where("updated_at > ? OR last_post_date > ?", last_update, last_update)
-    end
-    results = results.where("(default_read = ? AND default_write = ?) OR user_id = ? AND last_post_date != NULL", true, true, user.id)
-    results.reorder("last_post_date DESC").paginate(page: page, per_page: per_page)
-  end
-
-  def self.all_channels(site, _user, page)
-    where("((default_read = ? AND default_write = ?) OR user_id = ?) AND site_id = ?", true, true, _user.id, site.id).order("LOWER(title)").paginate(:page => page, :per_page => 100).load
   end
 
   def body=(body)
@@ -142,7 +172,11 @@ class Channel < ActiveRecord::Base
   end
 
   def last_post_user_id
-    last_post.try(:user_id) || 0
+    @last_post_user_id || last_post.try(:user_id) || 0
+  end
+
+  def last_post_id
+    @last_post_id || last_post.try(:id) || 0
   end
 
   # def as_json(*args)
@@ -154,6 +188,13 @@ class Channel < ActiveRecord::Base
   end
 
   def last_post
+    # begin
+    #   raise "foo"
+    # rescue => e
+    #   p [@last_post_id, @last_post_user_id]
+    #   puts e.backtrace.join("\n")
+    # end
+
     @last_post ||= posts.reorder("id DESC").first
   end
 
@@ -161,17 +202,17 @@ class Channel < ActiveRecord::Base
     @last_post = post
   end
 
-  def last_post_id
-    last_post.try(:id)
-  end
-
   def num_unread(current_user)
     posts.where("id > :last_id", :last_id => last_read_id(current_user)).count
   end
 
-  def has_posts?(current_user, post=nil)
+  def has_posts?(current_user, post_id=0)
+    if !post_id.is_a?(Fixnum)
+      post_id = post_id.id
+    end
     i = last_read_id(current_user)
-    (i == 0 || (post || last_post).nil? || i < (post || last_post).id) == true
+    last_id = post_id > 0 ? post_id : last_post_id
+    (i == 0 || last_id == 0 || i < last_id) == true
   end
 
   def visit(current_user, post_id=nil)
