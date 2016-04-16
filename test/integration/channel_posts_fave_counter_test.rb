@@ -36,6 +36,7 @@ class ChannelPostsFaveCounterTest < JSTest
     assert page.has_no_selector?(".channel-post.post-#{post} .faves button.emoji-heart")
     page.find(".channel-post.post-#{post} .faves button.add-emoji-button").click
     page.find(".channel-post.post-#{post} .faves .add-emoji input").native.send_keys("heart", :return)
+    page.has_selector?(".channel-post.post-#{post} .faves button.emoji-heart.on", text: "1")
     assert page.has_selector?(".channel-post.post-#{post} .faves button.emoji-heart.on", text: "1")
   end
 
