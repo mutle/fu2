@@ -116,6 +116,7 @@ class Channel < ActiveRecord::Base
 
     def last_posts(channels, current_user)
       ids = channels.map(&:id)
+      return if !ids || ids.size < 1
       res = connection.query(<<-SQL)
 SELECT MAX(id),channel_id,user_id FROM posts WHERE channel_id IN(#{ids.join(",")}) GROUP BY channel_id, user_id;
 SQL
