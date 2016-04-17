@@ -1,0 +1,26 @@
+@import "screen.scss";
+
+.header {
+  .counters {
+    display: inline-block;
+    text-align: center;
+
+    .count {
+      display: inline-block;
+      height: 38px;
+      line-height: 38px;
+      background-color: #e85c41;
+      text-align: center;
+      padding-left: 8px;
+      margin-right: 4px;
+
+      &.mentions {
+        background-color: #59afe3;
+      }
+
+      a {
+        display: inline-block;
+      }
+    }
+  }
+}

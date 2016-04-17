@@ -24,12 +24,24 @@
       display: none;
     }
 
-    .more-container {
+    .more-container, .notifications-container {
       display: inline-block;
       position: relative;
     }
 
-    .more {
+    .notifications {
+      right: -40px;
+      width: 500px;
+      height: 300px;
+      overflow-y: auto;
+      font-size: 12px;
+
+      a {
+        font-size: 12px;
+      }
+    }
+
+    .more, .notifications {
       position: absolute;
       top: 4px;
       padding: 8px 24px;
@@ -77,16 +89,6 @@
 
         a {
           display: block;
-        }
-      }
-
-      .counters .counters-inner {
-        top: 14px;
-        left: 14px;
-        width: auto;
-
-        .count {
-          float: none;
         }
       }
 
@@ -169,46 +171,6 @@
 
     &:first-child {
       padding-left: 0px;
-    }
-  }
-
-  .counters {
-    display: inline-block;
-    position: relative;
-    .counters-inner {
-      position: absolute;
-      top: 2px;
-      left: 0px;
-      width: 50px;
-      z-index: 10;
-      padding: 1px 3px;
-      font-size: 14px;
-
-      .count {
-        float: left;
-        font-size: 12px;
-        line-height: 14px;
-        padding: 3px 6px;
-        margin-right: 3px;
-        background-color: #e85c41;
-        border-radius: 12px;
-        a {
-          display: block;
-          text-decoration: none;
-          background-color: #e85c41;
-          line-height: 14px;
-          color: #fff;
-          padding: 0px;
-          font-size: 14px;
-          border: none;
-        }
-      }
-      .count.mentions {
-        background-color: #59afe3;
-        a {
-          background-color: #59afe3;
-        }
-      }
     }
   }
 }

@@ -10,6 +10,8 @@ module Fu2
     "/search",
     "/search/:query/:sort",
     "/search/:query",
-    "/notifications"
+    "/notifications/list",
+    "/notifications/:id",
+    "/notifications",
   ]
 end

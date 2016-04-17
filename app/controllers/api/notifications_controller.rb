@@ -1,4 +1,20 @@
 class Api::NotificationsController < Api::ApiController
+  def index
+    if params[:format].to_s == "json"
+      page = (params[:page] || 1).to_i
+      per_page = (params[:per_page] || 25).to_i
+      @view = Views::NotificationList.new({
+        current_user: current_user,
+        page: page,
+        per_page: per_page,
+        include_posts: true,
+        site: @site
+      })
+      @view.finalize
+      respond_with @view.notifications
+    end
+  end
+
   def show
     if params[:format].to_s == "json"
       user = User.find(params[:id])

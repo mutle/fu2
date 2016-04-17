@@ -60,6 +60,13 @@
       img {
         max-width: 100%;
       }
+
+      .user-mention {
+        background: #eee;
+        &.own {
+
+        }
+      }
     }
   }
 }

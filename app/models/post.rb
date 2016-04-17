@@ -159,12 +159,12 @@ class Post < ActiveRecord::Base
     channel.posts.create(:body => m.text.to_s, :user => User.fubot, :markdown => true)
   end
 
-  def html_body
+  def html_body(current_user=nil)
     text = body
     if query && query["text"]
       text = Highlighter.new.highlight(text, query["text"])
     end
-    result = markdown? ? RenderPipeline.markdown(text, id) : RenderPipeline.simple(text, id)
+    result = markdown? ? RenderPipeline.markdown(text, id, current_user.try(:login)) : RenderPipeline.simple(text, id, current_user.try(:login))
     result.html_safe
   end
 
