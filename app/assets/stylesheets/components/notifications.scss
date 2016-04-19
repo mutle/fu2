@@ -328,6 +328,15 @@
 }
 
 .notification-list {
+  .notifications-header {
+    margin-bottom: 0.5em;
+    text-align: right;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
   .notification-activity {
     position: relative;
     background: #D8D8D8;
@@ -365,6 +374,10 @@
   .content .notifications {
     top: 28px;
 
-    a { display: inline; }
+    a {
+      padding: 0px;
+      padding-left: 12px;
+      display: inline;
+    }
   }
 }

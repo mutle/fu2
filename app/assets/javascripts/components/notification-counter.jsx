@@ -17,12 +17,15 @@ var NotificationCounter = React.createClass({
       n.socket = false;
       n.refresh();
     });
+    var no = $(".notifications-container .notifications")
+    if(no.length > 0 && !this.notification_list) {
+      this.notification_list = ReactDOM.render(<NotificationList count={6} small={true} />, no.get(0));
+    }
     // this.refresh(true);
   },
   refresh: function(force) {
     var n = this;
     if(force || !this.socket) {
-      console.log("update notifications");
       $.getJSON(Data.url_root+Data.url.notification.counters(), {}, function(data, status, xhr) {
         n.setState({messages: data.messages, mentions: data.mentions});
       });
@@ -30,15 +33,12 @@ var NotificationCounter = React.createClass({
   },
   togglePopup: function(e) {
     var n = $(".notifications-container .notifications")
-    if(n.length > 0 && !this.notification_list) {
-      this.notification_list = ReactDOM.render(<NotificationList count={6} />, n.get(0));
-    }
     n.toggle();
     e.preventDefault();
   },
   render: function() {
     var count = this.state.messages + this.state.mentions;
-    if(count < 1) return null;
+    if(count < 1) return <a href="#" onClick={this.togglePopup}><span className="octicon octicon-radio-tower"></span></a>;
     var className = "count";
     if(this.state.messages == 0) className += " mentions";
     return <span className={className}><a href="#" onClick={this.togglePopup}>{count}</a></span>;

@@ -39,8 +39,12 @@ class Api::NotificationsController < Api::ApiController
   end
 
   def read
-    from = User.find(params[:id])
-    Notification.mark_unread(current_user, from)
+    if params[:id]
+      from = User.find(params[:id])
+      Notification.mark_unread(current_user, from)
+    else
+      Notification.mark_all_unread(current_user)
+    end
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end

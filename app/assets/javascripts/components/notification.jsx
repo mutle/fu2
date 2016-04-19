@@ -5,7 +5,6 @@ var Notification = React.createClass({
     return formatTimestamp(this.props.timestamp);
   },
   render: function() {
-    console.log(this.props);
     var className = "" + (this.props.own ? "own" : "");
     var message = {__html: this.props.message};
     var ts = this.timestampText();

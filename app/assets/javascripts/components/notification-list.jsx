@@ -25,8 +25,9 @@ var NotificationActivity = React.createClass({
     if(n.notification_type == "mention") {
       url = "/channels/"+n.channel_id+"#post-"+n.post_id;
       var body = {__html: n.post.html_body};
+      var title = {__html: n.channel.display_name};
       message = <span>
-        {userInfo} mentioned you in <a href={url}>{n.channel.title}</a>
+        {userInfo} mentioned you in <a href={url} dangerouslySetInnerHTML={title} />
         <span className="body" dangerouslySetInnerHTML={body} />
       </span>;
     } else {
@@ -49,6 +50,9 @@ var NotificationList = React.createClass({
   getInitialState: function() {
     return {notifications: null, view: null};
   },
+  getInitialProps: function() {
+    return {small: false};
+  },
   componentDidMount: function() {
     Data.subscribe("notification", this, 0, {callback: this.updated});
     Data.fetch(NotificationListData, 0, {per_page: this.perPage()}, this.fetchUpdatedNotifications);
@@ -63,7 +67,6 @@ var NotificationList = React.createClass({
     return 25;
   },
   updated: function(objects, view) {
-    console.log([objects, view]);
     var sorted = objects.sort(function(a,b) { return new Date(b.created_at) - new Date(a.created_at); });
     this.setState({notifications: sorted, view: view});
   },
@@ -74,6 +77,21 @@ var NotificationList = React.createClass({
   componentWillUnmount: function() {
     Data.unsubscribe(this, NotificationListData.subscribe);
   },
+  markRead: function(e) {
+    var self = this;
+    $.ajax({
+      dataType: "json",
+      type: "POST",
+      url: Data.url_root + "/api/notifications/read.json",
+      success: function(data) {
+        self.state.notifications.map(function(n, i) {
+          n.read = true;
+        });
+        self.setState({notifications: self.state.notifications});
+      }
+    });
+    e.preventDefault();
+  },
   render: function() {
     if(!this.state.notifications) return <LoadingIndicator />;
     var notifications = this.state.notifications.map(function(n, i) {
@@ -81,7 +99,13 @@ var NotificationList = React.createClass({
       if(n.notification_type == "response") return null;
       return <NotificationActivity key={n.id} notification={n} user={user} />;
     });
+    if(this.props.small) {
+      var small_header = <div className="notifications-header">
+        <a href="#" onClick={this.markRead}>Mark all as read</a>
+      </div>;
+    }
     return <div className="notification-list">
+      {small_header}
       {notifications}
       <ViewLoader callback={this.loadMore} visible={this.state.notifications.length} octicon="chevron-down" count={this.state.view.count} message={"older notifications"} />
     </div>

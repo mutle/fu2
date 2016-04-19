@@ -90,7 +90,6 @@ class Data
       type: "get",
       data: args,
       success: (data) =>
-        console.log(data)
         types = []
         if info.view
           view = info.view.replace(/\$ID/, id)
