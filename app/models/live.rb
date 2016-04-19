@@ -55,7 +55,7 @@ class Live
     end
 
     def notification_create(n)
-      update :notification_create, n, "notification"
+      update :notification_create, n, "notification", user.id
     end
   end
 end
