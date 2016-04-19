@@ -1,14 +1,14 @@
 class ReactController < ApplicationController
-  before_filter :login_required
-  before_filter :channel_redirect, only: [:channel]
-  before_filter :channel_exists, only: [:channel]
+  before_action :login_required
+  before_action :channel_redirect, only: [:channel]
+  before_action :channel_exists, only: [:channel]
 
   def index
-    render text: "", layout: "application"
+    render "index"
   end
 
   def channel
-    render text: "", layout: "application"
+    render "index"
   end
 
   private

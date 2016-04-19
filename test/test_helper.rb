@@ -10,8 +10,6 @@ end
 Capybara.javascript_driver = :poltergeist
 
 class ActiveSupport::TestCase
-  self.use_transactional_fixtures = true
-
   setup do
     $redis.flushdb
     User.stubs(:fubot).returns(User.new)
@@ -37,7 +35,7 @@ class ActiveSupport::TestCase
   end
 
   def create_channel(title=nil, body=nil)
-    c = Channel.create(site_id: @site.id, title: title || "test c #{Time.now.to_f}", body: body, user: @user, site_id: @site.id)
+    c = Channel.create(site_id: @site.id, title: title || "test c #{Time.now.to_f}", body: body, user: @user)
     @channel ||= c
     c
   end
@@ -49,10 +47,8 @@ class ActiveSupport::TestCase
 end
 
 class ActionDispatch::IntegrationTest
-  self.use_transactional_fixtures = true
-
   def login(login, password)
-    post("/session", login: login, password: password)
+    post("/session", params: {login: login, password: password})
   end
 
   def login_user
@@ -80,7 +76,6 @@ end
 
 class JSTest < ActionDispatch::IntegrationTest
   include Capybara::DSL
-  self.use_transactional_fixtures = false
   Poltergeist = Capybara::Session.new(:poltergeist, Fu2::Application)
 
   setup do

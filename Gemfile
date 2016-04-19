@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem "bundler", "~>1.11.2"
-gem "rails", "~>4.2.6"
+gem "rails", "~>5.0.0.beta3"
 gem "pg", "~>0.18.4"
 gem "jquery-rails", "~>4.1.1"
 gem 'json'
@@ -33,7 +33,6 @@ gem 'active_model_serializers'
 gem 'react-rails', '~>1.6.2'
 gem 'websocket-eventmachine-server'
 gem 'trashed', git: "https://github.com/basecamp/trashed.git", ref: "7eb2da3"
-gem 'sinatra'
 
 group :test do
   gem "mocha"

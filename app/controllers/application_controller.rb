@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_site_path
+  before_action :set_site_path
 
   def set_site_path
     @site = request.env['_site']
@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
   helper_method :new_features?
 
   def empty_response
-    render text: "", layout: "application"
+    render raw: "", layout: "application"
   end
 
 end
