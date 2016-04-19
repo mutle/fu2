@@ -3,6 +3,8 @@
 //= require components/loading-indicator
 //= require components/view-loader
 //= require components/timestamp
+//= require components/notification
+//= require components/notification-list
 //= require components/notification-counter
 //= require components/navigation
 //= require components/auto-completer

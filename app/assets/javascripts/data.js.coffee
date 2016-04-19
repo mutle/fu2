@@ -19,7 +19,7 @@ class Socket
       @message({type: "auth", api_key: @api_key, site_id: @site_id})
       for type,subscriptions of @subscriptions
         for s in subscriptions
-          s.open?()
+          s.open?(type)
     @connection.onerror = (error) =>
     @connection.onmessage = (e) =>
       data = $.parseJSON($.parseJSON(e.data))

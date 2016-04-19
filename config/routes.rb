@@ -50,6 +50,7 @@ Fu2::Application.routes.draw do
             get :unread
             get :unread_users
             get :counters
+            post :read
           end
         end
 

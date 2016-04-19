@@ -25,6 +25,15 @@ module RenderPipeline
         yield match, login, false
       end
     end
+
+    def link_to_mention_info(text, info_url=nil)
+      Rails.logger.info context.inspect
+      self_mention = " own" if context[:user_login] && text == context[:user_login]
+      return "@#{text}" if info_url.nil?
+      "<a href='#{info_url}' class='user-mention#{self_mention}'>" +
+      "@#{text}" +
+      "</a>"
+    end
   end
 
   class CustomEmojiFilter < Pipeline::EmojiFilter
@@ -158,13 +167,13 @@ module RenderPipeline
   ], PIPELINE_CONTEXT
 
   class << self
-    def markdown(text, post_id=nil)
-      result = MARKDOWN_PIPELINE.call(text, post_id: post_id)
+    def markdown(text, post_id=nil, user_login=nil)
+      result = MARKDOWN_PIPELINE.call(text, {post_id: post_id, user_login: user_login})
       result[:output].to_s
     end
 
-    def simple(text, post_id=nil)
-      result = SIMPLE_PIPELINE.call(text, post_id: post_id)
+    def simple(text, post_id=nil, user_login=nil)
+      result = SIMPLE_PIPELINE.call(text, {post_id: post_id, user_login: user_login})
       result[:output].to_s
     end
 

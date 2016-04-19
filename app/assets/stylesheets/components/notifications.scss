@@ -155,82 +155,6 @@
       padding-right: 8px;
     }
 
-    timestamp {
-      display: block;
-      text-align: center;
-      color: #999;
-      margin-bottom: 0.5em;
-      font-size: 12px;
-    }
-
-    message {
-      display: block;
-      padding: 0px;
-      position: relative;
-      margin-bottom: 1.5em;
-      background-color: #EFEFEF;
-      color: #3C3C4E;
-      font-size: 16px;
-      line-height: 22px;
-
-      from {
-        display: block;
-        text-align: left;
-        position: absolute;
-        width: 42px;
-        left: 0px;
-        top: 0px;
-
-        .avatar {
-        }
-      }
-
-      .body {
-        margin-left: 42px;
-        margin-right: 0px;
-        line-height: 18px;
-        min-height: 42px;
-        // padding-left: 8px;
-
-        .content {
-          padding: 10px;
-
-          img {
-            max-width: 508px;
-          }
-
-          p {
-            margin-bottom: 1em;
-
-            &:last-child {
-              margin-bottom: 0px;
-            }
-          }
-        }
-      }
-
-      &.own {
-        text-align: right;
-
-        from {
-          text-align: right;
-          right: 0px;
-          left: auto;
-          width: 42px;
-        }
-
-        .body {
-          margin-right: 42px;
-          margin-left: 0px;
-          padding-left: 0px;
-          padding-right: 8px;
-
-          .content {
-            color: #000;
-          }
-        }
-      }
-    }
 
     .empty, .welcome {
       font-size: 22px;
@@ -315,6 +239,145 @@
           background-color: #ddd;
         }
       }
+    }
+  }
+}
+
+.messages, .notification-list {
+
+  timestamp {
+    display: block;
+    text-align: center;
+    color: #999;
+    margin-bottom: 0.5em;
+    font-size: 12px;
+  }
+
+  message {
+    display: block;
+    padding: 0px;
+    position: relative;
+    margin-bottom: 1.5em;
+    background-color: #EFEFEF;
+    color: #3C3C4E;
+    font-size: 16px;
+    line-height: 22px;
+
+    from {
+      display: block;
+      text-align: left;
+      position: absolute;
+      width: 42px;
+      left: 0px;
+      top: 0px;
+
+      .name {
+        display: none;
+      }
+
+      .avatar {
+      }
+    }
+
+    .body {
+      margin-left: 42px;
+      margin-right: 0px;
+      line-height: 18px;
+      min-height: 42px;
+      // padding-left: 8px;
+
+      .content {
+        padding: 10px;
+
+        img {
+          max-width: 508px;
+        }
+
+        p {
+          margin-bottom: 1em;
+
+          &:last-child {
+            margin-bottom: 0px;
+          }
+        }
+      }
+    }
+
+    &.own {
+      text-align: right;
+
+      from {
+        text-align: right;
+        right: 0px;
+        left: auto;
+        width: 42px;
+      }
+
+      .body {
+        margin-right: 42px;
+        margin-left: 0px;
+        padding-left: 0px;
+        padding-right: 8px;
+
+        .content {
+          color: #000;
+        }
+      }
+    }
+  }
+}
+
+.notification-list {
+  .notifications-header {
+    margin-bottom: 0.5em;
+    text-align: right;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .notification-activity {
+    position: relative;
+    background: #D8D8D8;
+    margin-bottom: 24px;
+    min-height: 42px;
+
+    &.read {
+      background: #F2F2F2;
+    }
+
+    .timestamp {
+      float: right;
+      padding-right: 2px;
+    }
+  }
+
+  .notification-link {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+
+  img.avatar {
+    max-width: 42px;
+    max-height: 42px;
+    float: left;
+    padding-right: 6px;
+  }
+}
+
+.header {
+  .notification-activity .body {
+    font-size: 12px;
+  }
+
+  .content .notifications {
+    top: 28px;
+
+    a {
+      padding: 0px;
+      padding-left: 12px;
+      display: inline;
     }
   }
 }

@@ -159,6 +159,14 @@ $(function() {
     return ReactDOM.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M", name: "Notifications"});
 
+  Router.addResponder("notifications/list", function(params, e) {
+    return ReactDOM.render(<NotificationList />, e);
+  }, function(params) { return "/notifications/list"; }, {name: "Notification List"});
+
+  Router.addResponder("notifications/show", function(params, e) {
+    return ReactDOM.render(<Notifications userId={params.user_id} />, e);
+  }, function(params) { return "/notifications/"+params.user_id; }, {name: "Notifications"});
+
   Router.addResponder("users/settings", function(params, e) {
     $(".more").hide();
     var user = Data.get("user", Data.user_id);
@@ -183,6 +191,8 @@ $(function() {
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);
+  Router.addRoute("notifications/list", /^\/notifications\/list\/?$/);
+  Router.addRoute("notifications/show", /^\/notifications\/([^\/]+)\/?$/, ["user_id"]);
   Router.addRoute("users/settings", /^\/settings\/?$/);
   Router.addRoute("users/show", /^\/users\/([^\/]+)\/?$/, ["user_id"]);
   Router.addRoute("users/list", /^\/users\/?$/);

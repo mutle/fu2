@@ -75,28 +75,6 @@ var NotificationUserList = React.createClass({
   }
 });
 
-var Notification = React.createClass({
-  timestampText: function() {
-    return formatTimestamp(this.props.timestamp);
-  },
-  render: function() {
-    var className = "" + (this.props.own ? "own" : "");
-    var message = {__html: this.props.message};
-    var ts = this.timestampText();
-    return <div>
-      <timestamp title={this.props.timestamp}>{ts}</timestamp>
-      <message className={className}>
-        <from className='user'>
-          <img className="avatar" src={this.props.avatarUrl} />
-        </from>
-        <div className="body">
-          <div className="content" dangerouslySetInnerHTML={message}></div>
-        </div>
-      </message>
-    </div>;
-  }
-});
-
 var NotificationView = React.createClass({
   render: function() {
     var showNotification = function(notification, index) {
@@ -204,6 +182,9 @@ var Notifications = React.createClass({
     $(window).resize(resize);
     this.refresh();
     resize();
+    if(this.props.userId) {
+      this.show(this.props.userId);
+    }
   },
   componentWillUnmount: function() {
     notifications = null;

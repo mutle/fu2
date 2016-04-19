@@ -1,4 +1,20 @@
 class Api::NotificationsController < Api::ApiController
+  def index
+    if params[:format].to_s == "json"
+      page = (params[:page] || 1).to_i
+      per_page = (params[:per_page] || 25).to_i
+      @view = Views::NotificationList.new({
+        current_user: current_user,
+        page: page,
+        per_page: per_page,
+        include_posts: true,
+        site: @site
+      })
+      @view.finalize
+      respond_with @view.notifications
+    end
+  end
+
   def show
     if params[:format].to_s == "json"
       user = User.find(params[:id])
@@ -23,8 +39,12 @@ class Api::NotificationsController < Api::ApiController
   end
 
   def read
-    from = User.find(params[:id])
-    Notification.mark_unread(current_user, from)
+    if params[:id]
+      from = User.find(params[:id])
+      Notification.mark_unread(current_user, from)
+    else
+      Notification.mark_all_unread(current_user)
+    end
     status = {"status" => "ok"}
     respond_with status, :location => notifications_path
   end

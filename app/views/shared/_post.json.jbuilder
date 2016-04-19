@@ -5,7 +5,12 @@ if post.is_a?(Event)
 else
   json.object_type "post"
   json.type "channel-#{post.channel_id}-post"
-  json.(post, :id, :channel_id, :created_at, :updated_at, :user_id, :body, :html_body, :markdown, :read)
+  json.(post, :id, :channel_id, :created_at, :updated_at, :user_id, :body, :markdown, :read)
+  if @current_user
+    json.html_body post.html_body(@current_user)
+  else
+    json.html_body post.html_body
+  end
   json.faves post.faves do |fave|
     json.partial! "shared/fave", fave: fave
   end

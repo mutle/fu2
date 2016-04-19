@@ -1,10 +1,6 @@
 <%= link_to octicon('home')+content_tag(:span, "Home", class: "text"), root_path, title: "Home", class: "toolbar-home" %>
 
-<div class="counters">
-  <div class="counters-inner"></div>
-  <%= link_to octicon('mail')+content_tag(:span, "Messages", class: "text"), notifications_path, title: "Notifications", class: "toolbar-notifications" %>
-</div>
-
+<%= link_to octicon('mail')+content_tag(:span, "Messages", class: "text"), notifications_path, title: "Notifications", class: "toolbar-notifications" %>
 <%= link_to octicon("pencil")+content_tag(:span, "New Channel", class: "text"), new_channel_path, title: "New channel", class: "toolbar-new-channel" %>
 
 <div class="more-container">
@@ -18,6 +14,12 @@
 <%= link_to content_tag(:span, "More", class: "text")+octicon("triangle-down", false, "menu-indicator"), "#", class: "toolbar-more-link" %>
 
 <div class="right">
+  <div class="notifications-container">
+    <div class="notifications">
+    </div>
+  </div>
+  <div class="counters">
+  </div>
   <% if current_user.multi_site? %>
     <%= link_to octicon("sync", false, "site-switch-icon")+content_tag(:span, "Sites", class: "text"), "#", title: "Sites", class: "toolbar-sites" %>
   <% end %>
