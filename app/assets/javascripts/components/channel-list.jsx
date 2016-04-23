@@ -14,6 +14,14 @@ var ChannelListData = {
     "offline_channel_list"
   ]
 };
+var ChannelListTagData = {
+  url: "/api/channels.json",
+  result: {
+    channels: ["channel"]
+  },
+  view: "channel-tag-$ID",
+  subscribe: []
+};
 var ChannelListFilterData = {
   url: "/api/channels.json",
   result: {
@@ -180,9 +188,14 @@ var ChannelList = React.createClass({
   componentDidMount: function() {
     var self = this;
     $(window).scrollTop(0);
-    Data.subscribe("channel", this, 0, {callback: this.updated});
-    Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
-    Data.fetch(ChannelListData, 0, {}, this.fetchUpdatedChannels, this.loadError);
+    if(this.props.tag) {
+      Data.subscribe("channel-tag-"+this.props.tag, this, 0, {callback: this.updated});
+      Data.fetch(ChannelListTagData, this.props.tag, {tag: this.props.tag}, this.fetchUpdatedChannels, this.loadError);
+    } else {
+      Data.subscribe("channel", this, 0, {callback: this.updated});
+      Data.subscribe("channel-filtered", this, 0, {callback: this.updated});
+      Data.fetch(ChannelListData, 0, {tag: this.props.tag}, this.fetchUpdatedChannels, this.loadError);
+    }
   },
   loadError: function(e) {
     this.setState({error: true});
@@ -245,7 +258,12 @@ var ChannelList = React.createClass({
       }, 500);
     } else {
       query = null;
-      Data.fetch(ChannelListData, 0, {});
+      Data.fetch(ChannelListData, 0, {tag: this.props.tag});
+      if(this.props.tag) {
+        Data.fetch(ChannelListTagData, this.props.tag, {tag: this.props.tag});
+      } else {
+        Data.fetch(ChannelListData, 0, {tag: this.props.tag});
+      }
     }
     this.setState({query: filter});
   },
@@ -253,7 +271,11 @@ var ChannelList = React.createClass({
     if(this.state.query) {
       Data.fetch(ChannelListData, 0, {page: this.state.view_filtered.page + 1, query: this.state.query});
     } else {
-      Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
+      if(this.props.tag) {
+        Data.fetch(ChannelListTagData, this.props.tag, {tag: this.props.tag, page: this.state.view.page + 1});
+      } else {
+        Data.fetch(ChannelListData, 0, {page: this.state.view.page + 1});
+      }
     }
     e.preventDefault();
   },
@@ -262,7 +284,11 @@ var ChannelList = React.createClass({
       if(this.state.query && this.state.query.show) {
         Data.fetch(ChannelListFilterData, 0, {query: this.state.query, last_update: this.state.view_filtered.last_update + 1}, this.fetchUpdatedChannels);
       } else {
-        Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
+        if(this.props.tag) {
+          Data.fetch(ChannelListTagData, this.props.tag, {tag: this.props.tag, last_update: this.state.view.last_update + 1});
+        } else {
+          Data.fetch(ChannelListData, 0, {last_update: this.state.view.last_update + 1});
+        }
       }
     }
   },
@@ -286,7 +312,8 @@ var ChannelList = React.createClass({
   },
   render: function() {
     if(this.state.error) return <ErrorMessage title="Failed to load channels" />;
-    if(this.state.channels.length < 1) return <LoadingIndicator />;
+    if(!this.state.view.page && this.state.channels.length < 1) return <LoadingIndicator />;
+    if(this.state.channels.length < 1) return <div>No Channels</div>;
     var highlightId = this.activeHighlight();
     var query = null;
     if(this.state.query) query = this.state.query.text;
