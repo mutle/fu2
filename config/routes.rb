@@ -20,6 +20,13 @@ Fu2::Application.routes.draw do
         resources :channels do
           resources :posts
         end
+        scope :channels do
+          resources :tags do
+            member do
+              get :posts
+            end
+          end
+        end
         resources :posts do
           collection do
             post :search

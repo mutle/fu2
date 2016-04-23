@@ -31,7 +31,7 @@ class Notification < ActiveRecord::Base
       }
       n = create(attrs)
       Live.notification_counters(to)
-      Live.notification_create(n)
+      Live.notification_create(n, to)
       n
     end
 
@@ -54,7 +54,7 @@ class Notification < ActiveRecord::Base
         create(attrs)
       end
       Live.notification_counters(to)
-      Live.notification_create(m)
+      Live.notification_create(m, to)
       m.process_fubot_message
       m
     end

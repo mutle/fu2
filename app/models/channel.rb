@@ -20,10 +20,13 @@ class Channel < ActiveRecord::Base
     /ix
   end
 
+  TagPattern = /(\#)([a-zA-Z0-9\-\_]+)/ix
+
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
   has_many :events
+  has_many :channel_tags
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
@@ -74,7 +77,11 @@ class Channel < ActiveRecord::Base
   end
 
   class << self
-    def filter_ids(site, query, current_user)
+    def filter_ids(site, query, tag, current_user)
+      if !tag.blank?
+        return ChannelTag.channel_ids(site, tag)
+      end
+
       return nil if !query
       ids = nil
       if !query[:text].blank?
@@ -116,6 +123,7 @@ class Channel < ActiveRecord::Base
 
     def last_posts(channels, current_user)
       ids = channels.map(&:id)
+      return if ids.size < 1
       res = connection.query(<<-SQL)
 SELECT MAX(id),channel_id,user_id FROM posts WHERE channel_id IN(#{ids.join(",")}) GROUP BY channel_id, user_id;
 SQL
@@ -188,13 +196,6 @@ SQL
   end
 
   def last_post
-    # begin
-    #   raise "foo"
-    # rescue => e
-    #   p [@last_post_id, @last_post_user_id]
-    #   puts e.backtrace.join("\n")
-    # end
-
     @last_post ||= posts.reorder("id DESC").first
   end
 
@@ -303,6 +304,18 @@ SQL
 
   def notify_update
     Live.channel_update self
+  end
+
+  def set_post_tags(post, tags)
+    old_tags = channel_tags.all.map(&:tag)
+    tags.each do |tag|
+      tag = tag.downcase
+      channel_tags.create(site_id: site_id, channel_id: id, post_id: post.id, user_id: post.user_id, tag: tag)
+      old_tags.delete(tag) if old_tags.include?(tag)
+    end
+    if old_tags.size > 0
+      channel_tags.where(site_id: site_id, channel_id: id, post_id: post.id, tag: old_tags).delete_all
+    end
   end
 
 end

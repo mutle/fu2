@@ -26,13 +26,13 @@
 
     .more-container, .notifications-container {
       display: inline-block;
-      position: relative;
     }
 
     .notifications {
-      right: -40px;
-      width: 500px;
+      left: 10px;
+      right: 10px;
       height: 300px;
+      top: 56px;
       overflow-y: auto;
       font-size: 12px;
 
@@ -43,7 +43,7 @@
 
     .more, .notifications {
       position: absolute;
-      top: 4px;
+      top: 38px;
       padding: 8px 24px;
       text-align: left;
       background: #fff;
@@ -77,8 +77,11 @@
       display: inline-block;
     }
 
-    @media #{$small-screen} {
+    @media #{$small-phone-landscape} {
 
+    }
+
+    @media #{$small-screen} {
       height: 58px;
       line-height: 58px;
       margin-left: 5%;
@@ -90,6 +93,17 @@
         a {
           display: block;
         }
+      }
+
+      .notifications {
+        top: 29px;
+        right: -40px;
+        left: auto;
+        width: 500px;
+      }
+
+      .notifications-container {
+        position: relative;
       }
 
       .bottom-link {

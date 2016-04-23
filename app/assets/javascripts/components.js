@@ -23,6 +23,8 @@
 //= require components/channel-posts-event
 //= require components/channel-posts-search
 //= require components/channel-posts
+//= require components/channel-tags
+//= require components/channel-tag
 //= require components/notifications
 //= require components/hotkeys
 //= require components/site-switcher
