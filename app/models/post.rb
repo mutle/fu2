@@ -20,6 +20,8 @@ class Post < ActiveRecord::Base
   after_create :update_channel_last_post
   after_create :scan_for_mentions
   after_create :process_fubot_message
+  after_create :update_channel_tags
+  after_update :update_channel_tags
 
   after_create :notify_create
   after_update :notify_update
@@ -186,6 +188,16 @@ class Post < ActiveRecord::Base
 
   def notify_destroy
     Live.post_destroy self
+  end
+
+  def update_channel_tags
+    if channel
+      tags = []
+      body.scan Channel::TagPattern do |tag|
+        tags << tag.first
+      end
+      channel.set_post_tags(self, tags)
+    end
   end
 
 end

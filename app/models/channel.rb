@@ -20,10 +20,13 @@ class Channel < ActiveRecord::Base
     /ix
   end
 
+  TagPattern = /\#([a-zA-Z0-9\-\_]+)/ix
+
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
   has_many :events
+  has_many :channel_tags
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
@@ -188,13 +191,6 @@ SQL
   end
 
   def last_post
-    # begin
-    #   raise "foo"
-    # rescue => e
-    #   p [@last_post_id, @last_post_user_id]
-    #   puts e.backtrace.join("\n")
-    # end
-
     @last_post ||= posts.reorder("id DESC").first
   end
 
@@ -303,6 +299,17 @@ SQL
 
   def notify_update
     Live.channel_update self
+  end
+
+  def set_post_tags(post, tags)
+    old_tags = channel_tags.all.map(&:tag)
+    tags.each do |tag|
+      channel_tags.create(site_id: site_id, channel_id: id, post_id: post.id, user_id: post.user_id, tag: tag)
+      old_tags.delete(tag) if old_tags.include?(tag)
+    end
+    if old_tags.size > 0
+      channel_tags.where(site_id: site_id, channel_id: id, post_id: post.id, tag: old_tags).delete_all
+    end
   end
 
 end
