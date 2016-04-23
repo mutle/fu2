@@ -12,7 +12,7 @@ module Fu2
     "/search/:query/:sort",
     "/search/:query",
     "/notifications/list",
-    "/notifications/:id",
+    ["/notifications/:id", :notification],
     "/notifications",
   ]
 end
