@@ -72,8 +72,7 @@ module RenderPipeline
     EMBEDS = {
       tag: {
         pattern: Channel::TagPattern,
-        callback: proc do |content|
-          tag = content.gsub(/^\#/, '')
+        callback: proc do |content, tag|
           content.gsub(EMBEDS[:tag][:pattern], %{<a class="hash-tag" href="/channels/tags/#{tag}">##{tag}</a>})
         end
       },
