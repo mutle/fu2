@@ -13,6 +13,8 @@ class Post < ActiveRecord::Base
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
   scope :before, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id < :id", :channel_id => c.id, :id => id) }
   scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id) }
+  scope :before_id, proc { |id| includes(:user).where("id < :id", :id => id) }
+  scope :since_id, proc { |id| includes(:user).where("id > :id", :id => id) }
   scope :updated_since, proc { |c, d| includes(:user).where("channel_id = :channel_id AND updated_at > :d", :channel_id => c.id, :d => (d + 1)).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
   scope :with_ids, proc { |ids| where(id: ids) }

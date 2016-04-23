@@ -18,6 +18,15 @@ var ChannelPostsData = {
   ]
 };
 
+var ChannelTagPostsData = {
+  url: "/api/channels/tags/{id}/posts.json",
+  result: {
+    posts: ["post"]
+  },
+  view: "channel-tag-$ID-post",
+  subscribe: [ ]
+};
+
 
 var ChannelPosts = React.createClass({
   getInitialState: function() {
@@ -89,11 +98,18 @@ var ChannelPosts = React.createClass({
     };
   },
   componentDidMount: function() {
-    if(this.props.channelId > 0) {
-      Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
-      Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
-      Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
-      Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew, this.loadError);
+    if(this.props.channelId > 0 || this.props.tag) {
+      if(this.props.channelId > 0) {
+        Data.subscribe("channel-"+this.props.channelId+"-post", this, 0, {callback: this.updatedPosts});
+        Data.subscribe("channel-"+this.props.channelId+"-event", this, 0, {callback: this.updatedEvents});
+        Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
+        Data.fetch(ChannelPostsData, this.props.channelId, {}, this.loadNew, this.loadError);
+      } else if(this.props.tag) {
+        Data.subscribe("channel-tag-"+this.props.tag+"-post", this, 0, {callback: this.updatedPosts});
+        Data.subscribe("channel-tag-"+this.props.tag+"-event", this, 0, {callback: this.updatedEvents});
+        Data.subscribe("channel", this, this.props.channelId, {callback: this.updatedChannel});
+        Data.fetch(ChannelTagPostsData, this.props.tag, {}, this.loadNew, this.loadError);
+      }
     }
   },
   loadError: function(e) {
@@ -159,7 +175,11 @@ var ChannelPosts = React.createClass({
         }
       }
       if(!found) {
-        Data.fetch(ChannelPostsData, this.props.channelId, {last_id: anchorPostId - 1, limit: view.count});
+        if(this.props.channelId > 0) {
+          Data.fetch(ChannelPostsData, this.props.channelId, {last_id: anchorPostId - 1, limit: view.count});
+        } else if(this.props.tag) {
+          Data.fetch(ChannelTagPostsData, this.props.tag, {last_id: anchorPostId - 1, limit: view.count});
+        }
       }
     }
     var items = objects.concat(this.state.events).sort(function(a,b) { return new Date(a.created_at) - new Date(b.created_at); });
@@ -179,12 +199,21 @@ var ChannelPosts = React.createClass({
     return title;
   },
   loadMore: function(e) {
-    Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
+    if(this.props.channelId > 0) {
+      Data.fetch(ChannelPostsData, this.props.channelId, {first_id: this.state.view.start_id});
+    } else if(this.props.tag) {
+      Data.fetch(ChannelTagPostsData, this.props.tag, {first_id: this.state.view.start_id});
+    }
+
     if(e)
       e.preventDefault();
   },
   loadAll: function(e) {
-    Data.fetch(ChannelPostsData, this.props.channelId, {last_id: 0, limit: this.state.view.count});
+    if(this.props.channelId > 0) {
+      Data.fetch(ChannelPostsData, this.props.channelId, {last_id: 0, limit: this.state.view.count});
+    } else if(this.props.tag) {
+      Data.fetch(ChannelTagPostsData, this.props.tag, {last_id: 0, limit: this.state.view.count});
+    }
     if(e)
       e.preventDefault();
   },
@@ -223,11 +252,11 @@ var ChannelPosts = React.createClass({
     if(this.state.error) return <ErrorMessage title="Failed to load channel" />;
     var anchorPostId = this.state.anchor == "" ? 0 : parseInt(this.state.anchor.replace(/#?post[-_]/, ''))
     if(this.props.channelId > 0 && !this.state.channel.id) return <LoadingIndicator />;
-    if(this.props.channelId > 0) {
+    var self = this;
+    if(this.props.tag || this.props.channelId > 0) {
       var channelId = this.props.channelId;
       var highlight = this.state.highlight;
       var pi = 0;
-      var self = this;
       if(this.state.items && this.state.items.length > 0) {
         var posts = this.state.items.map(function(post, i) {
           var user = Data.get("user", post.user_id);
@@ -239,7 +268,11 @@ var ChannelPosts = React.createClass({
             return <ChannelPost key={"post-"+post.id} id={post.id} highlight={pi - 1 == highlight} channelId={channelId} user={user} post={post} posts={self} editable={editable} bodyClick={self.bodyClick} />;
           }
         });
+        if(this.props.tag)
+          posts.reverse();
       }
+    }
+    if(this.props.channelId > 0) {
       var refFunc = function(ref) { self.commentBox = ref; };
       var commentbox = <div>
         <a name="comments"></a>
@@ -248,11 +281,18 @@ var ChannelPosts = React.createClass({
           <CommentBox ref={refFunc} channelId={channelId} />
         </div>
       </div>;
+      var top_view_loader = <ViewLoader callback={this.loadMore} callbackAll={this.loadAll} visible={this.state.posts.length} count={this.state.view ? this.state.view.count : 0} octicon={"chevron-up"} message={"older posts"} messageAll={"Show all"} />;
+    } else if(this.props.tag) {
+      var bottom_view_loader = <ViewLoader callback={this.loadMore} callbackAll={this.loadAll} visible={this.state.posts.length} count={this.state.view ? this.state.view.count : 0} octicon={"chevron-down"} message={"older posts"} messageAll={"Show all"} />;
+    }
+    if(!this.props.hideHeader) {
+      var header = <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} channelPosts={this} />;
     }
     return <div>
-      <ChannelPostsHeader channelId={this.props.channelId} channel={this.state.channel} channelPosts={this} />
-      <ViewLoader callback={this.loadMore} callbackAll={this.loadAll} visible={this.state.posts.length} count={this.state.view ? this.state.view.count : 0} octicon={"chevron-up"} message={"older posts"} messageAll={"Show all"} />
+      {header}
+      {top_view_loader}
       {posts}
+      {bottom_view_loader}
       {commentbox}
     </div>;
   }

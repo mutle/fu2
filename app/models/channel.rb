@@ -77,7 +77,11 @@ class Channel < ActiveRecord::Base
   end
 
   class << self
-    def filter_ids(site, query, current_user)
+    def filter_ids(site, query, tag, current_user)
+      if !tag.blank?
+        return ChannelTag.channel_ids(site, tag)
+      end
+
       return nil if !query
       ids = nil
       if !query[:text].blank?
@@ -119,6 +123,7 @@ class Channel < ActiveRecord::Base
 
     def last_posts(channels, current_user)
       ids = channels.map(&:id)
+      return if ids.size < 1
       res = connection.query(<<-SQL)
 SELECT MAX(id),channel_id,user_id FROM posts WHERE channel_id IN(#{ids.join(",")}) GROUP BY channel_id, user_id;
 SQL
@@ -304,6 +309,7 @@ SQL
   def set_post_tags(post, tags)
     old_tags = channel_tags.all.map(&:tag)
     tags.each do |tag|
+      tag = tag.downcase
       channel_tags.create(site_id: site_id, channel_id: id, post_id: post.id, user_id: post.user_id, tag: tag)
       old_tags.delete(tag) if old_tags.include?(tag)
     end

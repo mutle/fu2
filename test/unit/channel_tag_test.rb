@@ -13,4 +13,21 @@ class ChannelTagTest < ActiveSupport::TestCase
     assert_equal 1, c.channel_tags.count
     assert_equal "losing", c.channel_tags.first.tag
   end
+
+  test "find all unique tags" do
+    create_user
+    create_post("blah blah #winning. blah!")
+    create_post("blah blah #winning. blah!")
+    create_post("blah blah #losing. blah!")
+    all = ChannelTag.all_tags(@site)
+    assert all.include?("winning")
+    assert all.include?("losing")
+  end
+
+  test "find channel ids for tag" do
+    create_user
+    create_post("blah blah #winning. blah!")
+    channel_ids = ChannelTag.channel_ids(@site, "winning")
+    assert_equal [@channel.id], channel_ids
+  end
 end
