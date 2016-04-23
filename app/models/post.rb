@@ -24,6 +24,7 @@ class Post < ActiveRecord::Base
   after_create :process_fubot_message
   after_create :update_channel_tags
   after_update :update_channel_tags
+  before_destroy :delete_channel_tags
 
   after_create :notify_create
   after_update :notify_update
@@ -190,6 +191,10 @@ class Post < ActiveRecord::Base
 
   def notify_destroy
     Live.post_destroy self
+  end
+
+  def delete_channel_tags
+    ChannelTag.where(post_id: id, site_id: site_id, channel_id: channel_id).destroy_all
   end
 
   def update_channel_tags
