@@ -36,7 +36,7 @@ module Views
       end
       posts
     }
-    fetches :updated_posts, proc { last_update ? Post.updated_since(channel, last_update) : [] }
+    fetches :updated_posts, proc { last_update && !tag ? Post.updated_since(channel, last_update) : [] }
     fetches :last_update, proc { (posts.map(&:created_at) + posts.map(&:updated_at) + updated_posts.map(&:updated_at)).map(&:utc).max.to_i }, [:posts, :updated_posts]
     fetches :count, proc {
       if tag

@@ -70,6 +70,13 @@ module RenderPipeline
 
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
+      tag: {
+        pattern: Channel::TagPattern,
+        callback: proc do |content|
+          tag = content.gsub(/^\#/, '')
+          content.gsub(EMBEDS[:tag][:pattern], %{<a class="hash-tag" href="/channels/tags/#{tag}">##{tag}</a>})
+        end
+      },
       twitter: {
         pattern: %r{https?://(m\.|mobile\.)?twitter\.com/[^/]+/statuse?s?/(\d+)},
         callback: proc do |content, id, post_id|
@@ -92,7 +99,6 @@ module RenderPipeline
       instagram: {
         pattern: %r{https?://(instagram\.com|instagr\.am)/p/([A-Za-z0-9]+)/?},
         callback: proc do |content, id, post_id|
-          p [content, id]
           image = $redis.get "Instagram:#{id}"
           if !image
             Resque.enqueue(FetchTweetJob, id, post_id, :instagram)
