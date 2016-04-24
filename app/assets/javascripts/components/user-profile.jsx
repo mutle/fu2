@@ -57,6 +57,7 @@ var UserProfile = React.createClass({
   },
   renderUserInfo: function() {
     if(this.props.small) {
+      // <p>Last active: <span className="stat"><Timestamp timestamp={this.state.stats.last_active * 1000} /></span></p>
       return <div className="user-info">
       </div>;
     }
@@ -77,7 +78,7 @@ var UserProfile = React.createClass({
     }
     return <div className="user-info">
       <h3>Stats</h3>
-      <p>Joined: <span className="stat">{formatTimestamp(this.user.created_at)}</span></p>
+      <p>Joined: <span className="stat"><Timestamp timestamp={this.user.created_at} /></span></p>
       <p>Posts: <span className="stat">{this.state.stats.posts_count}</span></p>
       <p>Channels: <span className="stat">{this.state.stats.channels_count}</span></p>
 

@@ -6,9 +6,10 @@ var UserLink = React.createClass({
     if(!this.props.user) return null;
     var userLink = Data.url_root + "/users/"+this.props.user.id;
     var name = {__html: this.props.user.display_name_html.replace(/<\/?p>/g, '')};
+    // onMouseOver={this.over} onMouseOut={this.out}
+    // <Popover style={"mouse-over"} local={true} show={this.state.showPopover} renderCallback={this.renderUserShow} />
     return <div className="user-link">
-      <a className="avatar" href={userLink}  onMouseOver={this.over} onMouseOut={this.out}><img className="avatar-image" src={this.props.user.avatar_url} width="32" height="32" /></a>
-      <Popover style={"mouse-over"} local={true} show={this.state.showPopover} renderCallback={this.renderUserShow} />
+      <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} width="32" height="32" /></a>
       <span className="user-name" dangerouslySetInnerHTML={name} />
     </div>;
   },
