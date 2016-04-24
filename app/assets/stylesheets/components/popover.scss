@@ -10,6 +10,8 @@
   &.top-left {
     position: fixed;
     right: 0px;
+    max-height: 450px;
+    overflow-y: auto;
   }
 
   &.more {
