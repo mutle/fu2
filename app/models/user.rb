@@ -237,6 +237,14 @@ class User < ActiveRecord::Base
     site_users.count > 1
   end
 
+  def last_active
+    ($redis.get("User:#{id}:active") || 0).to_i
+  end
+
+  def record_active
+    $redis.set("User:#{id}:active", Time.now.to_i)
+  end
+
   protected
     # before filter
     def encrypt_password

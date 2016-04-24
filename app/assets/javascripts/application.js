@@ -13,4 +13,3 @@
 //= require twitter
 //= require facebook
 //= require components
-//= require search

@@ -1,0 +1,47 @@
+.popover {
+  position: absolute;
+  padding: 8px 24px;
+  text-align: left;
+  background: #fff;
+  color: #484848;
+  z-index: 10;
+  border: 1px solid #e8e8e8;
+
+  &.top-left {
+    position: fixed;
+    right: 0px;
+    max-height: 450px;
+    overflow-y: auto;
+  }
+
+  &.more {
+    width: 150px;
+  }
+
+  &.top-center, &.main {
+    left: 100px;
+    right: 100px;
+  }
+
+  &.mouse-over {
+    top: 42px;
+  }
+
+  &.main {
+    // top: 120px;
+  }
+}
+
+#pre-content .inside {
+  z-index: 5;
+}
+
+.popover-exit {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -3;
+  cursor: pointer;
+}
