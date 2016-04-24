@@ -53,5 +53,9 @@ class Live
       view.finalize
       update :counters, view, "counters", user.id
     end
+
+    def notification_create(n, user)
+      update :notification_create, n, "notification", user.id
+    end
   end
 end

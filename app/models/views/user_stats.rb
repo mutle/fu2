@@ -3,6 +3,7 @@ module Views
 
     attrs :user
 
+    fetches :last_active, proc { user.last_active }
     fetches :posts_count, proc { Post.site_scope(site).where(user_id: user.id).count }
     fetches :channels_count, proc { Channel.site_scope(site).where(user_id: user.id).count }
     fetches :faves_count, proc { Fave.site_scope(site).where(user_id: user.id).count }

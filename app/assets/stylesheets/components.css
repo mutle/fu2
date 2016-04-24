@@ -2,6 +2,7 @@
  *= require components/common
  *= require components/error-message
  *= require components/loading-indicator
+ *= require components/popover
  *= require components/view-loader
  *= require components/timestamp
  *= require components/notification-counter
@@ -22,6 +23,7 @@
  *= require components/channel-posts-event
  *= require components/channel-posts-search
  *= require components/channel-posts
+ *= require components/channel-tags
  *= require components/notifications
  *= require components/hotkeys
  *= require components/site-switcher

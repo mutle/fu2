@@ -25,6 +25,15 @@ module RenderPipeline
         yield match, login, false
       end
     end
+
+    def link_to_mention_info(text, info_url=nil)
+      Rails.logger.info context.inspect
+      self_mention = " own" if context[:user_login] && text == context[:user_login]
+      return "@#{text}" if info_url.nil?
+      "<a href='#{info_url}' class='user-mention#{self_mention}'>" +
+      "@#{text}" +
+      "</a>"
+    end
   end
 
   class CustomEmojiFilter < Pipeline::EmojiFilter
@@ -61,6 +70,12 @@ module RenderPipeline
 
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
+      tag: {
+        pattern: Channel::TagPattern,
+        callback: proc do |content, tag|
+          content.gsub(EMBEDS[:tag][:pattern], %{<a class="hash-tag" href="/channels/tags/#{tag}">##{tag}</a>})
+        end
+      },
       twitter: {
         pattern: %r{https?://(m\.|mobile\.)?twitter\.com/[^/]+/statuse?s?/(\d+)},
         callback: proc do |content, id, post_id|
@@ -83,7 +98,6 @@ module RenderPipeline
       instagram: {
         pattern: %r{https?://(instagram\.com|instagr\.am)/p/([A-Za-z0-9]+)/?},
         callback: proc do |content, id, post_id|
-          p [content, id]
           image = $redis.get "Instagram:#{id}"
           if !image
             Resque.enqueue(FetchTweetJob, id, post_id, :instagram)
@@ -158,13 +172,13 @@ module RenderPipeline
   ], PIPELINE_CONTEXT
 
   class << self
-    def markdown(text, post_id=nil)
-      result = MARKDOWN_PIPELINE.call(text, post_id: post_id)
+    def markdown(text, post_id=nil, user_login=nil)
+      result = MARKDOWN_PIPELINE.call(text, {post_id: post_id, user_login: user_login})
       result[:output].to_s
     end
 
-    def simple(text, post_id=nil)
-      result = SIMPLE_PIPELINE.call(text, post_id: post_id)
+    def simple(text, post_id=nil, user_login=nil)
+      result = SIMPLE_PIPELINE.call(text, {post_id: post_id, user_login: user_login})
       result[:output].to_s
     end
 

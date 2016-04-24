@@ -74,6 +74,7 @@ class ActionDispatch::IntegrationTest
     end
     Post.any_instance.stubs(:process_fubot_message)
     Post.any_instance.stubs(:scan_for_mentions)
+    Live.stubs(:update)
   end
 end
 

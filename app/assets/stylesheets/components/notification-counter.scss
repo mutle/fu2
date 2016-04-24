@@ -1,0 +1,33 @@
+@import "screen.scss";
+
+.header {
+  .content {
+    .counters {
+      display: inline-block;
+      text-align: center;
+
+      .count {
+        display: inline-block;
+        height: 38px;
+        line-height: 38px;
+        background-color: #e85c41;
+        border-radius: 3px;
+        text-align: center;
+
+        &.mentions {
+          background-color: #59afe3;
+        }
+
+        a, a:first-child {
+          display: inline-block;
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+      }
+
+      .octicon {
+        display: inline;
+      }
+    }
+  }
+}

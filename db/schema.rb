@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160409002550) do
+ActiveRecord::Schema.define(version: 20160423190822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,23 @@ ActiveRecord::Schema.define(version: 20160409002550) do
   add_index "channel_redirects", ["original_channel_id"], name: "index_channel_redirects_on_original_channel_id", using: :btree
   add_index "channel_redirects", ["site_id"], name: "index_channel_redirects_on_site_id", using: :btree
   add_index "channel_redirects", ["target_channel_id"], name: "index_channel_redirects_on_target_channel_id", using: :btree
+
+  create_table "channel_tags", force: :cascade do |t|
+    t.integer  "site_id"
+    t.integer  "channel_id"
+    t.integer  "post_id"
+    t.integer  "user_id"
+    t.string   "tag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "channel_tags", ["channel_id"], name: "index_channel_tags_on_channel_id", using: :btree
+  add_index "channel_tags", ["created_at"], name: "index_channel_tags_on_created_at", using: :btree
+  add_index "channel_tags", ["post_id"], name: "index_channel_tags_on_post_id", using: :btree
+  add_index "channel_tags", ["site_id"], name: "index_channel_tags_on_site_id", using: :btree
+  add_index "channel_tags", ["tag"], name: "index_channel_tags_on_tag", using: :btree
+  add_index "channel_tags", ["user_id"], name: "index_channel_tags_on_user_id", using: :btree
 
   create_table "channel_users", force: :cascade do |t|
     t.integer  "channel_id",                null: false

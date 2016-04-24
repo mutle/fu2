@@ -2,10 +2,12 @@ class Api::ChannelsController < Api::ApiController
 
   def index
     page = (params[:page] || 1).to_i
+    @tag = params[:tag]
     @view = Views::ChannelList.new({
       current_user: current_user,
       page: page,
       per_page: 50,
+      tag: @tag,
       last_update_date: params[:last_update] ? Time.at(params[:last_update].to_i) : nil,
       site: @site,
       query: params[:query]

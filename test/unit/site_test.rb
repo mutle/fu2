@@ -9,7 +9,7 @@ class SiteTest < ActiveSupport::TestCase
     assert s.matches?(env)
   end
 
-  [Channel, ChannelRedirect, Event, Fave, Image, Invite, KeyValue, Notification, Post].each do |klass|
+  [Channel, ChannelRedirect, ChannelTag, Event, Fave, Image, Invite, KeyValue, Notification, Post].each do |klass|
     test "#{klass} site scope" do
       assert_nothing_raised { klass.site_scope(1) }
     end

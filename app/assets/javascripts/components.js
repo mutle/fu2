@@ -1,8 +1,11 @@
 //= require react
 //= require components/error-message
 //= require components/loading-indicator
+//= require components/popover
 //= require components/view-loader
 //= require components/timestamp
+//= require components/notification
+//= require components/notification-list
 //= require components/notification-counter
 //= require components/navigation
 //= require components/auto-completer
@@ -21,6 +24,8 @@
 //= require components/channel-posts-event
 //= require components/channel-posts-search
 //= require components/channel-posts
+//= require components/channel-tags
+//= require components/channel-tag
 //= require components/notifications
 //= require components/hotkeys
 //= require components/site-switcher

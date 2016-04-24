@@ -20,10 +20,13 @@ class Channel < ActiveRecord::Base
     /ix
   end
 
+  TagPattern = /(\#)([a-zA-Z0-9\-\_]+)/ix
+
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
   has_many :channel_users
   has_many :events
+  has_many :channel_tags
 
   validates_presence_of :title, :user_id
   validates_uniqueness_of :title, :on => :create, :scope => [:site_id]
@@ -74,7 +77,11 @@ class Channel < ActiveRecord::Base
   end
 
   class << self
-    def filter_ids(site, query, current_user)
+    def filter_ids(site, query, tag, current_user)
+      if !tag.blank?
+        return ChannelTag.channel_ids(site, tag)
+      end
+
       return nil if !query
       ids = nil
       if !query[:text].blank?
@@ -189,13 +196,6 @@ SQL
   end
 
   def last_post
-    # begin
-    #   raise "foo"
-    # rescue => e
-    #   p [@last_post_id, @last_post_user_id]
-    #   puts e.backtrace.join("\n")
-    # end
-
     @last_post ||= posts.reorder("id DESC").first
   end
 
@@ -217,10 +217,11 @@ SQL
   end
 
   def visit(current_user, post_id=nil)
+    update_live = false
     if !post_id
       num = $redis.zscore "mentions:#{current_user.id}", id
       $redis.zadd "mentions:#{current_user.id}", 0, id
-      Live.notification_counters(current_user) if num && num.to_i > 0
+      update_live = num && num.to_i > 0
     end
     post_id ||= (last_post_id || 0)
     i = last_read_id(current_user).to_i
@@ -232,6 +233,7 @@ SQL
     end
     $redis.zadd "last-post:#{current_user.id}", post_id, id
     Notification.for_user(current_user).mentions.in_channel(self).unread.update_all(:read => true)
+    Live.notification_counters(current_user) if update_live
     i
   end
 
@@ -304,6 +306,18 @@ SQL
 
   def notify_update
     Live.channel_update self
+  end
+
+  def set_post_tags(post, tags)
+    old_tags = channel_tags.all.map(&:tag)
+    tags.each do |tag|
+      tag = tag.downcase
+      channel_tags.create(site_id: site_id, channel_id: id, post_id: post.id, user_id: post.user_id, tag: tag)
+      old_tags.delete(tag) if old_tags.include?(tag)
+    end
+    if old_tags.size > 0
+      channel_tags.where(site_id: site_id, channel_id: id, post_id: post.id, tag: old_tags).delete_all
+    end
   end
 
 end

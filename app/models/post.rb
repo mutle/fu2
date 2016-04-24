@@ -13,6 +13,8 @@ class Post < ActiveRecord::Base
   scope :first_channel_post, proc { |c| includes(:user).where(:channel_id => c.id).order("created_at DESC").limit(1) }
   scope :before, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id < :id", :channel_id => c.id, :id => id) }
   scope :since, proc { |c, id| includes(:user).where("channel_id = :channel_id AND id > :id", :channel_id => c.id, :id => id) }
+  scope :before_id, proc { |id| includes(:user).where("id < :id", :id => id) }
+  scope :since_id, proc { |id| includes(:user).where("id > :id", :id => id) }
   scope :updated_since, proc { |c, d| includes(:user).where("channel_id = :channel_id AND updated_at > :d", :channel_id => c.id, :d => (d + 1)).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
   scope :with_ids, proc { |ids| where(id: ids) }
@@ -20,6 +22,9 @@ class Post < ActiveRecord::Base
   after_create :update_channel_last_post
   after_create :scan_for_mentions
   after_create :process_fubot_message
+  after_create :update_channel_tags
+  after_update :update_channel_tags
+  before_destroy :delete_channel_tags
 
   after_create :notify_create
   after_update :notify_update
@@ -159,12 +164,12 @@ class Post < ActiveRecord::Base
     channel.posts.create(:body => m.text.to_s, :user => User.fubot, :markdown => true)
   end
 
-  def html_body
+  def html_body(current_user=nil)
     text = body
     if query && query["text"]
       text = Highlighter.new.highlight(text, query["text"])
     end
-    result = markdown? ? RenderPipeline.markdown(text, id) : RenderPipeline.simple(text, id)
+    result = markdown? ? RenderPipeline.markdown(text, id, current_user.try(:login)) : RenderPipeline.simple(text, id, current_user.try(:login))
     result.html_safe
   end
 
@@ -186,6 +191,20 @@ class Post < ActiveRecord::Base
 
   def notify_destroy
     Live.post_destroy self
+  end
+
+  def delete_channel_tags
+    ChannelTag.where(post_id: id, site_id: site_id, channel_id: channel_id).destroy_all
+  end
+
+  def update_channel_tags
+    if channel
+      tags = []
+      body.scan Channel::TagPattern do |tag|
+        tags << tag[1]
+      end
+      channel.set_post_tags(self, tags)
+    end
   end
 
 end

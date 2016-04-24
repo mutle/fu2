@@ -31,6 +31,7 @@ class Notification < ActiveRecord::Base
       }
       n = create(attrs)
       Live.notification_counters(to)
+      Live.notification_create(n, to)
       n
     end
 
@@ -53,12 +54,18 @@ class Notification < ActiveRecord::Base
         create(attrs)
       end
       Live.notification_counters(to)
+      Live.notification_create(m, to)
       m.process_fubot_message
       m
     end
 
     def mark_unread(current_user, from)
       Notification.for_user(current_user).toolbar_notifications.from_user(from).unread.update_all(:read => true)
+      Live.notification_counters(current_user)
+    end
+
+    def mark_all_unread(current_user)
+      Notification.for_user(current_user).toolbar_notifications.unread.update_all(:read => true)
       Live.notification_counters(current_user)
     end
   end

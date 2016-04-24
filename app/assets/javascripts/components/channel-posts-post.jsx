@@ -23,7 +23,9 @@ var ChannelPostHeader = React.createClass({
     e.preventDefault();
   },
   render: function() {
-    var postLink = Data.url_root + "/channels/"+this.props.channelId+"#post-"+this.props.id;
+    var channel_id = this.props.channelId;
+    if(!channel_id) channel_id = this.props.post.channel_id;
+    var postLink = Data.url_root + "/channels/"+channel_id+"#post-"+this.props.id;
     var postDeleteLink = this.props.editable ? <a href="#" className="post-delete" onClick={this.deletePost}><span className="octicon octicon-trashcan"></span></a> : null;
     var postEditLink = this.props.editable ? <a href="#" className="post-edit" onClick={this.edit}><span className="octicon octicon-pencil"></span></a> : null;
     var postUnreadLink = <a href="#" className="post-unread" onClick={this.unread}><span className="octicon octicon-eye"></span></a>;

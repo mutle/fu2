@@ -19,7 +19,7 @@ class Socket
       @message({type: "auth", api_key: @api_key, site_id: @site_id})
       for type,subscriptions of @subscriptions
         for s in subscriptions
-          s.open?()
+          s.open?(type)
     @connection.onerror = (error) =>
     @connection.onmessage = (e) =>
       data = $.parseJSON($.parseJSON(e.data))
@@ -78,6 +78,12 @@ class Data
     @socket.connect() if @socket
   fetch: (info, id=0, args={}, fallback=null, errorCallback=null) ->
     return if !info
+    if info.storeResult
+      cached = @fetched["#{info.view}:#{id}:data"]
+      if cached?
+        view = info.view.replace(/\$ID/, id)
+        @notify([view], [cached])
+        return
     if info.view && !info.noCache && !args['last_update']
       cached = @fetched["#{info.view}:#{id}:#{args.page}#{args.first_id}#{args.last_id}"]
       if cached? && cached.length > 0
@@ -94,6 +100,10 @@ class Data
         if info.view
           view = info.view.replace(/\$ID/, id)
           @updateView(view, data.view)
+        if info.storeResult
+          @fetched["#{info.view}:#{id}:data"] = data
+          view = info.view.replace(/\$ID/, id)
+          @notify([view], [data])
         if !info.result
           @insert(data)
           @notify([data.type])
@@ -133,11 +143,11 @@ class Data
       for r in remove
         c = c.splice(c.indexOf(r), 1)
     socket.unsubscribe(types)
-  notify: (types) ->
+  notify: (types, data) ->
     for type in types
       continue if !@callbacks[type]
       for callback in @callbacks[type]
-        d = @dataForCallback(callback, type)
+        d = if data then data else @dataForCallback(callback, type)
         callback.callbacks.callback.apply(callback.object, [d, @viewInfo(type)])
   dataForCallback: (callback, type) ->
     if callback.id

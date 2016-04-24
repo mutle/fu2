@@ -2,6 +2,7 @@ module Fu2
   REACT_ROUTES = [
     ["", :root],
     ["/channels/new", :new_channel],
+    "/channels/tags/:id",
     ["/channels/:id", :channel, :channel],
     "/channels",
     "/settings",
@@ -10,6 +11,8 @@ module Fu2
     "/search",
     "/search/:query/:sort",
     "/search/:query",
-    "/notifications"
+    "/notifications/list",
+    "/notifications/:id",
+    "/notifications",
   ]
 end
