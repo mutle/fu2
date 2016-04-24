@@ -66,6 +66,19 @@
     float: right;
   }
 
+  &.small {
+    .title {
+      .avatar-image {
+        max-width: 64px;
+        max-height: 64px;
+      }
+
+      .user-title {
+        font-size: 16px;
+      }
+    }
+  }
+
 }
 
 #container #content .user-profile h2.title {

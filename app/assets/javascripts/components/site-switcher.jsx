@@ -19,7 +19,7 @@ var SiteSwitcher = React.createClass({
     var sites = this.state.sites.map(function(site, i) {
       return <a href={"/"+site.path}>{site.name}</a>;
     });
-    return <div className="site-switcher dialog small">
+    return <div className="site-switcher">
       <span className="close octicon octicon-x" onClick={this.close} />
       <div className="content">
         <h3>Switch to Site</h3>

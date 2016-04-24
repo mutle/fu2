@@ -209,34 +209,6 @@ $(function() {
 
   Router.route(document.location.pathname+document.location.hash);
 
-  var hotkeys = null;
-  var switcher = null;
-
-  $(document).bind("keydown", "shift+/", function(e) {
-    if(e.target != $("body").get(0)) return;
-    if(!hotkeys) hotkeys = ReactDOM.render(<Hotkeys />, $("#pre-content").get(0));
-    hotkeys.setState({show: !hotkeys.state.show});
-    e.preventDefault();
-  });
-
-  $(document).bind("keydown", "esc", function(e) {
-    if(e.target != $("body").get(0) || !hotkeys || !hotkeys.state.show) return;
-    hotkeys.setState({show: false});
-  });
-
-  $(document).on("click", "a.toolbar-sites", function(e) {
-    hotkeys = null;
-    if(!switcher)
-      switcher = ReactDOM.render(<SiteSwitcher />, $("#pre-content").get(0));
-    switcher.setState({show: true});
-    e.preventDefault();
-  });
-
-  $(document).on("click", "a.toolbar-info", function(e) {
-    if(!hotkeys) hotkeys = ReactDOM.render(<Hotkeys />, $("#pre-content").get(0));
-    hotkeys.setState({show: !hotkeys.state.show});
-    e.preventDefault();
-  });
 
   $(window).bind("popstate", function(e) {
     if(Router.route(document.location.pathname, true)) {
@@ -244,11 +216,6 @@ $(function() {
       return false;
     }
     return true;
-  });
-
-  $(document).on("click", "a.toolbar-more-link", function(e) {
-    $(".more").toggle();
-    e.preventDefault();
   });
 
   $(document).on("click", "a", function(e) {

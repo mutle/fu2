@@ -17,11 +17,11 @@ var Hotkey = React.createClass({
 
 var Hotkeys = React.createClass({
   getInitialState: function() {
-    return {show: false};
+    return {show: true};
   },
   close: function(e) {
     e.preventDefault();
-    this.setState({show: false});
+    this.props.navigation.setState({showHotkeys: false});
   },
   hotkeyGroup: function(name, hotkeys) {
     if(hotkeys) {
@@ -67,7 +67,7 @@ var Hotkeys = React.createClass({
     for(var n in Router.hotkey_groups) {
       otherCommands.push(this.hotkeyGroup(n, Router.hotkey_groups[n]));
     }
-    return <div className="hotkeys dialog">
+    return <div className="hotkeys">
       <span className="close octicon octicon-x" onClick={this.close} />
       <div className="content">
         {globalCommands}

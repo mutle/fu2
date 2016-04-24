@@ -12,6 +12,9 @@ class ChannelTagTest < ActiveSupport::TestCase
     p.save
     assert_equal 1, c.channel_tags.count
     assert_equal "losing", c.channel_tags.first.tag
+    id = p.id
+    p.destroy
+    assert_equal 0, ChannelTag.where(post_id: id).count
   end
 
   test "find all unique tags" do

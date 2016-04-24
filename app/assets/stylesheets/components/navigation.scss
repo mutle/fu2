@@ -3,7 +3,7 @@
 .header {
   color: #484848;
   background: #fff;
-  z-index: 5;
+  z-index: 15;
   border-bottom: 1px solid #e8e8e8;
   border-top: 8px solid #d54e51;
   border-top-image: linear-gradient(to right, #d54e51, #fea979);
@@ -24,52 +24,8 @@
       display: none;
     }
 
-    .more-container, .notifications-container {
-      display: inline-block;
-    }
-
-    .notifications {
-      left: 10px;
-      right: 10px;
-      height: 300px;
-      top: 56px;
-      overflow-y: auto;
-      font-size: 12px;
-
-      a {
-        font-size: 12px;
-      }
-    }
-
-    .more, .notifications {
-      position: absolute;
-      top: 38px;
-      padding: 8px 24px;
-      text-align: left;
-      background: #fff;
-      color: #484848;
-      z-index: 5;
-      border: 1px solid #e8e8e8;
+    .more-container {
       display: none;
-      line-height: 24px;
-
-      .octicon {
-        display: inline;
-        padding-right: 6px;
-      }
-
-      .text {
-        display: inline;
-      }
-
-      a {
-        display: block;
-        padding: 4px 12px;
-      }
-
-      &.show {
-        display: inline-block;
-      }
     }
 
     .bottom-link {
@@ -77,34 +33,11 @@
       display: inline-block;
     }
 
-    @media #{$small-phone-landscape} {
-
-    }
-
     @media #{$small-screen} {
       height: 58px;
       line-height: 58px;
       margin-left: 5%;
       margin-right: 5%;
-
-      .more {
-        top: 29px;
-
-        a {
-          display: block;
-        }
-      }
-
-      .notifications {
-        top: 29px;
-        right: -40px;
-        left: auto;
-        width: 500px;
-      }
-
-      .notifications-container {
-        position: relative;
-      }
 
       .bottom-link {
         .octicon {
@@ -167,12 +100,14 @@
     position: relative;
   }
 
-  .octicon {
-    font-size: 20px;
-  }
-
   .menu-indicator {
     padding-left: 6px;
+  }
+}
+
+.header, .more {
+  .octicon {
+    font-size: 20px;
   }
 
   a {
@@ -185,6 +120,30 @@
 
     &:first-child {
       padding-left: 0px;
+    }
+  }
+}
+
+.more {
+  line-height: 24px;
+  text-align: left;
+
+  .octicon {
+    display: inline;
+    padding-right: 6px;
+  }
+
+  .text {
+    display: inline;
+  }
+
+  a {
+    display: block;
+    padding: 4px 12px;
+    color: #000;
+
+    &:first-child {
+      padding-left: 10px;
     }
   }
 }
