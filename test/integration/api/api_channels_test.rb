@@ -25,7 +25,7 @@ class ApiChannelsTest < ActionDispatch::IntegrationTest
 
   test "create channel and post" do
     title = "Test Channel #{Time.now.to_f}"
-    post '/api/channels.json', {channel: {title: title, body: "Testing"}}
+    post '/api/channels.json', params: {channel: {title: title, body: "Testing"}}
     j = json_body
     assert_nil json_body['errors']
     jc = j['channel']
@@ -37,7 +37,7 @@ class ApiChannelsTest < ActionDispatch::IntegrationTest
   test "create channel requires unique name" do
     title = "Title in use #{Time.now.to_f}"
     c = create_channel(title)
-    post '/api/channels.json', {channel: {title: title, body: "Testing"}}
+    post '/api/channels.json', params: {channel: {title: title, body: "Testing"}}
     assert_not_nil json_body['errors']['title']
   end
 
@@ -45,7 +45,7 @@ class ApiChannelsTest < ActionDispatch::IntegrationTest
     title = "Foo Channel #{Time.now.to_f}"
     c = create_channel(title)
     title2 = "FooTest Channel #{Time.now.to_f}"
-    put "/api/channels/#{c.id}.json", {channel: {title: title2, text: "Channel text"}}
+    put "/api/channels/#{c.id}.json", params: {channel: {title: title2, text: "Channel text"}}
     j = json_body
     jc = j['channel']
     assert_equal title2, jc['title']

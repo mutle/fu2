@@ -1,5 +1,5 @@
 class Api::ImagesController < Api::ApiController
-  skip_before_filter :verify_authenticity_token, only: :create
+  skip_before_action :verify_authenticity_token, only: :create
 
   def create
     @image = siteImage.create image_params.merge(:user_id => current_user.id)

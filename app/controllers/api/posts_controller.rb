@@ -1,5 +1,5 @@
 class Api::PostsController < Api::ApiController
-  before_filter :load_channel, :except => [:fave, :faved, :search, :advanced_search]
+  before_action :load_channel, :except => [:fave, :faved, :search, :advanced_search]
 
   def index
     last_update = Time.at params[:last_update].to_i if params[:last_update]

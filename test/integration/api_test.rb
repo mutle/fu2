@@ -28,13 +28,13 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   test "sites api" do
-    get "/api/sites", format: "json"
+    get "/api/sites.json"
     assert_equal 0, json_body['sites'].size
     site = Site.create(path: "foo")
-    get "/api/sites", format: "json"
+    get "/api/sites.json"
     assert_equal 0, json_body['sites'].size
     SiteUser.create(site: site, user: @user)
-    get "/api/sites", format: "json"
+    get "/api/sites.json"
     assert_equal 1, json_body['sites'].size
     assert_equal "foo", json_body['sites'].first['path']
   end

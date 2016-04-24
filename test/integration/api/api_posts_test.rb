@@ -19,7 +19,7 @@ class ApiPostsTest < ActionDispatch::IntegrationTest
   test "create post" do
     c = create_channel
     assert_not_equal "Test", c.last_post.body
-    post "/api/channels/#{c.id}/posts.json", {post: {body: "Test"}}
+    post "/api/channels/#{c.id}/posts.json", params: {post: {body: "Test"}}
     assert_equal "Test", json_body['post']['body']
     assert_not_nil json_body['post']['id']
     p = Channel.find(c.id).last_post
@@ -29,7 +29,7 @@ class ApiPostsTest < ActionDispatch::IntegrationTest
   test "update post" do
     p = create_post
     assert_not_equal "Test", p.body
-    patch "/api/channels/#{p.channel_id}/posts/#{p.id}.json", {post: {body: "Test"}}
+    patch "/api/channels/#{p.channel_id}/posts/#{p.id}.json", params: {post: {body: "Test"}}
     assert_equal "Test", json_body['post']['body']
     p.reload
     assert_equal "Test", p.body
@@ -57,7 +57,7 @@ class ApiPostsTest < ActionDispatch::IntegrationTest
   test "create post json" do
     c = create_channel
     assert_not_equal "Test", c.last_post.body
-    post "/api/channels/#{c.id}/posts.json", {post: {body: "Test"}}
+    post "/api/channels/#{c.id}/posts.json", params: {post: {body: "Test"}}
     jp = json_body['post']
     assert_equal "Test", jp['body']
     assert_not_nil jp['html_body']

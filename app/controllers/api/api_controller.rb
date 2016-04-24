@@ -1,5 +1,5 @@
 class Api::ApiController < ApplicationController
-  before_filter :login_required, :update_active
+  before_action :login_required, :update_active
   respond_to :json
 
   def info
