@@ -32,9 +32,11 @@ var NotificationCounter = React.createClass({
     }
   },
   togglePopup: function(e) {
-    var n = $(".notifications-container .notifications")
-    n.toggle();
+    // var n = $(".notifications-container .notifications")
+    // n.toggle();
+    console.log(this.props.navigation);
     e.preventDefault();
+    this.props.navigation.setState({showNotifications: !this.props.navigation.state.showNotifications});
   },
   render: function() {
     var count = this.state.messages + this.state.mentions;
@@ -42,14 +44,6 @@ var NotificationCounter = React.createClass({
     var className = "count";
     if(this.state.messages == 0) className += " mentions";
     return <span className={className}><a href="#" onClick={this.togglePopup}>{count}</a></span>;
-  }
-})
-
-$(function() {
-  var counters = $(".header .counters");
-  if(counters.length > 0) {
-    var counter = ReactDOM.render(<NotificationCounter />, counters.get(0));
-    counter.connect();
   }
 });
 

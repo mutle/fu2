@@ -1,6 +1,7 @@
 //= require react
 //= require components/error-message
 //= require components/loading-indicator
+//= require components/popover
 //= require components/view-loader
 //= require components/timestamp
 //= require components/notification
