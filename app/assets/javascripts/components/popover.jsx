@@ -8,24 +8,14 @@ var Popover = React.createClass({
     if(!this.props.show) return <span></span>;
     if(this.props.renderCallback) {
       var content = this.props.renderCallback(this);
-      var exit = <div className="popover-exit" onClick={this.props.exitCallback} />;
+      if(!this.props.local)
+        var exit = <div className="popover-exit" onClick={this.props.exitCallback} />;
     }
     var className = "popover "+this.props.style;
     var style = {};
 
-    if(!this.relative && this.props.relativeCallback) this.relative = this.props.relativeCallback(this);
-
-    if(this.relative) {
-      var rp = $(this.relative).position();
-      if(this.props.style == "top-left") {
-        if($(document).width() >= 800)
-          style["left"] = rp.left;
-        else
-          style["left"] = 20;
-      } else {
-        style["left"] = rp.left;
-      }
-      style["right"] = 20;
+    if(this.props.relativeCallback) {
+      style = this.props.relativeCallback(this, style);
     }
 
     return <div className={className} style={style}>

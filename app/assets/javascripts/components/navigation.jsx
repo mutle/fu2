@@ -26,11 +26,20 @@ var Navigation = React.createClass({
   renderSites: function(p) {
     return <SiteSwitcher />;
   },
-  moreParent: function() {
-    return $(".toolbar-more-link").get(0);
+  moreParent: function(p, style) {
+    var rp = $(".toolbar-more-link").position();
+    style["left"] = rp.left;
+    style["right"] = 20;
+    return style;
   },
-  notificationsParent: function() {
-    return $(".counters").get(0);
+  notificationsParent: function(p, style) {
+    var rp = $(".counters").position();
+    if($(document).width() >= 800)
+      style["left"] = rp.left;
+    else
+      style["left"] = 20;
+    style["right"] = 20;
+    return style;
   }
 });
 
