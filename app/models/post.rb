@@ -18,6 +18,7 @@ class Post < ActiveRecord::Base
   scope :updated_since, proc { |c, d| includes(:user).where("channel_id = :channel_id AND updated_at > :d", :channel_id => c.id, :d => (d + 1)).order("id") }
   scope :most_recent, proc { order("created_at DESC").limit(1) }
   scope :with_ids, proc { |ids| where(id: ids) }
+  scope :timeframe, proc { |timeframe| where("created_at > :min_date AND created_at < :max_date", min_date: Post.timeframe_min(timeframe), max_date: Time.now) }
 
   after_create :update_channel_last_post
   after_create :scan_for_mentions
@@ -37,6 +38,46 @@ class Post < ActiveRecord::Base
   attr_accessor :read, :query
 
   class << self
+    def timeframe_min(timeframe)
+      if timeframe =~ /^([0-9]+)([wdmy])$/
+        i = $1.to_i
+        case $2
+        when "d"
+          return i.days.ago
+        when "w"
+          return i.weeks.ago
+        when "m"
+          return i.months.ago
+        when "y"
+          return i.years.ago
+        end
+      end
+      return 1.day.ago
+    end
+
+    def active_channels(posts)
+      channels = {}
+      posts.each do |post|
+        channels[post.channel_id] ||= 0
+        channels[post.channel_id] += 1
+      end
+      Channel.with_ids(channels.keys).to_a.map { |c| c.num_posts = channels[c.id]; c }.sort_by(&:num_posts).reverse[0, 25]
+    end
+
+    def best_posts(posts)
+      faves = {}
+      pl = {}
+      posts.each do |post|
+        c = post.faves.count
+        next if c < 1
+        faves[post.id] ||= 0
+        faves[post.id] += c
+        pl[post.id] = post
+      end
+      keys = faves.keys.sort_by { |pid| faves[pid] }.reverse[0, 10]
+      keys.map { |k| pl[k] }
+    end
+
     def indexed_type
       "post"
     end

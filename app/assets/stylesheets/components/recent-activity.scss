@@ -1,0 +1,21 @@
+
+.activity-header {
+  font-size: 22px;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.recent-activity {
+  .emoji-reaction {
+    margin-right: 16px;
+  }
+  .emoji {
+    max-width: 32px;
+    max-height: 32px;
+    padding-right: 8px;
+  }
+
+  .user-list-info {
+    padding-left: 8px;
+  }
+}

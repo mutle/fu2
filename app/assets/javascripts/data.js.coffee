@@ -205,6 +205,9 @@ class Data
       error: error,
       success: success
   destroy: (type) ->
+    @store[type] = {}
+  clearCache: (view, id) ->
+    @fetched["#{view}:#{id}:data"]
   update: (type, id, props) ->
     @store[type] ?= {}
     @store[type][id] = props

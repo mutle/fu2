@@ -160,6 +160,10 @@ $(function() {
     return ReactDOM.render(<ChannelPosts channelId={0} />, e);
   }, function(params) { return "/channels/new"; }, {hotkey: "N", name: "New Channel"});
 
+  Router.addResponder("channels/recent", function(params, e) {
+    return ReactDOM.render(<RecentActivity />, e);
+  }, function(params) { return "/channels/recent"; }, {hotkey: "R", name: "Recent activity"});
+
   Router.addResponder("notifications/index", function(params, e) {
     return ReactDOM.render(<Notifications />, e);
   }, function(params) { return "/notifications"; }, {hotkey: "M", name: "Notifications"});
@@ -194,6 +198,7 @@ $(function() {
   }, function(params) { return "/search/"+params.query; }, {name: "Search results"});
 
   Router.addRoute("channels/new", /^\/channels\/new\/?$/);
+  Router.addRoute("channels/recent", /^\/channels\/recent\/?$/);
   Router.addRoute("channels/tag", /^\/channels\/tags\/([^\/]+)\/?$/, ["tag"]);
   Router.addRoute("channels/show", /^\/channels\/([0-9]+)\/?$/, ["channel_id"]);
   Router.addRoute("notifications/index", /^\/notifications\/?$/);

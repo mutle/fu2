@@ -131,7 +131,7 @@ var ChannelPostsSearch = React.createClass({
       var results = "No results found.";
     }
     if(this.state.view) {
-      var className = "sort-menu search-menu";
+      var className = "sort-menu search-menu select-menu";
       if(this.state.showSortMenu) className += " active";
       var resultHeader = <header className="search-header">
         <span className="result-count">
@@ -145,7 +145,7 @@ var ChannelPostsSearch = React.createClass({
         <span className="sort-by">
           <span>Sort by: </span>
           <span className={className}>
-            <div className="search-menu-options">
+            <div className="search-menu-options select-menu-options">
               <span className={"option"+(this.state.sort == "score" ? " selected" : "")} onClick={this.sortBy}>score</span>
               <span className={"option"+(this.state.sort == "created" ? " selected" : "")} onClick={this.sortBy}>created</span>
               <span className={"option"+(this.state.sort == "faves" ? " selected" : "")} onClick={this.sortBy}>faves</span>

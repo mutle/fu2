@@ -1,10 +1,10 @@
 <%= link_to octicon('home')+content_tag(:span, "Home", class: "text"), root_path, title: "Home", class: "toolbar-home" %>
-
 <%= link_to octicon('mail')+content_tag(:span, "Messages", class: "text"), notifications_path, title: "Notifications", class: "toolbar-notifications" %>
 <%= link_to octicon("pencil")+content_tag(:span, "New Channel", class: "text"), new_channel_path, title: "New channel", class: "toolbar-new-channel" %>
 
 <div class="more-container">
   <div class="more">
+    <%= link_to octicon('clock')+content_tag(:span, "Recent", class: "text"), recent_channels_path, title: "Recent", class: "toolbar-recent" %>
     <%= link_to octicon('organization')+content_tag(:span, "Users", class: "text"), users_path, title: "Users" %>
     <%= link_to octicon('tools')+content_tag(:span, "Settings", class: "text"), settings_path, title: "Settings", class: "last" %>
     <%= link_to octicon("sign-out", false, "signout-icon")+content_tag(:span, "Signout", class: "text"), session_path(site_path: nil, site_domain: nil), title: "Logout", class: "toolbar-logout", method: :delete %>

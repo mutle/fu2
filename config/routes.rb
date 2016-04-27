@@ -18,6 +18,9 @@ Fu2::Application.routes.draw do
     constraints SiteConstraint.new do
       namespace :api do
         resources :channels do
+          collection do
+            get :recent
+          end
           resources :posts
         end
         scope :channels do

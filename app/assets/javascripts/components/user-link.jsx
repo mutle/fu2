@@ -8,9 +8,12 @@ var UserLink = React.createClass({
     var name = {__html: this.props.user.display_name_html.replace(/<\/?p>/g, '')};
     // onMouseOver={this.over} onMouseOut={this.out}
     // <Popover style={"mouse-over"} local={true} show={this.state.showPopover} renderCallback={this.renderUserShow} />
+    if(this.props.extra)
+      var extra = <span className="user-list-info">{this.props.extra}</span>;
     return <div className="user-link">
       <a className="avatar" href={userLink}><img className="avatar-image" src={this.props.user.avatar_url} width="32" height="32" /></a>
       <span className="user-name" dangerouslySetInnerHTML={name} />
+      {extra}
     </div>;
   },
   renderUserShow: function() {

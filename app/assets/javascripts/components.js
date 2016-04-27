@@ -17,6 +17,7 @@
 //= require components/user-settings
 //= require components/user-list
 //= require components/comment-box
+//= require components/channel
 //= require components/channel-list
 //= require components/channel-posts-fave-counter
 //= require components/channel-posts-header
@@ -27,6 +28,7 @@
 //= require components/channel-tags
 //= require components/channel-tag
 //= require components/notifications
+//= require components/recent-activity
 //= require components/hotkeys
 //= require components/site-switcher
 //= require components/router
