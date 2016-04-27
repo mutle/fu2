@@ -38,10 +38,10 @@ var UserProfile = React.createClass({
   renderRecents: function() {
     if(this.props.small) return null;
     var last_posts = this.state.stats.last_posts.map(function(post, i) {
-      return <ChannelPost post={post} id={post.id} channelId={post.channel_id} user={Data.get("user", post.user_id)} />;
+      return <ChannelPost key={post.id} post={post} id={post.id} channelId={post.channel_id} user={Data.get("user", post.user_id)} />;
     });
     var last_faves = this.state.stats.last_faves.map(function(post, i) {
-      return <ChannelPost post={post} id={post.id} channelId={post.channel_id} user={Data.get("user", post.user_id)} />;
+      return <ChannelPost key={post.id} post={post} id={post.id} channelId={post.channel_id} user={Data.get("user", post.user_id)} />;
     });
     return <div>
       <div className="user-posts">

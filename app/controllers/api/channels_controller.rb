@@ -26,6 +26,16 @@ class Api::ChannelsController < Api::ApiController
     render "index"
   end
 
+  def recent
+    @view = Views::RecentActivity.new({
+      current_user: current_user,
+      site: @site,
+      timeframe: params[:timeframe] || "1w"
+    })
+    @view.finalize
+    render "recent"
+  end
+
   def create
     @channel = siteChannel.create(channel_params.merge(user_id: current_user.id, markdown: true))
     @channel.visit(current_user)

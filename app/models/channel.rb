@@ -41,7 +41,7 @@ class Channel < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
-  attr_accessor :current_user, :markdown, :read, :query, :last_post_user_id, :last_post_id
+  attr_accessor :current_user, :markdown, :read, :query, :last_post_user_id, :last_post_id, :num_posts
 
   class << self
     def indexed_type

@@ -12,3 +12,6 @@ json.display_date (channel.last_post_date || channel.updated_at).to_i * 1000
 if show
   json.last_text_change channel.last_text_change
 end
+if channel.num_posts
+  json.num_posts channel.num_posts
+end
