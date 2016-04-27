@@ -61,7 +61,7 @@ class Post < ActiveRecord::Base
         channels[post.channel_id] ||= 0
         channels[post.channel_id] += 1
       end
-      Channel.with_ids(channels.keys).to_a.map { |c| c.num_posts = channels[c.id]; c }.sort_by(&:num_posts).reverse
+      Channel.with_ids(channels.keys).to_a.map { |c| c.num_posts = channels[c.id]; c }.sort_by(&:num_posts).reverse[0, 25]
     end
 
     def best_posts(posts)

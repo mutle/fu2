@@ -18,7 +18,6 @@ var RecentActivity = React.createClass({
     Data.unsubscribe(this, RecentActivityData.subscribe);
   },
   updatedData: function(objects, view) {
-    console.log(objects[0]);
     this.setState({activity: objects[0]});
   },
   sortUsers: function(users) {
@@ -33,8 +32,6 @@ var RecentActivity = React.createClass({
   updateTimeframe: function(e) {
     e.preventDefault();
     var self = this;
-    console.log($(e.target).data("value"))
-    console.log(e.target);
     this.setState({timeframe: $(e.target).data("value"), menuActive: false, activity: null}, function() {
       Data.fetch(RecentActivityData, this.state.timeframe, {timeframe: self.state.timeframe});
     });
@@ -55,7 +52,14 @@ var RecentActivity = React.createClass({
         users.push(us);
       }
       var emojis = [];
+      var active_emojis = [];
       for(var emoji in this.state.activity.active_emojis) {
+        active_emojis.push(emoji);
+      }
+      var am = this.state.activity.active_emojis;
+      var sorted_active_emojis = active_emojis.sort(function(a,b) { return (am[b] || 0) - (am[a] || 0); });
+      for(var ei in sorted_active_emojis) {
+        var emoji = sorted_active_emojis[ei];
         var i = this.state.activity.active_emojis[emoji];
         var em = window.Emojis.find(function(em,im) { return em.aliases[0] == emoji });
         var e = <span key={emoji} className="emoji-reaction"><img className="emoji" src={em.image} />{i}</span>;
