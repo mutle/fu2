@@ -242,7 +242,7 @@ class Post < ActiveRecord::Base
     if channel
       tags = []
       body.scan Channel::TagPattern do |tag|
-        tags << tag[1]
+        tags << tag[2]
       end
       channel.set_post_tags(self, tags)
     end

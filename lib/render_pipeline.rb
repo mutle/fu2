@@ -70,10 +70,16 @@ module RenderPipeline
 
   class AutoEmbedFilter < Pipeline::Filter
     EMBEDS = {
-      tag: {
+      redcursor: {
+        pattern: %r{https?://(#{(ENV["REDCURSOR_HOSTNAMES"] || "").gsub(/\./, "\\.").split(",").join("|")})/channels/([0-9]+(#[^ $]+)?)},
+        callback: proc do |content,id|
+          content.gsub(EMBEDS[:redcursor][:pattern], %{<a href="/channels/#{id}">#{Channel.find(id.to_i).title rescue "/channels/#{id}"}</a>})
+        end
+      },
+      redcursor_tag: {
         pattern: Channel::TagPattern,
-        callback: proc do |content, tag|
-          content.gsub(EMBEDS[:tag][:pattern], %{<a class="hash-tag" href="/channels/tags/#{tag}">##{tag}</a>})
+        callback: proc do |content, tag, id, m|
+          content.gsub(EMBEDS[:redcursor_tag][:pattern], %{#{m[1]}<a class="hash-tag" href="/channels/tags/#{m[3]}">##{m[3]}</a>})
         end
       },
       twitter: {
