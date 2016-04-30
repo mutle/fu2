@@ -35,6 +35,8 @@ class Post < ActiveRecord::Base
   after_update :update_index
   before_destroy :remove_index
 
+  before_create :set_markdown
+
   attr_accessor :read, :query
 
   class << self
@@ -154,7 +156,7 @@ class Post < ActiveRecord::Base
   end
 
   def set_markdown
-    self.markdown = user.markdown?
+    self.markdown = true
   end
 
   def can_read?(user)

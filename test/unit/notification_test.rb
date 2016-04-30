@@ -8,6 +8,8 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal 0, Notification.for_user(u).mentions.count
     create_post("@#{u.login} hi!")
     assert_equal 1, Notification.for_user(u).mentions.count
+    create_post("@#{u.login.upcase} hi!")
+    assert_equal 2, Notification.for_user(u).mentions.count
   end
 
 end

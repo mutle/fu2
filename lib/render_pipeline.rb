@@ -20,7 +20,7 @@ module RenderPipeline
 
   class BetterMentionFilter < Pipeline::MentionFilter
     def self.mentioned_logins_in(text, username_pattern=Channel::UsernamePattern)
-      text.gsub Channel::MentionPatterns[username_pattern] do |match|
+      text.gsub Channel::MentionPatterns[Channel::UsernamePattern] do |match|
         login = $1
         yield match, login, false
       end
@@ -28,7 +28,7 @@ module RenderPipeline
 
     def link_to_mention_info(text, info_url=nil)
       Rails.logger.info context.inspect
-      self_mention = " own" if context[:user_login] && text == context[:user_login]
+      self_mention = " own" if context[:user_login] && text.downcase == context[:user_login].downcase
       return "@#{text}" if info_url.nil?
       "<a href='#{info_url}' class='user-mention#{self_mention}'>" +
       "@#{text}" +
