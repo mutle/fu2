@@ -29,7 +29,7 @@ module ChannelsHelper
 
   def user_link(user)
     return "" unless user
-    link_to format_title(user.display_name), user_path(user), :style => user.display_color
+    link_to format_title(user.display_name), user_path(user)
   end
 
   def user_name(user)

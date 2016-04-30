@@ -22,8 +22,7 @@ class ActiveSupport::TestCase
       login: login || "testuser#{Time.now.to_f.to_s.gsub(/\./, '')}",
       password: password,
       password_confirmation: password,
-      email: "user-#{Random.rand(100000)}@example.com",
-      markdown: true
+      email: "user-#{Random.rand(100000)}@example.com"
     })
     if activate
       u.activated_at = Time.now
@@ -42,7 +41,7 @@ class ActiveSupport::TestCase
 
   def create_post(body="post")
     @channel ||= create_channel
-    @channel.posts.create(site_id: @site.id, user: @user, body: body, markdown: true)
+    @channel.posts.create(site_id: @site.id, user: @user, body: body)
   end
 end
 

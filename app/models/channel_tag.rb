@@ -7,15 +7,15 @@ class ChannelTag < ActiveRecord::Base
 
   class << self
     def all_tags(site)
-      res = connection.query(<<-SQL)
+      res = PGDB.query(<<-SQL)
 SELECT DISTINCT(tag) FROM channel_tags WHERE site_id = #{site.id};
 SQL
       res.map(&:first)
     end
 
     def channel_ids(site, tag)
-      res = connection.query(<<-SQL)
-SELECT DISTINCT(channel_id) FROM channel_tags WHERE site_id = #{site.id} AND tag = \'#{connection.quote_string(tag)}\';
+      res = PGDB.query(<<-SQL)
+SELECT DISTINCT(channel_id) FROM channel_tags WHERE site_id = #{site.id} AND tag = \'#{PGDB.quote_string(tag)}\';
 SQL
       res.map(&:first).map(&:to_i)
     end

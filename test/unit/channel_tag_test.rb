@@ -33,4 +33,10 @@ class ChannelTagTest < ActiveSupport::TestCase
     channel_ids = ChannelTag.channel_ids(@site, "winning")
     assert_equal [@channel.id], channel_ids
   end
+
+  test "no tags" do
+    create_user
+    c = create_post("blah#winning. blah!")
+    assert_equal 0, c.channel.channel_tags.count
+  end
 end

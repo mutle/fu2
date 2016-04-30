@@ -18,15 +18,13 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
 
-  # validates_format_of       :color, :with => /^(\#([0-9a-fA-F]{6}))?$/
-
   before_save :encrypt_password
 
   before_create :make_activation_code
   before_create :set_display_name
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  # attr_accessible :login, :email, :password, :password_confirmation, :color, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
+  # attr_accessible :login, :email, :password, :password_confirmation, :display_name, :stylesheet_id, :markdown, :new_features, :avatar_url
 
   has_many :posts
   has_many :channel_visits
@@ -83,11 +81,7 @@ class User < ActiveRecord::Base
   end
 
   def password
-    if password_hash.blank?
-      @password ||= ""
-    else
-      @password ||= BCrypt::Password.new(password_hash)
-    end
+    @password ||= BCrypt::Password.new(password_hash)
   end
 
   def update_password(oldpw, pw, repeatpw)
@@ -133,22 +127,8 @@ class User < ActiveRecord::Base
     u && u.authenticated?(password) ? u : nil
   end
 
-  # Encrypts some data with the salt.
-  def self.encrypt(password, salt)
-    Digest::SHA1.hexdigest("--#{salt}--#{password}--")
-  end
-
-  # Encrypts the password with the user salt
-  def encrypt(password)
-    self.class.encrypt(password, salt)
-  end
-
   def authenticated?(password)
-    if password_hash.blank?
-      crypted_password == encrypt(password)
-    else
-      self.password == password
-    end
+    self.password == password
   end
 
   def remember_token?
@@ -174,10 +154,6 @@ class User < ActiveRecord::Base
     self.remember_token_expires_at = nil
     self.remember_token            = nil
     save # (false)
-  end
-
-  def display_color
-    "color: #{color}" unless color.blank?
   end
 
   def number_unread_messages
@@ -206,7 +182,6 @@ class User < ActiveRecord::Base
       login: login,
       display_name: display_name,
       display_name_html: display_name_html,
-      display_color: display_color,
       avatar_url: avatar_image_url,
       created_at: created_at
     }
@@ -253,7 +228,7 @@ class User < ActiveRecord::Base
     end
 
     def password_required?
-      !@password.nil? && (crypted_password.blank? || password_hash.blank?)
+      !@password.nil? && password_hash.blank?
     end
 
     def make_activation_code

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423190822) do
+ActiveRecord::Schema.define(version: 20160429230308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,13 +139,6 @@ ActiveRecord::Schema.define(version: 20160423190822) do
 
   add_index "images", ["site_id"], name: "index_images_on_site_id", using: :btree
 
-  create_table "invite_approvals", force: :cascade do |t|
-    t.integer  "invite_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "invites", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "name",            limit: 255
@@ -157,6 +150,7 @@ ActiveRecord::Schema.define(version: 20160423190822) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "site_id",                     default: 1
+    t.boolean  "completed",                   default: false
   end
 
   add_index "invites", ["site_id"], name: "index_invites_on_site_id", using: :btree
@@ -268,31 +262,21 @@ ActiveRecord::Schema.define(version: 20160423190822) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "login",                     limit: 255
-    t.string   "email",                     limit: 255
-    t.string   "crypted_password",          limit: 40
-    t.string   "salt",                      limit: 40
+    t.string   "login",           limit: 255
+    t.string   "email",           limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",            limit: 255
-    t.datetime "remember_token_expires_at"
-    t.string   "activation_code",           limit: 40
+    t.string   "activation_code", limit: 40
     t.datetime "activated_at"
-    t.integer  "invite_user_id",                        default: 0
-    t.string   "display_name",              limit: 255
-    t.integer  "account_type",                          default: 0
-    t.string   "color",                     limit: 255
-    t.integer  "stylesheet_id",                         default: 0,    null: false
-    t.integer  "number_unread_messages",                default: 0
-    t.text     "block_users"
-    t.string   "password_hash",             limit: 255
-    t.string   "api_key",                   limit: 255, default: ""
-    t.boolean  "markdown",                              default: true
+    t.integer  "invite_user_id",              default: 0
+    t.string   "display_name",    limit: 255
+    t.integer  "account_type",                default: 0
+    t.string   "password_hash",   limit: 255
+    t.string   "api_key",         limit: 255, default: ""
     t.text     "avatar_url"
   end
 
   add_index "users", ["activation_code"], name: "index_users_on_activation_code", using: :btree
-  add_index "users", ["crypted_password"], name: "index_users_on_crypted_password", using: :btree
   add_index "users", ["login"], name: "index_users_on_login", using: :btree
 
 end
