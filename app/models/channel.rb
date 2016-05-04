@@ -20,7 +20,7 @@ class Channel < ActiveRecord::Base
     /ix
   end
 
-  TagPattern = /(^|\W|\n)(\#)([a-zA-Z0-9\-\_]+)/ix
+  TagPattern = /(^|\s)(\#)([a-zA-Z0-9\-\_]+)/ix
 
   belongs_to :user
   has_many :posts, lambda { order("created_at DESC") }
