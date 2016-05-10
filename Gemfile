@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem "bundler", "~>1.11.2"
-gem "rails", "~>5.0.0.beta3"
+gem "rails", "~>5.0.0.rc1"
 gem "pg", "~>0.18.4"
 gem "jquery-rails", "~>4.1.1"
 gem 'json'
