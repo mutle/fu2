@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'json'
+require 'fubot/js_command'
 
 class Fubot
 
@@ -59,10 +60,9 @@ class Fubot
   end
 
   def call(message)
-    message.each_line do |l|
-      match_line l do |result|
-        return result
-      end
+    line = message.lines.last
+    match_line line do |result|
+      return result
     end
     nil
   end
