@@ -3,12 +3,14 @@ class Api::UsersController < Api::ApiController
   def update
     user = current_user
     p = update_password_params
-    if p.size > 0
+    if p[:password] && p[:password_confirmation] && p[:old_password]
       errors = {}
       user.update_password p[:old_password], p[:password], p[:password_confirmation]
       if user.errors.any? || !user.valid?
         render status: 401, json: {error: user.errors}
         return
+      else
+        user.save
       end
     else
       u = update_params
