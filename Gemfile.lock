@@ -153,8 +153,7 @@ GEM
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     power_assert (0.3.0)
-    rack (2.0.0.rc1)
-      json
+    rack (2.2.3)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.rc1)
