@@ -80,14 +80,6 @@ class ApplicationController < ActionController::Base
     (session[:user_id] || params[:api_key]) && !current_user.nil? && (!@site || @site.user?(current_user))
   end
 
-  def increment_metric(name)
-    Fu2::Application::METRICS.increment name
-  end
-
-  def set_metric_gauge(name, value)
-    Fu2::Application::METRICS.gauge name, value
-  end
-
   helper_method :current_user
 
   def mobile_device?

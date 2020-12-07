@@ -50,24 +50,6 @@ module Fu2
     config.action_dispatch.default_headers = {
       'X-XSS-Protection' => '0'
     }
-
-    METRICS = Statsd.new(ENV['STATSD_HOST'] || 'localhost', 8125)
-    METRICS.namespace = "fu2"
-
-    config.trashed.statsd = METRICS
-
-    config.trashed.timing_dimensions = ->(env) do
-      # Rails 3 and 4 set this. Other Rack endpoints won't have it.
-      if controller = env['action_controller.instance']
-        name    = controller.controller_name
-        action  = controller.action_name
-        format  = controller.rendered_format || :none
-        variant = controller.request.variant || :none  # Rails 4.1+ only!
-
-        [ :All,
-          :"Actions.#{name}.#{action}.#{format}+#{variant}" ]
-      end
-    end
   end
 
   def self.time_format
