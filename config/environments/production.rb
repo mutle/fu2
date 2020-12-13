@@ -64,6 +64,10 @@ Fu2::Application.configure do
 
   config.react.variant = :production
 
-  config.logger = Logger::Syslog.new("local0", Syslog::LOG_LOCAL5)
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  else
+    config.logger = Logger::Syslog.new("local0", Syslog::LOG_LOCAL5)
+  end
 
 end
