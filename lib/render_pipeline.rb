@@ -77,7 +77,7 @@ module RenderPipeline
         end
       },
       redcursor_upload: {
-        pattern: %r{https?://files\.redcursor\.net/uploads/)},
+        pattern: %r{https?://files\.redcursor\.net/uploads/},
         callback: proc do |content,id|
           content.gsub(EMBEDS[:redcursor_upload][:pattern], %{https://redcursor.net/uploads/})
         end
