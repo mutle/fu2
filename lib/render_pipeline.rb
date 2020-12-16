@@ -76,6 +76,12 @@ module RenderPipeline
           content.gsub(EMBEDS[:redcursor][:pattern], %{<a href="/channels/#{id}">#{Channel.find(id.to_i).title rescue "/channels/#{id}"}</a>})
         end
       },
+      redcursor_upload: {
+        pattern: %r{https?://files\.redcursor\.net/uploads/)},
+        callback: proc do |content,id|
+          content.gsub(EMBEDS[:redcursor_upload][:pattern], %{https://redcursor.net/uploads/})
+        end
+      },
       redcursor_tag: {
         pattern: Channel::TagPattern,
         callback: proc do |content, tag, id, m|
