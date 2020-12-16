@@ -17,6 +17,12 @@ module RenderPipeline
       html.gsub /<([^\/a-zA-Z])/, '&lt;\1'
     end
   end
+  
+  class OldUploadsFilter < Pipeline::Filter
+    def call
+      html.gsub %r{https?://files\.redcursor\.net/uploads/}, %{https://redcursor.net/uploads/}
+    end
+  end
 
   class BetterMentionFilter < Pipeline::MentionFilter
     def self.mentioned_logins_in(text, username_pattern=Channel::UsernamePattern)
@@ -74,12 +80,6 @@ module RenderPipeline
         pattern: %r{https?://(#{(ENV["REDCURSOR_HOSTNAMES"] || "").gsub(/\./, "\\.").split(",").join("|")})/channels/([0-9]+(#[^ $]+)?)},
         callback: proc do |content,id|
           content.gsub(EMBEDS[:redcursor][:pattern], %{<a href="/channels/#{id}">#{Channel.find(id.to_i).title rescue "/channels/#{id}"}</a>})
-        end
-      },
-      redcursor_upload: {
-        pattern: %r{https?://files\.redcursor\.net/uploads/},
-        callback: proc do |content,id|
-          content.gsub(EMBEDS[:redcursor_upload][:pattern], %{https://redcursor.net/uploads/})
         end
       },
       redcursor_tag: {
@@ -155,6 +155,7 @@ module RenderPipeline
   }
 
   MARKDOWN_PIPELINE = Pipeline.new [
+    OldUploadsFilter,
     Pipeline::MarkdownFilter,
     # Pipeline::ImageMaxWidthFilter,
     BetterMentionFilter,
@@ -163,6 +164,7 @@ module RenderPipeline
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   SIMPLE_PIPELINE = Pipeline.new [
+    OldUploadsFilter,
     SimpleFormatFilter,
     # Pipeline::ImageMaxWidthFilter,
     PreserveFormatting,
@@ -172,10 +174,12 @@ module RenderPipeline
     Pipeline::AutolinkFilter
   ], PIPELINE_CONTEXT
   TITLE_PIPELINE = Pipeline.new [
+    OldUploadsFilter,
     Pipeline::MarkdownFilter,
     CustomEmojiFilter
   ], PIPELINE_CONTEXT
   NOTIFICATION_PIPELINE = Pipeline.new [
+    OldUploadsFilter,
     Pipeline::MarkdownFilter,
     BetterMentionFilter,
     CustomEmojiFilter,
