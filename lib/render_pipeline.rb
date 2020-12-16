@@ -18,9 +18,9 @@ module RenderPipeline
     end
   end
   
-  class OldUploadsFilter < Pipeline::Filter
+  class OldUploadsFilter < Pipeline::TextFilter
     def call
-      html.gsub %r{https?://files\.redcursor\.net/uploads/}, %{https://redcursor.net/uploads/}
+      text.gsub %r{https?://files\.redcursor\.net/uploads/}, %{https://redcursor.net/uploads/}
     end
   end
 
