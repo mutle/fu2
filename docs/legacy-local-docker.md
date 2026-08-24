@@ -48,6 +48,10 @@ normal page rendering does not connect to it. Legacy advanced search and
 background index jobs remain unavailable unless an Elasticsearch version
 compatible with the old Elastomer client and mappings is added separately.
 
+Do not set `REDIS_DB` for the web service. The legacy initializer has an
+operator-precedence bug that treats any configured value as the test database
+(DB 7). Leaving it unset correctly selects the production data in DB 6.
+
 ## Health, testing, and cleanup
 
 ```sh

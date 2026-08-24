@@ -46,7 +46,6 @@ services:
       POSTGRESQL_SERVER: postgres
       REDIS_SERVER: redis
       REDIS_PORT: 6379
-      REDIS_DB: 6
       RAILS_ENV: production
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?Set SECRET_KEY_BASE in docker/legacy/.env}
       FORCE_SSL: "0"
