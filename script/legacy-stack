@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+repo_root="$(dirname "${script_dir}")"
+stack_dir="${repo_root}/docker/legacy"
+env_file="${stack_dir}/.env"
+compose=(docker compose --env-file "${env_file}" -f "${stack_dir}/compose.yml")
+
+usage() {
+  cat <<'EOF'
+Usage: script/legacy-stack <setup|restore|start|health|stop|clean|config>
+
+  setup    Create docker/legacy/.env with local defaults and a generated secret.
+  restore  Recreate isolated data stores from the configured compressed backups.
+  start    Start PostgreSQL, Redis, and the legacy web application.
+  health   Check containers and the loopback-only login page.
+  stop     Stop the stack while preserving restored data.
+  clean    Stop the stack and delete its Docker volume and ignored local files.
+  config   Validate and render the effective Compose configuration.
+EOF
+}
+
+require_env() {
+  if [[ ! -f "${env_file}" ]]; then
+    echo "Missing ${env_file}; run script/legacy-stack setup first." >&2
+    exit 1
+  fi
+}
+
+load_env() {
+  require_env
+  set -a
+  # shellcheck disable=SC1090
+  source "${env_file}"
+  set +a
+}
+
+wait_for_healthy() {
+  local service="$1"
+  local container
+  container="$("${compose[@]}" ps -q "${service}")"
+  for _ in $(seq 1 60); do
+    if [[ "$(docker inspect --format '{{.State.Health.Status}}' "${container}")" == "healthy" ]]; then
+      return
+    fi
+    sleep 2
+  done
+  echo "${service} did not become healthy." >&2
+  "${compose[@]}" logs --no-color --tail=80 "${service}" >&2
+  exit 1
+}
+
+setup() {
+  if [[ -f "${env_file}" ]]; then
+    echo "${env_file} already exists."
+    return
+  fi
+
+  umask 077
+  cat >"${env_file}" <<EOF
+POSTGRES_BACKUP=${HOME}/Programming/fu3/redcursor_production-2026-06-30-05-00.bz2
+REDIS_BACKUP=${HOME}/Programming/fu3/redcursor-redis-2026-06-30-05-00.bz2
+LEGACY_WEB_PORT=3080
+SECRET_KEY_BASE=$(openssl rand -hex 64)
+EOF
+  echo "Created ${env_file}. Review the local backup paths before restoring."
+}
+
+restore() {
+  load_env
+  [[ -r "${POSTGRES_BACKUP}" ]] || { echo "PostgreSQL backup is not readable: ${POSTGRES_BACKUP}" >&2; exit 1; }
+  [[ -r "${REDIS_BACKUP}" ]] || { echo "Redis backup is not readable: ${REDIS_BACKUP}" >&2; exit 1; }
+  bzip2 -t "${POSTGRES_BACKUP}"
+  bzip2 -t "${REDIS_BACKUP}"
+
+  "${compose[@]}" down --volumes --remove-orphans
+  rm -rf "${stack_dir}/.local/redis"
+  install -d -m 700 "${stack_dir}/.local/redis"
+  bzcat "${REDIS_BACKUP}" >"${stack_dir}/.local/redis/dump.rdb"
+  chmod 600 "${stack_dir}/.local/redis/dump.rdb"
+
+  "${compose[@]}" up -d postgres redis
+  wait_for_healthy postgres
+  wait_for_healthy redis
+
+  restore_log="${stack_dir}/.local/postgres-restore.log"
+  set +e
+  bzcat "${POSTGRES_BACKUP}" |
+    "${compose[@]}" exec -T postgres \
+      psql --set ON_ERROR_STOP=off --username fu2 --dbname redcursor \
+      >"${restore_log}" 2>&1
+  restore_status=$?
+  set -e
+
+  if [[ ${restore_status} -ne 0 ]]; then
+    echo "PostgreSQL restore failed; inspect ${restore_log} locally." >&2
+    exit "${restore_status}"
+  fi
+
+  table_count="$("${compose[@]}" exec -T postgres psql -At --username fu2 --dbname redcursor \
+    -c "SELECT count(*) FROM pg_catalog.pg_tables WHERE schemaname = 'public';")"
+  user_count="$("${compose[@]}" exec -T postgres psql -At --username fu2 --dbname redcursor \
+    -c "SELECT count(*) FROM public.users;")"
+  redis_keys="$("${compose[@]}" exec -T redis redis-cli -n 6 DBSIZE | tr -d '\r')"
+
+  if [[ "${table_count}" -eq 0 || "${user_count}" -eq 0 || "${redis_keys}" -eq 0 ]]; then
+    echo "Restore verification failed (expected non-empty aggregate counts)." >&2
+    exit 1
+  fi
+
+  echo "Restore complete: ${table_count} public tables; user and Redis datasets are non-empty."
+}
+
+start() {
+  require_env
+  "${compose[@]}" up -d
+  wait_for_healthy web
+  health
+}
+
+health() {
+  load_env
+  "${compose[@]}" ps
+  curl --fail --silent --show-error --output /dev/null \
+    "http://127.0.0.1:${LEGACY_WEB_PORT:-3080}/session/new"
+  echo "Legacy login page is healthy at http://127.0.0.1:${LEGACY_WEB_PORT:-3080}/session/new"
+}
+
+case "${1:-}" in
+  setup) setup ;;
+  restore) restore ;;
+  start) start ;;
+  health) health ;;
+  stop) require_env; "${compose[@]}" down --remove-orphans ;;
+  clean)
+    require_env
+    "${compose[@]}" down --volumes --remove-orphans
+    rm -rf "${stack_dir}/.local"
+    ;;
+  config) require_env; "${compose[@]}" config --quiet ;;
+  *) usage; exit 1 ;;
+esac

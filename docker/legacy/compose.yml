@@ -1,0 +1,85 @@
+name: redcursor-legacy
+
+services:
+  postgres:
+    image: postgres:13.1
+    environment:
+      POSTGRES_DB: redcursor
+      POSTGRES_USER: fu2
+      POSTGRES_PASSWORD: local-redcursor
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fu2 -d redcursor"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - legacy
+
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "no", "--save", "", "--databases", "16"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - ./.local/redis:/data
+    networks:
+      - legacy
+
+  web:
+    image: ghcr.io/mutle/redcursor@sha256:e8ddc719b2a27f9ddb0f3d78b4ac0c47889ed34b366cbb64d818117cca2f55ee
+    platform: linux/amd64
+    entrypoint: ["/bin/bash", "-lc"]
+    command:
+      - >-
+        source /root/.profile &&
+        cd /data/redcursor &&
+        exec bin/bundle exec unicorn_rails -c config/unicorn.rb -E production
+    environment:
+      DB_NAME: redcursor
+      DB_USER: fu2
+      DB_PASSWORD: local-redcursor
+      POSTGRESQL_SERVER: postgres
+      REDIS_SERVER: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 6
+      RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?Set SECRET_KEY_BASE in docker/legacy/.env}
+      FORCE_SSL: "0"
+      RAILS_LOG_TO_STDOUT: "1"
+      RAILS_SERVE_STATIC_FILES: "1"
+      NO_WEBSOCKETS: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${LEGACY_WEB_PORT:-3080}:8080"
+    volumes:
+      - ./database.yml:/data/redcursor/config/database.yml:ro
+      - ../../config/environments/production.rb:/data/redcursor/config/environments/production.rb:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/bin/bash -lc 'source /root/.profile && ruby -rnet/http -e \"exit(Net::HTTP.get_response(URI(%q{http://127.0.0.1:8080/session/new})).code.to_i < 500 ? 0 : 1)\"'",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    networks:
+      - legacy
+      - frontend
+
+networks:
+  legacy:
+    internal: true
+  frontend:
+
+volumes:
+  postgres-data:

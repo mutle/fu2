@@ -13,3 +13,5 @@ log/*.log
 tmp
 .sass-cache/
 node_modules/
+docker/legacy/.env
+docker/legacy/.local/
